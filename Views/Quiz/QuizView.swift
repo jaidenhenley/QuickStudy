@@ -75,12 +75,12 @@ struct QuizView: View {
             }
             applyLaunchMode()
         }
-        .onChange(of: selectedSetID) { newValue in
+        .onChange(of: selectedSetID) { newValue, _ in
             guard let newValue,
                   let set = viewModel.savedSets.first(where: { $0.id == newValue }) else { return }
             viewModel.loadSet(set)
         }
-        .onChange(of: viewModel.flashcards) { _ in
+        .onChange(of: viewModel.flashcards) { _, _ in
             if viewModel.quizQuestions.isEmpty {
                 isQuizActive = false
             }
@@ -150,12 +150,12 @@ struct QuizView: View {
             }
             applyLaunchMode()
         }
-        .onChange(of: selectedSetID) { newValue in
+        .onChange(of: selectedSetID) { newValue, _ in
             guard let newValue,
                   let set = viewModel.savedSets.first(where: { $0.id == newValue }) else { return }
             viewModel.loadSet(set)
         }
-        .onChange(of: viewModel.flashcards) { _ in
+        .onChange(of: viewModel.flashcards) { _, _ in
             if viewModel.quizQuestions.isEmpty {
                 isQuizActive = false
             }

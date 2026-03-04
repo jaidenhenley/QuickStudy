@@ -123,7 +123,7 @@ struct QuizQuestionView: View {
         .background(BackgroundView())
         .animation(.default, value: hasSubmitted)
         .onAppear { loadQuestions() }
-        .onChange(of: viewModel.flashcards) { _ in
+        .onChange(of: viewModel.flashcards) { _, _ in
             if providedQuestions == nil {
                 loadQuestions()
             }

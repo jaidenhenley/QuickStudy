@@ -86,12 +86,12 @@ struct ContentView: View {
                 showOnboarding = true
             }
         }
-        .onChange(of: appState.selectedTab) { newValue in
+        .onChange(of: appState.selectedTab) { newValue, _ in
             if newValue == .quiz {
                 appState.isQuickQuizEntry = false
             }
         }
-        .onChange(of: splitSelection) { newValue in
+        .onChange(of: splitSelection) { newValue, _ in
             if newValue == .quiz {
                 appState.isQuickQuizEntry = false
             }

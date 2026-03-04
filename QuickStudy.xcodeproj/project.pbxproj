@@ -6,6 +6,48 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		630DF5002F57BAE400BD7CF2 /* AIFLashcardSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4112F57BAE400BD7CF2 /* AIFLashcardSet.swift */; };
+		630DF5002F57BAE400BD7CF3 /* AIFlashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4102F57BAE400BD7CF2 /* AIFlashcard.swift */; };
+		630DF5002F57BAE400BD7CF4 /* AIOCRRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4122F57BAE400BD7CF2 /* AIOCRRepair.swift */; };
+		630DF5002F57BAE400BD7CF5 /* AppBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43B2F57BAE400BD7CF2 /* AppBackgroundView.swift */; };
+		630DF5002F57BAE400BD7CF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41F2F57BAE400BD7CF2 /* AppState.swift */; };
+		630DF5002F57BAE400BD7CF7 /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4212F57BAE400BD7CF2 /* CardContentView.swift */; };
+		630DF5002F57BAE400BD7CF8 /* CardGenerationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4132F57BAE400BD7CF2 /* CardGenerationEngine.swift */; };
+		630DF5002F57BAE400BD7CF9 /* CardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43C2F57BAE400BD7CF2 /* CardGenerator.swift */; };
+		630DF5002F57BAE400BD7CFA /* CardRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4222F57BAE400BD7CF2 /* CardRowView.swift */; };
+		630DF5002F57BAE400BD7CFB /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4232F57BAE400BD7CF2 /* CardsView.swift */; };
+		630DF5002F57BAE400BD7CFC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43D2F57BAE400BD7CF2 /* ContentView.swift */; };
+		630DF5002F57BAE400BD7CFD /* DashboardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4282F57BAE400BD7CF2 /* DashboardComponents.swift */; };
+		630DF5002F57BAE400BD7CFE /* DashboardDestinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4292F57BAE400BD7CF2 /* DashboardDestinations.swift */; };
+		630DF5002F57BAE400BD7CFF /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42A2F57BAE400BD7CF2 /* DashboardView.swift */; };
+		630DF5002F57BAE400BD7D00 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42B2F57BAE400BD7CF2 /* DashboardViewModel.swift */; };
+		630DF5002F57BAE400BD7D01 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4152F57BAE400BD7CF2 /* DemoData.swift */; };
+		630DF5002F57BAE400BD7D02 /* DocumentImportHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF40D2F57BAE400BD7CF2 /* DocumentImportHelper.swift */; };
+		630DF5002F57BAE400BD7D03 /* DocumentScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4332F57BAE400BD7CF2 /* DocumentScannerView.swift */; };
+		630DF5002F57BAE400BD7D04 /* FlashcardFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4242F57BAE400BD7CF2 /* FlashcardFlipView.swift */; };
+		630DF5002F57BAE400BD7D05 /* FlashcardPracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4252F57BAE400BD7CF2 /* FlashcardPracticeView.swift */; };
+		630DF5002F57BAE400BD7D06 /* HomeIPadContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42C2F57BAE400BD7CF2 /* HomeIPadContent.swift */; };
+		630DF5002F57BAE400BD7D07 /* LayoutMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF40E2F57BAE400BD7CF2 /* LayoutMetrics.swift */; };
+		630DF5002F57BAE400BD7D08 /* MyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF40B2F57BAE400BD7CF2 /* MyApp.swift */; };
+		630DF5002F57BAE400BD7D09 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42E2F57BAE400BD7CF2 /* OnboardingView.swift */; };
+		630DF5002F57BAE400BD7D0A /* QuizQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4172F57BAE400BD7CF2 /* QuizQuestion.swift */; };
+		630DF5002F57BAE400BD7D0B /* QuizQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4302F57BAE400BD7CF2 /* QuizQuestionView.swift */; };
+		630DF5002F57BAE400BD7D0C /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4312F57BAE400BD7CF2 /* QuizView.swift */; };
+		630DF5002F57BAE400BD7D0D /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4342F57BAE400BD7CF2 /* ReviewView.swift */; };
+		630DF5002F57BAE400BD7D0E /* SavedSetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4372F57BAE400BD7CF2 /* SavedSetsView.swift */; };
+		630DF5002F57BAE400BD7D0F /* ScannerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4352F57BAE400BD7CF2 /* ScannerCoordinator.swift */; };
+		630DF5002F57BAE400BD7D10 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4392F57BAE400BD7CF2 /* SettingsView.swift */; };
+		630DF5002F57BAE400BD7D11 /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4192F57BAE400BD7CF2 /* StudyCard.swift */; };
+		630DF5002F57BAE400BD7D12 /* StudyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41A2F57BAE400BD7CF2 /* StudyDocument.swift */; };
+		630DF5002F57BAE400BD7D13 /* StudyGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4402F57BAE400BD7CF2 /* StudyGuideView.swift */; };
+		630DF5002F57BAE400BD7D14 /* StudyModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4412F57BAE400BD7CF2 /* StudyModeButton.swift */; };
+		630DF5002F57BAE400BD7D15 /* StudySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41B2F57BAE400BD7CF2 /* StudySet.swift */; };
+		630DF5002F57BAE400BD7D16 /* StudySourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41C2F57BAE400BD7CF2 /* StudySourceType.swift */; };
+		630DF5002F57BAE400BD7D17 /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4422F57BAE400BD7CF2 /* StudyViewModel.swift */; };
+		630DF5002F57BAE400BD7D18 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43E2F57BAE400BD7CF2 /* Theme.swift */; };
+		630DF5002F57BAE400BD7D19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 630DF40C2F57BAE400BD7CF2 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
 /* Begin PBXFileReference section */
 		630DF3FD2F57BAD200BD7CF2 /* QuickStudy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickStudy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		630DF40B2F57BAE400BD7CF2 /* MyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyApp.swift; sourceTree = "<group>"; };
@@ -321,6 +363,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630DF5002F57BAE400BD7D19 /* Assets.xcassets in Resources */, 
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +374,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630DF5002F57BAE400BD7CF2 /* AIFLashcardSet.swift in Sources */, 
+				630DF5002F57BAE400BD7CF3 /* AIFlashcard.swift in Sources */, 
+				630DF5002F57BAE400BD7CF4 /* AIOCRRepair.swift in Sources */, 
+				630DF5002F57BAE400BD7CF5 /* AppBackgroundView.swift in Sources */, 
+				630DF5002F57BAE400BD7CF6 /* AppState.swift in Sources */, 
+				630DF5002F57BAE400BD7CF7 /* CardContentView.swift in Sources */, 
+				630DF5002F57BAE400BD7CF8 /* CardGenerationEngine.swift in Sources */, 
+				630DF5002F57BAE400BD7CF9 /* CardGenerator.swift in Sources */, 
+				630DF5002F57BAE400BD7CFA /* CardRowView.swift in Sources */, 
+				630DF5002F57BAE400BD7CFB /* CardsView.swift in Sources */, 
+				630DF5002F57BAE400BD7CFC /* ContentView.swift in Sources */, 
+				630DF5002F57BAE400BD7CFD /* DashboardComponents.swift in Sources */, 
+				630DF5002F57BAE400BD7CFE /* DashboardDestinations.swift in Sources */, 
+				630DF5002F57BAE400BD7CFF /* DashboardView.swift in Sources */, 
+				630DF5002F57BAE400BD7D00 /* DashboardViewModel.swift in Sources */, 
+				630DF5002F57BAE400BD7D01 /* DemoData.swift in Sources */, 
+				630DF5002F57BAE400BD7D02 /* DocumentImportHelper.swift in Sources */, 
+				630DF5002F57BAE400BD7D03 /* DocumentScannerView.swift in Sources */, 
+				630DF5002F57BAE400BD7D04 /* FlashcardFlipView.swift in Sources */, 
+				630DF5002F57BAE400BD7D05 /* FlashcardPracticeView.swift in Sources */, 
+				630DF5002F57BAE400BD7D06 /* HomeIPadContent.swift in Sources */, 
+				630DF5002F57BAE400BD7D07 /* LayoutMetrics.swift in Sources */, 
+				630DF5002F57BAE400BD7D08 /* MyApp.swift in Sources */, 
+				630DF5002F57BAE400BD7D09 /* OnboardingView.swift in Sources */, 
+				630DF5002F57BAE400BD7D0A /* QuizQuestion.swift in Sources */, 
+				630DF5002F57BAE400BD7D0B /* QuizQuestionView.swift in Sources */, 
+				630DF5002F57BAE400BD7D0C /* QuizView.swift in Sources */, 
+				630DF5002F57BAE400BD7D0D /* ReviewView.swift in Sources */, 
+				630DF5002F57BAE400BD7D0E /* SavedSetsView.swift in Sources */, 
+				630DF5002F57BAE400BD7D0F /* ScannerCoordinator.swift in Sources */, 
+				630DF5002F57BAE400BD7D10 /* SettingsView.swift in Sources */, 
+				630DF5002F57BAE400BD7D11 /* StudyCard.swift in Sources */, 
+				630DF5002F57BAE400BD7D12 /* StudyDocument.swift in Sources */, 
+				630DF5002F57BAE400BD7D13 /* StudyGuideView.swift in Sources */, 
+				630DF5002F57BAE400BD7D14 /* StudyModeButton.swift in Sources */, 
+				630DF5002F57BAE400BD7D15 /* StudySet.swift in Sources */, 
+				630DF5002F57BAE400BD7D16 /* StudySourceType.swift in Sources */, 
+				630DF5002F57BAE400BD7D17 /* StudyViewModel.swift in Sources */, 
+				630DF5002F57BAE400BD7D18 /* Theme.swift in Sources */, 
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +551,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use the camera to scan documents for studying.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -503,6 +586,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use the camera to scan documents for studying.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

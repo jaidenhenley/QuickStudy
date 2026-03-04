@@ -32,7 +32,7 @@ struct ReviewView: View {
 
             Section("Review") {
                 Toggle("Remove headers/footers", isOn: $removeHeadersFooters)
-                    .onChange(of: removeHeadersFooters) { _ in
+                    .onChange(of: removeHeadersFooters) { _, _ in
                         applyHeaderFooterFilter()
                     }
             }

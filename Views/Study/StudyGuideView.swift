@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct StudyView: View {
     @EnvironmentObject var stuViewModel: StudyViewModel
     @State private var navigateToPractice = false

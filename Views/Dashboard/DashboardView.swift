@@ -8,6 +8,7 @@
 import SwiftUI
 import PhotosUI
 import VisionKit
+import Combine
 
 // MARK: - Root
 
@@ -108,7 +109,7 @@ struct IpadHomeScreen: View {
                 break
             }
         }
-        .onChange(of: selectedPhotoItem) { _ in
+        .onChange(of: selectedPhotoItem) { _, _ in
             Task {
                 await handleSelectedPhoto()
             }
@@ -116,10 +117,10 @@ struct IpadHomeScreen: View {
         .onAppear {
             dashboardViewModel.updateFromStudy(studyViewModel)
         }
-        .onChange(of: studyViewModel.document) { _ in
+        .onChange(of: studyViewModel.document) { _, _ in
             dashboardViewModel.updateFromStudy(studyViewModel)
         }
-        .onChange(of: studyViewModel.savedSets) { _ in
+        .onChange(of: studyViewModel.savedSets) { _, _ in
             dashboardViewModel.updateFromStudy(studyViewModel)
         }
     }
@@ -191,7 +192,6 @@ struct IpadHomeScreen: View {
 }
 
 // MARK: - iPhone Home
-
 struct DashboardView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var studyViewModel: StudyViewModel
@@ -213,7 +213,7 @@ struct DashboardView: View {
 #endif
     }
 
-    init(viewModel: DashboardViewModel = DashboardViewModel()) {
+    init(viewModel: DashboardViewModel) {
         _dashboardViewModel = StateObject(wrappedValue: viewModel)
     }
 
@@ -283,7 +283,7 @@ struct DashboardView: View {
                 break
             }
         }
-        .onChange(of: selectedPhotoItem) { _ in
+        .onChange(of: selectedPhotoItem) { _, _ in
             Task {
                 await handleSelectedPhoto()
             }
@@ -291,10 +291,10 @@ struct DashboardView: View {
         .onAppear {
             dashboardViewModel.updateFromStudy(studyViewModel)
         }
-        .onChange(of: studyViewModel.document) { _ in
+        .onChange(of: studyViewModel.document) { _, _ in
             dashboardViewModel.updateFromStudy(studyViewModel)
         }
-        .onChange(of: studyViewModel.savedSets) { _ in
+        .onChange(of: studyViewModel.savedSets) { _, _ in
             dashboardViewModel.updateFromStudy(studyViewModel)
         }
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
  class AppState: ObservableObject {
     @Published var splitVisibility: NavigationSplitViewVisibility = .all
