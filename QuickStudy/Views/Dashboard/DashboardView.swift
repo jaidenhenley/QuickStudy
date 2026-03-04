@@ -79,7 +79,6 @@ struct IpadHomeScreen: View {
             DocumentScannerView(
                 onComplete: { images in
                     showScanCapture = false
-                    navigateToCards = true
                     Task {
                         await processOCR(images: images)
                     }
@@ -146,10 +145,12 @@ struct IpadHomeScreen: View {
         do {
             let text = try await importHelper().extractText(from: images)
             guard !text.isEmpty else { return }
-            navigateToCards = true
             studyViewModel.currentSourceType = .scan
             if #available(iOS 26.0, *) {
                 await studyViewModel.loadScannedText(rawText: text)
+            }
+            await MainActor.run {
+                navigateToCards = true
             }
         } catch {
             return
@@ -452,10 +453,12 @@ struct DashboardView: View {
         do {
             let text = try await importHelper().extractText(from: images)
             guard !text.isEmpty else { return }
-            navigateToCards = true
             studyViewModel.currentSourceType = .scan
             if #available(iOS 26.0, *) {
                 await studyViewModel.loadScannedText(rawText: text)
+            }
+            await MainActor.run {
+                navigateToCards = true
             }
         } catch {
             return

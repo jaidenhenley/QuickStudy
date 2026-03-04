@@ -42,7 +42,7 @@ struct StudyView: View {
                 .padding(.horizontal)
 
                 LazyVStack(spacing: 12) {
-                    ForEach($stuViewModel.flashcards) { $card in
+                    ForEach(stuViewModel.flashcards) { card in
                         HStack(alignment: .top, spacing: 12) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(card.question)
@@ -58,7 +58,7 @@ struct StudyView: View {
                                 Text("Include")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
-                                Toggle("", isOn: $card.approved)
+                                Toggle("", isOn: approvedBinding(for: card))
                                     .labelsHidden()
                                     .toggleStyle(.switch)
                             }
@@ -67,7 +67,7 @@ struct StudyView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            card.approved.toggle()
+                            toggleApproval(for: card)
                         }
                         .appGlassCard(cornerRadius: 12)
                     }
@@ -81,5 +81,23 @@ struct StudyView: View {
             FlashcardPracticeView(cards: approvedCards)
         }
     }
+    
+    private func approvedBinding(for card: StudyCard) -> Binding<Bool> {
+        Binding(
+            get: {
+                stuViewModel.flashcards.first(where: { $0.id == card.id })?.approved ?? card.approved
+            },
+            set: { newValue in
+                if let index = stuViewModel.flashcards.firstIndex(where: { $0.id == card.id }) {
+                    stuViewModel.flashcards[index].approved = newValue
+                }
+            }
+        )
+    }
+    
+    private func toggleApproval(for card: StudyCard) {
+        if let index = stuViewModel.flashcards.firstIndex(where: { $0.id == card.id }) {
+            stuViewModel.flashcards[index].approved.toggle()
+        }
+    }
 }
-

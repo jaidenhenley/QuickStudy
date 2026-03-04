@@ -145,9 +145,9 @@ struct CardsView: View {
                         Text("No cards yet. Tap Generate Cards.")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach($viewModel.flashcards) { $card in
+                        ForEach(viewModel.flashcards) { card in
                             CardRowView(
-                                card: $card,
+                                card: binding(for: card),
                                 deleteCard: { deleteCard(card) }
                             )
                             .padding(.vertical, 6)
@@ -176,6 +176,19 @@ struct CardsView: View {
             viewModel.flashcards.remove(at: idx)
         }
     }
+    
+    private func binding(for card: StudyCard) -> Binding<StudyCard> {
+        Binding(
+            get: {
+                viewModel.flashcards.first(where: { $0.id == card.id }) ?? card
+            },
+            set: { updated in
+                if let index = viewModel.flashcards.firstIndex(where: { $0.id == updated.id }) {
+                    viewModel.flashcards[index] = updated
+                }
+            }
+        )
+    }
 
     func paragraphPreview(for doc: StudyDocument, lineCount: Int) -> String {
         let previewLines = doc.lines.prefix(lineCount)
@@ -183,4 +196,3 @@ struct CardsView: View {
         return previewDoc.paragraphText
     }
 }
-

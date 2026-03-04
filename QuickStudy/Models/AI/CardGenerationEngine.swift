@@ -40,7 +40,8 @@ struct CardGenerationEngine {
         for (offset, line) in lines.enumerated() {
             let lineNumber = startIndex + offset
             candidateBlock.append("Line \(lineNumber):")
-            var lineCandidates = candidates[offset]
+            let lineCandidatesSource = offset < candidates.count ? candidates[offset] : []
+            var lineCandidates = lineCandidatesSource
             if !lineCandidates.contains(line) {
                 lineCandidates.insert(line, at: 0)
             }
