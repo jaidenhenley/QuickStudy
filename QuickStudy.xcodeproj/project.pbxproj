@@ -6,91 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		630DF5002F57BAE400BD7CF2 /* AIFLashcardSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4112F57BAE400BD7CF2 /* AIFLashcardSet.swift */; };
-		630DF5002F57BAE400BD7CF3 /* AIFlashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4102F57BAE400BD7CF2 /* AIFlashcard.swift */; };
-		630DF5002F57BAE400BD7CF4 /* AIOCRRepair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4122F57BAE400BD7CF2 /* AIOCRRepair.swift */; };
-		630DF5002F57BAE400BD7CF5 /* AppBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43B2F57BAE400BD7CF2 /* AppBackgroundView.swift */; };
-		630DF5002F57BAE400BD7CF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41F2F57BAE400BD7CF2 /* AppState.swift */; };
-		630DF5002F57BAE400BD7CF7 /* CardContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4212F57BAE400BD7CF2 /* CardContentView.swift */; };
-		630DF5002F57BAE400BD7CF8 /* CardGenerationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4132F57BAE400BD7CF2 /* CardGenerationEngine.swift */; };
-		630DF5002F57BAE400BD7CF9 /* CardGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43C2F57BAE400BD7CF2 /* CardGenerator.swift */; };
-		630DF5002F57BAE400BD7CFA /* CardRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4222F57BAE400BD7CF2 /* CardRowView.swift */; };
-		630DF5002F57BAE400BD7CFB /* CardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4232F57BAE400BD7CF2 /* CardsView.swift */; };
-		630DF5002F57BAE400BD7CFC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43D2F57BAE400BD7CF2 /* ContentView.swift */; };
-		630DF5002F57BAE400BD7CFD /* DashboardComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4282F57BAE400BD7CF2 /* DashboardComponents.swift */; };
-		630DF5002F57BAE400BD7CFE /* DashboardDestinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4292F57BAE400BD7CF2 /* DashboardDestinations.swift */; };
-		630DF5002F57BAE400BD7CFF /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42A2F57BAE400BD7CF2 /* DashboardView.swift */; };
-		630DF5002F57BAE400BD7D00 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42B2F57BAE400BD7CF2 /* DashboardViewModel.swift */; };
-		630DF5002F57BAE400BD7D01 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4152F57BAE400BD7CF2 /* DemoData.swift */; };
-		630DF5002F57BAE400BD7D02 /* DocumentImportHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF40D2F57BAE400BD7CF2 /* DocumentImportHelper.swift */; };
-		630DF5002F57BAE400BD7D03 /* DocumentScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4332F57BAE400BD7CF2 /* DocumentScannerView.swift */; };
-		630DF5002F57BAE400BD7D04 /* FlashcardFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4242F57BAE400BD7CF2 /* FlashcardFlipView.swift */; };
-		630DF5002F57BAE400BD7D05 /* FlashcardPracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4252F57BAE400BD7CF2 /* FlashcardPracticeView.swift */; };
-		630DF5002F57BAE400BD7D06 /* HomeIPadContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42C2F57BAE400BD7CF2 /* HomeIPadContent.swift */; };
-		630DF5002F57BAE400BD7D07 /* LayoutMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF40E2F57BAE400BD7CF2 /* LayoutMetrics.swift */; };
-		630DF5002F57BAE400BD7D08 /* MyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF40B2F57BAE400BD7CF2 /* MyApp.swift */; };
-		630DF5002F57BAE400BD7D09 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF42E2F57BAE400BD7CF2 /* OnboardingView.swift */; };
-		630DF5002F57BAE400BD7D0A /* QuizQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4172F57BAE400BD7CF2 /* QuizQuestion.swift */; };
-		630DF5002F57BAE400BD7D0B /* QuizQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4302F57BAE400BD7CF2 /* QuizQuestionView.swift */; };
-		630DF5002F57BAE400BD7D0C /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4312F57BAE400BD7CF2 /* QuizView.swift */; };
-		630DF5002F57BAE400BD7D0D /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4342F57BAE400BD7CF2 /* ReviewView.swift */; };
-		630DF5002F57BAE400BD7D0E /* SavedSetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4372F57BAE400BD7CF2 /* SavedSetsView.swift */; };
-		630DF5002F57BAE400BD7D0F /* ScannerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4352F57BAE400BD7CF2 /* ScannerCoordinator.swift */; };
-		630DF5002F57BAE400BD7D10 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4392F57BAE400BD7CF2 /* SettingsView.swift */; };
-		630DF5002F57BAE400BD7D11 /* StudyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4192F57BAE400BD7CF2 /* StudyCard.swift */; };
-		630DF5002F57BAE400BD7D12 /* StudyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41A2F57BAE400BD7CF2 /* StudyDocument.swift */; };
-		630DF5002F57BAE400BD7D13 /* StudyGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4402F57BAE400BD7CF2 /* StudyGuideView.swift */; };
-		630DF5002F57BAE400BD7D14 /* StudyModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4412F57BAE400BD7CF2 /* StudyModeButton.swift */; };
-		630DF5002F57BAE400BD7D15 /* StudySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41B2F57BAE400BD7CF2 /* StudySet.swift */; };
-		630DF5002F57BAE400BD7D16 /* StudySourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF41C2F57BAE400BD7CF2 /* StudySourceType.swift */; };
-		630DF5002F57BAE400BD7D17 /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF4422F57BAE400BD7CF2 /* StudyViewModel.swift */; };
-		630DF5002F57BAE400BD7D18 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630DF43E2F57BAE400BD7CF2 /* Theme.swift */; };
-		630DF5002F57BAE400BD7D19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 630DF40C2F57BAE400BD7CF2 /* Assets.xcassets */; };
-/* End PBXBuildFile section */
 /* Begin PBXFileReference section */
 		630DF3FD2F57BAD200BD7CF2 /* QuickStudy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickStudy.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		630DF40B2F57BAE400BD7CF2 /* MyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyApp.swift; sourceTree = "<group>"; };
-		630DF40C2F57BAE400BD7CF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		630DF40D2F57BAE400BD7CF2 /* DocumentImportHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentImportHelper.swift; sourceTree = "<group>"; };
-		630DF40E2F57BAE400BD7CF2 /* LayoutMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutMetrics.swift; sourceTree = "<group>"; };
-		630DF4102F57BAE400BD7CF2 /* AIFlashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIFlashcard.swift; sourceTree = "<group>"; };
-		630DF4112F57BAE400BD7CF2 /* AIFLashcardSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIFLashcardSet.swift; sourceTree = "<group>"; };
-		630DF4122F57BAE400BD7CF2 /* AIOCRRepair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIOCRRepair.swift; sourceTree = "<group>"; };
-		630DF4132F57BAE400BD7CF2 /* CardGenerationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGenerationEngine.swift; sourceTree = "<group>"; };
-		630DF4152F57BAE400BD7CF2 /* DemoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoData.swift; sourceTree = "<group>"; };
-		630DF4172F57BAE400BD7CF2 /* QuizQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizQuestion.swift; sourceTree = "<group>"; };
-		630DF4192F57BAE400BD7CF2 /* StudyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyCard.swift; sourceTree = "<group>"; };
-		630DF41A2F57BAE400BD7CF2 /* StudyDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyDocument.swift; sourceTree = "<group>"; };
-		630DF41B2F57BAE400BD7CF2 /* StudySet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySet.swift; sourceTree = "<group>"; };
-		630DF41C2F57BAE400BD7CF2 /* StudySourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySourceType.swift; sourceTree = "<group>"; };
-		630DF41F2F57BAE400BD7CF2 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		630DF4212F57BAE400BD7CF2 /* CardContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContentView.swift; sourceTree = "<group>"; };
-		630DF4222F57BAE400BD7CF2 /* CardRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRowView.swift; sourceTree = "<group>"; };
-		630DF4232F57BAE400BD7CF2 /* CardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsView.swift; sourceTree = "<group>"; };
-		630DF4242F57BAE400BD7CF2 /* FlashcardFlipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardFlipView.swift; sourceTree = "<group>"; };
-		630DF4252F57BAE400BD7CF2 /* FlashcardPracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardPracticeView.swift; sourceTree = "<group>"; };
-		630DF4282F57BAE400BD7CF2 /* DashboardComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardComponents.swift; sourceTree = "<group>"; };
-		630DF4292F57BAE400BD7CF2 /* DashboardDestinations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDestinations.swift; sourceTree = "<group>"; };
-		630DF42A2F57BAE400BD7CF2 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		630DF42B2F57BAE400BD7CF2 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
-		630DF42C2F57BAE400BD7CF2 /* HomeIPadContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeIPadContent.swift; sourceTree = "<group>"; };
-		630DF42E2F57BAE400BD7CF2 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		630DF4302F57BAE400BD7CF2 /* QuizQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizQuestionView.swift; sourceTree = "<group>"; };
-		630DF4312F57BAE400BD7CF2 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
-		630DF4332F57BAE400BD7CF2 /* DocumentScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentScannerView.swift; sourceTree = "<group>"; };
-		630DF4342F57BAE400BD7CF2 /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
-		630DF4352F57BAE400BD7CF2 /* ScannerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerCoordinator.swift; sourceTree = "<group>"; };
-		630DF4372F57BAE400BD7CF2 /* SavedSetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSetsView.swift; sourceTree = "<group>"; };
-		630DF4392F57BAE400BD7CF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		630DF43B2F57BAE400BD7CF2 /* AppBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundView.swift; sourceTree = "<group>"; };
-		630DF43C2F57BAE400BD7CF2 /* CardGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGenerator.swift; sourceTree = "<group>"; };
-		630DF43D2F57BAE400BD7CF2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		630DF43E2F57BAE400BD7CF2 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		630DF4402F57BAE400BD7CF2 /* StudyGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyGuideView.swift; sourceTree = "<group>"; };
-		630DF4412F57BAE400BD7CF2 /* StudyModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyModeButton.swift; sourceTree = "<group>"; };
-		630DF4422F57BAE400BD7CF2 /* StudyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		630DF4452F57C68B00BD7CF2 /* QuickStudy */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = QuickStudy;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		630DF3FA2F57BAD200BD7CF2 /* Frameworks */ = {
@@ -106,12 +32,7 @@
 		630DF3F42F57BAD200BD7CF2 = {
 			isa = PBXGroup;
 			children = (
-				630DF40B2F57BAE400BD7CF2 /* MyApp.swift */,
-				630DF40C2F57BAE400BD7CF2 /* Assets.xcassets */,
-				630DF40F2F57BAE400BD7CF2 /* Helpers */,
-				630DF41E2F57BAE400BD7CF2 /* Models */,
-				630DF4202F57BAE400BD7CF2 /* Navigation */,
-				630DF4442F57BAE400BD7CF2 /* Views */,
+				630DF4452F57C68B00BD7CF2 /* QuickStudy */,
 				630DF3FE2F57BAD200BD7CF2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -122,184 +43,6 @@
 				630DF3FD2F57BAD200BD7CF2 /* QuickStudy.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		630DF40F2F57BAE400BD7CF2 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				630DF40D2F57BAE400BD7CF2 /* DocumentImportHelper.swift */,
-				630DF40E2F57BAE400BD7CF2 /* LayoutMetrics.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		630DF4142F57BAE400BD7CF2 /* AI */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4102F57BAE400BD7CF2 /* AIFlashcard.swift */,
-				630DF4112F57BAE400BD7CF2 /* AIFLashcardSet.swift */,
-				630DF4122F57BAE400BD7CF2 /* AIOCRRepair.swift */,
-				630DF4132F57BAE400BD7CF2 /* CardGenerationEngine.swift */,
-			);
-			path = AI;
-			sourceTree = "<group>";
-		};
-		630DF4162F57BAE400BD7CF2 /* Demo */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4152F57BAE400BD7CF2 /* DemoData.swift */,
-			);
-			path = Demo;
-			sourceTree = "<group>";
-		};
-		630DF4182F57BAE400BD7CF2 /* Quiz */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4172F57BAE400BD7CF2 /* QuizQuestion.swift */,
-			);
-			path = Quiz;
-			sourceTree = "<group>";
-		};
-		630DF41D2F57BAE400BD7CF2 /* Study */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4192F57BAE400BD7CF2 /* StudyCard.swift */,
-				630DF41A2F57BAE400BD7CF2 /* StudyDocument.swift */,
-				630DF41B2F57BAE400BD7CF2 /* StudySet.swift */,
-				630DF41C2F57BAE400BD7CF2 /* StudySourceType.swift */,
-			);
-			path = Study;
-			sourceTree = "<group>";
-		};
-		630DF41E2F57BAE400BD7CF2 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4142F57BAE400BD7CF2 /* AI */,
-				630DF4162F57BAE400BD7CF2 /* Demo */,
-				630DF4182F57BAE400BD7CF2 /* Quiz */,
-				630DF41D2F57BAE400BD7CF2 /* Study */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		630DF4202F57BAE400BD7CF2 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				630DF41F2F57BAE400BD7CF2 /* AppState.swift */,
-			);
-			path = Navigation;
-			sourceTree = "<group>";
-		};
-		630DF4262F57BAE400BD7CF2 /* Flashcard */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4242F57BAE400BD7CF2 /* FlashcardFlipView.swift */,
-				630DF4252F57BAE400BD7CF2 /* FlashcardPracticeView.swift */,
-			);
-			path = Flashcard;
-			sourceTree = "<group>";
-		};
-		630DF4272F57BAE400BD7CF2 /* Card */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4212F57BAE400BD7CF2 /* CardContentView.swift */,
-				630DF4222F57BAE400BD7CF2 /* CardRowView.swift */,
-				630DF4232F57BAE400BD7CF2 /* CardsView.swift */,
-				630DF4262F57BAE400BD7CF2 /* Flashcard */,
-			);
-			path = Card;
-			sourceTree = "<group>";
-		};
-		630DF42D2F57BAE400BD7CF2 /* Dashboard */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4282F57BAE400BD7CF2 /* DashboardComponents.swift */,
-				630DF4292F57BAE400BD7CF2 /* DashboardDestinations.swift */,
-				630DF42A2F57BAE400BD7CF2 /* DashboardView.swift */,
-				630DF42B2F57BAE400BD7CF2 /* DashboardViewModel.swift */,
-				630DF42C2F57BAE400BD7CF2 /* HomeIPadContent.swift */,
-			);
-			path = Dashboard;
-			sourceTree = "<group>";
-		};
-		630DF42F2F57BAE400BD7CF2 /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				630DF42E2F57BAE400BD7CF2 /* OnboardingView.swift */,
-			);
-			path = Onboarding;
-			sourceTree = "<group>";
-		};
-		630DF4322F57BAE400BD7CF2 /* Quiz */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4302F57BAE400BD7CF2 /* QuizQuestionView.swift */,
-				630DF4312F57BAE400BD7CF2 /* QuizView.swift */,
-			);
-			path = Quiz;
-			sourceTree = "<group>";
-		};
-		630DF4362F57BAE400BD7CF2 /* Scan */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4332F57BAE400BD7CF2 /* DocumentScannerView.swift */,
-				630DF4342F57BAE400BD7CF2 /* ReviewView.swift */,
-				630DF4352F57BAE400BD7CF2 /* ScannerCoordinator.swift */,
-			);
-			path = Scan;
-			sourceTree = "<group>";
-		};
-		630DF4382F57BAE400BD7CF2 /* Sets */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4372F57BAE400BD7CF2 /* SavedSetsView.swift */,
-			);
-			path = Sets;
-			sourceTree = "<group>";
-		};
-		630DF43A2F57BAE400BD7CF2 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4392F57BAE400BD7CF2 /* SettingsView.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		630DF43F2F57BAE400BD7CF2 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				630DF43B2F57BAE400BD7CF2 /* AppBackgroundView.swift */,
-				630DF43C2F57BAE400BD7CF2 /* CardGenerator.swift */,
-				630DF43D2F57BAE400BD7CF2 /* ContentView.swift */,
-				630DF43E2F57BAE400BD7CF2 /* Theme.swift */,
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
-		630DF4432F57BAE400BD7CF2 /* Study */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4402F57BAE400BD7CF2 /* StudyGuideView.swift */,
-				630DF4412F57BAE400BD7CF2 /* StudyModeButton.swift */,
-				630DF4422F57BAE400BD7CF2 /* StudyViewModel.swift */,
-			);
-			path = Study;
-			sourceTree = "<group>";
-		};
-		630DF4442F57BAE400BD7CF2 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				630DF4272F57BAE400BD7CF2 /* Card */,
-				630DF42D2F57BAE400BD7CF2 /* Dashboard */,
-				630DF42F2F57BAE400BD7CF2 /* Onboarding */,
-				630DF4322F57BAE400BD7CF2 /* Quiz */,
-				630DF4362F57BAE400BD7CF2 /* Scan */,
-				630DF4382F57BAE400BD7CF2 /* Sets */,
-				630DF43A2F57BAE400BD7CF2 /* Settings */,
-				630DF43F2F57BAE400BD7CF2 /* Shared */,
-				630DF4432F57BAE400BD7CF2 /* Study */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,6 +59,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				630DF4452F57C68B00BD7CF2 /* QuickStudy */,
 			);
 			name = QuickStudy;
 			packageProductDependencies = (
@@ -363,7 +109,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				630DF5002F57BAE400BD7D19 /* Assets.xcassets in Resources */, 
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,45 +119,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				630DF5002F57BAE400BD7CF2 /* AIFLashcardSet.swift in Sources */, 
-				630DF5002F57BAE400BD7CF3 /* AIFlashcard.swift in Sources */, 
-				630DF5002F57BAE400BD7CF4 /* AIOCRRepair.swift in Sources */, 
-				630DF5002F57BAE400BD7CF5 /* AppBackgroundView.swift in Sources */, 
-				630DF5002F57BAE400BD7CF6 /* AppState.swift in Sources */, 
-				630DF5002F57BAE400BD7CF7 /* CardContentView.swift in Sources */, 
-				630DF5002F57BAE400BD7CF8 /* CardGenerationEngine.swift in Sources */, 
-				630DF5002F57BAE400BD7CF9 /* CardGenerator.swift in Sources */, 
-				630DF5002F57BAE400BD7CFA /* CardRowView.swift in Sources */, 
-				630DF5002F57BAE400BD7CFB /* CardsView.swift in Sources */, 
-				630DF5002F57BAE400BD7CFC /* ContentView.swift in Sources */, 
-				630DF5002F57BAE400BD7CFD /* DashboardComponents.swift in Sources */, 
-				630DF5002F57BAE400BD7CFE /* DashboardDestinations.swift in Sources */, 
-				630DF5002F57BAE400BD7CFF /* DashboardView.swift in Sources */, 
-				630DF5002F57BAE400BD7D00 /* DashboardViewModel.swift in Sources */, 
-				630DF5002F57BAE400BD7D01 /* DemoData.swift in Sources */, 
-				630DF5002F57BAE400BD7D02 /* DocumentImportHelper.swift in Sources */, 
-				630DF5002F57BAE400BD7D03 /* DocumentScannerView.swift in Sources */, 
-				630DF5002F57BAE400BD7D04 /* FlashcardFlipView.swift in Sources */, 
-				630DF5002F57BAE400BD7D05 /* FlashcardPracticeView.swift in Sources */, 
-				630DF5002F57BAE400BD7D06 /* HomeIPadContent.swift in Sources */, 
-				630DF5002F57BAE400BD7D07 /* LayoutMetrics.swift in Sources */, 
-				630DF5002F57BAE400BD7D08 /* MyApp.swift in Sources */, 
-				630DF5002F57BAE400BD7D09 /* OnboardingView.swift in Sources */, 
-				630DF5002F57BAE400BD7D0A /* QuizQuestion.swift in Sources */, 
-				630DF5002F57BAE400BD7D0B /* QuizQuestionView.swift in Sources */, 
-				630DF5002F57BAE400BD7D0C /* QuizView.swift in Sources */, 
-				630DF5002F57BAE400BD7D0D /* ReviewView.swift in Sources */, 
-				630DF5002F57BAE400BD7D0E /* SavedSetsView.swift in Sources */, 
-				630DF5002F57BAE400BD7D0F /* ScannerCoordinator.swift in Sources */, 
-				630DF5002F57BAE400BD7D10 /* SettingsView.swift in Sources */, 
-				630DF5002F57BAE400BD7D11 /* StudyCard.swift in Sources */, 
-				630DF5002F57BAE400BD7D12 /* StudyDocument.swift in Sources */, 
-				630DF5002F57BAE400BD7D13 /* StudyGuideView.swift in Sources */, 
-				630DF5002F57BAE400BD7D14 /* StudyModeButton.swift in Sources */, 
-				630DF5002F57BAE400BD7D15 /* StudySet.swift in Sources */, 
-				630DF5002F57BAE400BD7D16 /* StudySourceType.swift in Sources */, 
-				630DF5002F57BAE400BD7D17 /* StudyViewModel.swift in Sources */, 
-				630DF5002F57BAE400BD7D18 /* Theme.swift in Sources */, 
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
