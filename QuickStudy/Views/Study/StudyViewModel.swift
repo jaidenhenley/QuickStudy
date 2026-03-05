@@ -147,11 +147,6 @@ class StudyViewModel: ObservableObject {
         defer { self.isGenerating = false }
         generationErrorMessage = nil
 
-        guard #available(iOS 26.0, *) else {
-            generationErrorMessage = "Apple Intelligence requires iOS 26 or later."
-            return
-        }
-
 #if canImport(FoundationModels)
         do {
             let cards = try await CardGenerator.generateAI(from: text)
@@ -252,7 +247,6 @@ class StudyViewModel: ObservableObject {
     }
 
     #if canImport(FoundationModels)
-    @available(iOS 26.0, *)
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)

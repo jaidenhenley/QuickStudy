@@ -11,7 +11,6 @@ import Foundation
 struct CardGenerator {
     // MARK: - AI generation
 
-    @available(iOS 26.0, *)
     static func generateAI(from rawText: String) async throws -> [StudyCard] {
 #if canImport(FoundationModels)
         let engine = CardGenerationEngine()

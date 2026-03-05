@@ -12,25 +12,13 @@ struct Theme {
 extension View {
     @ViewBuilder
     func appGlassCard(cornerRadius: CGFloat = 16) -> some View {
-        if #available(iOS 26.0, *) {
-            self.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
-        } else {
-            self
-                .padding(0)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius))
-        }
+        self.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
     }
 
     @ViewBuilder
     func appProminentButtonStyle(tint: Color) -> some View {
-        if #available(iOS 26.0, *) {
-            self.buttonStyle(.glassProminent)
-                .tint(tint)
-                .foregroundStyle(.white)
-        } else {
-            self.buttonStyle(.borderedProminent)
-                .tint(tint)
-                .foregroundStyle(.white)
-        }
+        self.buttonStyle(.glassProminent)
+            .tint(tint)
+            .foregroundStyle(.white)
     }
 }

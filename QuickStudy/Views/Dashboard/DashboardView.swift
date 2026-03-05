@@ -146,9 +146,7 @@ struct IpadHomeScreen: View {
             let text = try await importHelper().extractText(from: images)
             guard !text.isEmpty else { return }
             studyViewModel.currentSourceType = .scan
-            if #available(iOS 26.0, *) {
-                await studyViewModel.loadScannedText(rawText: text)
-            }
+            await studyViewModel.loadScannedText(rawText: text)
             await MainActor.run {
                 navigateToCards = true
             }
@@ -163,9 +161,7 @@ struct IpadHomeScreen: View {
             guard !text.isEmpty else { return }
             navigateToCards = true
             studyViewModel.currentSourceType = .pdf
-            if #available(iOS 26.0, *) {
-                await studyViewModel.loadScannedText(rawText: text)
-            }
+            await studyViewModel.loadScannedText(rawText: text)
         } catch {
             return
         }
@@ -182,9 +178,7 @@ struct IpadHomeScreen: View {
                 guard !text.isEmpty else { return }
                 navigateToCards = true
                 studyViewModel.currentSourceType = .photo
-                if #available(iOS 26.0, *) {
-                    await studyViewModel.loadScannedText(rawText: text)
-                }
+                await studyViewModel.loadScannedText(rawText: text)
             } catch {
                 return
             }
@@ -454,9 +448,7 @@ struct DashboardView: View {
             let text = try await importHelper().extractText(from: images)
             guard !text.isEmpty else { return }
             studyViewModel.currentSourceType = .scan
-            if #available(iOS 26.0, *) {
-                await studyViewModel.loadScannedText(rawText: text)
-            }
+            await studyViewModel.loadScannedText(rawText: text)
             await MainActor.run {
                 navigateToCards = true
             }
@@ -471,9 +463,7 @@ struct DashboardView: View {
             guard !text.isEmpty else { return }
             navigateToCards = true
             studyViewModel.currentSourceType = .pdf
-            if #available(iOS 26.0, *) {
-                await studyViewModel.loadScannedText(rawText: text)
-            }
+            await studyViewModel.loadScannedText(rawText: text)
         } catch {
             return
         }
@@ -490,9 +480,7 @@ struct DashboardView: View {
                 guard !text.isEmpty else { return }
                 navigateToCards = true
                 studyViewModel.currentSourceType = .photo
-                if #available(iOS 26.0, *) {
-                    await studyViewModel.loadScannedText(rawText: text)
-                }
+                await studyViewModel.loadScannedText(rawText: text)
             } catch {
                 return
             }
