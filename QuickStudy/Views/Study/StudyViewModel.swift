@@ -44,26 +44,51 @@ class StudyViewModel: ObservableObject {
         var questions: [QuizQuestion] = []
         questions.reserveCapacity(approvedCards.count)
 
+        // Get all unique answers for the distractor pool
         let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
 
         for (index, card) in approvedCards.enumerated() {
             let correctAnswer = card.answer
             let normalizedCorrect = normalizedAnswer(correctAnswer)
 
+            // Filter out the correct answer and get potential distractors
             var pool = allAnswers.filter { normalizedAnswer($0) != normalizedCorrect }
-            let similarLengthPool = pool.filter { abs($0.count - correctAnswer.count) <= 10 }
-            if !similarLengthPool.isEmpty {
-                pool = similarLengthPool
+            
+            // Improve distractor quality by filtering out answers that are too long
+            // (Long answers make poor multiple choice options)
+            let maxReasonableLength = 120
+            pool = pool.filter { $0.count <= maxReasonableLength }
+            
+            // If correct answer is short (< 50 chars), prefer similar-length distractors
+            // This makes the quiz more challenging and realistic
+            if correctAnswer.count <= 50 {
+                let similarLengthPool = pool.filter { 
+                    abs($0.count - correctAnswer.count) <= 30 
+                }
+                if similarLengthPool.count >= 3 {
+                    pool = similarLengthPool
+                }
             }
 
+            // Select 3 distractors randomly from the filtered pool
             var distractors: [String] = []
-            for answer in pool.shuffled() {
-                distractors.append(answer)
+            let shuffledPool = pool.shuffled()
+            for answer in shuffledPool {
+                // Skip answers that are too similar to the correct one
+                let similarity = calculateSimilarity(answer, correctAnswer)
+                if similarity < 0.7 {  // Less than 70% similar
+                    distractors.append(answer)
+                }
                 if distractors.count == 3 { break }
             }
 
+            // Only use generic fallbacks as a last resort if we don't have enough good distractors
             if distractors.count < 3 {
-                let fallbacks = ["None of the above", "Not sure", "Not listed"]
+                let fallbacks = [
+                    "I don't know",
+                    "Not mentioned in the text",
+                    "Insufficient information"
+                ]
                 for fallback in fallbacks {
                     let normalizedFallback = normalizedAnswer(fallback)
                     if normalizedFallback != normalizedCorrect
@@ -74,6 +99,7 @@ class StudyViewModel: ObservableObject {
                 }
             }
 
+            // Build choices and shuffle
             var choices: [String] = [correctAnswer] + distractors
             choices.shuffle()
 
@@ -90,6 +116,25 @@ class StudyViewModel: ObservableObject {
         }
 
         return questions
+    }
+    
+    // Calculate similarity between two strings (0.0 = completely different, 1.0 = identical)
+    private func calculateSimilarity(_ str1: String, _ str2: String) -> Double {
+        let norm1 = normalizedAnswer(str1)
+        let norm2 = normalizedAnswer(str2)
+        
+        if norm1 == norm2 { return 1.0 }
+        
+        // Calculate word-level similarity
+        let words1 = Set(norm1.split(separator: " ").map { String($0) })
+        let words2 = Set(norm2.split(separator: " ").map { String($0) })
+        
+        guard !words1.isEmpty && !words2.isEmpty else { return 0.0 }
+        
+        let intersection = words1.intersection(words2)
+        let union = words1.union(words2)
+        
+        return Double(intersection.count) / Double(union.count)
     }
 
     // MARK: - Persistence
