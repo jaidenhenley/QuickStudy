@@ -34,6 +34,8 @@ struct IpadHomeScreen: View {
     @State private var showFileImporter = false
     @State var selectedPhotoItem: PhotosPickerItem? = nil
     @State var navigateToCards = false
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
 
     private var isScannerSupported: Bool {
 #if targetEnvironment(simulator)
@@ -93,6 +95,11 @@ struct IpadHomeScreen: View {
         } message: {
             Text("Document scanning isn't available in the simulator. Try on a real device.")
         }
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(errorMessage)
+        }
         .navigationDestination(isPresented: $navigateToCards) {
             CardsView()
                 .environmentObject(studyViewModel)
@@ -144,26 +151,44 @@ struct IpadHomeScreen: View {
     private func processOCR(images: [UIImage]) async {
         do {
             let text = try await importHelper().extractText(from: images)
-            guard !text.isEmpty else { return }
+            guard !text.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "No text found in the scanned image. Try scanning a different page."
+                    showErrorAlert = true
+                }
+                return
+            }
             studyViewModel.currentSourceType = .scan
             await studyViewModel.loadScannedText(rawText: text)
             await MainActor.run {
                 navigateToCards = true
             }
         } catch {
-            return
+            await MainActor.run {
+                errorMessage = "Failed to process the scan. Please try again."
+                showErrorAlert = true
+            }
         }
     }
 
     private func processPDF(url: URL) async {
         do {
             let text = try await importHelper().extractText(from: url)
-            guard !text.isEmpty else { return }
+            guard !text.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "No text found in the PDF. Try a different document."
+                    showErrorAlert = true
+                }
+                return
+            }
             navigateToCards = true
             studyViewModel.currentSourceType = .pdf
             await studyViewModel.loadScannedText(rawText: text)
         } catch {
-            return
+            await MainActor.run {
+                errorMessage = "Failed to import the PDF. Please check the file and try again."
+                showErrorAlert = true
+            }
         }
     }
 
@@ -175,12 +200,21 @@ struct IpadHomeScreen: View {
            let image = UIImage(data: data) {
             do {
                 let text = try await importHelper().extractText(from: [image])
-                guard !text.isEmpty else { return }
+                guard !text.isEmpty else {
+                    await MainActor.run {
+                        errorMessage = "No text found in the photo. Try a different image."
+                        showErrorAlert = true
+                    }
+                    return
+                }
                 navigateToCards = true
                 studyViewModel.currentSourceType = .photo
                 await studyViewModel.loadScannedText(rawText: text)
             } catch {
-                return
+                await MainActor.run {
+                    errorMessage = "Failed to process the photo. Please try again."
+                    showErrorAlert = true
+                }
             }
         }
     }
@@ -199,6 +233,8 @@ struct DashboardView: View {
     @State var selectedPhotoItem: PhotosPickerItem? = nil
     @State private var showFileImporter = false
     @State var navigateToCards = false
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
 
     var isScannerSupported: Bool {
 #if targetEnvironment(simulator)
@@ -261,6 +297,11 @@ struct DashboardView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Document scanning isn't available in the simulator. Try on a real device.")
+        }
+        .alert("Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(errorMessage)
         }
         .background(BackgroundView())
         .navigationDestination(isPresented: $navigateToCards) {
@@ -446,26 +487,44 @@ struct DashboardView: View {
     private func processOCR(images: [UIImage]) async {
         do {
             let text = try await importHelper().extractText(from: images)
-            guard !text.isEmpty else { return }
+            guard !text.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "No text found in the scanned image. Try scanning a different page."
+                    showErrorAlert = true
+                }
+                return
+            }
             studyViewModel.currentSourceType = .scan
             await studyViewModel.loadScannedText(rawText: text)
             await MainActor.run {
                 navigateToCards = true
             }
         } catch {
-            return
+            await MainActor.run {
+                errorMessage = "Failed to process the scan. Please try again."
+                showErrorAlert = true
+            }
         }
     }
 
     private func processPDF(url: URL) async {
         do {
             let text = try await importHelper().extractText(from: url)
-            guard !text.isEmpty else { return }
+            guard !text.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "No text found in the PDF. Try a different document."
+                    showErrorAlert = true
+                }
+                return
+            }
             navigateToCards = true
             studyViewModel.currentSourceType = .pdf
             await studyViewModel.loadScannedText(rawText: text)
         } catch {
-            return
+            await MainActor.run {
+                errorMessage = "Failed to import the PDF. Please check the file and try again."
+                showErrorAlert = true
+            }
         }
     }
 
@@ -477,12 +536,21 @@ struct DashboardView: View {
            let image = UIImage(data: data) {
             do {
                 let text = try await importHelper().extractText(from: [image])
-                guard !text.isEmpty else { return }
+                guard !text.isEmpty else {
+                    await MainActor.run {
+                        errorMessage = "No text found in the photo. Try a different image."
+                        showErrorAlert = true
+                    }
+                    return
+                }
                 navigateToCards = true
                 studyViewModel.currentSourceType = .photo
                 await studyViewModel.loadScannedText(rawText: text)
             } catch {
-                return
+                await MainActor.run {
+                    errorMessage = "Failed to process the photo. Please try again."
+                    showErrorAlert = true
+                }
             }
         }
     }
