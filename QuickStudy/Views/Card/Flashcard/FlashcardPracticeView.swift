@@ -10,6 +10,7 @@ import SwiftUI
 struct FlashcardPracticeView: View {
     let cards: [StudyCard]
     @State private var currentIndex = 0
+    @EnvironmentObject var appState: AppState
     
     private var lastIndex: Int {
         max(0, cards.count - 1)
@@ -60,6 +61,9 @@ struct FlashcardPracticeView: View {
             .padding(.horizontal, 24)
         }
         .navigationTitle("Practice")
+        .onAppear {
+            appState.practiceViewAppeared = Date()
+        }
         .onChange(of: cards.count) { _, _ in
             if cards.isEmpty {
                 currentIndex = 0

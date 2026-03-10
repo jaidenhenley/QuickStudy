@@ -216,7 +216,7 @@ class StudyViewModel: ObservableObject {
     }
 
     private func generateDemoCards(from lines: [String]) -> [StudyCard] {
-        return generateCards(from: lines, approved: true, limit: 12)
+        return generateCards(from: lines, approved: false, limit: 12)
     }
 
     private func generateCards(from lines: [String], approved: Bool, limit: Int) -> [StudyCard] {
@@ -495,9 +495,8 @@ class StudyViewModel: ObservableObject {
     }
 
     private func seedDemoSetsIfNeeded() {
-        let demoTitles = Set(["Human Interface Guidelines", "SwiftUI", "SpriteKit"])
-        let existingDemoTitles = Set(savedSets.filter { isDemoSet($0) }.map { $0.title })
-        guard existingDemoTitles != demoTitles else { return }
+        // Always remove and regenerate demo sets to ensure they have the latest configuration
+        savedSets.removeAll { isDemoSet($0) }
 
         let higDocument = StudyDocument(title: "Human Interface Guidelines", lines: DemoData.higLines)
         let swiftUIDocument = StudyDocument(title: "SwiftUI", lines: DemoData.swiftuiLines)
@@ -509,7 +508,6 @@ class StudyViewModel: ObservableObject {
         let swiftUISet = StudySet(title: swiftUIDocument.title, document: swiftUIDocument, cards: swiftUICards, sourceType: .demo, isDemo: true)
         let spriteKitSet = StudySet(title: spriteKitDocument.title, document: spriteKitDocument, cards: spriteKitCards, sourceType: .demo, isDemo: true)
 
-        savedSets.removeAll { isDemoSet($0) }
         savedSets = [higSet, swiftUISet, spriteKitSet] + savedSets
         saveSavedSets()
     }

@@ -21,10 +21,6 @@ struct SettingsView: View {
                     Toggle("Spell Check", isOn: $studyViewModel.isSpellCheckEnabled)
                 }
 
-                Section("Demo") {
-                    Toggle("Demo Mode", isOn: $studyViewModel.demoModeEnabled)
-                }
-
                 Section("Help") {
                     Button("How to use QuickStudy") {
                         showOnboarding = true
@@ -33,15 +29,16 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
         }
-        .sheet(isPresented: $showOnboarding) {
-            OnboardingView(
-                onDismiss: {
-                    didShowOnboarding = true
+        .fullScreenCover(isPresented: $showOnboarding) {
+            WelcomeScreen(
+                onStart: {
+                    showOnboarding = false
+                    studyViewModel.demoModeEnabled = true
+                },
+                onSkip: {
                     showOnboarding = false
                 }
             )
-            .presentationDetents([.large])
-            .presentationDragIndicator(.visible)
         }
     }
 }

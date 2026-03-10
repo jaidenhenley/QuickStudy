@@ -10,6 +10,7 @@ import SwiftUI
 
 struct StudyView: View {
     @EnvironmentObject var stuViewModel: StudyViewModel
+    @EnvironmentObject var appState: AppState
     @State private var navigateToPractice = false
 
     private var approvedCards: [StudyCard] {
@@ -41,44 +42,56 @@ struct StudyView: View {
                 }
                 .padding(.horizontal)
 
-                LazyVStack(spacing: 12) {
-                    ForEach(stuViewModel.flashcards) { card in
-                        HStack(alignment: .top, spacing: 12) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(card.question)
-                                    .font(.headline)
-                                Text(card.answer)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Spacer()
-
-                            HStack(spacing: 6) {
-                                Text("Include")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                Toggle("", isOn: approvedBinding(for: card))
-                                    .labelsHidden()
-                                    .toggleStyle(.switch)
-                            }
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            toggleApproval(for: card)
-                        }
-                        .appGlassCard(cornerRadius: 12)
+                if approvedCards.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "checkmark.circle")
+                            .font(.system(size: 48))
+                            .foregroundStyle(.secondary)
+                        Text("No cards approved yet")
+                            .font(.headline)
+                        Text("Go back and approve some flashcards to practice with them here.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
                     }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    LazyVStack(spacing: 12) {
+                        ForEach(approvedCards) { card in
+                            HStack(alignment: .top, spacing: 12) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(card.question)
+                                        .font(.headline)
+                                    Text(card.answer)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+
+                                Spacer()
+
+                                HStack(spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(Theme.primary)
+                                        .font(.title3)
+                                }
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .appGlassCard(cornerRadius: 12)
+                        }
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
         }
         .background(BackgroundView())
         .navigationTitle(stuViewModel.document?.title ?? "Study GUide")
         .navigationDestination(isPresented: $navigateToPractice) {
             FlashcardPracticeView(cards: approvedCards)
+        }
+        .onAppear {
+            appState.studyViewAppeared = Date()
         }
     }
     

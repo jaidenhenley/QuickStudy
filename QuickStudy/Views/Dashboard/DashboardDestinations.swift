@@ -39,12 +39,14 @@ struct PDFImportView: View {
 
 struct StudySetDetailView: View {
     @EnvironmentObject var viewModel: StudyViewModel
+    @EnvironmentObject var appState: AppState
     let set: StudySet
 
     var body: some View {
         CardsView()
             .onAppear {
                 viewModel.loadSet(set)
+                appState.setDetailViewAppeared = Date()
             }
     }
 }

@@ -49,6 +49,9 @@ struct QuizView: View {
                 content
             }
         }
+        .onAppear {
+            appState.quizViewAppeared = Date()
+        }
         .onDisappear {
             appState.isQuickQuizEntry = false
         }

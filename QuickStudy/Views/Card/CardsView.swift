@@ -85,12 +85,13 @@ struct CardsView: View {
 
     @ViewBuilder
     func content(for doc: StudyDocument, metrics: LayoutMetrics) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: metrics.spacing) {
-                // Document text
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(doc.title)
-                        .font(.headline)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: metrics.spacing) {
+                    // Document text
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(doc.title)
+                            .font(.headline)
 
                     if !isDocumentExpanded {
                         Text(paragraphPreview(for: doc, lineCount: 10))
@@ -154,8 +155,21 @@ struct CardsView: View {
                         }
                     }
                 }
+                .id("flashcards")
             }
             .padding(metrics.padding)
+            .onChange(of: appState.scrollToFlashcards) { _, shouldScroll in
+                if shouldScroll {
+                    withAnimation {
+                        proxy.scrollTo("flashcards", anchor: .top)
+                    }
+                    // Reset the flag
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        appState.scrollToFlashcards = false
+                    }
+                }
+            }
+        }
         }
         .overlay {
             if viewModel.isGenerating {

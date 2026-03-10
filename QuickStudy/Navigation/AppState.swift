@@ -19,4 +19,9 @@ import Combine
 
     @Published var selectedTab: Tab = .scan
     @Published var isQuickQuizEntry: Bool = false
+    @Published var setDetailViewAppeared: Date? = nil
+    @Published var quizViewAppeared: Date? = nil
+    @Published var studyViewAppeared: Date? = nil
+    @Published var practiceViewAppeared: Date? = nil
+    @Published var scrollToFlashcards: Bool = false
 }
