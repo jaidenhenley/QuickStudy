@@ -80,6 +80,8 @@ struct WelcomeScreen: View {
                         .background(Theme.primary)
                         .cornerRadius(12)
                 }
+                .accessibilityLabel("Try interactive demo")
+                .accessibilityHint("Starts a guided tutorial of the app")
                 
                 Button {
                     onSkip()
@@ -88,6 +90,8 @@ struct WelcomeScreen: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+                .accessibilityLabel("Skip tutorial")
+                .accessibilityHint("Skips the tutorial and goes straight to the app")
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 32)
@@ -103,7 +107,6 @@ struct TutorialOverlay: View {
     let onSkip: () -> Void
     
     var body: some View {
-        let _ = print("🎨 TutorialOverlay rendering with step: \(step)")
         VStack {
             Spacer()
             
@@ -154,7 +157,7 @@ struct TutorialOverlay: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 8)
                 
-                // Action area - only show button on final step
+                // Action area - show buttons for all steps
                 if step == .complete {
                     VStack(spacing: 12) {
                         Button {
@@ -174,15 +177,32 @@ struct TutorialOverlay: View {
                     }
                     .padding(.top, 4)
                 } else {
-                    // Show skip option for all other steps
-                    Button {
-                        onSkip()
-                    } label: {
-                        Text("Exit Tutorial")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                    // Show Next and Exit buttons for all tutorial steps
+                    VStack(spacing: 12) {
+                        Button {
+                            onNext()
+                        } label: {
+                            HStack {
+                                Text("Next")
+                                Image(systemName: "arrow.right")
+                            }
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(Theme.primary)
+                            .cornerRadius(10)
+                        }
+                        
+                        Button {
+                            onSkip()
+                        } label: {
+                            Text("Exit Tutorial")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                     }
-                    .padding(.top, 8)
+                    .padding(.top, 4)
                 }
             }
             .padding(24)
@@ -290,7 +310,7 @@ struct TutorialOverlay: View {
     
     private var isTimedStep: Bool {
         switch step {
-        case .viewDemoSets, .viewFlashcards, .startQuiz:
+        case .viewDemoSets, .viewFlashcards, .viewStudyList, .flipCard, .startQuiz:
             return true
         default:
             return false
@@ -299,9 +319,11 @@ struct TutorialOverlay: View {
     
     private var stepDuration: TimeInterval {
         switch step {
-        case .viewDemoSets: return 4.0
-        case .viewFlashcards: return 5.0
-        case .startQuiz: return 3.0
+        case .viewDemoSets: return 8.0
+        case .viewFlashcards: return 10.0
+        case .viewStudyList: return 6.0
+        case .flipCard: return 8.0
+        case .startQuiz: return 6.0
         default: return 0
         }
     }

@@ -92,13 +92,7 @@ struct ContentView: View {
             WelcomeScreen(
                 onStart: {
                     showOnboarding = false
-                    viewModel.demoModeEnabled = true
-                    // Start at viewDemoSets (step 1 of tutorial overlay)
-                    currentTutorialStep = .viewDemoSets
-                    // Delay showing overlay so user sees the app first
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        showTutorialOverlay = true
-                    }
+                    startTutorial()
                 },
                 onSkip: {
                     showOnboarding = false
@@ -124,34 +118,35 @@ struct ContentView: View {
         }
         .onChange(of: appState.setDetailViewAppeared) { _, _ in
             if showTutorialOverlay {
-                print("📚 Set detail view appeared - current step: \(currentTutorialStep)")
                 // When user taps a set, we advance from tapFirstSet to viewFlashcards
                 if currentTutorialStep == .tapFirstSet {
-                    print("   → Advancing from tapFirstSet to viewFlashcards")
                     advanceTutorial()
                 }
             }
         }
         .onChange(of: appState.studyViewAppeared) { _, _ in
             if showTutorialOverlay && currentTutorialStep == .openStudyMode {
-                print("📚 Study view appeared - advancing from openStudyMode to viewStudyList")
                 advanceTutorial()
             }
         }
         .onChange(of: appState.practiceViewAppeared) { _, _ in
             if showTutorialOverlay && currentTutorialStep == .startPractice {
-                print("🎴 Practice view appeared - advancing from startPractice to flipCard")
                 advanceTutorial()
             }
         }
         .onChange(of: appState.quizViewAppeared) { _, _ in
             if showTutorialOverlay && currentTutorialStep == .goToQuiz {
-                print("📝 Quiz view appeared - advancing from goToQuiz to startQuiz")
                 advanceTutorial()
             }
         }
         .onChange(of: currentTutorialStep) { _, newStep in
             handleStepChange(newStep)
+        }
+        .onChange(of: appState.shouldRestartTutorial) { _, shouldRestart in
+            if shouldRestart {
+                appState.shouldRestartTutorial = false
+                startTutorial()
+            }
         }
         .onChange(of: viewModel.flashcards) { oldCards, newCards in
             // Detect when a card gets approved
@@ -160,55 +155,53 @@ struct ContentView: View {
                 let newApprovedCount = newCards.filter { $0.approved }.count
                 
                 if newApprovedCount > oldApprovedCount {
-                    print("✓ Card approved - advancing from approveCard to goToQuiz")
                     advanceTutorial()
                 }
             }
         }
     }
     
+    private func startTutorial() {
+        viewModel.demoModeEnabled = true
+        currentTutorialStep = .viewDemoSets
+        appState.selectedTab = .scan
+        splitSelection = .home
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            showTutorialOverlay = true
+        }
+    }
+
     private func advanceTutorial() {
         withAnimation {
-            print("🎯 Advancing tutorial from: \(currentTutorialStep)")
             switch currentTutorialStep {
             case .welcome:
                 currentTutorialStep = .viewDemoSets
-                print("   → Now on: viewDemoSets")
             case .viewDemoSets:
                 currentTutorialStep = .tapFirstSet
-                print("   → Now on: tapFirstSet")
             case .tapFirstSet:
                 currentTutorialStep = .viewFlashcards
-                print("   → Now on: viewFlashcards")
             case .viewFlashcards:
                 currentTutorialStep = .approveCard
-                print("   → Now on: approveCard")
             case .approveCard:
                 currentTutorialStep = .openStudyMode
-                print("   → Now on: openStudyMode")
             case .openStudyMode:
                 currentTutorialStep = .viewStudyList
-                print("   → Now on: viewStudyList")
             case .viewStudyList:
                 currentTutorialStep = .startPractice
-                print("   → Now on: startPractice")
             case .startPractice:
                 currentTutorialStep = .flipCard
-                print("   → Now on: flipCard")
             case .flipCard:
                 currentTutorialStep = .goToQuiz
-                print("   → Now on: goToQuiz")
             case .goToQuiz:
                 currentTutorialStep = .startQuiz
-                print("   → Now on: startQuiz")
             case .startQuiz:
                 currentTutorialStep = .complete
-                print("   → Now on: complete")
             case .complete:
-                print("   → Tutorial finished, closing overlay")
                 showTutorialOverlay = false
                 viewModel.demoModeEnabled = false
                 didShowOnboarding = true
+                appState.selectedTab = .scan
+                splitSelection = .home
             }
         }
     }
@@ -217,15 +210,15 @@ struct ContentView: View {
         // Auto-advance after showing informational steps
         switch step {
         case .viewDemoSets:
-            // Give user 4 seconds to see the demo sets
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            // Give user 8 seconds to see the demo sets
+            DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) {
                 if self.currentTutorialStep == .viewDemoSets {
                     self.advanceTutorial()
                 }
             }
         case .viewFlashcards:
-            // Give user 5 seconds to see the flashcards view
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            // Give user 10 seconds to see the flashcards view
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 if self.currentTutorialStep == .viewFlashcards {
                     self.advanceTutorial()
                 }
@@ -238,22 +231,22 @@ struct ContentView: View {
                 }
             }
         case .viewStudyList:
-            // Give user 3 seconds to see the study list
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            // Give user 6 seconds to see the study list
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) {
                 if self.currentTutorialStep == .viewStudyList {
                     self.advanceTutorial()
                 }
             }
         case .flipCard:
-            // Give user 4 seconds to try flipping the card
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            // Give user 8 seconds to try flipping the card
+            DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) {
                 if self.currentTutorialStep == .flipCard {
                     self.advanceTutorial()
                 }
             }
         case .startQuiz:
-            // Give user 3 seconds to see the quiz
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            // Give user 6 seconds to see the quiz
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) {
                 if self.currentTutorialStep == .startQuiz {
                     self.advanceTutorial()
                 }

@@ -24,4 +24,5 @@ import Combine
     @Published var studyViewAppeared: Date? = nil
     @Published var practiceViewAppeared: Date? = nil
     @Published var scrollToFlashcards: Bool = false
+    @Published var shouldRestartTutorial: Bool = false
 }

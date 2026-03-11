@@ -82,12 +82,25 @@ class StudyViewModel: ObservableObject {
                 if distractors.count == 3 { break }
             }
 
-            // Only use generic fallbacks as a last resort if we don't have enough good distractors
+            // If still short on distractors, relax filters and try again
+            if distractors.count < 3 {
+                let relaxedPool = allAnswers
+                    .filter { normalizedAnswer($0) != normalizedCorrect }
+                    .filter { candidate in
+                        !distractors.contains(where: { normalizedAnswer($0) == normalizedAnswer(candidate) })
+                    }
+                for answer in relaxedPool.shuffled() {
+                    distractors.append(answer)
+                    if distractors.count == 3 { break }
+                }
+            }
+
+            // Only use generic fallbacks as a last resort
             if distractors.count < 3 {
                 let fallbacks = [
-                    "I don't know",
-                    "Not mentioned in the text",
-                    "Insufficient information"
+                    "None of the above",
+                    "All of the above",
+                    "Not covered in the material"
                 ]
                 for fallback in fallbacks {
                     let normalizedFallback = normalizedAnswer(fallback)
@@ -99,8 +112,11 @@ class StudyViewModel: ObservableObject {
                 }
             }
 
-            // Build choices and shuffle
+            // Build choices and shuffle — ensure at least 2 options
             var choices: [String] = [correctAnswer] + distractors
+            if choices.count < 2 {
+                choices.append("Not applicable")
+            }
             choices.shuffle()
 
             let correctIndex = choices.firstIndex(of: correctAnswer) ?? 0

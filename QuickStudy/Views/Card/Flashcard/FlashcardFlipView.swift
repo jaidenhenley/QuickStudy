@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct FlashcardFlipView: View {
     let card: StudyCard
@@ -24,8 +25,13 @@ struct FlashcardFlipView: View {
         .animation(.spring(response: 0.35, dampingFraction: 0.8), value: isFlipped)
         .contentShape(Rectangle())
         .onTapGesture {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
             isFlipped.toggle()
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(isFlipped ? "Answer: \(card.answer)" : "Question: \(card.question)")
+        .accessibilityHint("Tap to flip the card")
+        .accessibilityAddTraits(.isButton)
     }
 }
 

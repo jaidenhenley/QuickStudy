@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct QuizQuestionView: View {
     @EnvironmentObject var viewModel: StudyViewModel
@@ -56,7 +57,10 @@ struct QuizQuestionView: View {
                 VStack(spacing: 12) {
                     ForEach(0..<currentQuestion.choices.count, id: \.self) { index in
                         Button {
-                            if !hasSubmitted { selectedAnswer = index }
+                            if !hasSubmitted {
+                                UISelectionFeedbackGenerator().selectionChanged()
+                                selectedAnswer = index
+                            }
                         } label: {
                             HStack {
                                 Text(currentQuestion.choices[index])
@@ -74,6 +78,7 @@ struct QuizQuestionView: View {
                             )
                         }
                         .disabled(hasSubmitted)
+                        .accessibilityLabel(answerAccessibilityLabel(for: index))
                     }
                 }
                 
@@ -176,6 +181,9 @@ struct QuizQuestionView: View {
 
         if selectedAnswer == currentQuestion.correctIndex {
             score += 1
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
         hasSubmitted = true
     }
@@ -188,6 +196,7 @@ struct QuizQuestionView: View {
             selectedAnswer = nil
             hasSubmitted = false
         } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
             isFinished = true
         }
     }
@@ -198,6 +207,24 @@ struct QuizQuestionView: View {
         selectedAnswer = nil
         hasSubmitted = false
         isFinished = false
+    }
+
+    private func answerAccessibilityLabel(for index: Int) -> String {
+        guard let currentQuestion = currentQuestion else { return "" }
+        let choiceText = currentQuestion.choices[index]
+        let isSelected = selectedAnswer == index
+        var label = "Choice \(index + 1): \(choiceText)"
+        if isSelected && !hasSubmitted {
+            label += ", selected"
+        }
+        if hasSubmitted {
+            if index == currentQuestion.correctIndex {
+                label += ", correct answer"
+            } else if isSelected {
+                label += ", incorrect"
+            }
+        }
+        return label
     }
        
     

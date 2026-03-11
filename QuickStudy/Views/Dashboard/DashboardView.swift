@@ -111,8 +111,9 @@ struct IpadHomeScreen: View {
                 Task {
                     await processPDF(url: url)
                 }
-            case .failure:
-                break
+            case .failure(let error):
+                errorMessage = "Failed to open the file: \(error.localizedDescription)"
+                showErrorAlert = true
             }
         }
         .onChange(of: selectedPhotoItem) { _, _ in
@@ -196,25 +197,30 @@ struct IpadHomeScreen: View {
         guard let selectedPhotoItem else { return }
         self.selectedPhotoItem = nil
 
-        if let data = try? await selectedPhotoItem.loadTransferable(type: Data.self),
-           let image = UIImage(data: data) {
-            do {
-                let text = try await importHelper().extractText(from: [image])
-                guard !text.isEmpty else {
-                    await MainActor.run {
-                        errorMessage = "No text found in the photo. Try a different image."
-                        showErrorAlert = true
-                    }
-                    return
-                }
-                navigateToCards = true
-                studyViewModel.currentSourceType = .photo
-                await studyViewModel.loadScannedText(rawText: text)
-            } catch {
+        do {
+            guard let data = try await selectedPhotoItem.loadTransferable(type: Data.self),
+                  let image = UIImage(data: data) else {
                 await MainActor.run {
-                    errorMessage = "Failed to process the photo. Please try again."
+                    errorMessage = "Could not load the selected photo. Try a different image."
                     showErrorAlert = true
                 }
+                return
+            }
+            let text = try await importHelper().extractText(from: [image])
+            guard !text.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "No text found in the photo. Try a different image."
+                    showErrorAlert = true
+                }
+                return
+            }
+            navigateToCards = true
+            studyViewModel.currentSourceType = .photo
+            await studyViewModel.loadScannedText(rawText: text)
+        } catch {
+            await MainActor.run {
+                errorMessage = "Failed to process the photo. Please try again."
+                showErrorAlert = true
             }
         }
     }
@@ -315,8 +321,9 @@ struct DashboardView: View {
                 Task {
                     await processPDF(url: url)
                 }
-            case .failure:
-                break
+            case .failure(let error):
+                errorMessage = "Failed to open the file: \(error.localizedDescription)"
+                showErrorAlert = true
             }
         }
         .onChange(of: selectedPhotoItem) { _, _ in
@@ -458,12 +465,15 @@ struct DashboardView: View {
         }
     }
 
+    @ViewBuilder
     private var quickQuizSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Quiz")
-                .font(.headline)
+        if !studyViewModel.savedSets.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Quick Quiz")
+                    .font(.headline)
 
-            QuickQuizCard()
+                QuickQuizCard()
+            }
         }
     }
 
@@ -532,25 +542,30 @@ struct DashboardView: View {
         guard let selectedPhotoItem else { return }
         self.selectedPhotoItem = nil
 
-        if let data = try? await selectedPhotoItem.loadTransferable(type: Data.self),
-           let image = UIImage(data: data) {
-            do {
-                let text = try await importHelper().extractText(from: [image])
-                guard !text.isEmpty else {
-                    await MainActor.run {
-                        errorMessage = "No text found in the photo. Try a different image."
-                        showErrorAlert = true
-                    }
-                    return
-                }
-                navigateToCards = true
-                studyViewModel.currentSourceType = .photo
-                await studyViewModel.loadScannedText(rawText: text)
-            } catch {
+        do {
+            guard let data = try await selectedPhotoItem.loadTransferable(type: Data.self),
+                  let image = UIImage(data: data) else {
                 await MainActor.run {
-                    errorMessage = "Failed to process the photo. Please try again."
+                    errorMessage = "Could not load the selected photo. Try a different image."
                     showErrorAlert = true
                 }
+                return
+            }
+            let text = try await importHelper().extractText(from: [image])
+            guard !text.isEmpty else {
+                await MainActor.run {
+                    errorMessage = "No text found in the photo. Try a different image."
+                    showErrorAlert = true
+                }
+                return
+            }
+            navigateToCards = true
+            studyViewModel.currentSourceType = .photo
+            await studyViewModel.loadScannedText(rawText: text)
+        } catch {
+            await MainActor.run {
+                errorMessage = "Failed to process the photo. Please try again."
+                showErrorAlert = true
             }
         }
     }

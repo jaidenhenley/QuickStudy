@@ -40,11 +40,7 @@ struct QuizView: View {
 
         Group {
             if appState.isQuickQuizEntry {
-                if #available(iOS 17.0, *) {
-                    content.toolbar(removing: .sidebarToggle)
-                } else {
-                    // Fallback on earlier versions
-                }
+                content.toolbar(removing: .sidebarToggle)
             } else {
                 content
             }

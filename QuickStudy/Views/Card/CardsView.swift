@@ -16,52 +16,47 @@ struct CardsView: View {
     @State private var isDocumentExpanded = false
 
     var body: some View {
-        if #available(iOS 17.0, *) {
-            GeometryReader { proxy in
-                let m = LayoutMetrics(availableWidth: proxy.size.width)
-                Group {
-                    if let doc = viewModel.currentDocument {
-                        content(for: doc, metrics: m)
-                    } else {
-                        emptyState
-                    }
-
+        GeometryReader { proxy in
+            let m = LayoutMetrics(availableWidth: proxy.size.width)
+            Group {
+                if let doc = viewModel.currentDocument {
+                    content(for: doc, metrics: m)
+                } else {
+                    emptyState
                 }
             }
-            .navigationTitle("Cards")
-            .navigationBarTitleDisplayMode(.inline)
-            .alert("Generation Error", isPresented: Binding(
-                get: { viewModel.generationErrorMessage != nil },
-                set: { isPresented in
-                    if !isPresented { viewModel.generationErrorMessage = nil }
-                }
-            ), presenting: viewModel.generationErrorMessage) { _ in
-                Button("OK", role: .cancel) { }
-            } message: { message in
-                Text(message)
+        }
+        .navigationTitle("Cards")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert("Generation Error", isPresented: Binding(
+            get: { viewModel.generationErrorMessage != nil },
+            set: { isPresented in
+                if !isPresented { viewModel.generationErrorMessage = nil }
             }
-            .navigationDestination(isPresented: $navigateToStudy) {
-                StudyView()
-                    .environmentObject(viewModel)
-                    .environmentObject(appState)
-            }
-            .navigationDestination(isPresented: $navigateToQuiz) {
-                QuizView()
-                    .environmentObject(viewModel)
-                    .environmentObject(appState)
-            }
-            .background(BackgroundView())
-            .onChange(of: viewModel.flashcards) { _, _ in
-                viewModel.saveCurrentSet()
-            }
-            .onChange(of: viewModel.document) { _, _ in
-                viewModel.saveCurrentSet()
-            }
-            .onDisappear {
-                viewModel.saveCurrentSet()
-            }
-        } else {
-            
+        ), presenting: viewModel.generationErrorMessage) { _ in
+            Button("OK", role: .cancel) { }
+        } message: { message in
+            Text(message)
+        }
+        .navigationDestination(isPresented: $navigateToStudy) {
+            StudyView()
+                .environmentObject(viewModel)
+                .environmentObject(appState)
+        }
+        .navigationDestination(isPresented: $navigateToQuiz) {
+            QuizView()
+                .environmentObject(viewModel)
+                .environmentObject(appState)
+        }
+        .background(BackgroundView())
+        .onChange(of: viewModel.flashcards) { _, _ in
+            viewModel.saveCurrentSet()
+        }
+        .onChange(of: viewModel.document) { _, _ in
+            viewModel.saveCurrentSet()
+        }
+        .onDisappear {
+            viewModel.saveCurrentSet()
         }
     }
 

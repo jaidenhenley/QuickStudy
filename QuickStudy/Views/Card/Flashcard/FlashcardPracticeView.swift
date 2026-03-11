@@ -42,6 +42,7 @@ struct FlashcardPracticeView: View {
                         }
                         .buttonStyle(.bordered)
                         .disabled(currentIndex == 0)
+                        .accessibilityLabel("Previous card")
 
                         Button("Next") {
                             guard !cards.isEmpty else { return }
@@ -49,6 +50,7 @@ struct FlashcardPracticeView: View {
                         }
                         .appProminentButtonStyle(tint: Theme.primary)
                         .disabled(currentIndex >= cards.count - 1)
+                        .accessibilityLabel("Next card")
                     }
                 } else {
                     Text("No approved cards yet.")

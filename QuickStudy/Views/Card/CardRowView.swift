@@ -12,6 +12,7 @@ struct CardRowView: View {
     let deleteCard: () -> Void
 
     @State private var isEditing = false
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -50,15 +51,25 @@ struct CardRowView: View {
                 } label: {
                     Image(systemName: isEditing ? "checkmark" : "pencil")
                 }
+                .accessibilityLabel(isEditing ? "Done editing" : "Edit card")
                 Button(role: .destructive) {
-                    deleteCard()
+                    showDeleteConfirmation = true
                 } label: {
                     Image(systemName: "trash")
                 }
+                .accessibilityLabel("Delete card")
             }
 
         }
         .padding(12)
         .appGlassCard(cornerRadius: 16)
+        .alert("Delete Card", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                deleteCard()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to delete this card? This cannot be undone.")
+        }
     }
 }

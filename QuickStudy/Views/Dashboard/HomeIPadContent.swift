@@ -129,11 +129,13 @@ struct HomeIPadContent: View {
                     }
                 }
 
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Quick Quiz")
-                        .font(.headline)
+                if !studyViewModel.savedSets.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Quick Quiz")
+                            .font(.headline)
 
-                    QuickQuizCard()
+                        QuickQuizCard()
+                    }
                 }
             }
 

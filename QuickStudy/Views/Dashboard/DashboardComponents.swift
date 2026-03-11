@@ -33,6 +33,8 @@ struct ContinueSourceCard: View {
         }
         .padding()
         .appGlassCard(cornerRadius: 16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(source.title), \(source.progressText)")
     }
 }
 

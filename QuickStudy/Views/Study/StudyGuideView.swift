@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+              
 
 struct StudyView: View {
     @EnvironmentObject var stuViewModel: StudyViewModel
@@ -39,6 +39,7 @@ struct StudyView: View {
                     }
                     .appProminentButtonStyle(tint: Theme.primary)
                     .disabled(approvedCards.isEmpty)
+                    .accessibilityLabel("Start practice with \(approvedCards.count) cards")
                 }
                 .padding(.horizontal)
 
@@ -86,7 +87,7 @@ struct StudyView: View {
             }
         }
         .background(BackgroundView())
-        .navigationTitle(stuViewModel.document?.title ?? "Study GUide")
+        .navigationTitle(stuViewModel.document?.title ?? "Study Guide")
         .navigationDestination(isPresented: $navigateToPractice) {
             FlashcardPracticeView(cards: approvedCards)
         }
