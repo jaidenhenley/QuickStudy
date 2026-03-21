@@ -440,7 +440,7 @@ class StudyViewModel: ObservableObject {
 
         let chunkSize = isUltraHandwritingMode ? 8 : 20
         var correctedChunks: [String] = []
-        let engine = CardGenerationEngine()
+        let engine = OnDeviceCardGenerationEngine()
 
         for start in stride(from: 0, to: lineCount, by: chunkSize) {
             let end = min(start + chunkSize, lineCount)
