@@ -28,6 +28,20 @@ struct CardGenerationEngine {
         return response.content.cards.map { AIFlashcard(question: $0.question, answer: $0.answer) }
     }
 
+    func generateDistractors(question: String, correctAnswer: String) async throws -> [String] {
+        let session = LanguageModelSession()
+        let prompt = """
+        Given this flashcard:
+        Question: \(question)
+        Correct Answer: \(correctAnswer)
+
+        Generate 3 plausible but incorrect distractor answers. \
+        Each distractor should be similar in length and style to the correct answer.
+        """
+        let response = try await session.respond(to: prompt, generating: AIAnswerModel.self)
+        return response.content.distractorAnswers
+    }
+
     func repairOCR(lines: [String], candidates: [[String]]) async throws -> String {
         let prompt = buildContextPrompt(lines: lines, candidates: candidates, startIndex: 1)
         let session = LanguageModelSession()
@@ -73,6 +87,11 @@ private struct AIFlashcardModel: Codable {
 
     @Guide(description: "A short, accurate answer")
     let answer: String
+}
+@Generable
+private struct AIAnswerModel: Codable {
+    @Guide(description: "Generate 3 distractor answers that are similar in length and style to the real answer but are clearly incorrect")
+    let distractorAnswers: [String]
 }
 
 @Generable

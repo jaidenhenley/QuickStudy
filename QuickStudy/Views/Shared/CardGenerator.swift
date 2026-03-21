@@ -26,4 +26,18 @@ struct CardGenerator {
         )
 #endif
     }
+
+    /// Generates plausible but incorrect distractor answers for a flashcard using on-device AI.
+    static func generateDistractors(question: String, correctAnswer: String) async throws -> [String] {
+#if canImport(FoundationModels)
+        let engine = CardGenerationEngine()
+        return try await engine.generateDistractors(question: question, correctAnswer: correctAnswer)
+#else
+        throw NSError(
+            domain: "FoundationModelsUnavailable",
+            code: 1,
+            userInfo: [NSLocalizedDescriptionKey: "FoundationModels is unavailable."]
+        )
+#endif
+    }
 }

@@ -31,12 +31,111 @@ class StudyViewModel: ObservableObject {
     @Published var savedSets: [StudySet] = []
     @Published var activeSetID: UUID? = nil
     @Published var currentSourceType: StudySourceType = .scan
+    @Published var aiQuizQuestions: [QuizQuestion]? = nil
+    @Published var isGeneratingQuiz: Bool = false
 
     init() {
         loadSavedSets()
     }
-    
-    // MARK: - Derived data
+
+    // MARK: - AI Quiz Generation
+
+    /// Generates quiz questions using on-device AI for distractors.
+    /// Falls back to the synchronous `quizQuestions` if AI is unavailable or fails.
+    @MainActor
+    func generateAIQuizQuestions() async {
+        let approvedCards = flashcards.filter { $0.approved }
+        guard !approvedCards.isEmpty else {
+            aiQuizQuestions = []
+            return
+        }
+
+        isGeneratingQuiz = true
+        defer { isGeneratingQuiz = false }
+
+        var questions: [QuizQuestion] = []
+
+        for (index, card) in approvedCards.enumerated() {
+            do {
+                let distractors = try await CardGenerator.generateDistractors(
+                    question: card.question,
+                    correctAnswer: card.answer
+                )
+
+                // Take up to 3 distractors, ensure minimum 2 total choices
+                let validDistractors = Array(distractors.prefix(3))
+                var choices = [card.answer] + validDistractors
+                if choices.count < 2 {
+                    choices.append("Not applicable")
+                }
+                choices.shuffle()
+
+                let correctIndex = choices.firstIndex(of: card.answer) ?? 0
+                questions.append(QuizQuestion(
+                    prompt: card.question,
+                    choices: choices,
+                    correctIndex: correctIndex,
+                    explanation: card.answer,
+                    sourceStartLine: index + 1,
+                    sourceEndLine: index + 1
+                ))
+            } catch {
+                // If AI fails for this card, fall back to the pool-based method for it
+                let fallbackQuestion = buildFallbackQuestion(for: card, at: index)
+                questions.append(fallbackQuestion)
+            }
+        }
+
+        aiQuizQuestions = questions
+    }
+
+    /// Builds a single quiz question using the pool-based distractor method (no AI).
+    private func buildFallbackQuestion(for card: StudyCard, at index: Int) -> QuizQuestion {
+        let correctAnswer = card.answer
+        let normalizedCorrect = normalizedAnswer(correctAnswer)
+        let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
+
+        var pool = allAnswers.filter { normalizedAnswer($0) != normalizedCorrect }
+        pool = pool.filter { $0.count <= 120 }
+
+        if correctAnswer.count <= 50 {
+            let similar = pool.filter { abs($0.count - correctAnswer.count) <= 30 }
+            if similar.count >= 3 { pool = similar }
+        }
+
+        var distractors: [String] = []
+        for answer in pool.shuffled() {
+            if calculateSimilarity(answer, correctAnswer) < 0.7 {
+                distractors.append(answer)
+            }
+            if distractors.count == 3 { break }
+        }
+
+        if distractors.count < 3 {
+            for fallback in ["None of the above", "All of the above", "Not covered in the material"] {
+                if normalizedAnswer(fallback) != normalizedCorrect
+                    && !distractors.contains(where: { normalizedAnswer($0) == normalizedAnswer(fallback) }) {
+                    distractors.append(fallback)
+                }
+                if distractors.count == 3 { break }
+            }
+        }
+
+        var choices = [correctAnswer] + distractors
+        if choices.count < 2 { choices.append("Not applicable") }
+        choices.shuffle()
+
+        return QuizQuestion(
+            prompt: card.question,
+            choices: choices,
+            correctIndex: choices.firstIndex(of: correctAnswer) ?? 0,
+            explanation: card.answer,
+            sourceStartLine: index + 1,
+            sourceEndLine: index + 1
+        )
+    }
+
+    // MARK: - Derived data (synchronous fallback)
     var quizQuestions: [QuizQuestion] {
         let approvedCards = flashcards.filter { $0.approved }
         if approvedCards.isEmpty { return [] }
