@@ -110,18 +110,22 @@ struct QuizQuestionView: View {
                 
                 Spacer()
             } else {
-                //Results screeen
+                // Results screen
+                Spacer()
                 VStack(spacing: 20) {
                     Text("Quiz Finished")
                         .font(.largeTitle)
                     
                     Text("Final Score: \(score) / \(questions.count)")
+                        .font(.title2)
                     
                     Button("Restart Quiz") {
                         restartQuiz()
                     }
-                    .buttonStyle(.bordered)
-                }
+                    .appProminentButtonStyle(tint: Theme.primary)
+                    }
+                .frame(maxWidth: .infinity)
+                Spacer()
             }
         }
         .padding()
