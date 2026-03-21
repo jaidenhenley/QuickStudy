@@ -14,7 +14,7 @@ import FoundationModels
 // Wrapping with canImport prevents build failures when the module is missing.
 // The rest of the app talks to simple Swift models only.
 
-struct OnDeviceCardGenerationEngine {
+struct OnDeviceCardGenerationEngine: CardGenerating {
     func generateCards(from text: String) async throws -> [AIFlashcard] {
         let session = LanguageModelSession()
         let prompt = """
