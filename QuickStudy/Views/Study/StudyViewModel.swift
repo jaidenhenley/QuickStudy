@@ -40,8 +40,9 @@ class StudyViewModel: ObservableObject {
 
     // MARK: - AI Quiz Generation
 
-    /// Generates quiz questions using on-device AI for distractors.
-    /// Falls back to the synchronous `quizQuestions` if AI is unavailable or fails.
+    /// Generates quiz questions using a single batch AI call for all distractors.
+    /// This gives the on-device model full context across every card, maximizing quality.
+    /// Falls back to the pool-based method if AI is unavailable or fails.
     @MainActor
     func generateAIQuizQuestions() async {
         let approvedCards = flashcards.filter { $0.approved }
@@ -53,18 +54,31 @@ class StudyViewModel: ObservableObject {
         isGeneratingQuiz = true
         defer { isGeneratingQuiz = false }
 
-        var questions: [QuizQuestion] = []
+        let sourceText = document?.lines.joined(separator: "\n") ?? ""
 
-        for (index, card) in approvedCards.enumerated() {
-            do {
-                let distractors = try await CardGenerator.generateDistractors(
-                    question: card.question,
-                    correctAnswer: card.answer
-                )
+        // Build input for batch generation
+        let cardPairs = approvedCards.map { (question: $0.question, answer: $0.answer) }
 
-                // Take up to 3 distractors, ensure minimum 2 total choices
-                let validDistractors = Array(distractors.prefix(3))
-                var choices = [card.answer] + validDistractors
+        do {
+            // Single AI call for the entire quiz — maximum context for the model
+            let allDistractors = try await CardGenerator.generateQuiz(
+                cards: cardPairs,
+                sourceText: sourceText
+            )
+
+            var questions: [QuizQuestion] = []
+            for (index, card) in approvedCards.enumerated() {
+                let distractors: [String]
+                if index < allDistractors.count {
+                    distractors = Array(allDistractors[index].prefix(3))
+                } else {
+                    // AI returned fewer entries than expected — use fallback for this card
+                    let fallback = buildFallbackQuestion(for: card, at: index)
+                    questions.append(fallback)
+                    continue
+                }
+
+                var choices = [card.answer] + distractors
                 if choices.count < 2 {
                     choices.append("Not applicable")
                 }
@@ -79,14 +93,20 @@ class StudyViewModel: ObservableObject {
                     sourceStartLine: index + 1,
                     sourceEndLine: index + 1
                 ))
-            } catch {
-                // If AI fails for this card, fall back to the pool-based method for it
-                let fallbackQuestion = buildFallbackQuestion(for: card, at: index)
-                questions.append(fallbackQuestion)
             }
-        }
 
-        aiQuizQuestions = questions
+            aiQuizQuestions = questions
+        } catch {
+            // If the batch AI call fails entirely, fall back to pool-based for all cards
+            #if DEBUG
+            print("Batch AI quiz generation failed: \(error.localizedDescription)")
+            #endif
+            var questions: [QuizQuestion] = []
+            for (index, card) in approvedCards.enumerated() {
+                questions.append(buildFallbackQuestion(for: card, at: index))
+            }
+            aiQuizQuestions = questions
+        }
     }
 
     /// Builds a single quiz question using the pool-based distractor method (no AI).
