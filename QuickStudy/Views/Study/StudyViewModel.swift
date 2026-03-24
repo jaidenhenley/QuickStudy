@@ -17,6 +17,8 @@ class StudyViewModel: ObservableObject {
             applyDemoMode()
         }
     }
+    
+    var aiSettings: AISettings = AISettings()
 
     // MARK: - Published state
     @Published var document: StudyDocument? = nil
@@ -98,9 +100,6 @@ class StudyViewModel: ObservableObject {
             aiQuizQuestions = questions
         } catch {
             // If the batch AI call fails entirely, fall back to pool-based for all cards
-            #if DEBUG
-            print("Batch AI quiz generation failed: \(error.localizedDescription)")
-            #endif
             var questions: [QuizQuestion] = []
             for (index, card) in approvedCards.enumerated() {
                 questions.append(buildFallbackQuestion(for: card, at: index))
@@ -308,11 +307,9 @@ class StudyViewModel: ObservableObject {
         } else {
             workingText = rawText
         }
-#if canImport(FoundationModels)
         if isHandwritingMode, let repaired = await contextCorrect(workingText, candidateLines: candidateLines) {
             workingText = repaired
         }
-#endif
         lastCorrectedText = workingText
 
         let lines = normalizeOCRLines(workingText)
@@ -327,22 +324,16 @@ class StudyViewModel: ObservableObject {
         defer { self.isGenerating = false }
         generationErrorMessage = nil
 
-#if canImport(FoundationModels)
         do {
-            let cards = try await CardGenerator.generateAI(from: text)
+            print("[CardGen] mode=\(aiSettings.mode.rawValue) format=\(aiSettings.apiFormat.rawValue) endpoint=\(aiSettings.endpoint?.absoluteString ?? "nil") model=\(aiSettings.modelName ?? "default")")
+            let cards = try await CardGenerator.generateAI(from: text, settings: aiSettings)
             self.flashcards = cards
             saveCurrentSet()
         } catch {
-#if DEBUG
-            print("AI generation failed: \(error.localizedDescription)")
-#endif
             let fallback = generateFallbackCards(from: text)
             self.flashcards = fallback
             saveCurrentSet()
         }
-#else
-        generationErrorMessage = "Apple Intelligence framework not available in this build."
-#endif
     }
 
     private func generateFallbackCards(from text: String) -> [StudyCard] {
@@ -426,7 +417,6 @@ class StudyViewModel: ObservableObject {
         return result
     }
 
-    #if canImport(FoundationModels)
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -455,16 +445,12 @@ class StudyViewModel: ObservableObject {
                     correctedChunks.append(lineSlice.joined(separator: "\n"))
                 }
             } catch {
-#if DEBUG
-                print("Context correction failed: \(error.localizedDescription)")
-#endif
                 correctedChunks.append(lineSlice.joined(separator: "\n"))
             }
         }
 
         return correctedChunks.joined(separator: "\n")
     }
-    #endif
 
     func validatedCorrection(originalLines: [String], correctedText: String) -> String? {
         let correctedLines = correctedText.components(separatedBy: .newlines)
@@ -655,9 +641,7 @@ class StudyViewModel: ObservableObject {
             let data = try encoder.encode(savedSets)
             try data.write(to: persistenceURL, options: [.atomic])
         } catch {
-#if DEBUG
-            print("Failed to save sets: \(error.localizedDescription)")
-#endif
+            
         }
     }
 

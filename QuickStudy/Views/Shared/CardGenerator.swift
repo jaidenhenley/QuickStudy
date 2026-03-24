@@ -11,20 +11,12 @@ import Foundation
 struct CardGenerator {
     // MARK: - AI generation
 
-    static func generateAI(from rawText: String) async throws -> [StudyCard] {
-#if canImport(FoundationModels)
-        let engine = OnDeviceCardGenerationEngine()
+    static func generateAI(from rawText: String, settings: AISettings) async throws -> [StudyCard] {
+        let engine = try AIController.makeGenerator(settings: settings)
         let cards = try await engine.generateCards(from: rawText)
         return cards.map { aiCard in
             StudyCard(question: aiCard.question, answer: aiCard.answer, approved: false)
         }
-#else
-        throw NSError(
-            domain: "FoundationModelsUnavailable",
-            code: 1,
-            userInfo: [NSLocalizedDescriptionKey: "FoundationModels is unavailable."]
-        )
-#endif
     }
 
     /// Generates plausible but incorrect distractor answers for a flashcard using on-device AI.
