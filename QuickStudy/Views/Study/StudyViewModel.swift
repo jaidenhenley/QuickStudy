@@ -17,6 +17,8 @@ class StudyViewModel: ObservableObject {
             applyDemoMode()
         }
     }
+    
+    var aiSettings: AISettings = AISettings()
 
     // MARK: - Published state
     @Published var document: StudyDocument? = nil
@@ -31,12 +33,128 @@ class StudyViewModel: ObservableObject {
     @Published var savedSets: [StudySet] = []
     @Published var activeSetID: UUID? = nil
     @Published var currentSourceType: StudySourceType = .scan
+    @Published var aiQuizQuestions: [QuizQuestion]? = nil
+    @Published var isGeneratingQuiz: Bool = false
 
     init() {
         loadSavedSets()
     }
-    
-    // MARK: - Derived data
+
+    // MARK: - AI Quiz Generation
+
+    /// Generates quiz questions using a single batch AI call for all distractors.
+    /// This gives the on-device model full context across every card, maximizing quality.
+    /// Falls back to the pool-based method if AI is unavailable or fails.
+    @MainActor
+    func generateAIQuizQuestions() async {
+        let approvedCards = flashcards.filter { $0.approved }
+        guard !approvedCards.isEmpty else {
+            aiQuizQuestions = []
+            return
+        }
+
+        isGeneratingQuiz = true
+        defer { isGeneratingQuiz = false }
+
+        let sourceText = document?.lines.joined(separator: "\n") ?? ""
+
+        // Build input for batch generation
+        let cardPairs = approvedCards.map { (question: $0.question, answer: $0.answer) }
+
+        do {
+            // Single AI call for the entire quiz — maximum context for the model
+            let allDistractors = try await CardGenerator.generateQuiz(
+                cards: cardPairs,
+                sourceText: sourceText
+            )
+
+            var questions: [QuizQuestion] = []
+            for (index, card) in approvedCards.enumerated() {
+                let distractors: [String]
+                if index < allDistractors.count {
+                    distractors = Array(allDistractors[index].prefix(3))
+                } else {
+                    // AI returned fewer entries than expected — use fallback for this card
+                    let fallback = buildFallbackQuestion(for: card, at: index)
+                    questions.append(fallback)
+                    continue
+                }
+
+                var choices = [card.answer] + distractors
+                if choices.count < 2 {
+                    choices.append("Not applicable")
+                }
+                choices.shuffle()
+
+                let correctIndex = choices.firstIndex(of: card.answer) ?? 0
+                questions.append(QuizQuestion(
+                    prompt: card.question,
+                    choices: choices,
+                    correctIndex: correctIndex,
+                    explanation: card.answer,
+                    sourceStartLine: index + 1,
+                    sourceEndLine: index + 1
+                ))
+            }
+
+            aiQuizQuestions = questions
+        } catch {
+            // If the batch AI call fails entirely, fall back to pool-based for all cards
+            var questions: [QuizQuestion] = []
+            for (index, card) in approvedCards.enumerated() {
+                questions.append(buildFallbackQuestion(for: card, at: index))
+            }
+            aiQuizQuestions = questions
+        }
+    }
+
+    /// Builds a single quiz question using the pool-based distractor method (no AI).
+    private func buildFallbackQuestion(for card: StudyCard, at index: Int) -> QuizQuestion {
+        let correctAnswer = card.answer
+        let normalizedCorrect = normalizedAnswer(correctAnswer)
+        let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
+
+        var pool = allAnswers.filter { normalizedAnswer($0) != normalizedCorrect }
+        pool = pool.filter { $0.count <= 120 }
+
+        if correctAnswer.count <= 50 {
+            let similar = pool.filter { abs($0.count - correctAnswer.count) <= 30 }
+            if similar.count >= 3 { pool = similar }
+        }
+
+        var distractors: [String] = []
+        for answer in pool.shuffled() {
+            if calculateSimilarity(answer, correctAnswer) < 0.7 {
+                distractors.append(answer)
+            }
+            if distractors.count == 3 { break }
+        }
+
+        if distractors.count < 3 {
+            for fallback in ["None of the above", "All of the above", "Not covered in the material"] {
+                if normalizedAnswer(fallback) != normalizedCorrect
+                    && !distractors.contains(where: { normalizedAnswer($0) == normalizedAnswer(fallback) }) {
+                    distractors.append(fallback)
+                }
+                if distractors.count == 3 { break }
+            }
+        }
+
+        var choices = [correctAnswer] + distractors
+        if choices.count < 2 { choices.append("Not applicable") }
+        choices.shuffle()
+
+        return QuizQuestion(
+            prompt: card.question,
+            choices: choices,
+            correctIndex: choices.firstIndex(of: correctAnswer) ?? 0,
+            explanation: card.answer,
+            sourceStartLine: index + 1,
+            sourceEndLine: index + 1
+        )
+    }
+
+    // MARK: - Derived data (synchronous fallback)
     var quizQuestions: [QuizQuestion] {
         let approvedCards = flashcards.filter { $0.approved }
         if approvedCards.isEmpty { return [] }
@@ -189,11 +307,9 @@ class StudyViewModel: ObservableObject {
         } else {
             workingText = rawText
         }
-#if canImport(FoundationModels)
         if isHandwritingMode, let repaired = await contextCorrect(workingText, candidateLines: candidateLines) {
             workingText = repaired
         }
-#endif
         lastCorrectedText = workingText
 
         let lines = normalizeOCRLines(workingText)
@@ -210,12 +326,12 @@ class StudyViewModel: ObservableObject {
 
 #if canImport(FoundationModels)
         do {
-            let cards = try await CardGenerator.generateAI(from: text)
+            let cards = try await CardGenerator.generateAI(from: text, settings: aiSettings)
             self.flashcards = cards
             saveCurrentSet()
         } catch {
 #if DEBUG
-            print("AI generation failed: \(error.localizedDescription)")
+            print("[CardGen] AI generation failed: \(error.localizedDescription)")
 #endif
             let fallback = generateFallbackCards(from: text)
             self.flashcards = fallback
@@ -307,7 +423,6 @@ class StudyViewModel: ObservableObject {
         return result
     }
 
-    #if canImport(FoundationModels)
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -321,7 +436,7 @@ class StudyViewModel: ObservableObject {
 
         let chunkSize = isUltraHandwritingMode ? 8 : 20
         var correctedChunks: [String] = []
-        let engine = CardGenerationEngine()
+        let engine = OnDeviceCardGenerationEngine()
 
         for start in stride(from: 0, to: lineCount, by: chunkSize) {
             let end = min(start + chunkSize, lineCount)
@@ -336,16 +451,12 @@ class StudyViewModel: ObservableObject {
                     correctedChunks.append(lineSlice.joined(separator: "\n"))
                 }
             } catch {
-#if DEBUG
-                print("Context correction failed: \(error.localizedDescription)")
-#endif
                 correctedChunks.append(lineSlice.joined(separator: "\n"))
             }
         }
 
         return correctedChunks.joined(separator: "\n")
     }
-    #endif
 
     func validatedCorrection(originalLines: [String], correctedText: String) -> String? {
         let correctedLines = correctedText.components(separatedBy: .newlines)
@@ -487,6 +598,9 @@ class StudyViewModel: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             savedSets = try decoder.decode([StudySet].self, from: data)
         } catch {
+            #if DEBUG
+            print("[Persistence] Failed to load saved sets: \(error.localizedDescription)")
+            #endif
             savedSets = []
         }
         ensurePresetSet()
@@ -536,9 +650,9 @@ class StudyViewModel: ObservableObject {
             let data = try encoder.encode(savedSets)
             try data.write(to: persistenceURL, options: [.atomic])
         } catch {
-#if DEBUG
-            print("Failed to save sets: \(error.localizedDescription)")
-#endif
+            #if DEBUG
+            print("[Persistence] Failed to save sets: \(error.localizedDescription)")
+            #endif
         }
     }
 

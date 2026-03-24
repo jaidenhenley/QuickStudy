@@ -11,6 +11,7 @@ struct ContentView: View {
     // Shared app state for the whole flow
     @StateObject private var viewModel = StudyViewModel()
     @StateObject private var appState = AppState()
+    @StateObject private var aiSettings = AISettings()
     @StateObject private var dashboardViewModel = DashboardViewModel()
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
@@ -73,6 +74,7 @@ struct ContentView: View {
         .foregroundStyle(Theme.textPrimary)
         .environmentObject(viewModel)
         .environmentObject(appState)
+        .environmentObject(aiSettings)
         .overlay {
             if showTutorialOverlay {
                 TutorialOverlay(
@@ -102,6 +104,7 @@ struct ContentView: View {
             )
         }
         .onAppear {
+            viewModel.aiSettings = aiSettings
             if !didShowOnboarding {
                 showOnboarding = true
             }

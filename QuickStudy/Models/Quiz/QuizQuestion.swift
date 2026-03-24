@@ -28,7 +28,7 @@ struct QuizQuestion: Identifiable, Hashable {
         self.id = id
         self.prompt = prompt
         self.choices = choices
-        self.correctIndex = correctIndex
+        self.correctIndex = choices.indices.contains(correctIndex) ? correctIndex : 0
         self.explanation = explanation
         self.sourceStartLine = sourceStartLine
         self.sourceEndLine = sourceEndLine
