@@ -13,6 +13,7 @@ enum APIFormat: String, Codable, Hashable {
     case anthropic
 }
 
+@MainActor
 class AISettings: ObservableObject {
     private static let defaults = UserDefaults.standard
 

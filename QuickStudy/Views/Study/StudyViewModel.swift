@@ -324,16 +324,22 @@ class StudyViewModel: ObservableObject {
         defer { self.isGenerating = false }
         generationErrorMessage = nil
 
+#if canImport(FoundationModels)
         do {
-            print("[CardGen] mode=\(aiSettings.mode.rawValue) format=\(aiSettings.apiFormat.rawValue) endpoint=\(aiSettings.endpoint?.absoluteString ?? "nil") model=\(aiSettings.modelName ?? "default")")
             let cards = try await CardGenerator.generateAI(from: text, settings: aiSettings)
             self.flashcards = cards
             saveCurrentSet()
         } catch {
+#if DEBUG
+            print("[CardGen] AI generation failed: \(error.localizedDescription)")
+#endif
             let fallback = generateFallbackCards(from: text)
             self.flashcards = fallback
             saveCurrentSet()
         }
+#else
+        generationErrorMessage = "Apple Intelligence framework not available in this build."
+#endif
     }
 
     private func generateFallbackCards(from text: String) -> [StudyCard] {
@@ -592,6 +598,9 @@ class StudyViewModel: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             savedSets = try decoder.decode([StudySet].self, from: data)
         } catch {
+            #if DEBUG
+            print("[Persistence] Failed to load saved sets: \(error.localizedDescription)")
+            #endif
             savedSets = []
         }
         ensurePresetSet()
@@ -641,7 +650,9 @@ class StudyViewModel: ObservableObject {
             let data = try encoder.encode(savedSets)
             try data.write(to: persistenceURL, options: [.atomic])
         } catch {
-            
+            #if DEBUG
+            print("[Persistence] Failed to save sets: \(error.localizedDescription)")
+            #endif
         }
     }
 

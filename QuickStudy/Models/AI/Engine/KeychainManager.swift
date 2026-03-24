@@ -28,7 +28,7 @@ enum KeychainManager {
         ]) { _, new in new }
 
         let status = SecItemAdd(attributes as CFDictionary, nil)
-        guard status == errSecSuccess else { throw CardGenerationError.invalidResponse }
+        guard status == errSecSuccess else { throw CardGenerationError.keychainError(status) }
     }
 
     static func loadAPIKey() -> String? {

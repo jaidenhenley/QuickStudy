@@ -16,6 +16,7 @@ enum CardGenerationError: LocalizedError {
     case networkError(String)
     case badStatusCode(Int)
     case unsupportedProviderResponse
+    case keychainError(OSStatus)
 
     var errorDescription: String? {
         switch self {
@@ -34,7 +35,9 @@ enum CardGenerationError: LocalizedError {
         case .badStatusCode(let code):
             return "The API returned status code \(code)."
         case .unsupportedProviderResponse:
-            return "The API returned an unsupported response format"
+            return "The API returned an unsupported response format."
+        case .keychainError(let status):
+            return "Failed to save API key (Keychain error \(status))."
         }
     }
 }
