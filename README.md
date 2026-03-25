@@ -12,7 +12,7 @@ Swift, SwiftUI, VisionKit, PDFKit, Foundation Models, AppStorage, UserDefaults
 
 - Scan handwritten notes or import a PDF
 - On-device flashcard generation using Foundation Models
-- Fallback generation path when AI isn't available (breaks cleaned text into card-sized chunks)
+- Cloud fallback with bring-your-own API key when on-device AI isn't available
 - Card review and approval step so only the cards you want make it into the deck
 - Flashcard practice mode with swipe interaction
 - Quiz mode auto-generated from your approved cards with multiple choice
@@ -20,13 +20,15 @@ Swift, SwiftUI, VisionKit, PDFKit, Foundation Models, AppStorage, UserDefaults
 
 ## Architecture
 
-Solo project. Everything runs on-device with no network layer.
+Solo project. Everything runs on-device by default with no network layer unless the user opts into the cloud fallback.
 
 **Scan and import pipeline.** VisionKit handles OCR for scanned pages and PDFKit handles PDF text extraction. Before anything goes to the model, the raw text runs through a cleanup pass that trims junk characters, fixes spacing and line breaks, and reshapes it into something the model can work with. For handwriting specifically, I run the image through a `preprocessForHandwriting` step that desaturates, boosts contrast, adjusts exposure, and sharpens using Core Image filters before OCR even starts.
 
 **Card generation.** The cleaned text gets sent to a `LanguageModelSession` from Foundation Models. I'm using structured generation with the `@Generable` macro so the response comes back as a typed `FlashcardSetModel` instead of raw text I'd have to parse. Each generated card starts with `approved: false` so nothing gets saved until the user explicitly keeps it.
 
-**Fallback path.** Not every device supports Foundation Models, and even supported devices can fail from low memory or a generation error. When AI isn't available the app falls back to breaking the cleaned text into card-sized chunks so you still get a usable deck. The UI shows a clear message about what happened instead of failing silently.
+**Generation engine abstraction.** I built card generation behind a protocol with two conforming engines — one for on-device Foundation Models and one for a cloud API using a key the user provides in settings. The rest of the app calls the same method either way and gets back the same typed response.
+
+**Fallback path.** Not every device supports Foundation Models, and even supported devices can fail from low memory or a generation error. When AI isn't available and no API key is configured, the app falls back to breaking the cleaned text into card-sized chunks so you still get a usable deck. The UI shows a clear message about what happened instead of failing silently.
 
 **Approval flow.** Generated cards land in a review list where you toggle each one on or off. Only approved cards move into study and quiz mode. This keeps decks focused and gives the user final say over what the AI produced.
 
@@ -36,7 +38,7 @@ Solo project. Everything runs on-device with no network layer.
 
 ## Privacy
 
-No data collected. No accounts, no analytics, no tracking.
+No data collected. No accounts, no analytics, no tracking. If you use the cloud fallback, your text goes to whatever API provider you configure — nothing touches any server I control.
 
 - [Privacy Policy](https://jaidenhenley.github.io/JaidenHenleyPort/quickstudy-privacy.html)
 - [Support](https://jaidenhenley.github.io/JaidenHenleyPort/quickstudy-support.html)
@@ -53,7 +55,7 @@ No data collected. No accounts, no analytics, no tracking.
 git clone https://github.com/jaidenhenley/QuickStudy.git
 ```
 
-Open `QuickStudy.xcodeproj` in Xcode and run on a physical device. AI generation features may not work in Simulator.
+Open `QuickStudy.xcodeproj` in Xcode and run on a physical device. AI generation features may not work in Simulator. To use the cloud fallback, add your API key in the app's settings.
 
 ## Developer
 
