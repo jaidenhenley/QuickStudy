@@ -12,6 +12,10 @@ struct CardGenerator {
     // MARK: - AI generation
 
     static func generateAI(from rawText: String, settings: AISettings) async throws -> [StudyCard] {
+#if DEBUG
+        print("[CardGen] rawText length: \(rawText.count)")
+        print("[CardGen] rawText begin\n\(rawText)\n[CardGen] rawText end")
+#endif
         let engine = try AIController.makeGenerator(settings: settings)
         let cards = try await engine.generateCards(from: rawText)
         return cards.map { aiCard in

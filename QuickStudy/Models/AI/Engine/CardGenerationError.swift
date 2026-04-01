@@ -17,6 +17,7 @@ enum CardGenerationError: LocalizedError {
     case badStatusCode(Int)
     case unsupportedProviderResponse
     case keychainError(OSStatus)
+    case invalidDistractors
 
     var errorDescription: String? {
         switch self {
@@ -38,6 +39,8 @@ enum CardGenerationError: LocalizedError {
             return "The API returned an unsupported response format."
         case .keychainError(let status):
             return "Failed to save API key (Keychain error \(status))."
+        case .invalidDistractors:
+            return "Distractors failed to generate properly"
         }
     }
 }
