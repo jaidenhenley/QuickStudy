@@ -425,6 +425,10 @@ class StudyViewModel: ObservableObject {
 
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
+#if canImport(FoundationModels)
+        guard #available(iOS 26.0, *) else {
+            return nil
+        }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
@@ -456,6 +460,9 @@ class StudyViewModel: ObservableObject {
         }
 
         return correctedChunks.joined(separator: "\n")
+#else
+        return nil
+#endif
     }
 
     func validatedCorrection(originalLines: [String], correctedText: String) -> String? {

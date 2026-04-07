@@ -151,8 +151,8 @@ struct IpadHomeScreen: View {
 
     private func processOCR(images: [UIImage]) async {
         do {
-            let text = try await importHelper().extractText(from: images)
-            guard !text.isEmpty else {
+            let result = try await importHelper().extractText(from: images)
+            guard !result.text.isEmpty else {
                 await MainActor.run {
                     errorMessage = "No text found in the scanned image. Try scanning a different page."
                     showErrorAlert = true
@@ -160,7 +160,7 @@ struct IpadHomeScreen: View {
                 return
             }
             studyViewModel.currentSourceType = .scan
-            await studyViewModel.loadScannedText(rawText: text)
+            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
             await MainActor.run {
                 navigateToCards = true
             }
@@ -206,8 +206,8 @@ struct IpadHomeScreen: View {
                 }
                 return
             }
-            let text = try await importHelper().extractText(from: [image])
-            guard !text.isEmpty else {
+            let result = try await importHelper().extractText(from: [image])
+            guard !result.text.isEmpty else {
                 await MainActor.run {
                     errorMessage = "No text found in the photo. Try a different image."
                     showErrorAlert = true
@@ -216,7 +216,7 @@ struct IpadHomeScreen: View {
             }
             navigateToCards = true
             studyViewModel.currentSourceType = .photo
-            await studyViewModel.loadScannedText(rawText: text)
+            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
         } catch {
             await MainActor.run {
                 errorMessage = "Failed to process the photo. Please try again."
@@ -496,8 +496,8 @@ struct DashboardView: View {
 
     private func processOCR(images: [UIImage]) async {
         do {
-            let text = try await importHelper().extractText(from: images)
-            guard !text.isEmpty else {
+            let result = try await importHelper().extractText(from: images)
+            guard !result.text.isEmpty else {
                 await MainActor.run {
                     errorMessage = "No text found in the scanned image. Try scanning a different page."
                     showErrorAlert = true
@@ -505,7 +505,7 @@ struct DashboardView: View {
                 return
             }
             studyViewModel.currentSourceType = .scan
-            await studyViewModel.loadScannedText(rawText: text)
+            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
             await MainActor.run {
                 navigateToCards = true
             }
@@ -551,8 +551,8 @@ struct DashboardView: View {
                 }
                 return
             }
-            let text = try await importHelper().extractText(from: [image])
-            guard !text.isEmpty else {
+            let result = try await importHelper().extractText(from: [image])
+            guard !result.text.isEmpty else {
                 await MainActor.run {
                     errorMessage = "No text found in the photo. Try a different image."
                     showErrorAlert = true
@@ -561,7 +561,7 @@ struct DashboardView: View {
             }
             navigateToCards = true
             studyViewModel.currentSourceType = .photo
-            await studyViewModel.loadScannedText(rawText: text)
+            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
         } catch {
             await MainActor.run {
                 errorMessage = "Failed to process the photo. Please try again."
