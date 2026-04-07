@@ -15,84 +15,148 @@ import FoundationModels
 // The rest of the app talks to simple Swift models only.
 
 struct OnDeviceCardGenerationEngine: CardGenerating {
+    
     func generateCards(from text: String) async throws -> [AIFlashcard] {
-        let session = LanguageModelSession()
-        let prompt = """
-        You are creating study flashcards from a student's notes.
+        let chunks = chunkText(text, maxLength: 2500)
+        var allCards: [AIFlashcard] = []
+        
+        for chunk in chunks {
+            let session = LanguageModelSession()
+            let prompt = """
+            You are an expert educator creating high-quality study flashcards.
 
-        Source material:
-        \(text)
+            SOURCE MATERIAL:
+            \(chunk)
 
-        Rules:
-        - Only create flashcards from information explicitly stated in the source material
-        - Do not infer or add outside knowledge
-        - Questions should test recall of a single concept
-        - Answers must be directly supported by the text
-        - Skip any text that is unclear or illegible
-        - Use the student's own terminology from their notes
+            QUESTION RULES:
+            - Each question must test exactly one fact, not multiple facts at once
+            - If a concept has multiple parts, create one card per part
+            - Prefer narrow, specific questions over broad ones
+            - Never ask a question that requires listing or comparing more than two things
 
-        TEXT:
-        \(text)
-        """
-        let response = try await session.respond(to: prompt, generating: AIFLashcardSetModel.self)
-        return response.content.cards.map { AIFlashcard(question: $0.question, answer: $0.answer) }
+            QUESTION TYPES:
+            - DEFINITION: What is X?
+            - CAUSE_EFFECT: Why does X happen? / What results from X?
+            - COMPARE: How does X differ from Y? (two things only, one difference)
+            - PROCESS: What happens at step X?
+            - APPLICATION: In what situation would X apply?
+
+            ANSWER RULES:
+            - Write answers in your own words, do not copy from the source
+            - Each answer must directly and completely resolve its question in as few sentences as needed
+
+            Only create cards from information explicitly in the source. Skip anything unclear.
+            """
+            let response = try await session.respond(to: prompt, generating: AIFLashcardSetModel.self)
+            let cards = response.content.cards.map { AIFlashcard(question: $0.question, answer: $0.answer) }
+            allCards.append(contentsOf: cards)
+        }
+        return allCards
+
     }
-
+    
+    func chunkText(_ text: String, maxLength: Int) -> [String] {
+        var chunks: [String] = []
+        var current = ""
+        
+        for paragraph in text.components(separatedBy: "\n\n") {
+            if current.count + paragraph.count > maxLength {
+                if !current.isEmpty {
+                    chunks.append(current.trimmingCharacters(in: .whitespacesAndNewlines))
+                }
+                current = paragraph
+            } else {
+                current += (current.isEmpty ? "" : "\n\n") + paragraph
+            }
+        }
+        
+        if !current.isEmpty {
+            chunks.append(current.trimmingCharacters(in: .whitespacesAndNewlines))
+        }
+        return chunks
+    }
+    
     func generateDistractors(
         question: String,
         correctAnswer: String,
         otherAnswers: [String],
         sourceText: String
     ) async throws -> [String] {
-        let session = LanguageModelSession()
-
-        // Give the model the full topic context so distractors are on-topic
-        let contextBlock = otherAnswers.prefix(15).joined(separator: "\n- ")
-        let sourceExcerpt = String(sourceText.prefix(1500))
-
-        let prompt = """
-        You are a quiz master creating challenging multiple-choice questions from study notes. \
-        Your goal is to make distractors that are HARD to distinguish from the real answer.
-
+        for _ in 0..<2 {
+            let session = LanguageModelSession()
+            let contextBlock = otherAnswers.prefix(15).joined(separator: "\n- ")
+            let sourceExcerpt = String(sourceText.prefix(1500))
+            
+            let prompt = """
+        You are an educator creating multiple-choice answer options to test student understanding.
+        
         SOURCE MATERIAL:
         \(sourceExcerpt)
-
+        
         OTHER ANSWERS FROM THIS STUDY SET:
         - \(contextBlock)
-
-        TARGET QUESTION: \(question)
+        
+        QUESTION: \(question)
         CORRECT ANSWER: \(correctAnswer)
-
-        Generate 3 wrong answers. Follow these rules strictly:
-
-        DIFFICULTY RULES:
-        - Each distractor must be a factual-sounding statement about the same topic
-        - Mix in real terminology and concepts from the source material
-        - Make distractors that a student who only skimmed the notes would pick
-        - Subtly alter key details: swap names, change numbers, reverse cause/effect, \
-        or attribute a property to the wrong concept
-
+        
+        Generate 3 incorrect answer options that test whether the student understood the concept.
+        
+        CONTENT RULES:
+        - Each incorrect option must use real terminology and concepts from the source material
+        - Use related but incorrect details: for example, attribute a property to the wrong concept, \
+        or use a number or name from a different part of the material
+        - Each option should address the same topic as the correct answer
+        
         FORMATTING RULES:
-        - Match the exact length, tone, and sentence structure of the correct answer
-        - If the correct answer is a short phrase, distractors must be short phrases
-        - If the correct answer is a full sentence, distractors must be full sentences
-
-        CRITICAL RULES:
-        - NEVER include the answer to the question inside the distractor text
-        - NEVER rephrase or restate the correct answer
-        - Each distractor must be clearly wrong if you know the material, but tempting if you don't
+        - Match the length and sentence structure of the correct answer
+        - If the correct answer is a short phrase, each option must be a short phrase
+        - If the correct answer is a full sentence, each option must be a full sentence
+        
+        ACCURACY RULES:
+        - Do not restate or rephrase the correct answer
+        - Do not include the correct answer within an incorrect option
+        - Each incorrect option must be factually wrong for this question
         """
-        let response = try await session.respond(to: prompt, generating: AIAnswerModel.self)
-        return response.content.distractorAnswers
+            let response = try await session.respond(to: prompt, generating: AIAnswerModel.self)
+            let distractors = response.content.distractorAnswers
+            if isValidDistractors(distractors) {
+                return distractors
+            }
+        }
+        throw CardGenerationError.invalidDistractors
     }
+    
+    func generateQuiz(
+        cards: [(question: String, answer: String)],
+        sourceText: String
+    ) async throws -> [AIQuizQuestionModel] {
+        var results: [AIQuizQuestionModel] = []
 
+        for card in cards {
+            let otherAnswers = cards
+                .filter { $0.question != card.question }
+                .map { $0.answer }
+
+            if let distractors = try? await generateDistractors(
+                question: card.question,
+                correctAnswer: card.answer,
+                otherAnswers: otherAnswers,
+                sourceText: sourceText
+            ) {
+                results.append(AIQuizQuestionModel(wrongAnswers: distractors))
+            }
+        }
+
+        return results
+    }
+    
     func repairOCR(lines: [String], candidates: [[String]]) async throws -> String {
         let prompt = buildContextPrompt(lines: lines, candidates: candidates, startIndex: 1)
         let session = LanguageModelSession()
         let response = try await session.respond(to: prompt, generating: AIOCRRepairModel.self)
         return response.content.correctedText
     }
-
+    
     private func buildContextPrompt(lines: [String], candidates: [[String]], startIndex: Int) -> String {
         var candidateBlock: [String] = []
         for (offset, line) in lines.enumerated() {
@@ -107,7 +171,7 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
                 candidateBlock.append("- \(candidate)")
             }
         }
-
+        
         return """
         You are an OCR repair assistant. Fix misread or incomplete words using surrounding context.
         Preserve the original line breaks and return exactly \(lines.count) lines.
@@ -115,52 +179,33 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
         Do not add new information. If unsure, keep the original line.
         Do not repeat lines or output duplicates unless they appear in the candidates.
         Return only the corrected text.
-
+        
         OCR LINE CANDIDATES:
         \(candidateBlock.joined(separator: "\n"))
         """
     }
-
-    /// Generates a complete quiz in a single AI call, giving the model full context across all cards.
-    /// This maximizes the on-device model's ability to create challenging, topic-aware distractors.
-    func generateQuiz(
-        cards: [(question: String, answer: String)],
-        sourceText: String
-    ) async throws -> [AIQuizQuestionModel] {
-        let session = LanguageModelSession()
-
-        let sourceExcerpt = String(sourceText.prefix(2000))
-
-        // Build a numbered list of all Q/A pairs
-        var cardList = ""
-        for (i, card) in cards.enumerated() {
-            cardList += "\(i + 1). Q: \(card.question)\n   A: \(card.answer)\n"
-        }
-
-        let prompt = """
-        You are creating a multiple-choice quiz from study notes. \
-        You have ALL the questions and answers below. \
-        For each question, generate exactly 3 wrong answers.
-
-        SOURCE MATERIAL:
-        \(sourceExcerpt)
-
-        ALL QUESTIONS AND CORRECT ANSWERS:
-        \(cardList)
-
-        RULES:
-        - For each question, create 3 plausible but wrong answers
-        - Use facts, terms, and concepts from the source material in your wrong answers
-        - Swap names, change numbers, reverse cause and effect, or attribute details to the wrong concept
-        - Wrong answers should match the length and style of the correct answer
-        - Never repeat the correct answer as a wrong answer
-        - Never use generic filler like "None of the above"
-        - Make wrong answers that a student who skimmed the notes would pick
-        - You may reuse real facts from OTHER questions as wrong answers for THIS question
-        """
-        let response = try await session.respond(to: prompt, generating: AIQuizModel.self)
-        return response.content.questions
+    // MARK: Filler Detection
+    
+    private let fillerPhrases = [
+        "none of the above",
+        "all of the above",
+        "not covered",
+        "not mentioned",
+        "none of these",
+        "all of these",
+        "not applicable"
+    ]
+    
+    func containsFiller(_ text: String) -> Bool {
+        let lower = text.lowercased()
+        return fillerPhrases.contains { lower.contains($0) }
     }
+    
+    func isValidDistractors(_ distractors: [String]) -> Bool {
+        guard distractors.count >= 3 else { return false }
+        return !distractors.contains { containsFiller($0) }
+    }
+    
 }
 
 // MARK: - FoundationModels types
@@ -170,13 +215,13 @@ private struct AIFlashcardModel: Codable {
     @Guide(description: "A clear, concise study question that tests recall of a single concept. Do not include the answer in the question. Avoid yes/no questions.")
     let question: String
 
-    @Guide(description: "A short, accurate answer in 1-2 sentences. Use plain language a student would understand.")
+    @Guide(description: "A concise answer in 1-2 sentences. Synthesize the key point in your own words. Do not copy sentences from the source material.")
     let answer: String
 }
 
 @Generable
 private struct AIAnswerModel: Codable {
-    @Guide(description: "Exactly 3 wrong answers that are hard to distinguish from the real answer. Each must match the length and sentence structure of the correct answer. Use real terminology from the source material but alter key details. Never restate the correct answer. Never include the answer in the distractor.")
+    @Guide(description: "Exactly 3 incorrect answer options. Each must be about the same topic as the question. Do not use facts from unrelated concepts. Each option must be plausible for this specific question but factually wrong.")
     let distractorAnswers: [String]
 }
 
@@ -197,9 +242,4 @@ struct AIQuizQuestionModel: Codable {
     let wrongAnswers: [String]
 }
 
-@Generable
-struct AIQuizModel: Codable {
-    @Guide(description: "One entry per question, in the same order as the input. Each entry contains exactly 3 wrong answers.")
-    let questions: [AIQuizQuestionModel]
-}
 #endif
