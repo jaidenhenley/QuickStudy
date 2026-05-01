@@ -18,7 +18,7 @@
 
 import SwiftUI
 
-struct TodayView: View {
+struct DashboardView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AppState.self) var appState
     @Environment(DashboardViewModel.self) var viewModel

@@ -31,9 +31,7 @@ struct ImportModifiers: ViewModifier {
                         .environment(studyViewModel)
                         .environment(appState)
                 }
-                .sheet(isPresented: $coordinator.showSourcePicker) {
-                    SourcePickerView()
-                }
+
                 .sheet(isPresented: $coordinator.showScanCapture) {
                     DocumentScannerView(
                         onComplete: { images in

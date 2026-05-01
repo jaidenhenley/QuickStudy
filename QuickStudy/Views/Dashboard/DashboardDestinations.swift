@@ -21,9 +21,3 @@ struct StudySetDetailView: View {
     }
 }
 
-struct SourcePickerView: View {
-    var body: some View {
-        Text("Pick a source")
-            .navigationTitle("Replace Source")
-    }
-}

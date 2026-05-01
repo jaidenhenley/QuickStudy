@@ -16,7 +16,6 @@ struct ContentView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
-    @State private var splitSelection: SplitItem? = .home
     @State private var showOnboarding = false
     @State private var showTutorialOverlay = false
     @State private var currentTutorialStep: TutorialStep = .welcome
@@ -29,7 +28,7 @@ struct ContentView: View {
             if horizontalSizeClass == .compact {
                 TabView(selection: $appState.selectedTab) {
                     NavigationStack {
-                        TodayView()
+                        DashboardView()
                     }
                     .tabItem {
                         Label("Today", systemImage: "house")
@@ -48,20 +47,7 @@ struct ContentView: View {
                 .environment(viewModel)
                 .environment(appState)
             } else {
-                NavigationSplitView(columnVisibility: $appState.splitVisibility) {
-                    List(selection: $splitSelection) {
-                        Label("Home", systemImage: "house")
-                            .tag(SplitItem.home)
-                        Label("Sets", systemImage: "square.grid.2x2")
-                            .tag(SplitItem.sets)
-                    }
-                    .navigationTitle("Browse")
-                } detail: {
-                    NavigationStack {
-                        splitDetailView
-                    }
-                }
-                .navigationSplitViewColumnWidth(min: 260, ideal: 300, max: 340)
+                
             }
         }
         .foregroundStyle(Theme.textPrimary)
@@ -101,11 +87,6 @@ struct ContentView: View {
             }
         }
         .onChange(of: appState.selectedTab) { newValue, _ in
-            if newValue == .quiz {
-                appState.isQuickQuizEntry = false
-            }
-        }
-        .onChange(of: splitSelection) { newValue, _ in
             if newValue == .quiz {
                 appState.isQuickQuizEntry = false
             }
@@ -159,7 +140,6 @@ struct ContentView: View {
         viewModel.demoModeEnabled = true
         currentTutorialStep = .viewDemoSets
         appState.selectedTab = .scan
-        splitSelection = .home
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             showTutorialOverlay = true
         }
@@ -195,7 +175,6 @@ struct ContentView: View {
                 viewModel.demoModeEnabled = false
                 didShowOnboarding = true
                 appState.selectedTab = .scan
-                splitSelection = .home
             }
         }
     }
@@ -251,25 +230,3 @@ struct ContentView: View {
     }
 }
 
-private extension ContentView {
-    enum SplitItem: Hashable {
-        case home
-        case sets
-        case quiz
-    }
-    
-    @ViewBuilder
-    var splitDetailView: some View {
-        switch splitSelection ?? .home {
-        case .home:
-            TodayView()
-        case .sets:
-            SavedSetsView()
-                .navigationTitle("Saved Sets")
-        case .quiz:
-            QuizView()
-                .navigationTitle("Quiz")
-        }
-    }
-    
-}
