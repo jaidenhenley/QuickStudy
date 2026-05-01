@@ -15,43 +15,41 @@ struct ContentView: View {
     @StateObject private var dashboardViewModel = DashboardViewModel()
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
-
+    
     @State private var splitSelection: SplitItem? = .home
     @State private var showOnboarding = false
     @State private var showTutorialOverlay = false
     @State private var currentTutorialStep: TutorialStep = .welcome
-
+    
     var body: some View {
         ZStack {
             BackgroundView()
-
+            
+            
             if horizontalSizeClass == .compact {
                 TabView(selection: $appState.selectedTab) {
                     NavigationStack {
-                        RootHomeView()
+                        TodayView(viewModel: dashboardViewModel)
+                            .environmentObject(viewModel)
+                            .environmentObject(appState)
                     }
                     .tabItem {
-                        Label("Home", systemImage: "house")
+                        Label("Today", systemImage: "house")
                     }
                     .tag(AppState.Tab.scan)
-
+                    
                     NavigationStack {
-                        SavedSetsView()
+                        DashboardView(viewModel: dashboardViewModel)
+//                        LibraryView()
+//                            .environmentObject(studyViewModel)
+//                            .environmentObject(appState)
                     }
                     .tabItem {
-                        Label("Sets", systemImage: "square.grid.2x2")
+                        Label("Library", systemImage: "books.vertical")
                     }
                     .tag(AppState.Tab.savedSets)
-
-                    NavigationStack {
-                        QuizView()
-                    }
-                    .tabItem {
-                        Label("Quiz", systemImage: "checklist")
-                    }
-                    .tag(AppState.Tab.quiz)
                 }
-                .tint(Theme.primary)
+                .tint(Color("#5B5BD6"))
             } else {
                 NavigationSplitView(columnVisibility: $appState.splitVisibility) {
                     List(selection: $splitSelection) {
@@ -59,8 +57,6 @@ struct ContentView: View {
                             .tag(SplitItem.home)
                         Label("Sets", systemImage: "square.grid.2x2")
                             .tag(SplitItem.sets)
-                        Label("Quiz", systemImage: "checklist")
-                            .tag(SplitItem.quiz)
                     }
                     .navigationTitle("Browse")
                 } detail: {
@@ -72,8 +68,6 @@ struct ContentView: View {
             }
         }
         .foregroundStyle(Theme.textPrimary)
-        .environmentObject(viewModel)
-        .environmentObject(appState)
         .environmentObject(aiSettings)
         .overlay {
             if showTutorialOverlay {
@@ -173,7 +167,7 @@ struct ContentView: View {
             showTutorialOverlay = true
         }
     }
-
+    
     private func advanceTutorial() {
         withAnimation {
             switch currentTutorialStep {
@@ -266,7 +260,7 @@ private extension ContentView {
         case sets
         case quiz
     }
-
+    
     @ViewBuilder
     var splitDetailView: some View {
         switch splitSelection ?? .home {
@@ -280,5 +274,5 @@ private extension ContentView {
                 .navigationTitle("Quiz")
         }
     }
-
+    
 }

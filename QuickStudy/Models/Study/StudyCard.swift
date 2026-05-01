@@ -12,16 +12,19 @@ struct StudyCard: Identifiable, Codable, Equatable {
     var question: String
     var answer: String
     var approved: Bool
+    var missCount: Int
 
     init(
         id: UUID = UUID(),
         question: String,
         answer: String,
-        approved: Bool
+        approved: Bool,
+        missCount: Int = 0
     ) {
         self.id = id
         self.question = question
         self.answer = answer
         self.approved = approved
+        self.missCount = missCount
     }
 }
