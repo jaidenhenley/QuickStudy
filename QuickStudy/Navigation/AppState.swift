@@ -13,7 +13,9 @@ import Combine
 
 /// Central observable state that coordinates navigation, tutorial flow,
 /// and cross-view communication throughout the app.
-class AppState: ObservableObject {
+
+@Observable
+class AppState {
 
     // MARK: - Tab & Split Navigation
 
@@ -23,28 +25,28 @@ class AppState: ObservableObject {
         case quiz
     }
 
-    @Published var selectedTab: Tab = .scan
-    @Published var splitVisibility: NavigationSplitViewVisibility = .all
+    var selectedTab: Tab = .scan
+    var splitVisibility: NavigationSplitViewVisibility = .all
 
     // MARK: - Quiz Entry
 
-    @Published var isQuickQuizEntry: Bool = false
+    var isQuickQuizEntry: Bool = false
 
     // MARK: - Tutorial Coordination
 
     /// Set to `true` from SettingsView to tell ContentView to restart the onboarding tutorial.
-    @Published var shouldRestartTutorial: Bool = false
+    var shouldRestartTutorial: Bool = false
 
     /// Timestamps used to detect when specific views appear during the tutorial.
     /// ContentView observes these to advance the tutorial step.
-    @Published var setDetailViewAppeared: Date? = nil
-    @Published var quizViewAppeared: Date? = nil
-    @Published var studyViewAppeared: Date? = nil
-    @Published var practiceViewAppeared: Date? = nil
+    var setDetailViewAppeared: Date? = nil
+    var quizViewAppeared: Date? = nil
+    var studyViewAppeared: Date? = nil
+    var practiceViewAppeared: Date? = nil
 
     // MARK: - Scroll Coordination
 
-    @Published var scrollToFlashcards: Bool = false
+     var scrollToFlashcards: Bool = false
 
     // MARK: - Convenience
 

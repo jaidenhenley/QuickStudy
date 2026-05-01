@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SavedSetsView: View {
     @Environment(StudyViewModel.self) var viewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     @State private var showRenameSheet = false
@@ -61,7 +61,7 @@ struct SavedSetsView: View {
                         NavigationLink {
                             StudySetDetailView(set: set)
                                 .environment(viewModel)
-                                .environmentObject(appState)
+                                .environment(appState)
                         } label: {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(set.title)
@@ -243,12 +243,12 @@ struct SavedSetsView: View {
                         .navigationDestination(isPresented: $navigateToCards) {
                             CardsView()
                                 .environment(viewModel)
-                                .environmentObject(appState)
+                                .environment(appState)
                         }
                         .navigationDestination(isPresented: $navigateToQuiz) {
                             QuizView()
                                 .environment(viewModel)
-                                .environmentObject(appState)
+                                .environment(appState)
                         }
                     }
                     .frame(width: m.rightColumnWidth, alignment: .topLeading)

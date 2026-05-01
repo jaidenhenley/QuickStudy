@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @EnvironmentObject var aiSettings: AISettings
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @Environment(\.dismiss) private var dismiss
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
 

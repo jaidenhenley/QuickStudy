@@ -10,7 +10,7 @@ import SwiftUI
 struct CardsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(StudyViewModel.self) var viewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @State private var navigateToStudy = false
     @State private var navigateToQuiz = false
     @State private var isDocumentExpanded = false
@@ -41,12 +41,12 @@ struct CardsView: View {
         .navigationDestination(isPresented: $navigateToStudy) {
             StudyView()
                 .environment(viewModel)
-                .environmentObject(appState)
+                .environment(appState)
         }
         .navigationDestination(isPresented: $navigateToQuiz) {
             QuizView()
                 .environment(viewModel)
-                .environmentObject(appState)
+                .environment(appState)
         }
         .background(BackgroundView())
         .onChange(of: viewModel.flashcards) { _, _ in

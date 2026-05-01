@@ -10,7 +10,7 @@ import SwiftUI
 
 struct StudyView: View {
     @Environment(StudyViewModel.self) var studyViewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @State private var navigateToPractice = false
 
     private var approvedCards: [StudyCard] {

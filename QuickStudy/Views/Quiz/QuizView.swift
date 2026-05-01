@@ -14,7 +14,7 @@ struct QuizView: View {
     }
 
     @Environment(StudyViewModel.self) var viewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     let launchMode: LaunchMode

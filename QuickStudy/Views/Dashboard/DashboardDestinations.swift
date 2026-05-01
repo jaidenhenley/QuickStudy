@@ -39,7 +39,7 @@ struct PDFImportView: View {
 
 struct StudySetDetailView: View {
     @Environment(StudyViewModel.self) var viewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     let set: StudySet
 
     var body: some View {

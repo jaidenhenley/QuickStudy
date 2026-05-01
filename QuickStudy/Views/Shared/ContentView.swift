@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     // Shared app state for the whole flow
     @State private var viewModel = StudyViewModel()
-    @StateObject private var appState = AppState()
+    @State private var appState = AppState()
     @StateObject private var aiSettings = AISettings()
     @StateObject private var dashboardViewModel = DashboardViewModel()
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -31,7 +31,7 @@ struct ContentView: View {
                     NavigationStack {
                         TodayView(viewModel: dashboardViewModel)
                             .environment(viewModel)
-                            .environmentObject(appState)
+                            .environment(appState)
                     }
                     .tabItem {
                         Label("Today", systemImage: "house")

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct TodayView: View {
     @Environment(StudyViewModel.self) var studyViewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @ObservedObject var viewModel: DashboardViewModel
 
     @State private var showSettings = false

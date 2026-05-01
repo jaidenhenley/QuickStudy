@@ -114,7 +114,7 @@ struct StudySetCardView: View {
 }
 
 struct QuickQuizCard: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
 
     var body: some View {
         HStack {

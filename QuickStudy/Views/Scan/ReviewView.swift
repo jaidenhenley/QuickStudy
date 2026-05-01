@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReviewView: View {
     @Environment(StudyViewModel.self) var viewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
 
     let document: StudyDocument
 
@@ -68,7 +68,7 @@ struct ReviewView: View {
         .navigationDestination(isPresented: $navigateToCards) {
             CardsView()
                 .environment(viewModel)
-                .environmentObject(appState)
+                .environment(appState)
         }
     }
 

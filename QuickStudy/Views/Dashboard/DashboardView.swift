@@ -23,7 +23,7 @@ struct RootHomeView: View {
 // MARK: - iPad Optimization
 
 struct IpadHomeScreen: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @Environment(StudyViewModel.self) var studyViewModel
     @StateObject var dashboardViewModel: DashboardViewModel
 
@@ -104,7 +104,7 @@ struct IpadHomeScreen: View {
         .navigationDestination(isPresented: $navigateToCards) {
             CardsView()
                 .environment(studyViewModel)
-                .environmentObject(appState)
+                .environment(appState)
         }
         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
             switch result {
@@ -229,7 +229,7 @@ struct IpadHomeScreen: View {
 
 // MARK: - iPhone Home
 struct DashboardView: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     @Environment(StudyViewModel.self) var studyViewModel
     @StateObject private var dashboardViewModel: DashboardViewModel
 
@@ -315,7 +315,7 @@ struct DashboardView: View {
         .navigationDestination(isPresented: $navigateToCards) {
             CardsView()
                 .environment(studyViewModel)
-                .environmentObject(appState)
+                .environment(appState)
         }
         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
             switch result {
