@@ -37,7 +37,7 @@ struct ContentView: View {
                     .tag(AppState.Tab.scan)
                     
                     NavigationStack {
-                        DashboardView()
+                        LibraryView()
                     }
                     .tabItem {
                         Label("Library", systemImage: "books.vertical")
@@ -262,7 +262,7 @@ private extension ContentView {
     var splitDetailView: some View {
         switch splitSelection ?? .home {
         case .home:
-            IpadHomeScreen()
+            TodayView()
         case .sets:
             SavedSetsView()
                 .navigationTitle("Saved Sets")
