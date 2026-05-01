@@ -11,7 +11,7 @@ import PhotosUI
 struct HomeIPadContent: View {
     @Environment(StudyViewModel.self) var studyViewModel
     
-    @ObservedObject var dashboardViewModel: DashboardViewModel
+    @Environment(DashboardViewModel.self) var dashboardViewModel
     let isScannerSupported: Bool
     @Binding var selectedPhotoItem: PhotosPickerItem?
     let onShowSourcePicker: () -> Void

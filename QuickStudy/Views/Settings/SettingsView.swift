@@ -9,7 +9,7 @@ import SwiftUI
  
 struct SettingsView: View {
     @Environment(StudyViewModel.self) var studyViewModel
-    @EnvironmentObject var aiSettings: AISettings
+    @Environment(AISettings.self) var aiSettings
     @Environment(AppState.self) var appState
     @Environment(\.dismiss) private var dismiss
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
@@ -61,6 +61,7 @@ struct SettingsView: View {
 
     var body: some View {
         @Bindable var studyViewModel = studyViewModel
+        @Bindable var aiSettings = aiSettings
         NavigationStack {
             Form {
                 Section("AI + Input") {

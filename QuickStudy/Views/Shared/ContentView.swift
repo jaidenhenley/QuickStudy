@@ -11,8 +11,8 @@ struct ContentView: View {
     // Shared app state for the whole flow
     @State private var viewModel = StudyViewModel()
     @State private var appState = AppState()
-    @StateObject private var aiSettings = AISettings()
-    @StateObject private var dashboardViewModel = DashboardViewModel()
+    @State private var aiSettings = AISettings()
+    @State private var dashboardViewModel = DashboardViewModel()
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
@@ -29,9 +29,7 @@ struct ContentView: View {
             if horizontalSizeClass == .compact {
                 TabView(selection: $appState.selectedTab) {
                     NavigationStack {
-                        TodayView(viewModel: dashboardViewModel)
-                            .environment(viewModel)
-                            .environment(appState)
+                        TodayView()
                     }
                     .tabItem {
                         Label("Today", systemImage: "house")
@@ -39,14 +37,16 @@ struct ContentView: View {
                     .tag(AppState.Tab.scan)
                     
                     NavigationStack {
-                        DashboardView(viewModel: dashboardViewModel)
+                        DashboardView()
                     }
                     .tabItem {
                         Label("Library", systemImage: "books.vertical")
                     }
                     .tag(AppState.Tab.savedSets)
                 }
-                .tint(Color("#5B5BD6"))
+                .environment(dashboardViewModel)
+                .environment(viewModel)
+                .environment(appState)
             } else {
                 NavigationSplitView(columnVisibility: $appState.splitVisibility) {
                     List(selection: $splitSelection) {
@@ -65,7 +65,7 @@ struct ContentView: View {
             }
         }
         .foregroundStyle(Theme.textPrimary)
-        .environmentObject(aiSettings)
+        .environment(aiSettings)
         .overlay {
             if showTutorialOverlay {
                 TutorialOverlay(
@@ -262,7 +262,7 @@ private extension ContentView {
     var splitDetailView: some View {
         switch splitSelection ?? .home {
         case .home:
-            IpadHomeScreen(dashboardViewModel: dashboardViewModel)
+            IpadHomeScreen()
         case .sets:
             SavedSetsView()
                 .navigationTitle("Saved Sets")

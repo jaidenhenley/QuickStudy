@@ -12,7 +12,7 @@ import SwiftUI
 struct TodayView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AppState.self) var appState
-    @ObservedObject var viewModel: DashboardViewModel
+    @Environment(DashboardViewModel.self) var viewModel
 
     @State private var showSettings = false
 

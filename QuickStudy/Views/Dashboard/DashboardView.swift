@@ -8,254 +8,54 @@
 import SwiftUI
 import PhotosUI
 import VisionKit
-import Combine
 
-// MARK: - Root
+// MARK: - iPhone
 
-struct RootHomeView: View {
-    @StateObject private var dashboardViewModel = DashboardViewModel()
-
-    var body: some View {
-        DashboardView(viewModel: dashboardViewModel)
-    }
-}
-
-// MARK: - iPad Optimization
-
-struct IpadHomeScreen: View {
+struct DashboardView: View {
     @Environment(AppState.self) var appState
     @Environment(StudyViewModel.self) var studyViewModel
-    @StateObject var dashboardViewModel: DashboardViewModel
+    @Environment(DashboardViewModel.self) var dashboardViewModel
 
     @State private var showSettings = false
-    @State private var showSourcePicker = false
-    @State private var showScanCapture = false
-    @State private var showScannerUnavailableAlert = false
-    @State private var showFileImporter = false
-    @State var selectedPhotoItem: PhotosPickerItem? = nil
-    @State var navigateToCards = false
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
+    @State private var coordinator = DashboardCoordinator()
 
-    private var isScannerSupported: Bool {
-#if targetEnvironment(simulator)
-        return false
-#else
-        return VNDocumentCameraViewController.isSupported
-#endif
-    }
-
-    init(dashboardViewModel: DashboardViewModel) {
-        _dashboardViewModel = StateObject(wrappedValue: dashboardViewModel)
-    }
-
-    var body: some View {
-        HomeIPadContent(
-            dashboardViewModel: dashboardViewModel,
-            isScannerSupported: isScannerSupported,
-            selectedPhotoItem: $selectedPhotoItem,
-            onShowSourcePicker: { showSourcePicker = true },
-            onScan: {
-                startScan()
-            },
-            onImportPDF: { showFileImporter = true }
-        )
-        .navigationTitle("QuickStudy")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showSettings = true
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .accessibilityLabel("Capture settings")
-            }
-        }
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-                .environment(studyViewModel)
-        }
-        .sheet(isPresented: $showSourcePicker) {
-            SourcePickerView()
-        }
-        .sheet(isPresented: $showScanCapture) {
-            DocumentScannerView(
-                onComplete: { images in
-                    showScanCapture = false
-                    Task {
-                        await processOCR(images: images)
-                    }
-                },
-                onCancel: {
-                    showScanCapture = false
-                }
-            )
-        }
-        .alert("Camera Unavailable", isPresented: $showScannerUnavailableAlert) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Document scanning isn't available in the simulator. Try on a real device.")
-        }
-        .alert("Error", isPresented: $showErrorAlert) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(errorMessage)
-        }
-        .navigationDestination(isPresented: $navigateToCards) {
-            CardsView()
-                .environment(studyViewModel)
-                .environment(appState)
-        }
-        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
-            switch result {
-            case .success(let url):
-                Task {
-                    await processPDF(url: url)
-                }
-            case .failure(let error):
-                errorMessage = "Failed to open the file: \(error.localizedDescription)"
-                showErrorAlert = true
-            }
-        }
-        .onChange(of: selectedPhotoItem) { _, _ in
-            Task {
-                await handleSelectedPhoto()
-            }
-        }
-        .onAppear {
-            dashboardViewModel.updateFromStudy(studyViewModel)
-        }
-        .onChange(of: studyViewModel.document) { _, _ in
-            dashboardViewModel.updateFromStudy(studyViewModel)
-        }
-        .onChange(of: studyViewModel.savedSets) { _, _ in
-            dashboardViewModel.updateFromStudy(studyViewModel)
-        }
-    }
-
-    // MARK: - Import helpers
-
-    private func importHelper() -> DocumentImportHelper {
+    private var importHelper: DocumentImportHelper {
         DocumentImportHelper(
             isHandwritingMode: studyViewModel.isHandwritingMode,
             isUltraHandwritingMode: studyViewModel.isUltraHandwritingMode
         )
     }
 
-    private func startScan() {
-        if isScannerSupported {
-            showScanCapture = true
-        } else {
-            showScannerUnavailableAlert = true
-        }
-    }
-
-    private func processOCR(images: [UIImage]) async {
-        do {
-            let result = try await importHelper().extractText(from: images)
-            guard !result.text.isEmpty else {
-                await MainActor.run {
-                    errorMessage = "No text found in the scanned image. Try scanning a different page."
-                    showErrorAlert = true
-                }
-                return
-            }
-            studyViewModel.currentSourceType = .scan
-            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
-            await MainActor.run {
-                navigateToCards = true
-            }
-        } catch {
-            await MainActor.run {
-                errorMessage = "Failed to process the scan. Please try again."
-                showErrorAlert = true
-            }
-        }
-    }
-
-    private func processPDF(url: URL) async {
-        do {
-            let text = try await importHelper().extractText(from: url)
-            guard !text.isEmpty else {
-                await MainActor.run {
-                    errorMessage = "No text found in the PDF. Try a different document."
-                    showErrorAlert = true
-                }
-                return
-            }
-            navigateToCards = true
-            studyViewModel.currentSourceType = .pdf
-            await studyViewModel.loadScannedText(rawText: text)
-        } catch {
-            await MainActor.run {
-                errorMessage = "Failed to import the PDF. Please check the file and try again."
-                showErrorAlert = true
-            }
-        }
-    }
-
-    private func handleSelectedPhoto() async {
-        guard let selectedPhotoItem else { return }
-        self.selectedPhotoItem = nil
-
-        do {
-            guard let data = try await selectedPhotoItem.loadTransferable(type: Data.self),
-                  let image = UIImage(data: data) else {
-                await MainActor.run {
-                    errorMessage = "Could not load the selected photo. Try a different image."
-                    showErrorAlert = true
-                }
-                return
-            }
-            let result = try await importHelper().extractText(from: [image])
-            guard !result.text.isEmpty else {
-                await MainActor.run {
-                    errorMessage = "No text found in the photo. Try a different image."
-                    showErrorAlert = true
-                }
-                return
-            }
-            navigateToCards = true
-            studyViewModel.currentSourceType = .photo
-            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
-        } catch {
-            await MainActor.run {
-                errorMessage = "Failed to process the photo. Please try again."
-                showErrorAlert = true
-            }
-        }
-    }
-}
-
-// MARK: - iPhone Home
-struct DashboardView: View {
-    @Environment(AppState.self) var appState
-    @Environment(StudyViewModel.self) var studyViewModel
-    @StateObject private var dashboardViewModel: DashboardViewModel
-
-    @State private var showSettings = false
-    @State private var showSourcePicker = false
-    @State private var showScanCapture = false
-    @State private var showScannerUnavailableAlert = false
-    @State var selectedPhotoItem: PhotosPickerItem? = nil
-    @State private var showFileImporter = false
-    @State var navigateToCards = false
-    @State private var showErrorAlert = false
-    @State private var errorMessage = ""
-
-    var isScannerSupported: Bool {
-#if targetEnvironment(simulator)
-        return false
-#else
-        return VNDocumentCameraViewController.isSupported
-#endif
-    }
-
-    init(viewModel: DashboardViewModel) {
-        _dashboardViewModel = StateObject(wrappedValue: viewModel)
-    }
-
     var body: some View {
+        scrollContent
+            .navigationTitle("QuickStudy")
+            .toolbar { trailingToolbar }
+            .background(BackgroundView())
+            .sheet(isPresented: $showSettings) {
+                SettingsView().environment(studyViewModel)
+            }
+            .modifier(ImportModifiers(
+                coordinator: coordinator,
+                studyViewModel: studyViewModel,
+                appState: appState,
+                importHelper: importHelper
+            ))
+            .onAppear { dashboardViewModel.updateFromStudy(studyViewModel) }
+            .onChange(of: studyViewModel.document) { _, _ in dashboardViewModel.updateFromStudy(studyViewModel) }
+            .onChange(of: studyViewModel.savedSets) { _, _ in dashboardViewModel.updateFromStudy(studyViewModel) }
+    }
+
+    @ToolbarContentBuilder
+    private var trailingToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button { showSettings = true } label: {
+                Image(systemName: "gearshape")
+            }
+            .accessibilityLabel("Settings")
+        }
+    }
+
+    private var scrollContent: some View {
         GeometryReader { proxy in
             let m = LayoutMetrics(availableWidth: proxy.size.width)
             ScrollView {
@@ -269,82 +69,9 @@ struct DashboardView: View {
                 .padding(.bottom, m.padding)
             }
         }
-        .navigationTitle("QuickStudy")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showSettings = true
-                } label: {
-                    Image(systemName: "gearshape")
-                }
-                .accessibilityLabel("Capture settings")
-            }
-        }
-        .sheet(isPresented: $showSettings) {
-            SettingsView()
-                .environment(studyViewModel)
-        }
-        .sheet(isPresented: $showSourcePicker) {
-            SourcePickerView()
-        }
-        .sheet(isPresented: $showScanCapture) {
-            DocumentScannerView(
-                onComplete: { images in
-                    showScanCapture = false
-                    navigateToCards = true
-                    Task {
-                        await processOCR(images: images)
-                    }
-                },
-                onCancel: {
-                    showScanCapture = false
-                }
-            )
-        }
-        .alert("Camera Unavailable", isPresented: $showScannerUnavailableAlert) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Document scanning isn't available in the simulator. Try on a real device.")
-        }
-        .alert("Error", isPresented: $showErrorAlert) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(errorMessage)
-        }
-        .background(BackgroundView())
-        .navigationDestination(isPresented: $navigateToCards) {
-            CardsView()
-                .environment(studyViewModel)
-                .environment(appState)
-        }
-        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
-            switch result {
-            case .success(let url):
-                Task {
-                    await processPDF(url: url)
-                }
-            case .failure(let error):
-                errorMessage = "Failed to open the file: \(error.localizedDescription)"
-                showErrorAlert = true
-            }
-        }
-        .onChange(of: selectedPhotoItem) { _, _ in
-            Task {
-                await handleSelectedPhoto()
-            }
-        }
-        .onAppear {
-            dashboardViewModel.updateFromStudy(studyViewModel)
-        }
-        .onChange(of: studyViewModel.document) { _, _ in
-            dashboardViewModel.updateFromStudy(studyViewModel)
-        }
-        .onChange(of: studyViewModel.savedSets) { _, _ in
-            dashboardViewModel.updateFromStudy(studyViewModel)
-        }
     }
 
-    // MARK: Sections
+    // MARK: - Sections
 
     private var continueCardSection: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -359,34 +86,24 @@ struct DashboardView: View {
                     } label: {
                         ContinueSourceCard(
                             source: source,
-                            onReplace: {
-                                showSourcePicker = true
-                            },
-                            onNewScan: {
-                                startScan()
-                            }
+                            onReplace: { coordinator.showSourcePicker = true },
+                            onNewScan: { coordinator.startScan() }
                         )
                     }
                     .buttonStyle(.plain)
                 } else {
                     ContinueSourceCard(
                         source: source,
-                        onReplace: {
-                            showSourcePicker = true
-                        },
-                        onNewScan: {
-                            startScan()
-                        }
+                        onReplace: { coordinator.showSourcePicker = true },
+                        onNewScan: { coordinator.startScan() }
                     )
                 }
             } else {
                 ContinueEmptyState(
-                    selectedPhotoItem: $selectedPhotoItem,
-                    isScannerSupported: isScannerSupported,
-                    onScan: {
-                        startScan()
-                    },
-                    onPDF: { showFileImporter = true }
+                    selectedPhotoItem: $coordinator.selectedPhotoItem,
+                    isScannerSupported: coordinator.isScannerSupported,
+                    onScan: { coordinator.startScan() },
+                    onPDF: { coordinator.showFileImporter = true }
                 )
             }
         }
@@ -398,21 +115,17 @@ struct DashboardView: View {
                 .font(.headline)
 
             HStack(spacing: 12) {
-                Button {
-                    startScan()
-                } label: {
+                Button { coordinator.startScan() } label: {
                     CreateTile(title: "Scan Document", systemImage: "camera.viewfinder")
                 }
                 .buttonStyle(.plain)
 
-                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                PhotosPicker(selection: $coordinator.selectedPhotoItem, matching: .images) {
                     CreateTile(title: "Import Photo", systemImage: "photo")
                 }
                 .buttonStyle(.plain)
 
-                Button {
-                    showFileImporter = true
-                } label: {
+                Button { coordinator.showFileImporter = true } label: {
                     CreateTile(title: "Import PDF", systemImage: "doc")
                 }
                 .buttonStyle(.plain)
@@ -452,7 +165,6 @@ struct DashboardView: View {
                                         systemImage: dashboardViewModel.pinnedSetIDs.contains(set.id) ? "pin.slash" : "pin"
                                     )
                                 }
-
                                 Button(role: .destructive) {
                                     dashboardViewModel.delete(set: set)
                                 } label: {
@@ -478,97 +190,56 @@ struct DashboardView: View {
             }
         }
     }
+}
 
-    // MARK: - Import helpers
+// MARK: - iPad
 
-    private func importHelper() -> DocumentImportHelper {
+struct IpadHomeScreen: View {
+    @Environment(AppState.self) var appState
+    @Environment(StudyViewModel.self) var studyViewModel
+    @Environment(DashboardViewModel.self) var dashboardViewModel
+
+    @State private var showSettings = false
+    @State private var coordinator = DashboardCoordinator()
+
+    private var importHelper: DocumentImportHelper {
         DocumentImportHelper(
             isHandwritingMode: studyViewModel.isHandwritingMode,
             isUltraHandwritingMode: studyViewModel.isUltraHandwritingMode
         )
     }
 
-    private func startScan() {
-        if isScannerSupported {
-            showScanCapture = true
-        } else {
-            showScannerUnavailableAlert = true
+    var body: some View {
+        HomeIPadContent(
+            isScannerSupported: coordinator.isScannerSupported,
+            selectedPhotoItem: $coordinator.selectedPhotoItem,
+            onShowSourcePicker: { coordinator.showSourcePicker = true },
+            onScan: { coordinator.startScan() },
+            onImportPDF: { coordinator.showFileImporter = true }
+        )
+        .navigationTitle("QuickStudy")
+        .toolbar { trailingToolbar }
+        .sheet(isPresented: $showSettings) {
+            SettingsView().environment(studyViewModel)
         }
+        .modifier(ImportModifiers(
+            coordinator: coordinator,
+            studyViewModel: studyViewModel,
+            appState: appState,
+            importHelper: importHelper
+        ))
+        .onAppear { dashboardViewModel.updateFromStudy(studyViewModel) }
+        .onChange(of: studyViewModel.document) { _, _ in dashboardViewModel.updateFromStudy(studyViewModel) }
+        .onChange(of: studyViewModel.savedSets) { _, _ in dashboardViewModel.updateFromStudy(studyViewModel) }
     }
 
-    private func processOCR(images: [UIImage]) async {
-        do {
-            let result = try await importHelper().extractText(from: images)
-            guard !result.text.isEmpty else {
-                await MainActor.run {
-                    errorMessage = "No text found in the scanned image. Try scanning a different page."
-                    showErrorAlert = true
-                }
-                return
+    @ToolbarContentBuilder
+    private var trailingToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button { showSettings = true } label: {
+                Image(systemName: "gearshape")
             }
-            studyViewModel.currentSourceType = .scan
-            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
-            await MainActor.run {
-                navigateToCards = true
-            }
-        } catch {
-            await MainActor.run {
-                errorMessage = "Failed to process the scan. Please try again."
-                showErrorAlert = true
-            }
-        }
-    }
-
-    private func processPDF(url: URL) async {
-        do {
-            let text = try await importHelper().extractText(from: url)
-            guard !text.isEmpty else {
-                await MainActor.run {
-                    errorMessage = "No text found in the PDF. Try a different document."
-                    showErrorAlert = true
-                }
-                return
-            }
-            navigateToCards = true
-            studyViewModel.currentSourceType = .pdf
-            await studyViewModel.loadScannedText(rawText: text)
-        } catch {
-            await MainActor.run {
-                errorMessage = "Failed to import the PDF. Please check the file and try again."
-                showErrorAlert = true
-            }
-        }
-    }
-
-    private func handleSelectedPhoto() async {
-        guard let selectedPhotoItem else { return }
-        self.selectedPhotoItem = nil
-
-        do {
-            guard let data = try await selectedPhotoItem.loadTransferable(type: Data.self),
-                  let image = UIImage(data: data) else {
-                await MainActor.run {
-                    errorMessage = "Could not load the selected photo. Try a different image."
-                    showErrorAlert = true
-                }
-                return
-            }
-            let result = try await importHelper().extractText(from: [image])
-            guard !result.text.isEmpty else {
-                await MainActor.run {
-                    errorMessage = "No text found in the photo. Try a different image."
-                    showErrorAlert = true
-                }
-                return
-            }
-            navigateToCards = true
-            studyViewModel.currentSourceType = .photo
-            await studyViewModel.loadScannedText(rawText: result.text, candidateLines: result.candidates)
-        } catch {
-            await MainActor.run {
-                errorMessage = "Failed to process the photo. Please try again."
-                showErrorAlert = true
-            }
+            .accessibilityLabel("Settings")
         }
     }
 }

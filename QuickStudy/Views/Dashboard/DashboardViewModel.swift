@@ -9,16 +9,17 @@ import Foundation
 import Combine
 
 @MainActor
-class DashboardViewModel: ObservableObject {
-    @Published var currentSource: Source?
-    @Published var recentSets: [StudySet] = []
-    @Published var pinnedSetIDs: Set<UUID> = []
-    @Published var streakCount: Int = 0
-    @Published var todayCardCount: Int = 0
-    @Published var estimatedMin: Int = 0
-    @Published var weakestCard: WeakestCardInfo? = nil
-    @Published var aiCardsUsed: Int = 32
-    @Published var aiCardsLimit: Int = 50
+@Observable
+class DashboardViewModel {
+    var currentSource: Source?
+    var recentSets: [StudySet] = []
+    var pinnedSetIDs: Set<UUID> = []
+    var streakCount: Int = 0
+    var todayCardCount: Int = 0
+    var estimatedMin: Int = 0
+    var weakestCard: WeakestCardInfo? = nil
+    var aiCardsUsed: Int = 32
+    var aiCardsLimit: Int = 50
     
     private let defaults = UserDefaults.standard
     private let streakKey = "qs_streakCount"

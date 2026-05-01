@@ -14,22 +14,23 @@ enum APIFormat: String, Codable, Hashable {
 }
 
 @MainActor
-class AISettings: ObservableObject {
+@Observable
+class AISettings {
     private static let defaults = UserDefaults.standard
 
-    @Published var mode: CardGenerationMode {
+    var mode: CardGenerationMode {
         didSet { Self.defaults.set(mode.rawValue, forKey: "aiSettings.mode") }
     }
 
-    @Published var apiFormat: APIFormat {
+    var apiFormat: APIFormat {
         didSet { Self.defaults.set(apiFormat.rawValue, forKey: "aiSettings.apiFormat") }
     }
 
-    @Published var endpoint: URL? {
+    var endpoint: URL? {
         didSet { Self.defaults.set(endpoint?.absoluteString, forKey: "aiSettings.endpoint") }
     }
 
-    @Published var modelName: String? {
+    var modelName: String? {
         didSet { Self.defaults.set(modelName, forKey: "aiSettings.modelName") }
     }
 
