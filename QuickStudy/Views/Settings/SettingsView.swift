@@ -8,7 +8,7 @@
 import SwiftUI
  
 struct SettingsView: View {
-    @EnvironmentObject var studyViewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var studyViewModel
     @EnvironmentObject var aiSettings: AISettings
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
@@ -60,6 +60,7 @@ struct SettingsView: View {
     }
 
     var body: some View {
+        @Bindable var studyViewModel = studyViewModel
         NavigationStack {
             Form {
                 Section("AI + Input") {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     // Shared app state for the whole flow
-    @StateObject private var viewModel = StudyViewModel()
+    @State private var viewModel = StudyViewModel()
     @StateObject private var appState = AppState()
     @StateObject private var aiSettings = AISettings()
     @StateObject private var dashboardViewModel = DashboardViewModel()
@@ -30,7 +30,7 @@ struct ContentView: View {
                 TabView(selection: $appState.selectedTab) {
                     NavigationStack {
                         TodayView(viewModel: dashboardViewModel)
-                            .environmentObject(viewModel)
+                            .environment(viewModel)
                             .environmentObject(appState)
                     }
                     .tabItem {
@@ -40,9 +40,6 @@ struct ContentView: View {
                     
                     NavigationStack {
                         DashboardView(viewModel: dashboardViewModel)
-//                        LibraryView()
-//                            .environmentObject(studyViewModel)
-//                            .environmentObject(appState)
                     }
                     .tabItem {
                         Label("Library", systemImage: "books.vertical")

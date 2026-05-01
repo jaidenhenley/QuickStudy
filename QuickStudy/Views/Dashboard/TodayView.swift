@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUI
 
 struct TodayView: View {
-    @EnvironmentObject var studyViewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var studyViewModel
     @EnvironmentObject var appState: AppState
     @ObservedObject var viewModel: DashboardViewModel
 

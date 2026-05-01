@@ -9,8 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct HomeIPadContent: View {
-    @EnvironmentObject var studyViewModel: StudyViewModel
-
+    @Environment(StudyViewModel.self) var studyViewModel
+    
     @ObservedObject var dashboardViewModel: DashboardViewModel
     let isScannerSupported: Bool
     @Binding var selectedPhotoItem: PhotosPickerItem?

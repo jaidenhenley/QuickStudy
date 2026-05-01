@@ -13,7 +13,7 @@ struct QuizView: View {
         case quick
     }
 
-    @EnvironmentObject var viewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var viewModel
     @EnvironmentObject var appState: AppState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 

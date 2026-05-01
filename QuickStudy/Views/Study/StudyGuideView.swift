@@ -9,12 +9,12 @@ import SwiftUI
               
 
 struct StudyView: View {
-    @EnvironmentObject var stuViewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var studyViewModel
     @EnvironmentObject var appState: AppState
     @State private var navigateToPractice = false
 
     private var approvedCards: [StudyCard] {
-        stuViewModel.flashcards.filter { $0.approved }
+        studyViewModel.flashcards.filter { $0.approved }
     }
 
     var body: some View {
@@ -87,7 +87,7 @@ struct StudyView: View {
             }
         }
         .background(BackgroundView())
-        .navigationTitle(stuViewModel.document?.title ?? "Study Guide")
+        .navigationTitle(studyViewModel.document?.title ?? "Study Guide")
         .navigationDestination(isPresented: $navigateToPractice) {
             FlashcardPracticeView(cards: approvedCards)
         }
@@ -99,19 +99,19 @@ struct StudyView: View {
     private func approvedBinding(for card: StudyCard) -> Binding<Bool> {
         Binding(
             get: {
-                stuViewModel.flashcards.first(where: { $0.id == card.id })?.approved ?? card.approved
+                studyViewModel.flashcards.first(where: { $0.id == card.id })?.approved ?? card.approved
             },
             set: { newValue in
-                if let index = stuViewModel.flashcards.firstIndex(where: { $0.id == card.id }) {
-                    stuViewModel.flashcards[index].approved = newValue
+                if let index = studyViewModel.flashcards.firstIndex(where: { $0.id == card.id }) {
+                    studyViewModel.flashcards[index].approved = newValue
                 }
             }
         )
     }
     
     private func toggleApproval(for card: StudyCard) {
-        if let index = stuViewModel.flashcards.firstIndex(where: { $0.id == card.id }) {
-            stuViewModel.flashcards[index].approved.toggle()
+        if let index = studyViewModel.flashcards.firstIndex(where: { $0.id == card.id }) {
+            studyViewModel.flashcards[index].approved.toggle()
         }
     }
 }

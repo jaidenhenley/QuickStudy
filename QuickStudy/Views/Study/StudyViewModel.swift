@@ -8,10 +8,11 @@
 import Foundation
 import UIKit
 import SwiftUI
-import Combine
 
-class StudyViewModel: ObservableObject {
+@Observable
+class StudyViewModel {
     // MARK: - Settings
+    @ObservationIgnored
     @AppStorage("demoModeEnabled") var demoModeEnabled: Bool = true {
         didSet {
             applyDemoMode()
@@ -21,20 +22,20 @@ class StudyViewModel: ObservableObject {
     var aiSettings: AISettings = AISettings()
 
     // MARK: - Published state
-    @Published var document: StudyDocument? = nil
-    @Published var flashcards: [StudyCard] = []
-    @Published var isGenerating: Bool = false
-    @Published var isSpellCheckEnabled: Bool = true
-    @Published var isHandwritingMode: Bool = false
-    @Published var isUltraHandwritingMode: Bool = true
-    @Published var generationErrorMessage: String? = nil
-    @Published var lastRawText: String = ""
-    @Published var lastCorrectedText: String = ""
-    @Published var savedSets: [StudySet] = []
-    @Published var activeSetID: UUID? = nil
-    @Published var currentSourceType: StudySourceType = .scan
-    @Published var aiQuizQuestions: [QuizQuestion]? = nil
-    @Published var isGeneratingQuiz: Bool = false
+   var document: StudyDocument? = nil
+   var flashcards: [StudyCard] = []
+   var isGenerating: Bool = false
+   var isSpellCheckEnabled: Bool = true
+   var isHandwritingMode: Bool = false
+   var isUltraHandwritingMode: Bool = true
+   var generationErrorMessage: String? = nil
+   var lastRawText: String = ""
+   var lastCorrectedText: String = ""
+   var savedSets: [StudySet] = []
+   var activeSetID: UUID? = nil
+   var currentSourceType: StudySourceType = .scan
+   var aiQuizQuestions: [QuizQuestion]? = nil
+   var isGeneratingQuiz: Bool = false
 
     init() {
         loadSavedSets()

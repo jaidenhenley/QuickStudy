@@ -9,8 +9,8 @@ import SwiftUI
 import UIKit
 
 struct QuizQuestionView: View {
-    @EnvironmentObject var viewModel: StudyViewModel
-
+    @Environment(StudyViewModel.self) var viewModel
+    
     let providedQuestions: [QuizQuestion]?
 
     @State private var questions: [QuizQuestion]

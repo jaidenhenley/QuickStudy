@@ -24,7 +24,7 @@ struct RootHomeView: View {
 
 struct IpadHomeScreen: View {
     @EnvironmentObject var appState: AppState
-    @EnvironmentObject var studyViewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var studyViewModel
     @StateObject var dashboardViewModel: DashboardViewModel
 
     @State private var showSettings = false
@@ -73,6 +73,7 @@ struct IpadHomeScreen: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
+                .environment(studyViewModel)
         }
         .sheet(isPresented: $showSourcePicker) {
             SourcePickerView()
@@ -102,7 +103,7 @@ struct IpadHomeScreen: View {
         }
         .navigationDestination(isPresented: $navigateToCards) {
             CardsView()
-                .environmentObject(studyViewModel)
+                .environment(studyViewModel)
                 .environmentObject(appState)
         }
         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
@@ -229,7 +230,7 @@ struct IpadHomeScreen: View {
 // MARK: - iPhone Home
 struct DashboardView: View {
     @EnvironmentObject var appState: AppState
-    @EnvironmentObject var studyViewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var studyViewModel
     @StateObject private var dashboardViewModel: DashboardViewModel
 
     @State private var showSettings = false
@@ -281,6 +282,7 @@ struct DashboardView: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
+                .environment(studyViewModel)
         }
         .sheet(isPresented: $showSourcePicker) {
             SourcePickerView()
@@ -312,7 +314,7 @@ struct DashboardView: View {
         .background(BackgroundView())
         .navigationDestination(isPresented: $navigateToCards) {
             CardsView()
-                .environmentObject(studyViewModel)
+                .environment(studyViewModel)
                 .environmentObject(appState)
         }
         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in

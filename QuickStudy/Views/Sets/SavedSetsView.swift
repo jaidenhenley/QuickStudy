@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SavedSetsView: View {
-    @EnvironmentObject var viewModel: StudyViewModel
+    @Environment(StudyViewModel.self) var viewModel
     @EnvironmentObject var appState: AppState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -60,7 +60,7 @@ struct SavedSetsView: View {
                     ForEach(viewModel.savedSets.sorted { $0.updatedAt > $1.updatedAt }) { set in
                         NavigationLink {
                             StudySetDetailView(set: set)
-                                .environmentObject(viewModel)
+                                .environment(viewModel)
                                 .environmentObject(appState)
                         } label: {
                             VStack(alignment: .leading, spacing: 4) {
@@ -242,12 +242,12 @@ struct SavedSetsView: View {
                         .appGlassCard(cornerRadius: 16)
                         .navigationDestination(isPresented: $navigateToCards) {
                             CardsView()
-                                .environmentObject(viewModel)
+                                .environment(viewModel)
                                 .environmentObject(appState)
                         }
                         .navigationDestination(isPresented: $navigateToQuiz) {
                             QuizView()
-                                .environmentObject(viewModel)
+                                .environment(viewModel)
                                 .environmentObject(appState)
                         }
                     }
