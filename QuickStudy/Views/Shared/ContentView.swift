@@ -12,7 +12,7 @@ struct ContentView: View {
     @State private var viewModel = StudyViewModel()
     @State private var appState = AppState()
     @State private var aiSettings = AISettings()
-    @State private var dashboardViewModel = DashboardViewModel()
+    @State private var todayViewModel = TodayViewModel()
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
@@ -28,7 +28,7 @@ struct ContentView: View {
             if horizontalSizeClass == .compact {
                 TabView(selection: $appState.selectedTab) {
                     NavigationStack {
-                        DashboardView()
+                        TodayView()
                     }
                     .tabItem {
                         Label("Today", systemImage: "house")
@@ -43,7 +43,7 @@ struct ContentView: View {
                     }
                     .tag(AppState.Tab.savedSets)
                 }
-                .environment(dashboardViewModel)
+                .environment(todayViewModel)
                 .environment(viewModel)
                 .environment(appState)
             } else {

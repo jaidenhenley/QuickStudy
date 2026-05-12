@@ -10,7 +10,7 @@ import PhotosUI
 import SwiftUI
 
 @Observable
-final class DashboardCoordinator {
+final class TodayCoordinator {
     var navigateToCards = false
     var showErrorAlert = false
     var errorMessage = ""

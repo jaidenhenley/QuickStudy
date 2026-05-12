@@ -12,11 +12,6 @@ struct SuggestedSetRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("SUGGESTED")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .tracking(1)
 
             if studyViewModel.savedSets.isEmpty {
                 Text("Scan or import a document to generate cards.")

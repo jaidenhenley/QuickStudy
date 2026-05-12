@@ -9,7 +9,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ImportModifiers: ViewModifier {
-    @Bindable var coordinator: DashboardCoordinator
+    @Bindable var coordinator: TodayCoordinator
     let studyViewModel: StudyViewModel
     let appState: AppState
     let importHelper: DocumentImportHelper

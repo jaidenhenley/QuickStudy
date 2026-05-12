@@ -10,7 +10,7 @@ import Combine
 
 @MainActor
 @Observable
-class DashboardViewModel {
+class TodayViewModel {
     var currentSource: Source?
     var recentSets: [StudySet] = []
     var pinnedSetIDs: Set<UUID> = []

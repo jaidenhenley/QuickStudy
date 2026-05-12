@@ -18,10 +18,10 @@
 
 import SwiftUI
 
-struct DashboardView: View {
+struct TodayView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AppState.self) var appState
-    @Environment(DashboardViewModel.self) var viewModel
+    @Environment(TodayViewModel.self) var todayViewModel
 
     @State private var showSettings = false
 
@@ -34,7 +34,7 @@ struct DashboardView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 4) {
                             Image(systemName: "sparkles").font(.caption)
-                            Text("\(viewModel.aiCardsUsed) of \(viewModel.aiCardsLimit) AI cards used this month")
+                            Text("\(todayViewModel.aiCardsUsed) of \(todayViewModel.aiCardsLimit) AI cards used this month")
                                 .font(.caption)
                                 .fontWeight(.medium)
                             Text("Plus >")
@@ -50,8 +50,8 @@ struct DashboardView: View {
                             Text(formattedDate)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
-                            if viewModel.streakCount > 0 {
-                                Text("🔥 \(viewModel.streakCount) day streak")
+                            if todayViewModel.streakCount > 0 {
+                                Text("🔥 \(todayViewModel.streakCount) day streak")
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.orange)
@@ -73,23 +73,25 @@ struct DashboardView: View {
                 SessionCard()
 
                 // MARK: Weakest Card
-                if let weakest = viewModel.weakestCard {
+                if let weakest = todayViewModel.weakestCard {
                     WeakestCardRow(weakest: weakest)
                 }
 
                 // MARK: Suggested
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("SUGGESTED")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                        .tracking(1)
+                    
 
                     if studyViewModel.savedSets.isEmpty {
                         Text("Scan or import a document to generate cards.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     } else {
+                        Text("SUGGESTED")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+                            .tracking(1)
+                        
                         ForEach(studyViewModel.savedSets.prefix(3)) { set in
                             NavigationLink {
                                 StudySetDetailView(set: set)
@@ -107,8 +109,8 @@ struct DashboardView: View {
         }
         .background(Color(.systemBackground))
         .sheet(isPresented: $showSettings) { SettingsView() }
-        .onAppear { viewModel.updateFromStudy(studyViewModel) }
-        .onChange(of: studyViewModel.savedSets) { _, _ in viewModel.updateFromStudy(studyViewModel) }
+        .onAppear { todayViewModel.updateFromStudy(studyViewModel) }
+        .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel) }
     }
 
     private var formattedDate: String {

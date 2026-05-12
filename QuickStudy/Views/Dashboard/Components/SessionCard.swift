@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SessionCard: View {
-    @Environment(DashboardViewModel.self) var viewModel
+    @Environment(TodayViewModel.self) var todayViewModel
     @Environment(AppState.self) var appState
 
 
@@ -21,10 +21,10 @@ struct SessionCard: View {
                 .tracking(1)
             
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text("\(viewModel.todayCardCount)")
+                Text("\(todayViewModel.todayCardCount)")
                     .font(.system(size: 72, weight: .bold))
                     .foregroundStyle(.white)
-                Text("cards · \(viewModel.estimatedMin) min")
+                Text("cards · \(todayViewModel.estimatedMin) min")
                     .font(.title3)
                     .foregroundStyle(.white.opacity(0.85))
             }
@@ -34,10 +34,10 @@ struct SessionCard: View {
             } label: {
                 Text("Start Session")
                     .font(.headline)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.appSecondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(.appSecondary)
+                    .background(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             
