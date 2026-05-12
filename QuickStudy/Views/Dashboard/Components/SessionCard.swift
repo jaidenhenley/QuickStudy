@@ -49,7 +49,7 @@ struct SessionCard: View {
                     .foregroundStyle(.white.opacity(0.75))
             }
         }
-        .padding(20)
+        .padding()
         .background(.appPrimary)
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }

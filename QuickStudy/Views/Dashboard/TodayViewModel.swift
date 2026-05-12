@@ -18,7 +18,7 @@ class TodayViewModel {
     var todayCardCount: Int = 0
     var estimatedMin: Int = 0
     var weakestCard: WeakestCardInfo? = nil
-    var aiCardsUsed: Int = 32
+    var aiCardsUsed: Int = UserDefaults.standard.integer(forKey: "qs_aiCardsUsed")
     var aiCardsLimit: Int = 50
     
     private let defaults = UserDefaults.standard
@@ -35,7 +35,7 @@ class TodayViewModel {
         streakCount = defaults.integer(forKey: streakKey)
     }
     
-    func recordStudySessio() {
+    func recordStudySession() {
         let today = Calendar.current.startOfDay(for: Date())
         if let lastDate = defaults.object(forKey: lastStudiedKey) as? Date {
             let lastDay = Calendar.current.startOfDay(for: lastDate)

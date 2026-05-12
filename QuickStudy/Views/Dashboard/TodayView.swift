@@ -32,19 +32,9 @@ struct TodayView: View {
                 // MARK: Header
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "sparkles").font(.caption)
-                            Text("\(todayViewModel.aiCardsUsed) of \(todayViewModel.aiCardsLimit) AI cards used this month")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                            Text("Plus >")
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                        }
-                        .foregroundStyle(.appSecondary)
-
                         Text("Today")
                             .font(.system(size: 40, weight: .bold))
+                        
 
                         HStack(spacing: 6) {
                             Text(formattedDate)
@@ -68,6 +58,10 @@ struct TodayView: View {
                             .clipShape(Circle())
                     }
                 }
+                
+                
+                AICardsLeftView()
+
 
                 // MARK: Session Card
                 SessionCard()
