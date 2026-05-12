@@ -27,41 +27,32 @@ struct TodayView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 12) {
 
                 // MARK: Header
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Today")
                             .font(.system(size: 40, weight: .bold))
-                        
-
-                        HStack(spacing: 6) {
-                            Text(formattedDate)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            if todayViewModel.streakCount > 0 {
-                                Text("🔥 \(todayViewModel.streakCount) day streak")
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.orange)
-                            }
-                        }
                     }
                     Spacer()
-                    Button { showSettings = true } label: {
-                        Image(systemName: "gearshape")
-                            .font(.system(size: 18))
-                            .foregroundStyle(.secondary)
-                            .padding(8)
-                            .background(Color(.secondarySystemBackground))
-                            .clipShape(Circle())
-                    }
                 }
                 
                 
                 AICardsLeftView()
 
+                
+                HStack(spacing: 6) {
+                    Text(formattedDate)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    if todayViewModel.streakCount > 0 {
+                        Text("🔥 \(todayViewModel.streakCount) day streak")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.orange)
+                    }
+                }
 
                 // MARK: Session Card
                 SessionCard()
@@ -105,6 +96,15 @@ struct TodayView: View {
         .sheet(isPresented: $showSettings) { SettingsView() }
         .onAppear { todayViewModel.updateFromStudy(studyViewModel) }
         .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel) }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { showSettings = true } label: {
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
     }
 
     private var formattedDate: String {
