@@ -45,9 +45,6 @@ struct QuizView: View {
                 content
             }
         }
-        .onAppear {
-            appState.quizViewAppeared = Date()
-        }
         .onDisappear {
             appState.isQuickQuizEntry = false
         }
@@ -250,7 +247,8 @@ struct QuizView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             Button("Scan Document") {
-                appState.selectedTab = .scan
+                
+                
             }
             .appProminentButtonStyle(tint: Theme.primary)
         }

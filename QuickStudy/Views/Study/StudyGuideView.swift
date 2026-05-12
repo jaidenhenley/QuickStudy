@@ -91,9 +91,6 @@ struct StudyView: View {
         .navigationDestination(isPresented: $navigateToPractice) {
             FlashcardPracticeView(cards: approvedCards)
         }
-        .onAppear {
-            appState.studyViewAppeared = Date()
-        }
     }
     
     private func approvedBinding(for card: StudyCard) -> Binding<Bool> {

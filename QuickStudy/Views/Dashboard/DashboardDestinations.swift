@@ -16,7 +16,6 @@ struct StudySetDetailView: View {
         CardsView()
             .onAppear {
                 viewModel.loadSet(set)
-                appState.setDetailViewAppeared = Date()
             }
     }
 }

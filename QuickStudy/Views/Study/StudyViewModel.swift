@@ -40,6 +40,10 @@ class StudyViewModel {
     init() {
         loadSavedSets()
     }
+    
+    func loadTodaySession() {
+        flashcards = savedSets.flatMap { $0.cards }.filter { $0.approved }
+    }
 
     // MARK: - AI Quiz Generation
 

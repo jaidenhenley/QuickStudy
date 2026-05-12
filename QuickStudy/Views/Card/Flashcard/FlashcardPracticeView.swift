@@ -63,9 +63,6 @@ struct FlashcardPracticeView: View {
             .padding(.horizontal, 24)
         }
         .navigationTitle("Practice")
-        .onAppear {
-            appState.practiceViewAppeared = Date()
-        }
         .onChange(of: cards.count) { _, _ in
             if cards.isEmpty {
                 currentIndex = 0

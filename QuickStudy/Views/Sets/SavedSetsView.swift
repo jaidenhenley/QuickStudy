@@ -27,7 +27,7 @@ struct SavedSetsView: View {
         if horizontalSizeClass == .compact {
             compactContent
         } else {
-            ipadContent
+//            ipadContent
         }
     }
 
@@ -112,167 +112,167 @@ struct SavedSetsView: View {
         }
     }
 
-    private var ipadContent: some View {
-        GeometryReader { proxy in
-            let m = LayoutMetrics(availableWidth: proxy.size.width)
-            HStack(alignment: .top, spacing: m.spacing) {
-                VStack(alignment: .leading, spacing: m.spacing) {
-                    HStack {
-                        Picker("Sort", selection: $sortOption) {
-                            ForEach(SortOption.allCases, id: \.self) { option in
-                                Text(option.label).tag(option)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .frame(maxWidth: 220)
-                    }
-
-                    List {
-                        if filteredSets.isEmpty {
-                            emptyState
-                                .listRowBackground(Color.clear)
-                        } else {
-                            ForEach(filteredSets) { set in
-                                Button {
-                                    selectedSetID = set.id
-                                    appState.splitVisibility = .detailOnly
-                                } label: {
-                                    HStack(spacing: 12) {
-                                        VStack(alignment: .leading, spacing: 6) {
-                                            Text(set.title)
-                                                .font(.headline)
-                                                .foregroundStyle(Theme.textPrimary)
-                                            Text("\(set.cards.count) cards • \(set.document.lines.count) lines")
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                            Text("Updated \(formattedDate(set.updatedAt))")
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    .padding(.vertical, 6)
-                                }
-                                .buttonStyle(.plain)
-                                .listRowBackground(Color.clear)
-                                .contextMenu {
-                                    Button {
-                                        beginRename(for: set)
-                                    } label: {
-                                        Label("Rename", systemImage: "pencil")
-                                    }
-                                    Button(role: .destructive) {
-                                        deletingSet = set
-                                        showDeleteAlert = true
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .listStyle(.plain)
-                    .scrollContentBackground(.hidden)
-                    .searchable(text: $searchText, placement: .toolbar, prompt: "Search sets")
-                    .frame(width: m.leftColumnWidth)
-                    .appGlassCard(cornerRadius: 16)
-                }
-                .frame(width: m.leftColumnWidth, alignment: .topLeading)
-
-                if !m.isStacked {
-                    VStack(alignment: .leading, spacing: m.spacing) {
-                        Text("Set Preview")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-
-                        Group {
-                            if let selectedSet {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    Text(selectedSet.title)
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
-
-                                    Text("\(selectedSet.cards.count) cards • Updated \(formattedDate(selectedSet.updatedAt))")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        ForEach(selectedSet.cards.prefix(5)) { card in
-                                            VStack(alignment: .leading, spacing: 4) {
-                                                Text(card.question)
-                                                    .font(.subheadline)
-                                                    .fontWeight(.semibold)
-                                                Text(card.answer)
-                                                    .font(.caption)
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                        }
-                                        if selectedSet.cards.isEmpty {
-                                            Text("No cards yet.")
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                    }
-
-                                    HStack(spacing: 12) {
-                                        Button("Start Quiz") {
-                                            viewModel.loadSet(selectedSet)
-                                            navigateToQuiz = true
-                                        }
-                                        .appProminentButtonStyle(tint: Theme.primary)
-
-                                        Button("Study Cards") {
-                                            viewModel.loadSet(selectedSet)
-                                            navigateToCards = true
-                                        }
-                                        .buttonStyle(.bordered)
-                                    }
-                                }
-                            } else {
-                                Text("Select a set to preview.")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .appGlassCard(cornerRadius: 16)
-                        .navigationDestination(isPresented: $navigateToCards) {
-                            CardsView()
-                                .environment(viewModel)
-                                .environment(appState)
-                        }
-                        .navigationDestination(isPresented: $navigateToQuiz) {
-                            QuizView()
-                                .environment(viewModel)
-                                .environment(appState)
-                        }
-                    }
-                    .frame(width: m.rightColumnWidth, alignment: .topLeading)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        }
-        .padding()
-        .background(BackgroundView())
-        .sheet(isPresented: $showRenameSheet) {
-            renameSetSheet
-        }
-        .alert("Delete Set", isPresented: $showDeleteAlert, presenting: deletingSet) { set in
-            Button("Delete", role: .destructive) {
-                viewModel.deleteSet(set)
-                deletingSet = nil
-            }
-            Button("Cancel", role: .cancel) {
-                deletingSet = nil
-            }
-        } message: { set in
-            Text("Delete \"\(set.title)\"? This cannot be undone.")
-        }
-    }
+//    private var ipadContent: some View {
+//        GeometryReader { proxy in
+//            let m = LayoutMetrics(availableWidth: proxy.size.width)
+//            HStack(alignment: .top, spacing: m.spacing) {
+//                VStack(alignment: .leading, spacing: m.spacing) {
+//                    HStack {
+//                        Picker("Sort", selection: $sortOption) {
+//                            ForEach(SortOption.allCases, id: \.self) { option in
+//                                Text(option.label).tag(option)
+//                            }
+//                        }
+//                        .pickerStyle(.segmented)
+//                        .frame(maxWidth: 220)
+//                    }
+//
+//                    List {
+//                        if filteredSets.isEmpty {
+//                            emptyState
+//                                .listRowBackground(Color.clear)
+//                        } else {
+//                            ForEach(filteredSets) { set in
+//                                Button {
+//                                    selectedSetID = set.id
+//                                    appState.splitVisibility = .detailOnly
+//                                } label: {
+//                                    HStack(spacing: 12) {
+//                                        VStack(alignment: .leading, spacing: 6) {
+//                                            Text(set.title)
+//                                                .font(.headline)
+//                                                .foregroundStyle(Theme.textPrimary)
+//                                            Text("\(set.cards.count) cards • \(set.document.lines.count) lines")
+//                                                .font(.subheadline)
+//                                                .foregroundStyle(.secondary)
+//                                            Text("Updated \(formattedDate(set.updatedAt))")
+//                                                .font(.caption)
+//                                                .foregroundStyle(.secondary)
+//                                        }
+//                                        Spacer()
+//                                        Image(systemName: "chevron.right")
+//                                            .font(.caption)
+//                                            .foregroundStyle(.secondary)
+//                                    }
+//                                    .padding(.vertical, 6)
+//                                }
+//                                .buttonStyle(.plain)
+//                                .listRowBackground(Color.clear)
+//                                .contextMenu {
+//                                    Button {
+//                                        beginRename(for: set)
+//                                    } label: {
+//                                        Label("Rename", systemImage: "pencil")
+//                                    }
+//                                    Button(role: .destructive) {
+//                                        deletingSet = set
+//                                        showDeleteAlert = true
+//                                    } label: {
+//                                        Label("Delete", systemImage: "trash")
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    .listStyle(.plain)
+//                    .scrollContentBackground(.hidden)
+//                    .searchable(text: $searchText, placement: .toolbar, prompt: "Search sets")
+//                    .frame(width: m.leftColumnWidth)
+//                    .appGlassCard(cornerRadius: 16)
+//                }
+//                .frame(width: m.leftColumnWidth, alignment: .topLeading)
+//
+//                if !m.isStacked {
+//                    VStack(alignment: .leading, spacing: m.spacing) {
+//                        Text("Set Preview")
+//                            .font(.title2)
+//                            .fontWeight(.semibold)
+//
+//                        Group {
+//                            if let selectedSet {
+//                                VStack(alignment: .leading, spacing: 12) {
+//                                    Text(selectedSet.title)
+//                                        .font(.title3)
+//                                        .fontWeight(.semibold)
+//
+//                                    Text("\(selectedSet.cards.count) cards • Updated \(formattedDate(selectedSet.updatedAt))")
+//                                        .font(.subheadline)
+//                                        .foregroundStyle(.secondary)
+//
+//                                    VStack(alignment: .leading, spacing: 8) {
+//                                        ForEach(selectedSet.cards.prefix(5)) { card in
+//                                            VStack(alignment: .leading, spacing: 4) {
+//                                                Text(card.question)
+//                                                    .font(.subheadline)
+//                                                    .fontWeight(.semibold)
+//                                                Text(card.answer)
+//                                                    .font(.caption)
+//                                                    .foregroundStyle(.secondary)
+//                                            }
+//                                        }
+//                                        if selectedSet.cards.isEmpty {
+//                                            Text("No cards yet.")
+//                                                .font(.subheadline)
+//                                                .foregroundStyle(.secondary)
+//                                        }
+//                                    }
+//
+//                                    HStack(spacing: 12) {
+//                                        Button("Start Quiz") {
+//                                            viewModel.loadSet(selectedSet)
+//                                            navigateToQuiz = true
+//                                        }
+//                                        .appProminentButtonStyle(tint: Theme.primary)
+//
+//                                        Button("Study Cards") {
+//                                            viewModel.loadSet(selectedSet)
+//                                            navigateToCards = true
+//                                        }
+//                                        .buttonStyle(.bordered)
+//                                    }
+//                                }
+//                            } else {
+//                                Text("Select a set to preview.")
+//                                    .font(.subheadline)
+//                                    .foregroundStyle(.secondary)
+//                            }
+//                        }
+//                        .padding()
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .appGlassCard(cornerRadius: 16)
+//                        .navigationDestination(isPresented: $navigateToCards) {
+//                            CardsView()
+//                                .environment(viewModel)
+//                                .environment(appState)
+//                        }
+//                        .navigationDestination(isPresented: $navigateToQuiz) {
+//                            QuizView()
+//                                .environment(viewModel)
+//                                .environment(appState)
+//                        }
+//                    }
+//                    .frame(width: m.rightColumnWidth, alignment: .topLeading)
+//                }
+//            }
+//            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+//        }
+//        .padding()
+//        .background(BackgroundView())
+//        .sheet(isPresented: $showRenameSheet) {
+//            renameSetSheet
+//        }
+//        .alert("Delete Set", isPresented: $showDeleteAlert, presenting: deletingSet) { set in
+//            Button("Delete", role: .destructive) {
+//                viewModel.deleteSet(set)
+//                deletingSet = nil
+//            }
+//            Button("Cancel", role: .cancel) {
+//                deletingSet = nil
+//            }
+//        } message: { set in
+//            Text("Delete \"\(set.title)\"? This cannot be undone.")
+//        }
+//    }
 
     private var filteredSets: [StudySet] {
         let base = viewModel.savedSets

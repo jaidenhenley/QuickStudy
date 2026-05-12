@@ -140,7 +140,6 @@ struct SettingsView: View {
                     // Dismiss the Settings sheet, then signal ContentView to start the tutorial
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         dismiss()
-                        appState.shouldRestartTutorial = true
                     }
                 },
                 onSkip: {

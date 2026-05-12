@@ -33,7 +33,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("Today", systemImage: "house")
                     }
-                    .tag(AppState.Tab.scan)
+                    .tag(AppState.Tab.today)
                     
                     NavigationStack {
                         LibraryView()
@@ -41,7 +41,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("Library", systemImage: "books.vertical")
                     }
-                    .tag(AppState.Tab.savedSets)
+                    .tag(AppState.Tab.library)
                 }
                 .environment(todayViewModel)
                 .environment(viewModel)
@@ -86,60 +86,12 @@ struct ContentView: View {
                 showOnboarding = true
             }
         }
-        .onChange(of: appState.selectedTab) { newValue, _ in
-            if newValue == .quiz {
-                appState.isQuickQuizEntry = false
-            }
-        }
-        .onChange(of: appState.setDetailViewAppeared) { _, _ in
-            if showTutorialOverlay {
-                // When user taps a set, we advance from tapFirstSet to viewFlashcards
-                if currentTutorialStep == .tapFirstSet {
-                    advanceTutorial()
-                }
-            }
-        }
-        .onChange(of: appState.studyViewAppeared) { _, _ in
-            if showTutorialOverlay && currentTutorialStep == .openStudyMode {
-                advanceTutorial()
-            }
-        }
-        .onChange(of: appState.practiceViewAppeared) { _, _ in
-            if showTutorialOverlay && currentTutorialStep == .startPractice {
-                advanceTutorial()
-            }
-        }
-        .onChange(of: appState.quizViewAppeared) { _, _ in
-            if showTutorialOverlay && currentTutorialStep == .goToQuiz {
-                advanceTutorial()
-            }
-        }
-        .onChange(of: currentTutorialStep) { _, newStep in
-            handleStepChange(newStep)
-        }
-        .onChange(of: appState.shouldRestartTutorial) { _, shouldRestart in
-            if shouldRestart {
-                appState.shouldRestartTutorial = false
-                startTutorial()
-            }
-        }
-        .onChange(of: viewModel.flashcards) { oldCards, newCards in
-            // Detect when a card gets approved
-            if showTutorialOverlay && currentTutorialStep == .approveCard {
-                let oldApprovedCount = oldCards.filter { $0.approved }.count
-                let newApprovedCount = newCards.filter { $0.approved }.count
-                
-                if newApprovedCount > oldApprovedCount {
-                    advanceTutorial()
-                }
-            }
-        }
+        
     }
     
     private func startTutorial() {
         viewModel.demoModeEnabled = true
         currentTutorialStep = .viewDemoSets
-        appState.selectedTab = .scan
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             showTutorialOverlay = true
         }
@@ -174,7 +126,6 @@ struct ContentView: View {
                 showTutorialOverlay = false
                 viewModel.demoModeEnabled = false
                 didShowOnboarding = true
-                appState.selectedTab = .scan
             }
         }
     }

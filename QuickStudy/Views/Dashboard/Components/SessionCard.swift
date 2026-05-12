@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SessionCard: View {
     @Environment(TodayViewModel.self) var todayViewModel
+    @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AppState.self) var appState
+    @State private var navigateToStudy = false
 
 
     var body: some View {
@@ -30,7 +32,8 @@ struct SessionCard: View {
             }
             
             Button {
-                appState.selectedTab = .savedSets
+                studyViewModel.loadTodaySession()
+                navigateToStudy = true
             } label: {
                 Text("Start Session")
                     .font(.headline)
