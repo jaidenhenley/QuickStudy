@@ -383,10 +383,6 @@ class StudyViewModel {
         return generateCards(from: rawLines, approved: false, limit: 12)
     }
 
-    private func generateDemoCards(from lines: [String]) -> [StudyCard] {
-        return generateCards(from: lines, approved: false, limit: 12)
-    }
-
     private func generateCards(from lines: [String], approved: Bool, limit: Int) -> [StudyCard] {
         var cleanedLines: [String] = []
         cleanedLines.reserveCapacity(lines.count)
@@ -671,17 +667,33 @@ class StudyViewModel {
         // Always remove and regenerate demo sets to ensure they have the latest configuration
         savedSets.removeAll { isDemoSet($0) }
 
-        let higDocument = StudyDocument(title: "Human Interface Guidelines", lines: DemoData.higLines)
-        let swiftUIDocument = StudyDocument(title: "SwiftUI", lines: DemoData.swiftuiLines)
-        let spriteKitDocument = StudyDocument(title: "SpriteKit", lines: DemoData.spriteKitLines)
-        let higCards = generateDemoCards(from: DemoData.higLines)
-        let swiftUICards = generateDemoCards(from: DemoData.swiftuiLines)
-        let spriteKitCards = generateDemoCards(from: DemoData.spriteKitLines)
-        let higSet = StudySet(title: higDocument.title, document: higDocument, cards: higCards, sourceType: .demo, isDemo: true)
-        let swiftUISet = StudySet(title: swiftUIDocument.title, document: swiftUIDocument, cards: swiftUICards, sourceType: .demo, isDemo: true)
-        let spriteKitSet = StudySet(title: spriteKitDocument.title, document: spriteKitDocument, cards: spriteKitCards, sourceType: .demo, isDemo: true)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
 
-        savedSets = [higSet, swiftUISet, spriteKitSet] + savedSets
+        let demoSets = DemoData.sets.map { spec in
+            let cards = spec.cards.map { card in
+                StudyCard(
+                    question: card.question,
+                    answer: card.answer,
+                    approved: card.approved,
+                    missCount: card.missCount,
+                    box: card.box,
+                    dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },
+                    lastReviewedAt: card.box > 0 ? today : nil
+                )
+            }
+            return StudySet(
+                title: spec.title,
+                document: StudyDocument(title: spec.title, lines: spec.lines),
+                cards: cards,
+                sourceType: .demo,
+                isDemo: true
+            )
+        }
+
+        StreakStore.seedDemoStreak(DemoData.seededStreak)
+
+        savedSets = demoSets + savedSets
         saveSavedSets()
     }
 
@@ -770,6 +782,7 @@ class StudyViewModel {
             }
 
             savedSets.removeAll { isDemoSet($0) }
+            StreakStore.clearDemoStreak()
             saveSavedSets()
         }
     }

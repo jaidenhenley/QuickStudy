@@ -40,10 +40,6 @@ class TodayViewModel {
     var generationsRemaining: Int = GenerationAllowance.remaining
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
 
-    private let defaults = UserDefaults.standard
-    private let streakKey = "qs_streakCount"
-    private let lastStudiedKey = "qs_lastStudiedDate"
-
     init() {
         loadStreak()
     }
@@ -51,12 +47,12 @@ class TodayViewModel {
     // MARK: Streak
 
     private func loadStreak() {
-        streakCount = defaults.integer(forKey: streakKey)
+        streakCount = StreakStore.count
     }
 
     func recordStudySession() {
         let today = Calendar.current.startOfDay(for: Date())
-        if let lastDate = defaults.object(forKey: lastStudiedKey) as? Date {
+        if let lastDate = StreakStore.lastStudied {
             let lastDay = Calendar.current.startOfDay(for: lastDate)
             guard let diff = Calendar.current.dateComponents([.day], from: lastDay, to: today).day else { return }
             if diff == 1 {
@@ -67,8 +63,7 @@ class TodayViewModel {
         } else {
             streakCount = 1
         }
-        defaults.set(streakCount, forKey: streakKey)
-        defaults.set(Date(), forKey: lastStudiedKey)
+        StreakStore.record(count: streakCount, on: Date())
     }
 
     // MARK: - Derived
@@ -81,6 +76,7 @@ class TodayViewModel {
         let sets = studyViewModel.savedSets
         hasReviewableCards = sets.contains { !$0.reviewableCards.isEmpty }
         generationsRemaining = GenerationAllowance.remaining
+        loadStreak()
         computeTodaySession(from: sets, now: now, calendar: calendar)
         computeWeakestCard(from: sets)
         computeUpNext(from: sets, now: now, calendar: calendar)
