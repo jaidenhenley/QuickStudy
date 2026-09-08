@@ -22,12 +22,12 @@ struct NewSetSheet: View {
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 12) {
-                SourceOptionButton(title: "Scan", systemImage: "camera", isProminent: true) {
-                    coordinator.pendingSource = .scan
-                    dismiss()
-                }
                 SourceOptionButton(title: "PDF", systemImage: "doc.text") {
                     coordinator.pendingSource = .pdf
+                    dismiss()
+                }
+                SourceOptionButton(title: "Scan", systemImage: "camera", isProminent: true) {
+                    coordinator.pendingSource = .scan
                     dismiss()
                 }
                 SourceOptionButton(title: "Paste", systemImage: "text.alignleft") {

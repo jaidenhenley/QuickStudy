@@ -30,7 +30,7 @@ struct PasteTextSheet: View {
                 }
             }
             .padding(16)
-            .background(Color(.systemBackground))
+            .background(Theme.background)
             .navigationTitle("Paste Notes")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

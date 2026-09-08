@@ -7,6 +7,7 @@ struct Theme {
     static let secondary = Color("AppSecondary")
     static let aiAccent = Color("AppAIAccent")
     static let textPrimary = Color("AppTextPrimary")
+    static let success = Color("AppSuccess")
 }
 
 extension View {

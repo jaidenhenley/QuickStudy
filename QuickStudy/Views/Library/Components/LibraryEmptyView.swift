@@ -11,17 +11,33 @@ struct LibraryEmptyView: View {
     let coordinator: ImportCoordinator
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 18) {
             ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+                    .foregroundStyle(Color.secondary.opacity(0.35))
+                    .frame(width: 116, height: 92)
+                    .rotationEffect(.degrees(-7))
+                    .offset(x: -26, y: -6)
+
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+                    .foregroundStyle(Color.secondary.opacity(0.35))
+                    .frame(width: 116, height: 92)
+                    .rotationEffect(.degrees(7))
+                    .offset(x: 26, y: -6)
+
                 RoundedRectangle(cornerRadius: 14)
-                    .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
-                    .foregroundStyle(Color.appPrimary.opacity(0.35))
-                    .frame(width: 132, height: 96)
-                Image(systemName: "plus")
-                    .font(.title)
-                    .foregroundStyle(Color.appPrimary)
+                    .fill(Theme.surface)
+                    .frame(width: 118, height: 96)
+                    .shadow(color: .black.opacity(0.08), radius: 10, y: 4)
+                    .overlay {
+                        Image(systemName: "plus")
+                            .font(.title)
+                            .foregroundStyle(Color.appPrimary)
+                    }
             }
-            .padding(.bottom, 8)
+            .padding(.bottom, 6)
 
             Text("Build your first set")
                 .font(.title2)
@@ -43,22 +59,23 @@ struct LibraryEmptyView: View {
                     coordinator.showPasteSheet = true
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
 
-            HStack(alignment: .top, spacing: 8) {
+            HStack(spacing: 10) {
                 Image(systemName: "sparkles")
                     .font(.caption)
-                    .foregroundStyle(Color.appAIAccent)
+                    .foregroundStyle(Color.appPrimary)
+                    .frame(width: 28, height: 28)
+                    .background(Color.appPrimary.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 Text("Tip: works best with **1–3 pages of notes** at a time.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer(minLength: 0)
             }
             .padding(12)
-            .background(Color(.secondarySystemBackground))
+            .background(Theme.surface)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding(.top, 8)
         }
-        .padding(.horizontal, 20)
     }
 }

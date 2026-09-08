@@ -63,7 +63,7 @@ struct SuggestedSetLabel: View {
                 .foregroundStyle(.secondary)
         }
         .padding(14)
-        .background(Color(.secondarySystemBackground))
+        .background(Theme.surface)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }

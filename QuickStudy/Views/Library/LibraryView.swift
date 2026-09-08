@@ -12,27 +12,77 @@ struct LibraryView: View {
     @Environment(AppState.self) private var appState
 
     @State private var coordinator = ImportCoordinator()
+    @State private var libraryViewModel = LibraryViewModel()
+    @State private var renamingSet: StudySet? = nil
+    @State private var renameText = ""
+    @State private var showRenameAlert = false
+    @State private var deletingSet: StudySet? = nil
+    @State private var showDeleteAlert = false
 
     var body: some View {
+        @Bindable var libraryViewModel = libraryViewModel
+
         ZStack(alignment: .bottomTrailing) {
-            if studyViewModel.savedSets.isEmpty {
-                LibraryEmptyView(coordinator: coordinator)
-            } else {
-                List(studyViewModel.savedSets.sorted { $0.updatedAt > $1.updatedAt }) { set in
-                    NavigationLink {
-                        StudySetDetailView(set: set)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(set.title)
-                                .font(.headline)
-                            Text("\(set.reviewableCards.count) cards")
+            Theme.background
+                .ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    LibrarySearchField(
+                        text: $libraryViewModel.searchText,
+                        isEnabled: !studyViewModel.savedSets.isEmpty
+                    )
+
+                    if studyViewModel.savedSets.isEmpty {
+                        LibraryEmptyView(coordinator: coordinator)
+                            .padding(.top, 32)
+                    } else {
+                        LibraryFilterChips(selection: $libraryViewModel.filter)
+
+                        let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
+                        if visible.isEmpty {
+                            Text("No sets match this filter.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.top, 48)
+                        } else {
+                            LazyVGrid(
+                                columns: [
+                                    GridItem(.flexible(), spacing: 12),
+                                    GridItem(.flexible(), spacing: 12)
+                                ],
+                                spacing: 12
+                            ) {
+                                ForEach(visible) { set in
+                                    NavigationLink {
+                                        StudySetDetailView(set: set)
+                                    } label: {
+                                        SetTile(set: set)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .contextMenu {
+                                        Button {
+                                            renameText = set.title
+                                            renamingSet = set
+                                            showRenameAlert = true
+                                        } label: {
+                                            Label("Rename", systemImage: "pencil")
+                                        }
+                                        Button(role: .destructive) {
+                                            deletingSet = set
+                                            showDeleteAlert = true
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                .listStyle(.plain)
-                .safeAreaPadding(.bottom, 88)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 96)
             }
 
             FloatingCreateButton {
@@ -43,7 +93,25 @@ struct LibraryView: View {
         }
         .navigationTitle("Library")
         .navigationBarTitleDisplayMode(.large)
-        .background(Color(.systemBackground))
+        .alert("Rename Set", isPresented: $showRenameAlert) {
+            TextField("Title", text: $renameText)
+            Button("Save") {
+                if let renamingSet {
+                    studyViewModel.renameSet(id: renamingSet.id, title: renameText)
+                }
+                renamingSet = nil
+            }
+            Button("Cancel", role: .cancel) { renamingSet = nil }
+        }
+        .alert("Delete Set", isPresented: $showDeleteAlert, presenting: deletingSet) { set in
+            Button("Delete", role: .destructive) {
+                studyViewModel.deleteSet(set)
+                deletingSet = nil
+            }
+            Button("Cancel", role: .cancel) { deletingSet = nil }
+        } message: { set in
+            Text("Delete \"\(set.title)\"? This cannot be undone.")
+        }
         .modifier(
             ImportModifiers(
                 coordinator: coordinator,
