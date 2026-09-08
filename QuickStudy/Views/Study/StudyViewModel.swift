@@ -354,6 +354,36 @@ class StudyViewModel {
     }
 
     @MainActor
+    func generateSuggestedCards(for setID: UUID, topic: String, count: Int) async {
+        guard let index = savedSets.firstIndex(where: { $0.id == setID }) else { return }
+
+        isGenerating = true
+        defer { isGenerating = false }
+        generationErrorMessage = nil
+
+        let sourceText = savedSets[index].document.lines.joined(separator: "\n")
+
+        do {
+            let cards = try await CardGenerator.generateTopicCards(
+                from: sourceText,
+                topic: topic,
+                count: count,
+                settings: aiSettings
+            )
+            guard !cards.isEmpty else {
+                generationErrorMessage = "Couldn't find enough about \(topic) in this set to make new cards."
+                return
+            }
+            savedSets[index].cards.append(contentsOf: cards)
+            savedSets[index].updatedAt = Date()
+            GenerationAllowance.recordGeneration()
+            saveSavedSets()
+        } catch {
+            generationErrorMessage = "Couldn't generate cards on \(topic). Please try again."
+        }
+    }
+
+    @MainActor
     func generateAICards(text: String) async {
         self.isGenerating = true
         defer { self.isGenerating = false }

@@ -27,6 +27,15 @@ struct APICardGenerationEngine: CardGenerating {
         return decoded.cards.map { AIFlashcard(question: $0.question, answer: $0.answer) }
     }
 
+    func generateCards(from text: String, topic: String, count: Int) async throws -> [AIFlashcard] {
+        let prompt = PromptBuilder.topicFlashcardPrompt(from: text, topic: topic, count: count)
+        let jsonString = try await sendPrompt(prompt)
+        let decoded = try decodeJSON(AIFlashcardSetResponse.self, from: jsonString)
+        return decoded.cards
+            .prefix(count)
+            .map { AIFlashcard(question: $0.question, answer: $0.answer) }
+    }
+
     func generateDistractors(
         question: String,
         correctAnswer: String,

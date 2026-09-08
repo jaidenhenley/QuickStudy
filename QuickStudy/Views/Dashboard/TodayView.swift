@@ -51,6 +51,16 @@ struct TodayView: View {
                             .padding(.top, Spacing.sm)
                         WeakestCardRow(weakest: weakest)
                     }
+
+                    if let suggestion = todayViewModel.suggestion {
+                        Text("SUGGESTED")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+                            .tracking(1)
+                            .padding(.top, Spacing.sm)
+                        SuggestionRow(suggestion: suggestion)
+                    }
                 }
             }
             .padding(.horizontal, Spacing.lg)

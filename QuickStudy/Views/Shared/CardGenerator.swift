@@ -19,6 +19,19 @@ struct CardGenerator {
         }
     }
 
+    static func generateTopicCards(
+        from rawText: String,
+        topic: String,
+        count: Int,
+        settings: AISettings
+    ) async throws -> [StudyCard] {
+        let engine = try AIController.makeGenerator(settings: settings)
+        let cards = try await engine.generateCards(from: rawText, topic: topic, count: count)
+        return cards.map { aiCard in
+            StudyCard(question: aiCard.question, answer: aiCard.answer, approved: false)
+        }
+    }
+
     /// Generates plausible but incorrect distractor answers for a flashcard using on-device AI.
     static func generateDistractors(
         question: String,
