@@ -1,40 +1,38 @@
 //
-//  DashboardViewModel.swift
+//  TodayViewModel.swift
 //  QuickStudy
 //
 //  Created by Jaiden Henley on 1/24/26.
 //
 
 import Foundation
-import Combine
 
 @MainActor
 @Observable
 class TodayViewModel {
-    var currentSource: Source?
-    var recentSets: [StudySet] = []
-    var pinnedSetIDs: Set<UUID> = []
     var streakCount: Int = 0
     var todayCardCount: Int = 0
     var estimatedMin: Int = 0
     var weakestCard: WeakestCardInfo? = nil
+    var upNext: [UpNextEntry] = []
+    var hasReviewableCards: Bool = false
     var aiCardsUsed: Int = UserDefaults.standard.integer(forKey: "qs_aiCardsUsed")
     var aiCardsLimit: Int = 50
-    
+
     private let defaults = UserDefaults.standard
     private let streakKey = "qs_streakCount"
     private let lastStudiedKey = "qs_lastStudiedDate"
-    
+
     init() {
         loadStreak()
     }
-    
+
     // MARK: Streak
-    
+
     private func loadStreak() {
         streakCount = defaults.integer(forKey: streakKey)
     }
-    
+
     func recordStudySession() {
         let today = Calendar.current.startOfDay(for: Date())
         if let lastDate = defaults.object(forKey: lastStudiedKey) as? Date {
@@ -50,97 +48,74 @@ class TodayViewModel {
         }
         defaults.set(streakCount, forKey: streakKey)
         defaults.set(Date(), forKey: lastStudiedKey)
-        
-    }
-    
-    // MARK: Pins / Delete
-
-    func togglePin(for set: StudySet) {
-        if pinnedSetIDs.contains(set.id) {
-            pinnedSetIDs.remove(set.id)
-        } else {
-            pinnedSetIDs.insert(set.id)
-        }
     }
 
-    func delete(set: StudySet) {
-        recentSets.removeAll { $0.id == set.id }
-        pinnedSetIDs.remove(set.id)
-    }
-
-    func updateFromStudy(_ studyViewModel: StudyViewModel) {
-        let activeID = studyViewModel.activeSetID
-        recentSets = studyViewModel.savedSets
-            .filter { set in
-                guard let activeID else { return true }
-                return set.id != activeID
-            }
-            .sorted { $0.updatedAt > $1.updatedAt }
-
-        if let document = studyViewModel.document {
-            let title = document.title.isEmpty ? "Untitled Document" : document.title
-            let progressText = "\(document.lines.count) lines"
-            currentSource = Source(title: title, updatedAt: Date(), progressText: progressText)
-        } else {
-            currentSource = nil
-        }
-        
-        computeTodaySession(from: studyViewModel.savedSets)
-        computeWeakestCard(from: studyViewModel.savedSets)
-    }
-    
-    
     // MARK: - Derived
 
-    private func computeTodaySession(from sets: [StudySet]) {
-        let approvedCards = sets.flatMap { $0.cards }.filter { $0.approved }
-        todayCardCount = approvedCards.count
-        estimatedMin = max(1, Int((Double(approvedCards.count) * 0.5).rounded()))
+    func updateFromStudy(
+        _ studyViewModel: StudyViewModel,
+        now: Date = Date(),
+        calendar: Calendar = .current
+    ) {
+        let sets = studyViewModel.savedSets
+        hasReviewableCards = sets.contains { !$0.reviewableCards.isEmpty }
+        computeTodaySession(from: sets, now: now, calendar: calendar)
+        computeWeakestCard(from: sets)
+        computeUpNext(from: sets, now: now, calendar: calendar)
+    }
+
+    private func computeTodaySession(from sets: [StudySet], now: Date, calendar: Calendar) {
+        let due = sets
+            .flatMap(\.reviewableCards)
+            .filter { $0.isDue(asOf: now, calendar: calendar) }
+        todayCardCount = due.count
+        estimatedMin = due.isEmpty ? 0 : max(1, Int(Double(due.count) * 0.5))
     }
 
     private func computeWeakestCard(from sets: [StudySet]) {
-        var worst: (card: StudyCard, setID: UUID)? = nil
-        for set in sets {
-            for card in set.cards {
-                if card.missCount > 0 {
-                    if let current = worst {
-                        if card.missCount > current.card.missCount {
-                            worst = (card, set.id)
-                        }
-                    } else {
-                        worst = (card, set.id)
-                    }
-                }
-            }
+        let missed = sets.flatMap { set in
+            set.reviewableCards
+                .filter { $0.missCount > 0 }
+                .map { (card: $0, setID: set.id) }
         }
-        if let worst {
-            weakestCard = WeakestCardInfo(
-                question: worst.card.question,
-                missCount: worst.card.missCount,
-                setID: worst.setID
-            )
-        } else {
+        guard let worst = missed.max(by: { $0.card.missCount < $1.card.missCount }) else {
             weakestCard = nil
+            return
         }
+        weakestCard = WeakestCardInfo(
+            question: worst.card.question,
+            missCount: worst.card.missCount,
+            setID: worst.setID
+        )
     }
-}
 
-struct Source: Identifiable, Equatable {
-    let id: UUID
-    let title: String
-    let updatedAt: Date
-    let progressText: String
+    private func computeUpNext(from sets: [StudySet], now: Date, calendar: Calendar) {
+        upNext = sets.compactMap { set in
+            guard let next = set.nextDueDate(after: now, calendar: calendar) else { return nil }
+            let count = set.cardsDue(on: next, calendar: calendar)
+            guard count > 0 else { return nil }
+            return UpNextEntry(
+                id: set.id,
+                title: set.title,
+                dueDate: next,
+                cardCount: count,
+                dayLabel: Self.dayLabel(for: next, now: now, calendar: calendar)
+            )
+        }
+        .sorted { $0.dueDate < $1.dueDate }
+    }
 
-    init(
-        id: UUID = UUID(),
-        title: String,
-        updatedAt: Date,
-        progressText: String
-    ) {
-        self.id = id
-        self.title = title
-        self.updatedAt = updatedAt
-        self.progressText = progressText
+    private static func dayLabel(for date: Date, now: Date, calendar: Calendar) -> String {
+        if calendar.isDateInTomorrow(date) { return "Tomorrow" }
+        let days = calendar.dateComponents(
+            [.day],
+            from: calendar.startOfDay(for: now),
+            to: calendar.startOfDay(for: date)
+        ).day ?? 0
+        if days < 7 {
+            return date.formatted(.dateTime.weekday(.wide))
+        }
+        return date.formatted(.dateTime.month(.abbreviated).day())
     }
 }
 
@@ -150,3 +125,10 @@ struct WeakestCardInfo {
     let setID: UUID
 }
 
+struct UpNextEntry: Identifiable {
+    let id: UUID
+    let title: String
+    let dueDate: Date
+    let cardCount: Int
+    let dayLabel: String
+}

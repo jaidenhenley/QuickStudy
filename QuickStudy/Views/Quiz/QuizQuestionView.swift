@@ -10,7 +10,8 @@ import UIKit
 
 struct QuizQuestionView: View {
     @Environment(StudyViewModel.self) var viewModel
-    
+    @Environment(TodayViewModel.self) var todayViewModel
+
     let providedQuestions: [QuizQuestion]?
 
     @State private var questions: [QuizQuestion]
@@ -30,7 +31,7 @@ struct QuizQuestionView: View {
         return questions[currentIndex]
     }
 
-    
+
     var body: some View {
         VStack(spacing: 20) {
             if questions.isEmpty {
@@ -41,12 +42,12 @@ struct QuizQuestionView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             } else if !isFinished, let currentQuestion = currentQuestion {
-                
+
                 // header
                 Text("Question \(currentIndex + 1) of \(questions.count)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                
+
                 // prompt
                 Text(currentQuestion.prompt)
                     .font(.title3)
@@ -81,19 +82,19 @@ struct QuizQuestionView: View {
                         .accessibilityLabel(answerAccessibilityLabel(for: index))
                     }
                 }
-                
+
                 if hasSubmitted {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Explanation")
                             .font(.headline)
-                        
+
                         Text(currentQuestion.explanation)
                             .font(.subheadline)
                     }
                     .padding()
                     .appGlassCard(cornerRadius: 10)
                     .transition(.opacity)
-                    
+
                     Button("Next Question") {
                         nextQuestion()
                     }
@@ -107,7 +108,7 @@ struct QuizQuestionView: View {
                     .disabled(selectedAnswer == nil)
                     .padding(.top)
                 }
-                
+
                 Spacer()
             } else {
                 // Results screen
@@ -115,10 +116,10 @@ struct QuizQuestionView: View {
                 VStack(spacing: 20) {
                     Text("Quiz Finished")
                         .font(.largeTitle)
-                    
+
                     Text("Final Score: \(score) / \(questions.count)")
                         .font(.title2)
-                    
+
                     Button("Restart Quiz") {
                         restartQuiz()
                     }
@@ -154,13 +155,13 @@ struct QuizQuestionView: View {
             selectedAnswer = nil
         }
     }
-    
+
     private func color(for index: Int) -> Color {
         guard hasSubmitted else {
             return selectedAnswer == index ? .blue : .gray
         }
         guard let currentQuestion = currentQuestion else { return .gray }
-        
+
         if index == currentQuestion.correctIndex {
             return .green
         } else if index == selectedAnswer {
@@ -168,7 +169,7 @@ struct QuizQuestionView: View {
         }
         return .gray
     }
-    
+
     private func icon(for index: Int) -> Image? {
         guard let currentQuestion = currentQuestion else { return nil }
 
@@ -179,19 +180,23 @@ struct QuizQuestionView: View {
         }
         return nil
     }
-    
+
     private func submitAnswer() {
         guard let currentQuestion = currentQuestion else { return }
 
-        if selectedAnswer == currentQuestion.correctIndex {
+        let isCorrect = selectedAnswer == currentQuestion.correctIndex
+
+        if isCorrect {
             score += 1
             UINotificationFeedbackGenerator().notificationOccurred(.success)
         } else {
             UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
+
+        viewModel.recordAnswer(for: currentQuestion.cardID, correct: isCorrect)
         hasSubmitted = true
     }
-    
+
     private func nextQuestion() {
         guard !questions.isEmpty else { return }
 
@@ -201,10 +206,11 @@ struct QuizQuestionView: View {
             hasSubmitted = false
         } else {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
+            todayViewModel.recordStudySession()
             isFinished = true
         }
     }
-    
+
     private func restartQuiz() {
         currentIndex = 0
         score = 0
@@ -230,11 +236,4 @@ struct QuizQuestionView: View {
         }
         return label
     }
-       
-    
-    
-}
-
-#Preview {
-    QuizQuestionView()
 }

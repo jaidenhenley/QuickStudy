@@ -36,13 +36,35 @@ class StudyViewModel {
    var currentSourceType: StudySourceType = .scan
    var aiQuizQuestions: [QuizQuestion]? = nil
    var isGeneratingQuiz: Bool = false
+   var isTodaySession: Bool = false
 
     init() {
         loadSavedSets()
     }
-    
-    func loadTodaySession() {
-        flashcards = savedSets.flatMap { $0.cards }.filter { $0.approved }
+
+    func loadTodaySession(asOf date: Date = Date(), calendar: Calendar = .current) {
+        flashcards = savedSets
+            .flatMap(\.reviewableCards)
+            .filter { $0.isDue(asOf: date, calendar: calendar) }
+        isTodaySession = true
+    }
+
+    /// Session cards come from many sets, so the answer is written back by card id.
+    func recordAnswer(for cardID: UUID, correct: Bool, on date: Date = Date()) {
+        guard let setIndex = savedSets.firstIndex(where: { set in
+            set.cards.contains { $0.id == cardID }
+        }), let cardIndex = savedSets[setIndex].cards.firstIndex(where: { $0.id == cardID }) else {
+            return
+        }
+
+        savedSets[setIndex].cards[cardIndex].recordAnswer(correct: correct, on: date)
+        savedSets[setIndex].updatedAt = date
+
+        if let workingIndex = flashcards.firstIndex(where: { $0.id == cardID }) {
+            flashcards[workingIndex] = savedSets[setIndex].cards[cardIndex]
+        }
+
+        saveSavedSets()
     }
 
     // MARK: - AI Quiz Generation
@@ -93,6 +115,7 @@ class StudyViewModel {
 
                 let correctIndex = choices.firstIndex(of: card.answer) ?? 0
                 questions.append(QuizQuestion(
+                    cardID: card.id,
                     prompt: card.question,
                     choices: choices,
                     correctIndex: correctIndex,
@@ -150,6 +173,7 @@ class StudyViewModel {
         choices.shuffle()
 
         return QuizQuestion(
+            cardID: card.id,
             prompt: card.question,
             choices: choices,
             correctIndex: choices.firstIndex(of: correctAnswer) ?? 0,
@@ -244,6 +268,7 @@ class StudyViewModel {
 
             let correctIndex = choices.firstIndex(of: correctAnswer) ?? 0
             let question = QuizQuestion(
+                cardID: card.id,
                 prompt: card.question,
                 choices: choices,
                 correctIndex: correctIndex,
@@ -304,6 +329,7 @@ class StudyViewModel {
     @MainActor
     func loadScannedText(rawText: String, candidateLines: [[String]]? = nil) async {
         activeSetID = nil
+        isTodaySession = false
         lastRawText = rawText
 
         var workingText: String
@@ -669,6 +695,7 @@ class StudyViewModel {
     }
 
     func saveCurrentSet() {
+        guard !isTodaySession else { return }
         guard let document else { return }
         let title = document.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             ? "Study Set"
@@ -708,6 +735,7 @@ class StudyViewModel {
         flashcards = set.cards
         activeSetID = set.id
         currentSourceType = set.sourceType
+        isTodaySession = false
     }
 
     private func isDemoSet(_ set: StudySet) -> Bool {
