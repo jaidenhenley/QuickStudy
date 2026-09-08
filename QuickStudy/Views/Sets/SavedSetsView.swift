@@ -345,6 +345,8 @@ struct SavedSetsView: View {
             return "Photo"
         case .pdf:
             return "PDF"
+        case .paste:
+            return "Pasted"
         case .demo:
             return "Demo"
         }

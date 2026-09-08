@@ -59,7 +59,6 @@ struct ContentView: View {
                     onNext: advanceTutorial,
                     onSkip: {
                         showTutorialOverlay = false
-                        viewModel.demoModeEnabled = false
                         didShowOnboarding = true
                     }
                 )
@@ -75,7 +74,6 @@ struct ContentView: View {
                 },
                 onSkip: {
                     showOnboarding = false
-                    viewModel.demoModeEnabled = false
                     didShowOnboarding = true
                 }
             )
@@ -124,7 +122,6 @@ struct ContentView: View {
                 currentTutorialStep = .complete
             case .complete:
                 showTutorialOverlay = false
-                viewModel.demoModeEnabled = false
                 didShowOnboarding = true
             }
         }

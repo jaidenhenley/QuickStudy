@@ -327,7 +327,11 @@ class StudyViewModel {
     
     // MARK: - Scan + generate
     @MainActor
-    func loadScannedText(rawText: String, candidateLines: [[String]]? = nil) async {
+    func loadScannedText(
+        rawText: String,
+        candidateLines: [[String]]? = nil,
+        title: String = "Scanned Document"
+    ) async {
         activeSetID = nil
         isTodaySession = false
         lastRawText = rawText
@@ -344,7 +348,7 @@ class StudyViewModel {
         lastCorrectedText = workingText
 
         let lines = normalizeOCRLines(workingText)
-        self.document = StudyDocument(title: "Scanned Document", lines: lines)
+        self.document = StudyDocument(title: title, lines: lines)
         self.flashcards = []
         await generateAICards(text: workingText)
     }

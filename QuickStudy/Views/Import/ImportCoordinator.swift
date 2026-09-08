@@ -1,5 +1,5 @@
 //
-//  DashboardCoordinator.swift
+//  ImportCoordinator.swift
 //  QuickStudy
 //
 //  Created by Jaiden Henley on 5/1/26.
@@ -8,9 +8,16 @@
 import Foundation
 import PhotosUI
 import SwiftUI
+import VisionKit
 
 @Observable
-final class TodayCoordinator {
+final class ImportCoordinator {
+    enum ImportSource {
+        case scan
+        case pdf
+        case paste
+    }
+
     var navigateToCards = false
     var showErrorAlert = false
     var errorMessage = ""
@@ -18,6 +25,8 @@ final class TodayCoordinator {
     var showScannerUnavailableAlert = false
     var showFileImporter = false
     var showSourcePicker = false
+    var showPasteSheet = false
+    var pendingSource: ImportSource? = nil
     var selectedPhotoItem: PhotosPickerItem? = nil
 
     var isScannerSupported: Bool {
@@ -28,12 +37,39 @@ final class TodayCoordinator {
         #endif
     }
 
+    /// Presenting a sheet while another is dismissing drops the second one, so the
+    /// picker records a choice and this runs once it has fully dismissed.
+    func presentPendingSource() {
+        guard let source = pendingSource else { return }
+        pendingSource = nil
+        switch source {
+        case .scan:
+            startScan()
+        case .pdf:
+            showFileImporter = true
+        case .paste:
+            showPasteSheet = true
+        }
+    }
+
     func startScan() {
         if isScannerSupported {
             showScanCapture = true
         } else {
             showScannerUnavailableAlert = true
         }
+    }
+
+    func processPastedText(_ text: String, study: StudyViewModel) async {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            errorMessage = "Paste some notes to generate cards from."
+            showErrorAlert = true
+            return
+        }
+        study.currentSourceType = .paste
+        await study.loadScannedText(rawText: trimmed, title: "Pasted Notes")
+        navigateToCards = true
     }
 
     func processOCR(images: [UIImage], using helper: DocumentImportHelper, study: StudyViewModel) async {

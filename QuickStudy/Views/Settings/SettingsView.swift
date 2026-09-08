@@ -88,6 +88,14 @@ struct SettingsView: View {
                     
                 }
 
+                Section {
+                    Toggle("Show Sample Sets", isOn: $studyViewModel.demoModeEnabled)
+                } header: {
+                    Text("Sample Content")
+                } footer: {
+                    Text("Adds three example sets you can study right away. Turning this off removes them; turning it back on restores them.")
+                }
+
                 Section("Help") {
                     Button("How to use QuickStudy") {
                         showOnboarding = true
