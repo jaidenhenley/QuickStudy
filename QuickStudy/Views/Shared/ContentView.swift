@@ -13,7 +13,6 @@ struct ContentView: View {
     @State private var appState = AppState()
     @State private var aiSettings = AISettings()
     @State private var todayViewModel = TodayViewModel()
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
     @State private var showOnboarding = false
@@ -21,35 +20,34 @@ struct ContentView: View {
     @State private var currentTutorialStep: TutorialStep = .welcome
     
     var body: some View {
-        ZStack {
-            BackgroundView()
-            
-            
-            if horizontalSizeClass == .compact {
-                TabView(selection: $appState.selectedTab) {
-                    NavigationStack {
-                        TodayView()
-                    }
-                    .tabItem {
-                        Label("Today", systemImage: "house")
-                    }
-                    .tag(AppState.Tab.today)
-                    
-                    NavigationStack {
-                        LibraryView()
-                    }
-                    .tabItem {
-                        Label("Library", systemImage: "books.vertical")
-                    }
-                    .tag(AppState.Tab.library)
-                }
-                .environment(todayViewModel)
-                .environment(viewModel)
-                .environment(appState)
-            } else {
-                
+        TabView(selection: $appState.selectedTab) {
+            NavigationStack {
+                TodayView()
             }
+            .tabItem {
+                Label("Today", systemImage: "house")
+            }
+            .tag(AppState.Tab.today)
+
+            NavigationStack {
+                LibraryView()
+            }
+            .tabItem {
+                Label("Library", systemImage: "books.vertical")
+            }
+            .tag(AppState.Tab.library)
+
+            NavigationStack {
+                StatsView()
+            }
+            .tabItem {
+                Label("Stats", systemImage: "chart.bar")
+            }
+            .tag(AppState.Tab.stats)
         }
+        .environment(todayViewModel)
+        .environment(viewModel)
+        .environment(appState)
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
         .overlay {
@@ -124,56 +122,6 @@ struct ContentView: View {
                 showTutorialOverlay = false
                 didShowOnboarding = true
             }
-        }
-    }
-    
-    private func handleStepChange(_ step: TutorialStep) {
-        // Auto-advance after showing informational steps
-        switch step {
-        case .viewDemoSets:
-            // Give user 8 seconds to see the demo sets
-            DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) {
-                if self.currentTutorialStep == .viewDemoSets {
-                    self.advanceTutorial()
-                }
-            }
-        case .viewFlashcards:
-            // Give user 10 seconds to see the flashcards view
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
-                if self.currentTutorialStep == .viewFlashcards {
-                    self.advanceTutorial()
-                }
-            }
-        case .approveCard:
-            // Scroll to flashcards section when this step appears
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                withAnimation {
-                    self.appState.scrollToFlashcards = true
-                }
-            }
-        case .viewStudyList:
-            // Give user 6 seconds to see the study list
-            DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) {
-                if self.currentTutorialStep == .viewStudyList {
-                    self.advanceTutorial()
-                }
-            }
-        case .flipCard:
-            // Give user 8 seconds to try flipping the card
-            DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) {
-                if self.currentTutorialStep == .flipCard {
-                    self.advanceTutorial()
-                }
-            }
-        case .startQuiz:
-            // Give user 6 seconds to see the quiz
-            DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) {
-                if self.currentTutorialStep == .startQuiz {
-                    self.advanceTutorial()
-                }
-            }
-        default:
-            break
         }
     }
 }

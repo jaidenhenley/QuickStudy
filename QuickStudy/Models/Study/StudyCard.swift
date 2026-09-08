@@ -59,7 +59,7 @@ struct StudyCard: Identifiable, Codable, Equatable {
         box = correct ? ReviewSchedule.promote(box) : ReviewSchedule.demote(box)
         if !correct { missCount += 1 }
         lastReviewedAt = date
-        dueDate = ReviewSchedule.newDueDate(forBox: box, from: date, calender: calendar)
+        dueDate = ReviewSchedule.newDueDate(forBox: box, from: date, calendar: calendar)
     }
 
     /// Explicit so cards saved before scheduling existed keep decoding.

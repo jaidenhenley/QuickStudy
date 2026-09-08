@@ -6,8 +6,14 @@
 //
 
 import Foundation
+import OSLog
 import UIKit
 import SwiftUI
+
+private let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier ?? "com.henley.jaiden.QuickStudy",
+    category: "StudyViewModel"
+)
 
 @Observable
 class StudyViewModel {
@@ -119,9 +125,7 @@ class StudyViewModel {
                     prompt: card.question,
                     choices: choices,
                     correctIndex: correctIndex,
-                    explanation: card.answer,
-                    sourceStartLine: index + 1,
-                    sourceEndLine: index + 1
+                    explanation: card.answer
                 ))
             }
 
@@ -177,9 +181,7 @@ class StudyViewModel {
             prompt: card.question,
             choices: choices,
             correctIndex: choices.firstIndex(of: correctAnswer) ?? 0,
-            explanation: card.answer,
-            sourceStartLine: index + 1,
-            sourceEndLine: index + 1
+            explanation: card.answer
         )
     }
 
@@ -272,9 +274,7 @@ class StudyViewModel {
                 prompt: card.question,
                 choices: choices,
                 correctIndex: correctIndex,
-                explanation: card.answer,
-                sourceStartLine: index + 1,
-                sourceEndLine: index + 1
+                explanation: card.answer
             )
             questions.append(question)
         }
@@ -396,9 +396,7 @@ class StudyViewModel {
             self.flashcards = cards
             saveCurrentSet()
         } catch {
-#if DEBUG
-            print("[CardGen] AI generation failed: \(error.localizedDescription)")
-#endif
+            logger.error("AI generation failed: \(error.localizedDescription)")
             let fallback = generateFallbackCards(from: text)
             self.flashcards = fallback
             saveCurrentSet()
@@ -488,9 +486,6 @@ class StudyViewModel {
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
 #if canImport(FoundationModels)
-        guard #available(iOS 26.0, *) else {
-            return nil
-        }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
@@ -667,9 +662,7 @@ class StudyViewModel {
             decoder.dateDecodingStrategy = .iso8601
             savedSets = try decoder.decode([StudySet].self, from: data)
         } catch {
-            #if DEBUG
-            print("[Persistence] Failed to load saved sets: \(error.localizedDescription)")
-            #endif
+            logger.error("Failed to load saved sets: \(error.localizedDescription)")
             savedSets = []
         }
         ensurePresetSet()
@@ -735,9 +728,7 @@ class StudyViewModel {
             let data = try encoder.encode(savedSets)
             try data.write(to: persistenceURL, options: [.atomic])
         } catch {
-            #if DEBUG
-            print("[Persistence] Failed to save sets: \(error.localizedDescription)")
-            #endif
+            logger.error("Failed to save sets: \(error.localizedDescription)")
         }
     }
 

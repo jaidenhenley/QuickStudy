@@ -103,14 +103,9 @@ struct QuizView: View {
                         Text("Quiz Setup")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        if #available(iOS 16.0, *) {
-                            setupForm
-                                .appGlassCard(cornerRadius: 16)
-                                .scrollDisabled(true)
-                        } else {
-                            setupForm
-                                .appGlassCard(cornerRadius: 16)
-                        }
+                        setupForm
+                            .appGlassCard(cornerRadius: 16)
+                            .scrollDisabled(true)
                     }
 
                     let previewContent = VStack(alignment: .leading, spacing: m.spacing) {

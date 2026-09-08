@@ -20,6 +20,7 @@ class AppState {
     enum Tab: Hashable {
         case today
         case library
+        case stats
     }
 
     var selectedTab: Tab = .today

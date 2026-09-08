@@ -15,8 +15,6 @@ struct QuizQuestion: Identifiable, Hashable {
     var choices: [String]
     var correctIndex: Int
     var explanation: String
-    var sourceStartLine: Int
-    var sourceEndLine: Int
 
     init(
         id: UUID = UUID(),
@@ -24,9 +22,7 @@ struct QuizQuestion: Identifiable, Hashable {
         prompt: String,
         choices: [String],
         correctIndex: Int,
-        explanation: String,
-        sourceStartLine: Int,
-        sourceEndLine: Int
+        explanation: String
     ) {
         self.id = id
         self.cardID = cardID
@@ -34,7 +30,5 @@ struct QuizQuestion: Identifiable, Hashable {
         self.choices = choices
         self.correctIndex = choices.indices.contains(correctIndex) ? correctIndex : 0
         self.explanation = explanation
-        self.sourceStartLine = sourceStartLine
-        self.sourceEndLine = sourceEndLine
     }
 }

@@ -31,10 +31,10 @@ enum ReviewSchedule {
     static func newDueDate(
         forBox box: Int,
         from date: Date = Date(),
-        calender: Calendar = .current
+        calendar: Calendar = .current
     ) -> Date {
-        let day = calender.startOfDay(for: date)
-        return calender.date(byAdding: .day, value: interval(forBox: box), to: day) ?? day
+        let day = calendar.startOfDay(for: date)
+        return calendar.date(byAdding: .day, value: interval(forBox: box), to: day) ?? day
     }
     
     static func progress(forBox box: Int) -> Double {
