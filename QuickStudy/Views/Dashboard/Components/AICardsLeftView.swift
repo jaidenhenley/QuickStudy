@@ -9,28 +9,21 @@ import SwiftUI
 
 struct AICardsLeftView: View {
     @Environment(TodayViewModel.self) var todayViewModel
-    
+
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: Spacing.xs) {
             Image(systemName: "sparkles")
                 .font(.caption)
-            Text("\(todayViewModel.aiCardsUsed) of \(todayViewModel.aiCardsLimit) AI cards used this month")
+            Text("\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month")
                 .font(.caption)
                 .fontWeight(.medium)
             Spacer()
-            Button("Plus \(Image(systemName: "chevron.right"))") { /* upgrade action */ }
-                .font(.caption)
-                .fontWeight(.semibold)
         }
         .frame(maxWidth: .infinity)
         .foregroundStyle(.appSecondary)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
         .background(Color.appSecondary.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
     }
-}
-
-#Preview {
-    AICardsLeftView()
 }

@@ -11,6 +11,7 @@ struct QuizView: View {
     enum LaunchMode {
         case standard
         case quick
+        case todaySession
     }
 
     @Environment(StudyViewModel.self) var viewModel
@@ -63,6 +64,12 @@ struct QuizView: View {
         .padding(.top, 8)
         .background(BackgroundView())
         .onAppear {
+            // The today session spans sets; loadSet would replace it with one set's cards.
+            if launchMode == .todaySession {
+                applyLaunchMode()
+                Task { await prepareQuestions() }
+                return
+            }
             if selectedSetID == nil {
                 selectedSetID = viewModel.activeSetID ?? viewModel.savedSets.first?.id
             }
@@ -138,6 +145,12 @@ struct QuizView: View {
             }
         }
         .onAppear {
+            // The today session spans sets; loadSet would replace it with one set's cards.
+            if launchMode == .todaySession {
+                applyLaunchMode()
+                Task { await prepareQuestions() }
+                return
+            }
             if selectedSetID == nil {
                 selectedSetID = viewModel.activeSetID ?? viewModel.savedSets.first?.id
             }
@@ -364,6 +377,9 @@ struct QuizView: View {
             break
         case .quick:
             questionCount = .ten
+            shuffleQuestions = true
+        case .todaySession:
+            questionCount = .all
             shuffleQuestions = true
         }
     }

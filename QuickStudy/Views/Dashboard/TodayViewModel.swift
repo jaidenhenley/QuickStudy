@@ -10,14 +10,35 @@ import Foundation
 @MainActor
 @Observable
 class TodayViewModel {
+    struct WeakestCardInfo {
+        let question: String
+        let missCount: Int
+        let setID: UUID
+    }
+
+    struct UpNextEntry: Identifiable {
+        let id: UUID
+        let title: String
+        let dueDate: Date
+        let cardCount: Int
+        let dayLabel: String
+    }
+
+    struct SessionSetCount: Identifiable {
+        let id: UUID
+        let title: String
+        let cardCount: Int
+    }
+
     var streakCount: Int = 0
     var todayCardCount: Int = 0
     var estimatedMin: Int = 0
     var weakestCard: WeakestCardInfo? = nil
     var upNext: [UpNextEntry] = []
+    var sessionBreakdown: [SessionSetCount] = []
     var hasReviewableCards: Bool = false
-    var aiCardsUsed: Int = UserDefaults.standard.integer(forKey: "qs_aiCardsUsed")
-    var aiCardsLimit: Int = 50
+    var generationsRemaining: Int = GenerationAllowance.remaining
+    let generationsLimit: Int = GenerationAllowance.monthlyLimit
 
     private let defaults = UserDefaults.standard
     private let streakKey = "qs_streakCount"
@@ -59,6 +80,7 @@ class TodayViewModel {
     ) {
         let sets = studyViewModel.savedSets
         hasReviewableCards = sets.contains { !$0.reviewableCards.isEmpty }
+        generationsRemaining = GenerationAllowance.remaining
         computeTodaySession(from: sets, now: now, calendar: calendar)
         computeWeakestCard(from: sets)
         computeUpNext(from: sets, now: now, calendar: calendar)
@@ -70,6 +92,13 @@ class TodayViewModel {
             .filter { $0.isDue(asOf: now, calendar: calendar) }
         todayCardCount = due.count
         estimatedMin = due.isEmpty ? 0 : max(1, Int(Double(due.count) * 0.5))
+
+        sessionBreakdown = sets.compactMap { set in
+            let count = set.dueCount(asOf: now, calendar: calendar)
+            guard count > 0 else { return nil }
+            return SessionSetCount(id: set.id, title: set.title, cardCount: count)
+        }
+        .sorted { $0.cardCount > $1.cardCount }
     }
 
     private func computeWeakestCard(from sets: [StudySet]) {
@@ -117,18 +146,4 @@ class TodayViewModel {
         }
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
-}
-
-struct WeakestCardInfo {
-    let question: String
-    let missCount: Int
-    let setID: UUID
-}
-
-struct UpNextEntry: Identifiable {
-    let id: UUID
-    let title: String
-    let dueDate: Date
-    let cardCount: Int
-    let dayLabel: String
 }

@@ -8,46 +8,38 @@
 import SwiftUI
 
 struct WeakestCardRow: View {
-    let weakest: WeakestCardInfo
-    
+    let weakest: TodayViewModel.WeakestCardInfo
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("WEAKEST CARD")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-                .tracking(1)
+        HStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: AppRadius.sm)
+                    .fill(Color(.systemPink).opacity(0.15))
+                    .frame(width: 36, height: 36)
+                Text("\(weakest.missCount)×")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.pink)
+            }
 
-            HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.systemPink).opacity(0.15))
-                        .frame(width: 36, height: 36)
-                    Text("\(weakest.missCount)×")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.pink)
-                }
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(weakest.question)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .lineLimit(1)
-                    Text("Missed \(weakest.missCount) \(weakest.missCount == 1 ? "time" : "times") — drill")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
+            VStack(alignment: .leading, spacing: 2) {
+                Text(weakest.question)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                Text("Missed \(weakest.missCount) \(weakest.missCount == 1 ? "time" : "times") — drill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            .padding(14)
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
+        .padding(Spacing.base)
+        .background(Theme.surface)
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
     }
 }

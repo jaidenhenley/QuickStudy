@@ -13,7 +13,7 @@ import SwiftUI
 class StudyViewModel {
     // MARK: - Settings
     @ObservationIgnored
-    @AppStorage("demoModeEnabled") var demoModeEnabled: Bool = true {
+    @AppStorage("demoModeEnabled") var demoModeEnabled: Bool = false {
         didSet {
             applyDemoMode()
         }
@@ -362,6 +362,7 @@ class StudyViewModel {
 #if canImport(FoundationModels)
         do {
             let cards = try await CardGenerator.generateAI(from: text, settings: aiSettings)
+            GenerationAllowance.recordGeneration()
             self.flashcards = cards
             saveCurrentSet()
         } catch {
