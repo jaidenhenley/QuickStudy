@@ -47,33 +47,35 @@ struct LibraryView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding(.top, 48)
                         } else {
-                            LazyVGrid(
-                                columns: [
-                                    GridItem(.flexible(), spacing: 12),
-                                    GridItem(.flexible(), spacing: 12)
-                                ],
-                                spacing: 12
-                            ) {
-                                ForEach(visible) { set in
-                                    NavigationLink {
-                                        StudySetDetailView(set: set)
-                                    } label: {
-                                        SetTile(set: set)
-                                    }
-                                    .buttonStyle(.plain)
-                                    .contextMenu {
-                                        Button {
-                                            renameText = set.title
-                                            renamingSet = set
-                                            showRenameAlert = true
+                            GlassEffectContainer {
+                                LazyVGrid(
+                                    columns: [
+                                        GridItem(.flexible(), spacing: Spacing.md),
+                                        GridItem(.flexible(), spacing: Spacing.md)
+                                    ],
+                                    spacing: Spacing.md
+                                ) {
+                                    ForEach(visible) { set in
+                                        NavigationLink {
+                                            StudySetDetailView(set: set)
                                         } label: {
-                                            Label("Rename", systemImage: "pencil")
+                                            SetTile(set: set)
                                         }
-                                        Button(role: .destructive) {
-                                            deletingSet = set
-                                            showDeleteAlert = true
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
+                                        .buttonStyle(.plain)
+                                        .contextMenu {
+                                            Button {
+                                                renameText = set.title
+                                                renamingSet = set
+                                                showRenameAlert = true
+                                            } label: {
+                                                Label("Rename", systemImage: "pencil")
+                                            }
+                                            Button(role: .destructive) {
+                                                deletingSet = set
+                                                showDeleteAlert = true
+                                            } label: {
+                                                Label("Delete", systemImage: "trash")
+                                            }
                                         }
                                     }
                                 }
@@ -81,7 +83,7 @@ struct LibraryView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, Spacing.lg)
                 .padding(.bottom, 96)
             }
 
