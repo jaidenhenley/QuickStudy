@@ -16,6 +16,10 @@ struct SettingsView: View {
 
     @State private var showOnboarding = false
     @State private var showClearDataAlert = false
+    @State private var apiKeyDraft = ""
+    @State private var keychainErrorMessage: String?
+    @State private var showKeychainError = false
+    @FocusState private var apiKeyFocused: Bool
 
     private var appVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -23,13 +27,13 @@ struct SettingsView: View {
         return "\(version) (\(build))"
     }
     
-    private var apiKeyBinding: Binding<String> {
-        Binding(
-            get: { aiSettings.apiKey ?? "" },
-            set: { newValue in
-                try? KeychainManager.saveAPIKey(newValue)
-            }
-        )
+    private func commitAPIKey() {
+        do {
+            try KeychainManager.saveAPIKey(apiKeyDraft)
+        } catch {
+            keychainErrorMessage = error.localizedDescription
+            showKeychainError = true
+        }
     }
 
     private var modelNameBinding: Binding<String> {
@@ -79,7 +83,12 @@ struct SettingsView: View {
                             Text("Anthropic").tag(APIFormat.anthropic)
                         }
                         
-                        SecureField("API Key", text: apiKeyBinding)
+                        SecureField("API Key", text: $apiKeyDraft)
+                            .focused($apiKeyFocused)
+                            .onChange(of: apiKeyFocused) { _, isFocused in
+                                if !isFocused { commitAPIKey() }
+                            }
+                            .onSubmit { commitAPIKey() }
                         TextField("Endpoint URL", text: endpointBinding)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
@@ -122,6 +131,12 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .onAppear { apiKeyDraft = aiSettings.apiKey ?? "" }
+            .alert("Couldn't Save API Key", isPresented: $showKeychainError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(keychainErrorMessage ?? "Please try again.")
+            }
             .onChange(of: aiSettings.apiFormat) { _, newFormat in
                 switch newFormat {
                 case .openAI:
@@ -146,7 +161,8 @@ struct SettingsView: View {
                 onStart: {
                     showOnboarding = false
                     // Dismiss the Settings sheet, then signal ContentView to start the tutorial
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    Task {
+                        try? await Task.sleep(for: .seconds(0.5))
                         dismiss()
                     }
                 },

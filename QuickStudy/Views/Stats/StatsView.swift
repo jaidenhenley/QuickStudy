@@ -78,12 +78,12 @@ struct StatsView: View {
                             HStack {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: AppRadius.sm)
-                                        .fill(Color(.systemPink).opacity(0.15))
+                                        .fill(Theme.danger.opacity(0.15))
                                         .frame(width: 36, height: 36)
                                     Text("\(card.missCount)×")
                                         .font(.caption)
                                         .fontWeight(.bold)
-                                        .foregroundStyle(.pink)
+                                        .foregroundStyle(Theme.danger)
                                 }
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(card.question)

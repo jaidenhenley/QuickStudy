@@ -88,7 +88,9 @@ struct ContentView: View {
     private func startTutorial() {
         viewModel.demoModeEnabled = true
         currentTutorialStep = .viewDemoSets
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            // sleep only throws on cancellation, where showing the overlay is still correct
+            try? await Task.sleep(for: .seconds(0.5))
             showTutorialOverlay = true
         }
     }

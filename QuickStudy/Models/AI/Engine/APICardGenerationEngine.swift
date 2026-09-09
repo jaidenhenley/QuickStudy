@@ -137,8 +137,8 @@ private extension APICardGenerationEngine {
 
     func decodeJSON<T: Decodable>(_ type: T.Type, from string: String) throws -> T {
         let cleaned = cleanJSONString(string)
-        
-        guard let data = string.data(using: .utf8) else {
+
+        guard let data = cleaned.data(using: .utf8) else {
             throw CardGenerationError.decodingFailed
         }
 

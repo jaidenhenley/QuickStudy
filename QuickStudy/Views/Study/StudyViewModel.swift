@@ -108,7 +108,7 @@ class StudyViewModel {
                     distractors = Array(allDistractors[index].prefix(3))
                 } else {
                     // AI returned fewer entries than expected — use fallback for this card
-                    let fallback = buildFallbackQuestion(for: card, at: index)
+                    let fallback = buildFallbackQuestion(for: card)
                     questions.append(fallback)
                     continue
                 }
@@ -133,15 +133,15 @@ class StudyViewModel {
         } catch {
             // If the batch AI call fails entirely, fall back to pool-based for all cards
             var questions: [QuizQuestion] = []
-            for (index, card) in approvedCards.enumerated() {
-                questions.append(buildFallbackQuestion(for: card, at: index))
+            for card in approvedCards {
+                questions.append(buildFallbackQuestion(for: card))
             }
             aiQuizQuestions = questions
         }
     }
 
     /// Builds a single quiz question using the pool-based distractor method (no AI).
-    private func buildFallbackQuestion(for card: StudyCard, at index: Int) -> QuizQuestion {
+    private func buildFallbackQuestion(for card: StudyCard) -> QuizQuestion {
         let correctAnswer = card.answer
         let normalizedCorrect = normalizedAnswer(correctAnswer)
         let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
@@ -196,7 +196,7 @@ class StudyViewModel {
         // Get all unique answers for the distractor pool
         let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
 
-        for (index, card) in approvedCards.enumerated() {
+        for card in approvedCards {
             let correctAnswer = card.answer
             let normalizedCorrect = normalizedAnswer(correctAnswer)
 
