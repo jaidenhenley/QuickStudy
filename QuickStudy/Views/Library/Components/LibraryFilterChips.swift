@@ -23,8 +23,10 @@ struct LibraryFilterChips: View {
                             .foregroundStyle(selection == filter ? Color.white : Theme.textPrimary)
                             .padding(.horizontal, 14)
                             .padding(.vertical, 8)
-                            .background(selection == filter ? Color.appPrimary : Theme.surface)
-                            .clipShape(Capsule())
+                            .glassEffect(
+                                selection == filter ? .regular.tint(Color.appPrimary) : .regular,
+                                in: .capsule
+                            )
                     }
                     .buttonStyle(.plain)
                 }

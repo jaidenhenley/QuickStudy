@@ -33,7 +33,6 @@ struct StatSetRow: View {
                 .tint(entry.mastery == .mastered ? Theme.success : Color.appPrimary)
         }
         .padding(Spacing.base)
-        .background(Theme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+        .appGlassCard(cornerRadius: AppRadius.lg)
     }
 }

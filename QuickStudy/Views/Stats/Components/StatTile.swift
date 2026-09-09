@@ -25,7 +25,6 @@ struct StatTile: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)
-        .background(Theme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+        .appGlassCard(cornerRadius: AppRadius.lg)
     }
 }

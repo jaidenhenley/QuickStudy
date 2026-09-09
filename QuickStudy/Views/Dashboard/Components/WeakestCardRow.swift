@@ -39,7 +39,6 @@ struct WeakestCardRow: View {
                 .foregroundStyle(.secondary)
         }
         .padding(Spacing.base)
-        .background(Theme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+        .appGlassCard(cornerRadius: AppRadius.lg)
     }
 }

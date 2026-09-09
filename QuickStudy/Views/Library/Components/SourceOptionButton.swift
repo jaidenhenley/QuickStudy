@@ -27,9 +27,7 @@ struct SourceOptionButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 22)
-            .background(isProminent ? Color.appPrimary : Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(isProminent ? 0.18 : 0.05), radius: 8, y: 3)
+            .appGlassCard(cornerRadius: AppRadius.lg, tint: isProminent ? Color.appPrimary : nil)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title)

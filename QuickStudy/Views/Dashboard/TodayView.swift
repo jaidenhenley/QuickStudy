@@ -67,7 +67,7 @@ struct TodayView: View {
             .padding(.top, Spacing.sm)
             .padding(.bottom, Spacing.xl)
         }
-        .background(Theme.background)
+        .background(BackgroundView())
         .sheet(isPresented: $showSettings) { SettingsView() }
         .onAppear { todayViewModel.updateFromStudy(studyViewModel) }
         .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel) }

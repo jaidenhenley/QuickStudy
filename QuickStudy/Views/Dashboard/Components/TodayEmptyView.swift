@@ -58,19 +58,14 @@ struct TodayEmptyView: View {
                     } label: {
                         Text("Practice anyway")
                             .font(.headline)
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, Spacing.lg)
-                            .padding(.vertical, Spacing.md)
-                            .background(Color.appPrimary)
-                            .clipShape(Capsule())
-                            .shadow(color: Color.appPrimary.opacity(0.35), radius: 10, y: 4)
+                            .padding(.horizontal, Spacing.sm)
                     }
+                    .appProminentButtonStyle(tint: Theme.primary)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, Spacing.xl)
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl))
+            .appGlassCard(cornerRadius: AppRadius.xl)
 
             if !todayViewModel.upNext.isEmpty {
                 Text("UP NEXT")

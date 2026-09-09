@@ -12,8 +12,12 @@ struct Theme {
 
 extension View {
     @ViewBuilder
-    func appGlassCard(cornerRadius: CGFloat = 16) -> some View {
-        self.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+    func appGlassCard(cornerRadius: CGFloat = 16, tint: Color? = nil) -> some View {
+        if let tint {
+            self.glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
+        } else {
+            self.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+        }
     }
 
     @ViewBuilder

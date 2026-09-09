@@ -23,7 +23,7 @@ struct LibraryView: View {
         @Bindable var libraryViewModel = libraryViewModel
 
         ZStack(alignment: .bottomTrailing) {
-            Theme.background
+            BackgroundView()
                 .ignoresSafeArea()
 
             ScrollView {

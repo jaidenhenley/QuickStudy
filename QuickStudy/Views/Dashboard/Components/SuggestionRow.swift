@@ -52,8 +52,7 @@ struct SuggestionRow: View {
             }
         }
         .padding(Spacing.base)
-        .background(Theme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+        .appGlassCard(cornerRadius: AppRadius.lg)
         .alert("Generation Failed", isPresented: $showError) {
             Button("OK", role: .cancel) {}
         } message: {

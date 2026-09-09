@@ -22,7 +22,7 @@ struct LibrarySearchField: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 11)
-        .background(isEnabled ? Theme.surface : Color.primary.opacity(0.05))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .appGlassCard(cornerRadius: AppRadius.md)
+        .opacity(isEnabled ? 1 : 0.6)
     }
 }

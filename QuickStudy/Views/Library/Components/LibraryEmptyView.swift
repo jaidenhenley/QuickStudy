@@ -73,9 +73,8 @@ struct LibraryEmptyView: View {
                     .foregroundStyle(.secondary)
                 Spacer(minLength: 0)
             }
-            .padding(12)
-            .background(Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .padding(Spacing.md)
+            .appGlassCard(cornerRadius: AppRadius.md)
         }
     }
 }

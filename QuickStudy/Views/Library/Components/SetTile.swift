@@ -51,10 +51,9 @@ struct SetTile: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .padding(14)
+        .padding(Spacing.base)
         .frame(maxWidth: .infinity, minHeight: 152, alignment: .leading)
-        .background(Theme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .appGlassCard(cornerRadius: AppRadius.lg)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(set.title), \(set.cards.count) cards")
     }

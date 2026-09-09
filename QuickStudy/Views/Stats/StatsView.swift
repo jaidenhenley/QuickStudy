@@ -31,17 +31,19 @@ struct StatsView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, Spacing.xl)
                 } else {
-                    LazyVGrid(
-                        columns: [
-                            GridItem(.flexible(), spacing: Spacing.md),
-                            GridItem(.flexible(), spacing: Spacing.md)
-                        ],
-                        spacing: Spacing.md
-                    ) {
-                        StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .orange)
-                        StatTile(value: "\(statsViewModel.dueToday)", label: "Cards due today")
-                        StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.success)
-                        StatTile(value: "\(statsViewModel.scheduledCards)", label: "Cards in rotation")
+                    GlassEffectContainer {
+                        LazyVGrid(
+                            columns: [
+                                GridItem(.flexible(), spacing: Spacing.md),
+                                GridItem(.flexible(), spacing: Spacing.md)
+                            ],
+                            spacing: Spacing.md
+                        ) {
+                            StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .orange)
+                            StatTile(value: "\(statsViewModel.dueToday)", label: "Cards due today")
+                            StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.success)
+                            StatTile(value: "\(statsViewModel.scheduledCards)", label: "Cards in rotation")
+                        }
                     }
 
                     Text("OVERALL PROGRESS")
@@ -62,8 +64,7 @@ struct StatsView: View {
                             .foregroundStyle(.secondary)
                     }
                     .padding(Spacing.base)
-                    .background(Theme.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+                    .appGlassCard(cornerRadius: AppRadius.lg)
 
                     if !statsViewModel.toughest.isEmpty {
                         Text("TOUGHEST CARDS")
@@ -96,8 +97,7 @@ struct StatsView: View {
                                 Spacer()
                             }
                             .padding(Spacing.base)
-                            .background(Theme.surface)
-                            .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+                            .appGlassCard(cornerRadius: AppRadius.lg)
                         }
                     }
 
@@ -116,7 +116,7 @@ struct StatsView: View {
             .padding(.horizontal, Spacing.lg)
             .padding(.bottom, Spacing.xl)
         }
-        .background(Theme.background)
+        .background(BackgroundView())
         .navigationTitle("Stats")
         .navigationBarTitleDisplayMode(.large)
         .onAppear { statsViewModel.update(from: studyViewModel.savedSets) }
