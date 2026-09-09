@@ -76,7 +76,19 @@ Always use established design tokens. Never hardcode colors inline in views.
 
 Use the named asset colors only — never `Color(red:green:blue:)`, and never a hex string. `Color("#5B5BD6")` is an asset-catalog *name* lookup, not a hex initializer; it silently renders as a fallback color. That bug is currently in `SuggestedSetRow`.
 
-**Also never use the system semantic backgrounds** — `Color(.systemBackground)`, `Color(.secondarySystemBackground)`, and friends. They look plausible and compile clean, but they are not the app's palette: `Color(.systemBackground)` is pure white where `Theme.background` is #F7F7FB, so screens come out washed-out and cards lose their contrast against the ground. Screens get `Theme.background`; cards, rows, tiles, and fields sitting on top of them get `Theme.surface`.
+**Also never use the system semantic backgrounds** — `Color(.systemBackground)`, `Color(.secondarySystemBackground)`, and friends. They look plausible and compile clean, but they are not the app's palette.
+
+### Material — the app is Liquid Glass
+
+The Final v2 designs render flat because Claude Design is web. **The app is glass.** Any flat surface in a mock maps to its glass counterpart here.
+
+- **Screens** get `.background(BackgroundView())`. This is load-bearing, not decoration: glass refracts what is behind it, so over a flat opaque fill it barely reads as glass at all. Never put `Theme.background` on a screen.
+- **Cards, rows, tiles, fields, chips** get `.appGlassCard(cornerRadius:)`.
+- **Prominent surfaces** get `.appGlassCard(cornerRadius:tint:)` — tinted glass, not a solid fill.
+- **Clusters of adjacent glass** (grids of tiles) go inside a `GlassEffectContainer` so they blend and morph together rather than compositing independently.
+- **Small badges and pills stay tinted fills** — the DUE badge, the generations pill, the miss-count badge. Glass on a 20pt pill reads as noise, not material.
+- **The session card stays solid `.appPrimary`.** It is the loudest thing on Today by design; glass everywhere flattens the hierarchy the screen is built around.
+- `Theme.surface` is retained only for genuinely opaque contexts — the paste sheet's `TextEditor` needs a readable ground. It is not the default card background.
 
 Available in `Assets.xcassets`, exposed through `Theme`:
 - Brand: `Theme.primary` / `.appPrimary` (#5352DC indigo), `Theme.secondary` / `.appSecondary`, `Theme.aiAccent` / `.appAIAccent` (teal — reserved for AI-generated affordances)
