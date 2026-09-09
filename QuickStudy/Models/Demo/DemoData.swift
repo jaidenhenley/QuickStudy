@@ -8,8 +8,6 @@
 import Foundation
 
 enum DemoData {
-    static let seededStreak = 12
-
     /// `dueInDays` is relative to the seeding date, so samples never go stale.
     /// A nil value means the card has never been scheduled.
     struct CardSpec {

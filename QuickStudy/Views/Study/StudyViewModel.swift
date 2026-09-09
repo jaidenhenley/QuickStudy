@@ -714,7 +714,6 @@ class StudyViewModel {
             )
         }
 
-        StreakStore.seedDemoStreak(DemoData.seededStreak)
 
         savedSets = demoSets + savedSets
         saveSavedSets()
@@ -803,7 +802,6 @@ class StudyViewModel {
             }
 
             savedSets.removeAll { isDemoSet($0) }
-            StreakStore.clearDemoStreak()
             saveSavedSets()
         }
     }

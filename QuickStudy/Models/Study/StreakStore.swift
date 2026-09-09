@@ -28,15 +28,9 @@ enum StreakStore {
         defaults.removeObject(forKey: seededKey)
     }
 
-    /// Never overwrites a real streak — only seeds when the user has no study history.
-    static func seedDemoStreak(_ value: Int, calendar: Calendar = .current) {
-        guard lastStudied == nil else { return }
-        defaults.set(value, forKey: countKey)
-        defaults.set(calendar.date(byAdding: .day, value: -1, to: Date()), forKey: lastStudiedKey)
-        defaults.set(true, forKey: seededKey)
-    }
-
-    static func clearDemoStreak() {
+    /// Migration: clears a streak written by the earlier sample-seeding build.
+    /// A streak the user has since studied into is left alone — `record` drops the flag.
+    static func purgeSeededStreak() {
         guard defaults.bool(forKey: seededKey) else { return }
         defaults.removeObject(forKey: countKey)
         defaults.removeObject(forKey: lastStudiedKey)

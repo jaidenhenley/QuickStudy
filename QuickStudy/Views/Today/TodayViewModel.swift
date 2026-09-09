@@ -50,6 +50,7 @@ class TodayViewModel {
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
 
     init() {
+        StreakStore.purgeSeededStreak()
         loadStreak()
     }
 
