@@ -19,7 +19,7 @@ struct TodayEmptyView: View {
                 ZStack {
                     Circle()
                         .fill(Color.appPrimary.opacity(0.15))
-                        .frame(width: 108, height: 108)
+                        .frame(width: 90, height: 90)
                     Circle()
                         .fill(Color.appPrimary)
                         .frame(width: 76, height: 76)
