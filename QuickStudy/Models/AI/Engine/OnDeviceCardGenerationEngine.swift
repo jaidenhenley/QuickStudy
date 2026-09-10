@@ -55,6 +55,38 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
 
     }
     
+    /// Single pass rather than the chunked loop above: a topic drill wants `count`
+    /// cards total, not `count` per chunk.
+    func generateCards(from text: String, topic: String, count: Int) async throws -> [AIFlashcard] {
+        let session = LanguageModelSession()
+        let prompt = """
+        You are an expert educator creating study flashcards about a single topic.
+
+        TOPIC: \(topic)
+
+        SOURCE MATERIAL:
+        \(String(text.prefix(2500)))
+
+        Create at most \(count) flashcards, every one of them about "\(topic)".
+
+        QUESTION RULES:
+        - Each question must test exactly one fact about \(topic)
+        - Prefer narrow, specific questions over broad ones
+        - Do not repeat a question the source already answers in the same words
+
+        ANSWER RULES:
+        - Write answers in your own words, do not copy from the source
+        - Each answer must directly and completely resolve its question
+
+        Only use information explicitly in the source. If the source says little about \(topic),
+        return fewer cards rather than inventing facts.
+        """
+        let response = try await session.respond(to: prompt, generating: AIFLashcardSetModel.self)
+        return response.content.cards
+            .prefix(count)
+            .map { AIFlashcard(question: $0.question, answer: $0.answer) }
+    }
+
     func chunkText(_ text: String, maxLength: Int) -> [String] {
         var chunks: [String] = []
         var current = ""

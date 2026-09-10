@@ -12,23 +12,36 @@ enum KeychainManager {
     private static let service = "com.jaidenhenley.quickstudy"
     private static let account = "external-api-key"
 
+    /// Update-then-add rather than delete-then-add: a failed write must never
+    /// destroy the key that was already stored.
     static func saveAPIKey(_ key: String) throws {
-        let data = Data(key.utf8)
+        let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            try deleteAPIKey()
+            return
+        }
 
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account
         ]
+        let data = Data(trimmed.utf8)
 
-        SecItemDelete(query as CFDictionary)
+        let updateStatus = SecItemUpdate(
+            query as CFDictionary,
+            [kSecValueData as String: data] as CFDictionary
+        )
+        if updateStatus == errSecSuccess { return }
+        guard updateStatus == errSecItemNotFound else {
+            throw CardGenerationError.keychainError(updateStatus)
+        }
 
-        let attributes: [String: Any] = query.merging([
-            kSecValueData as String: data
-        ]) { _, new in new }
-
-        let status = SecItemAdd(attributes as CFDictionary, nil)
-        guard status == errSecSuccess else { throw CardGenerationError.keychainError(status) }
+        let attributes = query.merging([kSecValueData as String: data]) { _, new in new }
+        let addStatus = SecItemAdd(attributes as CFDictionary, nil)
+        guard addStatus == errSecSuccess else {
+            throw CardGenerationError.keychainError(addStatus)
+        }
     }
 
     static func loadAPIKey() -> String? {
@@ -52,13 +65,16 @@ enum KeychainManager {
         return key
     }
 
-    static func deleteAPIKey() {
+    static func deleteAPIKey() throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account
         ]
 
-        SecItemDelete(query as CFDictionary)
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw CardGenerationError.keychainError(status)
+        }
     }
 }

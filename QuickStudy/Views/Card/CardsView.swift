@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CardsView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var viewModel: StudyViewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(StudyViewModel.self) var viewModel
+    @Environment(AppState.self) var appState
     @State private var navigateToStudy = false
     @State private var navigateToQuiz = false
     @State private var isDocumentExpanded = false
@@ -40,13 +40,13 @@ struct CardsView: View {
         }
         .navigationDestination(isPresented: $navigateToStudy) {
             StudyView()
-                .environmentObject(viewModel)
-                .environmentObject(appState)
+                .environment(viewModel)
+                .environment(appState)
         }
         .navigationDestination(isPresented: $navigateToQuiz) {
             QuizView()
-                .environmentObject(viewModel)
-                .environmentObject(appState)
+                .environment(viewModel)
+                .environment(appState)
         }
         .background(BackgroundView())
         .onChange(of: viewModel.flashcards) { _, _ in
@@ -158,8 +158,8 @@ struct CardsView: View {
                     withAnimation {
                         proxy.scrollTo("flashcards", anchor: .top)
                     }
-                    // Reset the flag
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    Task {
+                        try? await Task.sleep(for: .seconds(0.5))
                         appState.scrollToFlashcards = false
                     }
                 }

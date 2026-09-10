@@ -16,15 +16,11 @@ class ScannerCoordinator: NSObject, VNDocumentCameraViewControllerDelegate, @unc
     }
 
     func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-        DispatchQueue.main.async {
-            self.parent.onCancel()
-        }
+        Task { @MainActor in self.parent.onCancel() }
     }
 
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-        DispatchQueue.main.async {
-            self.parent.onCancel()
-        }
+        Task { @MainActor in self.parent.onCancel() }
     }
 
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
@@ -32,8 +28,6 @@ class ScannerCoordinator: NSObject, VNDocumentCameraViewControllerDelegate, @unc
         for index in 0..<scan.pageCount {
             images.append(scan.imageOfPage(at: index))
         }
-        DispatchQueue.main.async {
-            self.parent.onComplete(images)
-        }
+        Task { @MainActor in self.parent.onComplete(images) }
     }
 }

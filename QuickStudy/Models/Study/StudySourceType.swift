@@ -11,5 +11,6 @@ enum StudySourceType: String, Codable {
     case scan
     case photo
     case pdf
+    case paste
     case demo
 }

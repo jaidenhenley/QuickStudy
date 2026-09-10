@@ -31,6 +31,30 @@ enum PromptBuilder {
         """
     }
 
+    static func topicFlashcardPrompt(from text: String, topic: String, count: Int) -> String {
+        """
+        Create at most \(count) study flashcards about "\(topic)" from the source material below.
+
+        Return only JSON in this format:
+        {
+          "cards": [
+            { "question": "string", "answer": "string" }
+          ]
+        }
+
+        Rules:
+        - Every card must be about "\(topic)"
+        - Only use information explicitly stated in the source material
+        - No outside knowledge
+        - Each question should test one concept
+        - Answers must be short and directly supported by the text
+        - If the source does not cover "\(topic)" in enough depth, return fewer cards rather than inventing facts
+
+        Source:
+        \(text)
+        """
+    }
+
     static func distractorPrompt(
         question: String,
         correctAnswer: String,

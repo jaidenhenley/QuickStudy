@@ -11,10 +11,11 @@ struct QuizView: View {
     enum LaunchMode {
         case standard
         case quick
+        case todaySession
     }
 
-    @EnvironmentObject var viewModel: StudyViewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(StudyViewModel.self) var viewModel
+    @Environment(AppState.self) var appState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     let launchMode: LaunchMode
@@ -45,9 +46,6 @@ struct QuizView: View {
                 content
             }
         }
-        .onAppear {
-            appState.quizViewAppeared = Date()
-        }
         .onDisappear {
             appState.isQuickQuizEntry = false
         }
@@ -66,6 +64,12 @@ struct QuizView: View {
         .padding(.top, 8)
         .background(BackgroundView())
         .onAppear {
+            // The today session spans sets; loadSet would replace it with one set's cards.
+            if launchMode == .todaySession {
+                applyLaunchMode()
+                Task { await prepareQuestions() }
+                return
+            }
             if selectedSetID == nil {
                 selectedSetID = viewModel.activeSetID ?? viewModel.savedSets.first?.id
             }
@@ -99,14 +103,9 @@ struct QuizView: View {
                         Text("Quiz Setup")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        if #available(iOS 16.0, *) {
-                            setupForm
-                                .appGlassCard(cornerRadius: 16)
-                                .scrollDisabled(true)
-                        } else {
-                            setupForm
-                                .appGlassCard(cornerRadius: 16)
-                        }
+                        setupForm
+                            .appGlassCard(cornerRadius: 16)
+                            .scrollDisabled(true)
                     }
 
                     let previewContent = VStack(alignment: .leading, spacing: m.spacing) {
@@ -141,6 +140,12 @@ struct QuizView: View {
             }
         }
         .onAppear {
+            // The today session spans sets; loadSet would replace it with one set's cards.
+            if launchMode == .todaySession {
+                applyLaunchMode()
+                Task { await prepareQuestions() }
+                return
+            }
             if selectedSetID == nil {
                 selectedSetID = viewModel.activeSetID ?? viewModel.savedSets.first?.id
             }
@@ -250,7 +255,8 @@ struct QuizView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             Button("Scan Document") {
-                appState.selectedTab = .scan
+                
+                
             }
             .appProminentButtonStyle(tint: Theme.primary)
         }
@@ -366,6 +372,9 @@ struct QuizView: View {
             break
         case .quick:
             questionCount = .ten
+            shuffleQuestions = true
+        case .todaySession:
+            questionCount = .all
             shuffleQuestions = true
         }
     }

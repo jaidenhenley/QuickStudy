@@ -6,13 +6,20 @@
 //
 
 import Foundation
+import OSLog
 import UIKit
 import SwiftUI
-import Combine
 
-class StudyViewModel: ObservableObject {
+private let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier ?? "com.henley.jaiden.QuickStudy",
+    category: "StudyViewModel"
+)
+
+@Observable
+class StudyViewModel {
     // MARK: - Settings
-    @AppStorage("demoModeEnabled") var demoModeEnabled: Bool = true {
+    @ObservationIgnored
+    @AppStorage("demoModeEnabled") var demoModeEnabled: Bool = false {
         didSet {
             applyDemoMode()
         }
@@ -21,23 +28,49 @@ class StudyViewModel: ObservableObject {
     var aiSettings: AISettings = AISettings()
 
     // MARK: - Published state
-    @Published var document: StudyDocument? = nil
-    @Published var flashcards: [StudyCard] = []
-    @Published var isGenerating: Bool = false
-    @Published var isSpellCheckEnabled: Bool = true
-    @Published var isHandwritingMode: Bool = false
-    @Published var isUltraHandwritingMode: Bool = true
-    @Published var generationErrorMessage: String? = nil
-    @Published var lastRawText: String = ""
-    @Published var lastCorrectedText: String = ""
-    @Published var savedSets: [StudySet] = []
-    @Published var activeSetID: UUID? = nil
-    @Published var currentSourceType: StudySourceType = .scan
-    @Published var aiQuizQuestions: [QuizQuestion]? = nil
-    @Published var isGeneratingQuiz: Bool = false
+   var document: StudyDocument? = nil
+   var flashcards: [StudyCard] = []
+   var isGenerating: Bool = false
+   var isSpellCheckEnabled: Bool = true
+   var isHandwritingMode: Bool = false
+   var isUltraHandwritingMode: Bool = true
+   var generationErrorMessage: String? = nil
+   var lastRawText: String = ""
+   var lastCorrectedText: String = ""
+   var savedSets: [StudySet] = []
+   var activeSetID: UUID? = nil
+   var currentSourceType: StudySourceType = .scan
+   var aiQuizQuestions: [QuizQuestion]? = nil
+   var isGeneratingQuiz: Bool = false
+   var isTodaySession: Bool = false
 
     init() {
         loadSavedSets()
+    }
+
+    func loadTodaySession(asOf date: Date = Date(), calendar: Calendar = .current) {
+        flashcards = savedSets
+            .flatMap(\.reviewableCards)
+            .filter { $0.isDue(asOf: date, calendar: calendar) }
+        isTodaySession = true
+    }
+
+    /// Session cards come from many sets, so the answer is written back by card id.
+    func recordAnswer(for cardID: UUID, correct: Bool, on date: Date = Date()) {
+        guard let setIndex = savedSets.firstIndex(where: { set in
+            set.cards.contains { $0.id == cardID }
+        }), let cardIndex = savedSets[setIndex].cards.firstIndex(where: { $0.id == cardID }) else {
+            return
+        }
+
+        savedSets[setIndex].cards[cardIndex].recordAnswer(correct: correct, on: date)
+        savedSets[setIndex].updatedAt = date
+
+        if let workingIndex = flashcards.firstIndex(where: { $0.id == cardID }) {
+            flashcards[workingIndex] = savedSets[setIndex].cards[cardIndex]
+        }
+
+        saveSavedSets()
     }
 
     // MARK: - AI Quiz Generation
@@ -75,7 +108,7 @@ class StudyViewModel: ObservableObject {
                     distractors = Array(allDistractors[index].prefix(3))
                 } else {
                     // AI returned fewer entries than expected — use fallback for this card
-                    let fallback = buildFallbackQuestion(for: card, at: index)
+                    let fallback = buildFallbackQuestion(for: card)
                     questions.append(fallback)
                     continue
                 }
@@ -88,12 +121,11 @@ class StudyViewModel: ObservableObject {
 
                 let correctIndex = choices.firstIndex(of: card.answer) ?? 0
                 questions.append(QuizQuestion(
+                    cardID: card.id,
                     prompt: card.question,
                     choices: choices,
                     correctIndex: correctIndex,
-                    explanation: card.answer,
-                    sourceStartLine: index + 1,
-                    sourceEndLine: index + 1
+                    explanation: card.answer
                 ))
             }
 
@@ -101,15 +133,15 @@ class StudyViewModel: ObservableObject {
         } catch {
             // If the batch AI call fails entirely, fall back to pool-based for all cards
             var questions: [QuizQuestion] = []
-            for (index, card) in approvedCards.enumerated() {
-                questions.append(buildFallbackQuestion(for: card, at: index))
+            for card in approvedCards {
+                questions.append(buildFallbackQuestion(for: card))
             }
             aiQuizQuestions = questions
         }
     }
 
     /// Builds a single quiz question using the pool-based distractor method (no AI).
-    private func buildFallbackQuestion(for card: StudyCard, at index: Int) -> QuizQuestion {
+    private func buildFallbackQuestion(for card: StudyCard) -> QuizQuestion {
         let correctAnswer = card.answer
         let normalizedCorrect = normalizedAnswer(correctAnswer)
         let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
@@ -145,12 +177,11 @@ class StudyViewModel: ObservableObject {
         choices.shuffle()
 
         return QuizQuestion(
+            cardID: card.id,
             prompt: card.question,
             choices: choices,
             correctIndex: choices.firstIndex(of: correctAnswer) ?? 0,
-            explanation: card.answer,
-            sourceStartLine: index + 1,
-            sourceEndLine: index + 1
+            explanation: card.answer
         )
     }
 
@@ -165,7 +196,7 @@ class StudyViewModel: ObservableObject {
         // Get all unique answers for the distractor pool
         let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
 
-        for (index, card) in approvedCards.enumerated() {
+        for card in approvedCards {
             let correctAnswer = card.answer
             let normalizedCorrect = normalizedAnswer(correctAnswer)
 
@@ -239,12 +270,11 @@ class StudyViewModel: ObservableObject {
 
             let correctIndex = choices.firstIndex(of: correctAnswer) ?? 0
             let question = QuizQuestion(
+                cardID: card.id,
                 prompt: card.question,
                 choices: choices,
                 correctIndex: correctIndex,
-                explanation: card.answer,
-                sourceStartLine: index + 1,
-                sourceEndLine: index + 1
+                explanation: card.answer
             )
             questions.append(question)
         }
@@ -297,8 +327,13 @@ class StudyViewModel: ObservableObject {
     
     // MARK: - Scan + generate
     @MainActor
-    func loadScannedText(rawText: String, candidateLines: [[String]]? = nil) async {
+    func loadScannedText(
+        rawText: String,
+        candidateLines: [[String]]? = nil,
+        title: String = "Scanned Document"
+    ) async {
         activeSetID = nil
+        isTodaySession = false
         lastRawText = rawText
 
         var workingText: String
@@ -313,9 +348,39 @@ class StudyViewModel: ObservableObject {
         lastCorrectedText = workingText
 
         let lines = normalizeOCRLines(workingText)
-        self.document = StudyDocument(title: "Scanned Document", lines: lines)
+        self.document = StudyDocument(title: title, lines: lines)
         self.flashcards = []
         await generateAICards(text: workingText)
+    }
+
+    @MainActor
+    func generateSuggestedCards(for setID: UUID, topic: String, count: Int) async {
+        guard let index = savedSets.firstIndex(where: { $0.id == setID }) else { return }
+
+        isGenerating = true
+        defer { isGenerating = false }
+        generationErrorMessage = nil
+
+        let sourceText = savedSets[index].document.lines.joined(separator: "\n")
+
+        do {
+            let cards = try await CardGenerator.generateTopicCards(
+                from: sourceText,
+                topic: topic,
+                count: count,
+                settings: aiSettings
+            )
+            guard !cards.isEmpty else {
+                generationErrorMessage = "Couldn't find enough about \(topic) in this set to make new cards."
+                return
+            }
+            savedSets[index].cards.append(contentsOf: cards)
+            savedSets[index].updatedAt = Date()
+            GenerationAllowance.recordGeneration()
+            saveSavedSets()
+        } catch {
+            generationErrorMessage = "Couldn't generate cards on \(topic). Please try again."
+        }
     }
 
     @MainActor
@@ -327,12 +392,11 @@ class StudyViewModel: ObservableObject {
 #if canImport(FoundationModels)
         do {
             let cards = try await CardGenerator.generateAI(from: text, settings: aiSettings)
+            GenerationAllowance.recordGeneration()
             self.flashcards = cards
             saveCurrentSet()
         } catch {
-#if DEBUG
-            print("[CardGen] AI generation failed: \(error.localizedDescription)")
-#endif
+            logger.error("AI generation failed: \(error.localizedDescription)")
             let fallback = generateFallbackCards(from: text)
             self.flashcards = fallback
             saveCurrentSet()
@@ -345,10 +409,6 @@ class StudyViewModel: ObservableObject {
     private func generateFallbackCards(from text: String) -> [StudyCard] {
         let rawLines = text.components(separatedBy: .newlines)
         return generateCards(from: rawLines, approved: false, limit: 12)
-    }
-
-    private func generateDemoCards(from lines: [String]) -> [StudyCard] {
-        return generateCards(from: lines, approved: false, limit: 12)
     }
 
     private func generateCards(from lines: [String], approved: Bool, limit: Int) -> [StudyCard] {
@@ -425,6 +485,7 @@ class StudyViewModel: ObservableObject {
 
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
+#if canImport(FoundationModels)
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
@@ -456,6 +517,9 @@ class StudyViewModel: ObservableObject {
         }
 
         return correctedChunks.joined(separator: "\n")
+#else
+        return nil
+#endif
     }
 
     func validatedCorrection(originalLines: [String], correctedText: String) -> String? {
@@ -598,9 +662,7 @@ class StudyViewModel: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             savedSets = try decoder.decode([StudySet].self, from: data)
         } catch {
-            #if DEBUG
-            print("[Persistence] Failed to load saved sets: \(error.localizedDescription)")
-            #endif
+            logger.error("Failed to load saved sets: \(error.localizedDescription)")
             savedSets = []
         }
         ensurePresetSet()
@@ -628,17 +690,32 @@ class StudyViewModel: ObservableObject {
         // Always remove and regenerate demo sets to ensure they have the latest configuration
         savedSets.removeAll { isDemoSet($0) }
 
-        let higDocument = StudyDocument(title: "Human Interface Guidelines", lines: DemoData.higLines)
-        let swiftUIDocument = StudyDocument(title: "SwiftUI", lines: DemoData.swiftuiLines)
-        let spriteKitDocument = StudyDocument(title: "SpriteKit", lines: DemoData.spriteKitLines)
-        let higCards = generateDemoCards(from: DemoData.higLines)
-        let swiftUICards = generateDemoCards(from: DemoData.swiftuiLines)
-        let spriteKitCards = generateDemoCards(from: DemoData.spriteKitLines)
-        let higSet = StudySet(title: higDocument.title, document: higDocument, cards: higCards, sourceType: .demo, isDemo: true)
-        let swiftUISet = StudySet(title: swiftUIDocument.title, document: swiftUIDocument, cards: swiftUICards, sourceType: .demo, isDemo: true)
-        let spriteKitSet = StudySet(title: spriteKitDocument.title, document: spriteKitDocument, cards: spriteKitCards, sourceType: .demo, isDemo: true)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
 
-        savedSets = [higSet, swiftUISet, spriteKitSet] + savedSets
+        let demoSets = DemoData.sets.map { spec in
+            let cards = spec.cards.map { card in
+                StudyCard(
+                    question: card.question,
+                    answer: card.answer,
+                    approved: card.approved,
+                    missCount: card.missCount,
+                    box: card.box,
+                    dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },
+                    lastReviewedAt: card.box > 0 ? today : nil
+                )
+            }
+            return StudySet(
+                title: spec.title,
+                document: StudyDocument(title: spec.title, lines: spec.lines),
+                cards: cards,
+                sourceType: .demo,
+                isDemo: true
+            )
+        }
+
+
+        savedSets = demoSets + savedSets
         saveSavedSets()
     }
 
@@ -650,13 +727,12 @@ class StudyViewModel: ObservableObject {
             let data = try encoder.encode(savedSets)
             try data.write(to: persistenceURL, options: [.atomic])
         } catch {
-            #if DEBUG
-            print("[Persistence] Failed to save sets: \(error.localizedDescription)")
-            #endif
+            logger.error("Failed to save sets: \(error.localizedDescription)")
         }
     }
 
     func saveCurrentSet() {
+        guard !isTodaySession else { return }
         guard let document else { return }
         let title = document.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             ? "Study Set"
@@ -696,6 +772,7 @@ class StudyViewModel: ObservableObject {
         flashcards = set.cards
         activeSetID = set.id
         currentSourceType = set.sourceType
+        isTodaySession = false
     }
 
     private func isDemoSet(_ set: StudySet) -> Bool {

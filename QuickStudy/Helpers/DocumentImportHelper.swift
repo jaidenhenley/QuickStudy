@@ -6,6 +6,7 @@
 //
 
 import CoreImage
+import ImageIO
 import PDFKit
 import UIKit
 import Vision
@@ -18,9 +19,9 @@ struct DocumentImportHelper {
 
     // MARK: Public API
 
-    func extractText(from images: [UIImage]) async throws -> String {
+    func extractText(from images: [UIImage]) async throws -> (text: String, candidates: [[String]]) {
         let result = await ocrResult(images: images)
-        return result.trimmingCharacters(in: .whitespacesAndNewlines)
+        return (result.text.trimmingCharacters(in: .whitespacesAndNewlines), result.candidates)
     }
 
     func extractText(from pdfURL: URL) async throws -> String {
@@ -41,30 +42,37 @@ struct DocumentImportHelper {
             }
         }
 
-        let images = renderPDFPages(document, scale: isUltraHandwritingMode ? 3.0 : 2.0)
+        let images = renderPDFPages(document, scale: isUltraHandwritingMode ? 3.0 : 2.5)
         let scaled = isUltraHandwritingMode ? scaleImages(images, maxDimension: 2200) : images
-        return try await extractText(from: scaled)
+        let result = try await extractText(from: scaled)
+        return result.text
     }
 
     // MARK: OCR
 
-    private func ocrResult(images: [UIImage]) async -> String {
+    private func ocrResult(images: [UIImage]) async -> (text: String, candidates: [[String]]) {
         var fullTextLines: [String] = []
+        var allCandidates: [[String]] = []
 
         for pageIndex in images.indices {
             let image = images[pageIndex]
-            let lines = await ocrLines(for: image)
-            fullTextLines.append(contentsOf: lines)
+            let pageCandidates = await ocrLines(for: image)
+            let pageLines = pageCandidates.map { $0.first ?? ""}
+            
+            
+            fullTextLines.append(contentsOf: pageLines)
+            allCandidates.append(contentsOf: pageCandidates)
 
             if pageIndex < images.count - 1 {
                 fullTextLines.append("")
+                allCandidates.append([""])
             }
         }
 
-        return fullTextLines.joined(separator: "\n")
+        return (fullTextLines.joined(separator: "\n"), allCandidates)
     }
 
-    func ocrLines(for image: UIImage) async -> [String] {
+    func ocrLines(for image: UIImage) async -> [[String]] {
         // Simplified OCR: one normal pass, or a single handwriting-boosted pass.
         if isHandwritingMode {
             if let lines = try? await performVisionOCRCandidates(
@@ -74,7 +82,7 @@ struct DocumentImportHelper {
                 candidateCount: 5,
                 ultraMode: isUltraHandwritingMode
             ) {
-                return lines.map { $0.first ?? "" }
+                return lines
             }
         } else {
             if let lines = try? await performVisionOCRCandidates(
@@ -84,7 +92,7 @@ struct DocumentImportHelper {
                 candidateCount: 5,
                 ultraMode: false
             ) {
-                return lines.map { $0.first ?? "" }
+                return lines
             }
         }
 
@@ -105,22 +113,32 @@ struct DocumentImportHelper {
                     continuation.resume(returning: [])
                     return
                 }
+                let orientation = CGImagePropertyOrientation(image.imageOrientation)
                 let request = VNRecognizeTextRequest { request, _ in
                     let observations = request.results as? [VNRecognizedTextObservation] ?? []
-                    let candidates = observations.map { observation in
+                    let sorted = observations.sorted { lhs, rhs in
+                        let lhsY = lhs.boundingBox.midY
+                        let rhsY = rhs.boundingBox.midY
+                        if abs(lhsY - rhsY) > 0.01 {
+                            return lhsY > rhsY
+                        }
+                        return lhs.boundingBox.minX < rhs.boundingBox.minX
+                    }
+                    let candidates = sorted.map { observation in
                         observation.topCandidates(candidateCount).map { $0.string }
                     }
                     continuation.resume(returning: candidates)
                 }
+                request.revision = VNRecognizeTextRequestRevision3
                 request.recognitionLevel = .accurate
                 request.usesLanguageCorrection = true
                 request.recognitionLanguages = ["en_US"]
                 request.automaticallyDetectsLanguage = false
                 request.minimumTextHeight = handwritingMode
                     ? (ultraMode ? 0.015 : 0.02)
-                    : 0.0
+                    : 0.012
 
-                let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+                let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
                 do {
                     try handler.perform([request])
                 } catch {
@@ -232,3 +250,19 @@ struct DocumentImportHelper {
     }
 
 }
+private extension CGImagePropertyOrientation {
+    init(_ orientation: UIImage.Orientation) {
+        switch orientation {
+        case .up: self = .up
+        case .down: self = .down
+        case .left: self = .left
+        case .right: self = .right
+        case .upMirrored: self = .upMirrored
+        case .downMirrored: self = .downMirrored
+        case .leftMirrored: self = .leftMirrored
+        case .rightMirrored: self = .rightMirrored
+        @unknown default: self = .up
+        }
+    }
+}
+
