@@ -261,6 +261,21 @@ Branch naming: `jh/<feature-slug>` — no phase names or numbers in branch names
 
 Commit subjects: `[Feature] <what changed>`, `[Fix] <what changed>`, `[Refactor] <what changed>`.
 
+**Never run a git command that changes repository state.** Git is handled by the user, not
+by Claude. This is absolute and is not waived by a general instruction to "apply this",
+"fix it", or "go ahead" — those authorize file edits, never git operations.
+
+Prohibited without an explicit, git-specific instruction naming the operation:
+`commit`, `add`, `rm`, `mv`, `checkout`, `switch`, `branch`, `merge`, `rebase`, `reset`,
+`revert`, `restore`, `stash`, `cherry-pick`, `push`, `pull`, `fetch`, `clean`, `tag`,
+and any `gh` command that writes (`pr create`, `pr merge`, `issue create`).
+
+Read-only inspection is always fine: `status`, `log`, `diff`, `show`, `ls-files`, `blame`.
+
+To delete or move a file, use the filesystem (`rm`, `mv`) and say so — do not reach for
+`git rm` or `git mv` as a shortcut. Leave every change unstaged in the working tree and
+report what changed so the user can review and commit it themselves.
+
 ### Swift Concurrency & Observation
 
 Use modern Swift only — no legacy observation patterns:
