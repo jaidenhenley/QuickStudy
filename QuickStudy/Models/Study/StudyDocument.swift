@@ -39,7 +39,7 @@ struct StudyDocument: Codable, Equatable {
         try container.encodeIfPresent(pageBreaks, forKey: .pageBreaks)
     }
 
-    func page(containing lineIndex: Int) -> Int? {
+    nonisolated func page(containing lineIndex: Int) -> Int? {
         guard let pageBreaks, !pageBreaks.isEmpty else { return nil }
         return pageBreaks.lastIndex { $0 <= lineIndex }.map { $0 + 1 }
     }

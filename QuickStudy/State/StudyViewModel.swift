@@ -99,6 +99,16 @@ class StudyViewModel {
                 )
             }
 
+            // The quality filters can still empty the pool for an unusual answer. Four
+            // weak options beat two good ones, so this stage accepts anything that is
+            // not a duplicate.
+            if wrong.count < 3 {
+                let library = savedSets.flatMap(\.cards).map(\.answer).shuffled()
+                wrong += DistractorRefiner.pad(
+                    library, answer: card.answer, existing: wrong, needed: 3 - wrong.count
+                )
+            }
+
             var choices = [card.answer] + wrong.prefix(3)
             if choices.count < 2 { choices.append("Not applicable") }
             choices.shuffle()

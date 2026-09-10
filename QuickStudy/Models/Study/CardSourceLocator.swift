@@ -10,7 +10,7 @@ import Foundation
 /// Maps a model-supplied excerpt back onto the document. The model quotes the source;
 /// locating it stays deterministic here rather than trusting the model to count lines.
 enum CardSourceLocator {
-    static func locate(excerpt: String, in document: StudyDocument) -> CardSource? {
+    nonisolated static func locate(excerpt: String, in document: StudyDocument) -> CardSource? {
         let needle = normalized(excerpt)
         guard !needle.isEmpty else { return nil }
 
@@ -34,14 +34,14 @@ enum CardSourceLocator {
         )
     }
 
-    private static func normalized(_ text: String) -> String {
+    nonisolated private static func normalized(_ text: String) -> String {
         text.lowercased()
             .components(separatedBy: CharacterSet.alphanumerics.inverted)
             .filter { !$0.isEmpty }
             .joined(separator: " ")
     }
 
-    private static func matchRange(needle: String, lines: [String]) -> ClosedRange<Int>? {
+    nonisolated private static func matchRange(needle: String, lines: [String]) -> ClosedRange<Int>? {
         let normalizedLines = lines.map(normalized)
 
         for start in normalizedLines.indices {
@@ -57,7 +57,7 @@ enum CardSourceLocator {
         return nil
     }
 
-    private static func paragraphIndex(ofLine line: Int, in lines: [String]) -> Int {
+    nonisolated private static func paragraphIndex(ofLine line: Int, in lines: [String]) -> Int {
         var paragraph = 1
         for index in 0..<line where lines[index].trimmingCharacters(in: .whitespaces).isEmpty {
             paragraph += 1
