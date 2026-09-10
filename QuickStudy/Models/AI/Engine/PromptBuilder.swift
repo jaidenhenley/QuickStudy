@@ -15,7 +15,12 @@ enum PromptBuilder {
         Return only JSON in this format:
         {
           "cards": [
-            { "question": "string", "answer": "string" }
+            {
+              "question": "string",
+              "answer": "string",
+              "sourceExcerpt": "string",
+              "explanation": "string"
+            }
           ]
         }
 
@@ -24,6 +29,10 @@ enum PromptBuilder {
         - No outside knowledge
         - Each question should test one concept
         - Answers must be short and directly supported by the text
+        - sourceExcerpt must be copied VERBATIM from the source — the exact sentence the
+          card is based on, so it can be located in the original document
+        - explanation is one or two sentences saying why the answer is correct, written
+          for a learner who just got it wrong
         - Skip unclear content
 
         Source:

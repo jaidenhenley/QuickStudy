@@ -376,6 +376,7 @@ class StudyViewModel {
         do {
             let cards = try await CardGenerator.generateTopicCards(
                 from: sourceText,
+                document: savedSets[index].document,
                 topic: topic,
                 count: count,
                 settings: aiSettings
@@ -401,7 +402,11 @@ class StudyViewModel {
 
 #if canImport(FoundationModels)
         do {
-            let cards = try await CardGenerator.generateAI(from: text, settings: aiSettings)
+            let cards = try await CardGenerator.generateAI(
+                from: text,
+                document: document ?? StudyDocument(title: "", lines: []),
+                settings: aiSettings
+            )
             GenerationAllowance.recordGeneration()
             self.flashcards = cards
             saveCurrentSet()

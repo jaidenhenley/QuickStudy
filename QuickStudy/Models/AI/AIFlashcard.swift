@@ -10,4 +10,6 @@ import Foundation
 struct AIFlashcard: Codable {
     let question: String
     let answer: String
+    let sourceExcerpt: String
+    let explanation: String
 }

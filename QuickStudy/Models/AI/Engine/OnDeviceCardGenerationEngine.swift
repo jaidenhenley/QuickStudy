@@ -14,7 +14,7 @@ import FoundationModels
 // Wrapping with canImport prevents build failures when the module is missing.
 // The rest of the app talks to simple Swift models only.
 
-struct OnDeviceCardGenerationEngine: CardGenerating {
+struct OnDeviceCardGenerationEngine: CardGenerating, AnswerGrading {
     
     func generateCards(from text: String) async throws -> [AIFlashcard] {
         let chunks = chunkText(text, maxLength: 2500)
@@ -48,7 +48,12 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
             Only create cards from information explicitly in the source. Skip anything unclear.
             """
             let response = try await session.respond(to: prompt, generating: AIFLashcardSetModel.self)
-            let cards = response.content.cards.map { AIFlashcard(question: $0.question, answer: $0.answer) }
+            let cards = response.content.cards.map { AIFlashcard(
+                question: $0.question,
+                answer: $0.answer,
+                sourceExcerpt: $0.sourceExcerpt,
+                explanation: $0.explanation
+            ) }
             allCards.append(contentsOf: cards)
         }
         return allCards
@@ -84,7 +89,34 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
         let response = try await session.respond(to: prompt, generating: AIFLashcardSetModel.self)
         return response.content.cards
             .prefix(count)
-            .map { AIFlashcard(question: $0.question, answer: $0.answer) }
+            .map { AIFlashcard(
+                question: $0.question,
+                answer: $0.answer,
+                sourceExcerpt: $0.sourceExcerpt,
+                explanation: $0.explanation
+            ) }
+    }
+
+    func grade(question: String, expected: String, submitted: String) async throws -> AnswerGrade {
+        let session = LanguageModelSession()
+        let prompt = """
+        You are grading a student's free-text answer to a flashcard.
+
+        QUESTION: \(question)
+        REFERENCE ANSWER: \(expected)
+        STUDENT ANSWER: \(submitted)
+
+        Mark it correct if the student's answer conveys the same meaning as the reference,
+        even if the wording, length, or examples differ. Different phrasing is expected
+        and must not be penalised.
+
+        Mark it incorrect only if the meaning is wrong, reversed, or the key idea is missing.
+
+        In `rationale`, address the student directly in one or two sentences, saying what
+        their wording did or did not capture.
+        """
+        let response = try await session.respond(to: prompt, generating: AIGradeModel.self)
+        return AnswerGrade(isCorrect: response.content.isCorrect, rationale: response.content.rationale)
     }
 
     func chunkText(_ text: String, maxLength: Int) -> [String] {
@@ -249,6 +281,21 @@ private struct AIFlashcardModel: Codable {
 
     @Guide(description: "A concise answer in 1-2 sentences. Synthesize the key point in your own words. Do not copy sentences from the source material.")
     let answer: String
+
+    @Guide(description: "The exact sentence or sentences from the SOURCE MATERIAL this card is based on, copied verbatim with no rewording. Used to locate the card's origin in the original document.")
+    let sourceExcerpt: String
+
+    @Guide(description: "One or two sentences explaining why the answer is correct, written for a learner who just answered incorrectly. Explain the concept, do not restate the answer.")
+    let explanation: String
+}
+
+@Generable
+private struct AIGradeModel: Codable {
+    @Guide(description: "True if the student's answer means the same thing as the reference answer, even when worded differently. Only false when the meaning is wrong or the key idea is absent.")
+    let isCorrect: Bool
+
+    @Guide(description: "One or two sentences addressed to the student explaining the judgement. Reference their specific wording.")
+    let rationale: String
 }
 
 @Generable

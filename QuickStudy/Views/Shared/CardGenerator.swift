@@ -11,16 +11,27 @@ import Foundation
 struct CardGenerator {
     // MARK: - AI generation
 
-    static func generateAI(from rawText: String, settings: AISettings) async throws -> [StudyCard] {
+    static func generateAI(
+        from rawText: String,
+        document: StudyDocument,
+        settings: AISettings
+    ) async throws -> [StudyCard] {
         let engine = try AIController.makeGenerator(settings: settings)
         let cards = try await engine.generateCards(from: rawText)
         return cards.map { aiCard in
-            StudyCard(question: aiCard.question, answer: aiCard.answer, approved: false)
+            StudyCard(
+                question: aiCard.question,
+                answer: aiCard.answer,
+                approved: false,
+                source: CardSourceLocator.locate(excerpt: aiCard.sourceExcerpt, in: document),
+                explanation: aiCard.explanation.isEmpty ? nil : aiCard.explanation
+            )
         }
     }
 
     static func generateTopicCards(
         from rawText: String,
+        document: StudyDocument,
         topic: String,
         count: Int,
         settings: AISettings
@@ -28,7 +39,13 @@ struct CardGenerator {
         let engine = try AIController.makeGenerator(settings: settings)
         let cards = try await engine.generateCards(from: rawText, topic: topic, count: count)
         return cards.map { aiCard in
-            StudyCard(question: aiCard.question, answer: aiCard.answer, approved: false)
+            StudyCard(
+                question: aiCard.question,
+                answer: aiCard.answer,
+                approved: false,
+                source: CardSourceLocator.locate(excerpt: aiCard.sourceExcerpt, in: document),
+                explanation: aiCard.explanation.isEmpty ? nil : aiCard.explanation
+            )
         }
     }
 
