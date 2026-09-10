@@ -44,6 +44,7 @@ final class QuizSessionViewModel {
     private(set) var index = 0
     private(set) var session = StudySession()
     private(set) var phase: Phase = .answering
+    private(set) var summary: Summary?
 
     var selectedChoice: Int?
     var showsHint = false
@@ -72,6 +73,7 @@ final class QuizSessionViewModel {
         self.questions = questions
         index = 0
         session = StudySession()
+        summary = nil
         phase = questions.isEmpty ? .finished : .answering
         reset()
     }
@@ -104,6 +106,7 @@ final class QuizSessionViewModel {
             session.endedAt = Date()
             sessions.record(session)
             study.flushPendingChanges()
+            summary = makeSummary(sessions: sessions)
             phase = .finished
         }
     }
@@ -118,7 +121,7 @@ final class QuizSessionViewModel {
         phase = .answering
     }
 
-    func summary(sessions: SessionStore, calendar: Calendar = .current) -> Summary {
+    private func makeSummary(sessions: SessionStore, calendar: Calendar = .current) -> Summary {
         let streak = StreakCalculator.summary(
             studiedDays: sessions.studiedDays(calendar: calendar),
             frozenDays: StreakStore.frozenDays
@@ -127,14 +130,18 @@ final class QuizSessionViewModel {
         let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())
         let yesterdayCards = yesterday.map { sessions.cardsStudied(on: $0, calendar: calendar) } ?? 0
 
-        let reinforcement = Dictionary(grouping: session.results.filter { !$0.correct }, by: \.cardID)
-            .compactMap { cardID, results -> Reinforcement? in
-                guard let question = questions.first(where: { $0.cardID == cardID }) else { return nil }
+        let missCounts = session.results
+            .filter { !$0.correct }
+            .reduce(into: [UUID: Int]()) { $0[$1.cardID, default: 0] += 1 }
+
+        let reinforcement = questions
+            .compactMap { question -> Reinforcement? in
+                guard let missed = missCounts[question.cardID] else { return nil }
                 return Reinforcement(
-                    id: cardID,
+                    id: question.cardID,
                     question: question.prompt,
                     setTitle: question.setTitle,
-                    missed: results.count
+                    missed: missed
                 )
             }
             .sorted { $0.missed > $1.missed }

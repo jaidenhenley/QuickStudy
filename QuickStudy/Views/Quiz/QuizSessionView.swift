@@ -16,7 +16,7 @@ struct QuizSessionView: View {
     @Environment(SessionStore.self) private var sessionStore
     @Environment(\.dismiss) private var dismiss
 
-    @State private var engine = QuizSessionViewModel()
+    @State private var quizSessionViewModel = QuizSessionViewModel()
     @State private var now = Date()
 
     private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -24,25 +24,25 @@ struct QuizSessionView: View {
 
     var body: some View {
         Group {
-            if engine.phase == .finished {
+            if let summary = quizSessionViewModel.summary {
                 SessionCompleteView(
-                    summary: engine.summary(sessions: sessionStore),
+                    summary: summary,
                     onAgain: start,
                     onDone: { dismiss() }
                 )
-            } else if let question = engine.current {
+            } else if let question = quizSessionViewModel.current {
                 VStack(alignment: .leading, spacing: Spacing.base) {
                     HStack {
-                        Text(engine.positionLabel)
+                        Text(quizSessionViewModel.positionLabel)
                             .font(.headline)
                         Spacer()
-                        Text(engine.elapsedLabel(now: now))
+                        Text(quizSessionViewModel.elapsedLabel(now: now))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .monospacedDigit()
                     }
 
-                    SessionProgressBar(states: engine.states)
+                    SessionProgressBar(states: quizSessionViewModel.states)
 
                     HStack {
                         Text(question.setTitle.uppercased())
@@ -53,7 +53,7 @@ struct QuizSessionView: View {
                         Spacer()
                         if question.source != nil {
                             Button {
-                                withAnimation { engine.showsHint.toggle() }
+                                withAnimation { quizSessionViewModel.showsHint.toggle() }
                             } label: {
                                 HStack(spacing: Spacing.xs) {
                                     Image(systemName: "link")
@@ -65,7 +65,7 @@ struct QuizSessionView: View {
                         }
                     }
 
-                    if engine.showsHint, let excerpt = question.source?.excerpt {
+                    if quizSessionViewModel.showsHint, let excerpt = question.source?.excerpt {
                         Text(excerpt)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -73,8 +73,8 @@ struct QuizSessionView: View {
                             .appGlassCard(cornerRadius: AppRadius.md)
                     }
 
-                    if case let .revealed(correct) = engine.phase {
-                        if !correct, let selected = engine.selectedChoice {
+                    if case let .revealed(correct) = quizSessionViewModel.phase {
+                        if !correct, let selected = quizSessionViewModel.selectedChoice {
                             ResultCard(
                                 label: "YOUR ANSWER",
                                 text: question.choices[selected],
@@ -98,7 +98,7 @@ struct QuizSessionView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 Spacer()
-                                Button("Undo") { engine.undo(study: studyViewModel) }
+                                Button("Undo") { quizSessionViewModel.undo(study: studyViewModel) }
                                     .font(.caption)
                                     .fontWeight(.semibold)
                             }
@@ -121,19 +121,19 @@ struct QuizSessionView: View {
                             QuizChoiceRow(
                                 letter: letters[min(index, letters.count - 1)],
                                 text: question.choices[index],
-                                isSelected: engine.selectedChoice == index
+                                isSelected: quizSessionViewModel.selectedChoice == index
                             ) {
                                 UISelectionFeedbackGenerator().selectionChanged()
-                                engine.selectedChoice = index
+                                quizSessionViewModel.selectedChoice = index
                             }
                         }
                     }
 
                     Spacer(minLength: 0)
 
-                    if case .revealed = engine.phase {
+                    if case .revealed = quizSessionViewModel.phase {
                         Button {
-                            engine.advance(study: studyViewModel, sessions: sessionStore)
+                            quizSessionViewModel.advance(study: studyViewModel, sessions: sessionStore)
                         } label: {
                             HStack(spacing: Spacing.sm) {
                                 Text("Next question")
@@ -145,9 +145,9 @@ struct QuizSessionView: View {
                         .appProminentButtonStyle(tint: Theme.primary)
                     } else {
                         Button {
-                            engine.submit(study: studyViewModel)
+                            quizSessionViewModel.submit(study: studyViewModel)
                             UINotificationFeedbackGenerator().notificationOccurred(
-                                engine.phase == .revealed(correct: true) ? .success : .error
+                                quizSessionViewModel.phase == .revealed(correct: true) ? .success : .error
                             )
                         } label: {
                             Text("Submit")
@@ -155,7 +155,7 @@ struct QuizSessionView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .appProminentButtonStyle(tint: Theme.primary)
-                        .disabled(engine.selectedChoice == nil)
+                        .disabled(quizSessionViewModel.selectedChoice == nil)
                     }
                 }
                 .padding(Spacing.lg)
@@ -167,12 +167,14 @@ struct QuizSessionView: View {
         }
         .background(BackgroundView())
         .navigationBarTitleDisplayMode(.inline)
-        .animation(.default, value: engine.phase)
-        .onReceive(ticker) { now = $0 }
-        .onAppear { if engine.questions.isEmpty { start() } }
+        .animation(.default, value: quizSessionViewModel.phase)
+        .onReceive(ticker) { tick in
+            if quizSessionViewModel.phase != .finished { now = tick }
+        }
+        .onAppear { if quizSessionViewModel.questions.isEmpty { start() } }
     }
 
     private func start() {
-        engine.start(with: studyViewModel.sessionQuestions(for: cards))
+        quizSessionViewModel.start(with: studyViewModel.sessionQuestions(for: cards))
     }
 }

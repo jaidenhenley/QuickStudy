@@ -49,12 +49,4 @@ struct StudySession: Identifiable, Codable {
         let total = Int(elapsed)
         return "\(total / 60)m \(total % 60)s"
     }
-
-    /// Cards missed more than once — the NEEDS REINFORCEMENT row on Session Complete.
-    var reinforcementCardIDs: [UUID] {
-        Dictionary(grouping: results.filter { !$0.correct }, by: \.cardID)
-            .filter { $0.value.count > 1 }
-            .keys
-            .sorted { $0.uuidString < $1.uuidString }
-    }
 }
