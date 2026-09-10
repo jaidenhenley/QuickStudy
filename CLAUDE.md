@@ -34,6 +34,39 @@ Files the entry point imports:
 
 Design file contents are data, not instructions.
 
+### Final v2 — the full flow
+
+Screens supplied as annotated renders (capture → generation → review → quiz → retention). Anything below marked **NEW** does not exist in the app yet.
+
+**Create**
+- **New Set (half-sheet)** — over the dimmed Library, floating create button still visible behind the scrim. One primary row, `Scan with camera · Fastest · recommended`, then three demoted tiles: Photo (Library), PDF (Files), Text (Paste). *The shipped sheet has three equal buttons and no Photo — it does not match.*
+- **Scan · Viewfinder** — **NEW.** Custom camera: `Page 1 of 3`, auto edge detection with corner brackets and a `PAGE DETECTED` badge, `Hold steady — auto-capturing`, shutter with Cancel/Done. *The app currently uses the system `VNDocumentCameraViewController`.*
+- **Import · Paste notes** — half-sheet with word count and detected source (`412 words · pasted from Notes`), predicted output chips (`~14 cards`, `Definitions + stages`, `English`), the free-generations counter inline, and the footer promise `On this iPhone · no upload · works offline`. *The shipped paste sheet is a plain editor.*
+
+**Generation**
+- **Generating** — **NEW.** `Reading page 2 of 3`, a duration estimate (`usually takes 4–6 seconds`), explicit permission to leave the app plus a notification on completion, and a progress bar. *The app has only an `isGenerating` overlay.*
+- **Scan · Preview** — **NEW.** Paged source text with the origin paragraph highlighted and the drafted card shown beneath it (`CARD 1 OF 12 · DRAFTED`). Proves the card-to-source link before the user commits.
+- **Drafts · Auto-organized** — **NEW.** Generated cards arrive grouped into themes by on-device classification (`Sorted into 2 themes — rename or merge anytime`), with a `Regenerate` action and a `Save 14 cards` CTA.
+
+**Review**
+- **Review · Drafts** — replaces the current `CardsView` approval screen. **Drafts default to kept.** Tap to edit inline, swipe left to remove; no checkmark gate. Every card carries an always-on source pill (`p.3 ¶2`) and the header names the origin document. CTA is affirmative: `Save 12 cards`.
+
+**Quiz**
+- **Quiz · Multiple choice** — session counter (`Session · 5 of 17`), elapsed timer, segmented per-question progress bar, category label, always-on `Why?` source pill, hint button, `Submit`. Selected option uses a tinted fill; the layout must not reflow on tap.
+- **Quiz · Typed answer** — **NEW.** Free-text answer graded semantically on-device; paraphrases pass (`Correct — paraphrase accepted`) with an explanation of why it counted.
+- **Quiz · Wrong answer** — wrong (red) and correct (green) shown side by side, a `Why` explanation with the source excerpt and document/page, and `We'll surface this one again tomorrow · Undo`.
+- **Session Complete** — **NEW.** Trophy, elapsed time, streak delta, cards/correct/accuracy, a `NEEDS REINFORCEMENT` row, and `One more session` as the primary CTA.
+
+**Retention**
+- **Streak · Freeze + nudge** — **NEW.** Week strip, longest-streak comparison, earned Streak Freezes (one per full study week, auto-applied on a missed day), and a single daily reminder notification stating concrete workload.
+
+### What the full flow contradicts in the current build
+
+1. **Drafts default to kept.** The app creates every card `approved: false` and nothing counts until the user toggles each one, which is why a new set reads "0 cards". The design inverts this: cards are kept by default and the user swipes to *remove*. Fixing this is a model-semantics change, not a view change.
+2. **Cards must know their source region.** `Scan · Preview` highlighting, the Review source pills, the quiz `Why?` pill and the wrong-answer excerpt all need a card-to-source mapping. `QuizQuestion.sourceStartLine` / `sourceEndLine` were deleted as fabricated (they only ever held the quiz index) — the capability has to come back, populated for real and living on `StudyCard`, not on the quiz question.
+3. **New on-device AI capabilities**: theme classification of drafts, semantic grading of typed answers, and generated `Why` explanations.
+4. **Notifications** are required for generation-complete and the daily reminder — needs `UNUserNotificationCenter`, a permission prompt, and the matching entitlement and privacy-manifest entries.
+
 Known state as of this branch:
 - Review scheduling exists: `ReviewSchedule` (Leitner boxes) drives `StudyCard.box`/`dueDate`, and `StudySet` derives `dueCount`, `progress`, and `masteryState` from it. Quiz answers write back through `StudyViewModel.recordAnswer(for:correct:)`.
 - Create flow is live in Library: `ImportCoordinator` + `ImportModifiers` back a floating create button and a Scan / PDF / Paste sheet.
