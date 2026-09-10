@@ -73,15 +73,30 @@ class StudyViewModel {
         cards.compactMap { card in
             guard let set = savedSets.first(where: { $0.cards.contains { $0.id == card.id } }) else { return nil }
 
-            var wrong = card.distractors
+            var wrong = DistractorRefiner.refine(
+                card.distractors,
+                answer: card.answer,
+                source: card.source?.excerpt ?? card.answer
+            )
+
             if wrong.count < 3 {
-                // Cards from before distractors existed, or from the non-AI fallback.
-                wrong += savedSets
-                    .flatMap(\.cards)
-                    .map(\.answer)
-                    .filter { $0.caseInsensitiveCompare(card.answer) != .orderedSame }
-                    .shuffled()
-                    .prefix(3 - wrong.count)
+                // Cards from before distractors existed, and cards whose options were
+                // refined away. Same page first, then same set: topical neighbours make
+                // better wrong answers than random ones.
+                let samePage = set.cards.filter {
+                    $0.id != card.id && $0.source?.page != nil && $0.source?.page == card.source?.page
+                }
+                let pool = (samePage + set.cards.filter { $0.id != card.id }).map(\.answer)
+                wrong += DistractorRefiner.backfill(
+                    pool, answer: card.answer, existing: wrong, needed: 3 - wrong.count
+                )
+            }
+
+            if wrong.count < 3 {
+                let library = savedSets.flatMap(\.cards).map(\.answer).shuffled()
+                wrong += DistractorRefiner.backfill(
+                    library, answer: card.answer, existing: wrong, needed: 3 - wrong.count
+                )
             }
 
             var choices = [card.answer] + wrong.prefix(3)
@@ -210,14 +225,27 @@ class StudyViewModel {
             let cards = try await CardGenerator.generateAI(from: text, document: document, settings: aiSettings)
             if countsAgainstAllowance { GenerationAllowance.recordGeneration() }
             return cards
+        } catch CardGenerationError.deviceNotEligible {
+            // Permanent for this hardware, and the only remaining silent fallback.
+            // Onboarding should route these users to an API key before they ever scan;
+            // until it does, poor cards beat an app that cannot import anything at all.
+            logger.error("On-device AI unavailable on this hardware, using heuristic cards")
+            return generateFallbackCards(from: text)
         } catch {
             logger.error("AI generation failed: \(error.localizedDescription)")
-            return generateFallbackCards(from: text)
+            generationErrorMessage = Self.message(for: error)
+            return []
         }
 #else
         generationErrorMessage = "Apple Intelligence framework not available in this build."
         return generateFallbackCards(from: text)
 #endif
+    }
+
+    /// A raw URLError description is not user-facing copy.
+    private static func message(for error: Error) -> String {
+        (error as? CardGenerationError)?.errorDescription
+            ?? "Couldn't draft cards from this. Try a different source."
     }
 
     @MainActor
@@ -247,7 +275,7 @@ class StudyViewModel {
             GenerationAllowance.recordGeneration()
             saveSavedSets()
         } catch {
-            generationErrorMessage = "Couldn't generate cards on \(topic). Please try again."
+            generationErrorMessage = Self.message(for: error)
         }
     }
 

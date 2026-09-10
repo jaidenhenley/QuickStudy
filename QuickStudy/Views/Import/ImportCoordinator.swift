@@ -54,6 +54,9 @@ final class ImportCoordinator {
     func presentPendingSource() {
         guard let source = pendingSource else { return }
         pendingSource = nil
+#if canImport(FoundationModels)
+        OnDeviceCardGenerationEngine.prewarm()
+#endif
         switch source {
         case .scan:
             startScan()
@@ -86,7 +89,8 @@ final class ImportCoordinator {
         defer { stage = .idle; showGenerating = false }
 
         guard let draft = await study.makePastedDraft(trimmed) else {
-            errorMessage = "Couldn't draft any cards from those notes. Try a longer passage."
+            errorMessage = study.generationErrorMessage
+                ?? "Couldn't draft any cards from those notes. Try a longer passage."
             showErrorAlert = true
             return
         }
@@ -111,7 +115,8 @@ final class ImportCoordinator {
             }
             stage = .drafting
             guard let draft = await study.makeDraft(from: extracted, title: "Scanned Document", sourceType: .scan) else {
-                errorMessage = "Couldn't draft any cards from this. Try a different source."
+                errorMessage = study.generationErrorMessage
+                    ?? "Couldn't draft any cards from this. Try a different source."
                 showErrorAlert = true
                 return
             }
@@ -140,7 +145,8 @@ final class ImportCoordinator {
             }
             stage = .drafting
             guard let draft = await study.makeDraft(from: extracted, title: url.deletingPathExtension().lastPathComponent, sourceType: .pdf) else {
-                errorMessage = "Couldn't draft any cards from this. Try a different source."
+                errorMessage = study.generationErrorMessage
+                    ?? "Couldn't draft any cards from this. Try a different source."
                 showErrorAlert = true
                 return
             }
@@ -175,7 +181,8 @@ final class ImportCoordinator {
             }
             stage = .drafting
             guard let draft = await study.makeDraft(from: extracted, title: "Photo", sourceType: .photo) else {
-                errorMessage = "Couldn't draft any cards from this. Try a different source."
+                errorMessage = study.generationErrorMessage
+                    ?? "Couldn't draft any cards from this. Try a different source."
                 showErrorAlert = true
                 return
             }
