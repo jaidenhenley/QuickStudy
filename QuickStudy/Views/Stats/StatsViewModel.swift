@@ -35,8 +35,13 @@ final class StatsViewModel {
 
     var hasData: Bool { scheduledCards > 0 }
 
-    func update(from sets: [StudySet], now: Date = Date(), calendar: Calendar = .current) {
-        streak = StreakStore.count
+    func update(from sets: [StudySet], sessions: SessionStore, now: Date = Date(), calendar: Calendar = .current) {
+        streak = StreakCalculator.summary(
+            studiedDays: sessions.studiedDays(calendar: calendar),
+            frozenDays: StreakStore.frozenDays,
+            now: now,
+            calendar: calendar
+        ).current
         setCount = sets.count
 
         let scheduled = sets.flatMap(\.cards)

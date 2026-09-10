@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StatsView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
+    @Environment(SessionStore.self) private var sessionStore
 
     @State private var statsViewModel = StatsViewModel()
 
@@ -119,9 +120,9 @@ struct StatsView: View {
         .background(BackgroundView())
         .navigationTitle("Stats")
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { statsViewModel.update(from: studyViewModel.savedSets) }
+        .onAppear { statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore) }
         .onChange(of: studyViewModel.savedSets) { _, _ in
-            statsViewModel.update(from: studyViewModel.savedSets)
+            statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
         }
     }
 }
