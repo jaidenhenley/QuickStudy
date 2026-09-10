@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var aiSettings = AISettings()
     @State private var todayViewModel = TodayViewModel()
     @State private var draftStore = DraftStore()
+    @State private var sessionStore = SessionStore()
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
@@ -49,6 +50,7 @@ struct ContentView: View {
         }
         .environment(todayViewModel)
         .environment(draftStore)
+        .environment(sessionStore)
         .environment(viewModel)
         .environment(appState)
         .onChange(of: scenePhase) { _, phase in

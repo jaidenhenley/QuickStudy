@@ -14,7 +14,7 @@ import FoundationModels
 // Wrapping with canImport prevents build failures when the module is missing.
 // The rest of the app talks to simple Swift models only.
 
-struct OnDeviceCardGenerationEngine: CardGenerating, AnswerGrading {
+struct OnDeviceCardGenerationEngine: CardGenerating {
     
     func generateCards(from text: String) async throws -> [AIFlashcard] {
         let chunks = chunkText(text, maxLength: 2500)
@@ -52,7 +52,8 @@ struct OnDeviceCardGenerationEngine: CardGenerating, AnswerGrading {
                 question: $0.question,
                 answer: $0.answer,
                 sourceExcerpt: $0.sourceExcerpt,
-                explanation: $0.explanation
+                explanation: $0.explanation,
+                distractors: $0.distractors
             ) }
             allCards.append(contentsOf: cards)
         }
@@ -93,30 +94,9 @@ struct OnDeviceCardGenerationEngine: CardGenerating, AnswerGrading {
                 question: $0.question,
                 answer: $0.answer,
                 sourceExcerpt: $0.sourceExcerpt,
-                explanation: $0.explanation
+                explanation: $0.explanation,
+                distractors: $0.distractors
             ) }
-    }
-
-    func grade(question: String, expected: String, submitted: String) async throws -> AnswerGrade {
-        let session = LanguageModelSession()
-        let prompt = """
-        You are grading a student's free-text answer to a flashcard.
-
-        QUESTION: \(question)
-        REFERENCE ANSWER: \(expected)
-        STUDENT ANSWER: \(submitted)
-
-        Mark it correct if the student's answer conveys the same meaning as the reference,
-        even if the wording, length, or examples differ. Different phrasing is expected
-        and must not be penalised.
-
-        Mark it incorrect only if the meaning is wrong, reversed, or the key idea is missing.
-
-        In `rationale`, address the student directly in one or two sentences, saying what
-        their wording did or did not capture.
-        """
-        let response = try await session.respond(to: prompt, generating: AIGradeModel.self)
-        return AnswerGrade(isCorrect: response.content.isCorrect, rationale: response.content.rationale)
     }
 
     func chunkText(_ text: String, maxLength: Int) -> [String] {
@@ -140,79 +120,7 @@ struct OnDeviceCardGenerationEngine: CardGenerating, AnswerGrading {
         return chunks
     }
     
-    func generateDistractors(
-        question: String,
-        correctAnswer: String,
-        otherAnswers: [String],
-        sourceText: String
-    ) async throws -> [String] {
-        for _ in 0..<2 {
-            let session = LanguageModelSession()
-            let contextBlock = otherAnswers.prefix(15).joined(separator: "\n- ")
-            let sourceExcerpt = String(sourceText.prefix(1500))
-            
-            let prompt = """
-        You are an educator creating multiple-choice answer options to test student understanding.
-        
-        SOURCE MATERIAL:
-        \(sourceExcerpt)
-        
-        OTHER ANSWERS FROM THIS STUDY SET:
-        - \(contextBlock)
-        
-        QUESTION: \(question)
-        CORRECT ANSWER: \(correctAnswer)
-        
-        Generate 3 incorrect answer options that test whether the student understood the concept.
-        
-        CONTENT RULES:
-        - Each incorrect option must use real terminology and concepts from the source material
-        - Use related but incorrect details: for example, attribute a property to the wrong concept, \
-        or use a number or name from a different part of the material
-        - Each option should address the same topic as the correct answer
-        
-        FORMATTING RULES:
-        - Match the length and sentence structure of the correct answer
-        - If the correct answer is a short phrase, each option must be a short phrase
-        - If the correct answer is a full sentence, each option must be a full sentence
-        
-        ACCURACY RULES:
-        - Do not restate or rephrase the correct answer
-        - Do not include the correct answer within an incorrect option
-        - Each incorrect option must be factually wrong for this question
-        """
-            let response = try await session.respond(to: prompt, generating: AIAnswerModel.self)
-            let distractors = response.content.distractorAnswers
-            if isValidDistractors(distractors) {
-                return distractors
-            }
-        }
-        throw CardGenerationError.invalidDistractors
-    }
     
-    func generateQuiz(
-        cards: [(question: String, answer: String)],
-        sourceText: String
-    ) async throws -> [AIQuizQuestionModel] {
-        var results: [AIQuizQuestionModel] = []
-
-        for card in cards {
-            let otherAnswers = cards
-                .filter { $0.question != card.question }
-                .map { $0.answer }
-
-            if let distractors = try? await generateDistractors(
-                question: card.question,
-                correctAnswer: card.answer,
-                otherAnswers: otherAnswers,
-                sourceText: sourceText
-            ) {
-                results.append(AIQuizQuestionModel(wrongAnswers: distractors))
-            }
-        }
-
-        return results
-    }
     
     func repairOCR(lines: [String], candidates: [[String]]) async throws -> String {
         let prompt = buildContextPrompt(lines: lines, candidates: candidates, startIndex: 1)
@@ -250,25 +158,8 @@ struct OnDeviceCardGenerationEngine: CardGenerating, AnswerGrading {
     }
     // MARK: Filler Detection
     
-    private let fillerPhrases = [
-        "none of the above",
-        "all of the above",
-        "not covered",
-        "not mentioned",
-        "none of these",
-        "all of these",
-        "not applicable"
-    ]
     
-    func containsFiller(_ text: String) -> Bool {
-        let lower = text.lowercased()
-        return fillerPhrases.contains { lower.contains($0) }
-    }
     
-    func isValidDistractors(_ distractors: [String]) -> Bool {
-        guard distractors.count >= 3 else { return false }
-        return !distractors.contains { containsFiller($0) }
-    }
     
 }
 
@@ -287,21 +178,9 @@ private struct AIFlashcardModel: Codable {
 
     @Guide(description: "One or two sentences explaining why the answer is correct, written for a learner who just answered incorrectly. Explain the concept, do not restate the answer.")
     let explanation: String
-}
 
-@Generable
-private struct AIGradeModel: Codable {
-    @Guide(description: "True if the student's answer means the same thing as the reference answer, even when worded differently. Only false when the meaning is wrong or the key idea is absent.")
-    let isCorrect: Bool
-
-    @Guide(description: "One or two sentences addressed to the student explaining the judgement. Reference their specific wording.")
-    let rationale: String
-}
-
-@Generable
-private struct AIAnswerModel: Codable {
-    @Guide(description: "Exactly 3 incorrect answer options. Each must be about the same topic as the question. Do not use facts from unrelated concepts. Each option must be plausible for this specific question but factually wrong.")
-    let distractorAnswers: [String]
+    @Guide(description: "Exactly 3 incorrect answers for this question. Each must be plausible, use real terminology from the source material, and match the length and sentence structure of the correct answer. Never restate the correct answer. No filler like 'None of the above'.")
+    let distractors: [String]
 }
 
 @Generable
@@ -313,12 +192,6 @@ private struct AIFLashcardSetModel: Codable {
 private struct AIOCRRepairModel: Codable {
     @Guide(description: "Corrected OCR text with original line breaks preserved")
     let correctedText: String
-}
-
-@Generable
-struct AIQuizQuestionModel: Codable {
-    @Guide(description: "The 3 wrong answers for this question. Each must be plausible, match the style and length of the correct answer, and use real terminology from the source material.")
-    let wrongAnswers: [String]
 }
 
 #endif

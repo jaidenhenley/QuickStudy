@@ -12,4 +12,5 @@ struct AIFlashcard: Codable {
     let answer: String
     let sourceExcerpt: String
     let explanation: String
+    let distractors: [String]
 }

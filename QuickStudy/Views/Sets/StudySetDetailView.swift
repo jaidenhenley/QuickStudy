@@ -57,9 +57,8 @@ struct StudySetDetailView: View {
             }
         }
         .navigationDestination(isPresented: $navigateToSession) {
-            QuizView(mode: .standard)
+            QuizSessionView(cards: set.cards)
                 .environment(viewModel)
-                .environment(appState)
         }
     }
 }

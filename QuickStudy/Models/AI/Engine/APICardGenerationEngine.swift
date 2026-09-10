@@ -29,7 +29,8 @@ struct APICardGenerationEngine: CardGenerating {
                 question: $0.question,
                 answer: $0.answer,
                 sourceExcerpt: $0.sourceExcerpt ?? "",
-                explanation: $0.explanation ?? ""
+                explanation: $0.explanation ?? "",
+                distractors: $0.distractors ?? []
             )
         }
     }
@@ -45,38 +46,12 @@ struct APICardGenerationEngine: CardGenerating {
                     question: $0.question,
                     answer: $0.answer,
                     sourceExcerpt: $0.sourceExcerpt ?? "",
-                    explanation: $0.explanation ?? ""
+                    explanation: $0.explanation ?? "",
+                    distractors: $0.distractors ?? []
                 )
             }
     }
 
-    func generateDistractors(
-        question: String,
-        correctAnswer: String,
-        otherAnswers: [String],
-        sourceText: String
-    ) async throws -> [String] {
-        let prompt = PromptBuilder.distractorPrompt(
-            question: question,
-            correctAnswer: correctAnswer,
-            otherAnswers: otherAnswers,
-            sourceText: sourceText
-        )
-
-        let jsonString = try await sendPrompt(prompt)
-        let decoded = try decodeJSON(AIDistractorResponse.self, from: jsonString)
-        return decoded.distractorAnswers
-    }
-
-    func generateQuiz(
-        cards: [(question: String, answer: String)],
-        sourceText: String
-    ) async throws -> [AIQuizQuestionModel] {
-        let prompt = PromptBuilder.quizPrompt(cards: cards, sourceText: sourceText)
-        let jsonString = try await sendPrompt(prompt)
-        let decoded = try decodeJSON(APIQuizResponse.self, from: jsonString)
-        return decoded.questions.map { AIQuizQuestionModel(wrongAnswers: $0.wrongAnswers) }
-    }
 }
 
 private extension APICardGenerationEngine {
@@ -236,16 +211,6 @@ private struct APIFlashcard: Decodable {
     let answer: String
     let sourceExcerpt: String?
     let explanation: String?
+    let distractors: [String]?
 }
 
-private struct AIDistractorResponse: Decodable {
-    let distractorAnswers: [String]
-}
-
-private struct APIQuizResponse: Decodable {
-    let questions: [APIQuizQuestion]
-}
-
-private struct APIQuizQuestion: Decodable {
-    let wrongAnswers: [String]
-}

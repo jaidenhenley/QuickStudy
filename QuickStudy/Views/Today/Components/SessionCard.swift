@@ -86,9 +86,8 @@ struct SessionCard: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl))
         .navigationDestination(isPresented: $navigateToSession) {
-            QuizView(mode: .todaySession)
+            QuizSessionView(cards: studyViewModel.flashcards)
                 .environment(studyViewModel)
-                .environment(appState)
         }
     }
 }

@@ -40,8 +40,6 @@ class StudyViewModel {
    var savedSets: [StudySet] = []
    var activeSetID: UUID? = nil
    var currentSourceType: StudySourceType = .scan
-   var aiQuizQuestions: [QuizQuestion]? = nil
-   var isGeneratingQuiz: Bool = false
    var isTodaySession: Bool = false
 
     @ObservationIgnored private var hasUnsavedChanges = false
@@ -55,6 +53,53 @@ class StudyViewModel {
             .flatMap(\.cards)
             .filter { $0.isDue(asOf: date, calendar: calendar) }
         isTodaySession = true
+    }
+
+    func box(for cardID: UUID) -> Int? {
+        savedSets.lazy.compactMap { $0.cards.first { $0.id == cardID }?.box }.first
+    }
+
+    func restoreBox(_ box: Int, missCountDelta: Int, for cardID: UUID) {
+        guard let setIndex = savedSets.firstIndex(where: { $0.cards.contains { $0.id == cardID } }),
+              let cardIndex = savedSets[setIndex].cards.firstIndex(where: { $0.id == cardID }) else { return }
+        savedSets[setIndex].cards[cardIndex].box = box
+        savedSets[setIndex].cards[cardIndex].missCount = max(0, savedSets[setIndex].cards[cardIndex].missCount + missCountDelta)
+        savedSets[setIndex].cards[cardIndex].dueDate = ReviewSchedule.newDueDate(forBox: box)
+        hasUnsavedChanges = true
+    }
+
+    /// Questions carry their set, source and box so nothing has to be looked back up mid-session.
+    func sessionQuestions(for cards: [StudyCard]) -> [QuizQuestion] {
+        cards.compactMap { card in
+            guard let set = savedSets.first(where: { $0.cards.contains { $0.id == card.id } }) else { return nil }
+
+            var wrong = card.distractors
+            if wrong.count < 3 {
+                // Cards from before distractors existed, or from the non-AI fallback.
+                wrong += savedSets
+                    .flatMap(\.cards)
+                    .map(\.answer)
+                    .filter { $0.caseInsensitiveCompare(card.answer) != .orderedSame }
+                    .shuffled()
+                    .prefix(3 - wrong.count)
+            }
+
+            var choices = [card.answer] + wrong.prefix(3)
+            if choices.count < 2 { choices.append("Not applicable") }
+            choices.shuffle()
+
+            return QuizQuestion(
+                cardID: card.id,
+                setID: set.id,
+                prompt: card.question,
+                choices: choices,
+                correctIndex: choices.firstIndex(of: card.answer) ?? 0,
+                explanation: card.explanation ?? card.answer,
+                source: card.source,
+                setTitle: set.title,
+                boxBefore: card.box
+            )
+        }
     }
 
     /// Session cards come from many sets, so the answer is written back by card id.
@@ -85,231 +130,7 @@ class StudyViewModel {
 
     // MARK: - AI Quiz Generation
 
-    /// Generates quiz questions using a single batch AI call for all distractors.
-    /// This gives the on-device model full context across every card, maximizing quality.
-    /// Falls back to the pool-based method if AI is unavailable or fails.
-    @MainActor
-    func generateAIQuizQuestions() async {
-        let approvedCards = flashcards
-        guard !approvedCards.isEmpty else {
-            aiQuizQuestions = []
-            return
-        }
-
-        isGeneratingQuiz = true
-        defer { isGeneratingQuiz = false }
-
-        let sourceText = document?.lines.joined(separator: "\n") ?? ""
-
-        // Build input for batch generation
-        let cardPairs = approvedCards.map { (question: $0.question, answer: $0.answer) }
-
-        do {
-            // Single AI call for the entire quiz — maximum context for the model
-            let allDistractors = try await CardGenerator.generateQuiz(
-                cards: cardPairs,
-                sourceText: sourceText
-            )
-
-            var questions: [QuizQuestion] = []
-            for (index, card) in approvedCards.enumerated() {
-                let distractors: [String]
-                if index < allDistractors.count {
-                    distractors = Array(allDistractors[index].prefix(3))
-                } else {
-                    // AI returned fewer entries than expected — use fallback for this card
-                    let fallback = buildFallbackQuestion(for: card)
-                    questions.append(fallback)
-                    continue
-                }
-
-                var choices = [card.answer] + distractors
-                if choices.count < 2 {
-                    choices.append("Not applicable")
-                }
-                choices.shuffle()
-
-                let correctIndex = choices.firstIndex(of: card.answer) ?? 0
-                questions.append(QuizQuestion(
-                    cardID: card.id,
-                    prompt: card.question,
-                    choices: choices,
-                    correctIndex: correctIndex,
-                    explanation: card.answer
-                ))
-            }
-
-            aiQuizQuestions = questions
-        } catch {
-            // If the batch AI call fails entirely, fall back to pool-based for all cards
-            var questions: [QuizQuestion] = []
-            for card in approvedCards {
-                questions.append(buildFallbackQuestion(for: card))
-            }
-            aiQuizQuestions = questions
-        }
-    }
-
-    /// Builds a single quiz question using the pool-based distractor method (no AI).
-    private func buildFallbackQuestion(for card: StudyCard) -> QuizQuestion {
-        let correctAnswer = card.answer
-        let normalizedCorrect = normalizedAnswer(correctAnswer)
-        let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
-
-        var pool = allAnswers.filter { normalizedAnswer($0) != normalizedCorrect }
-        pool = pool.filter { $0.count <= 120 }
-
-        if correctAnswer.count <= 50 {
-            let similar = pool.filter { abs($0.count - correctAnswer.count) <= 30 }
-            if similar.count >= 3 { pool = similar }
-        }
-
-        var distractors: [String] = []
-        for answer in pool.shuffled() {
-            if calculateSimilarity(answer, correctAnswer) < 0.7 {
-                distractors.append(answer)
-            }
-            if distractors.count == 3 { break }
-        }
-
-        if distractors.count < 3 {
-            for fallback in ["None of the above", "All of the above", "Not covered in the material"] {
-                if normalizedAnswer(fallback) != normalizedCorrect
-                    && !distractors.contains(where: { normalizedAnswer($0) == normalizedAnswer(fallback) }) {
-                    distractors.append(fallback)
-                }
-                if distractors.count == 3 { break }
-            }
-        }
-
-        var choices = [correctAnswer] + distractors
-        if choices.count < 2 { choices.append("Not applicable") }
-        choices.shuffle()
-
-        return QuizQuestion(
-            cardID: card.id,
-            prompt: card.question,
-            choices: choices,
-            correctIndex: choices.firstIndex(of: correctAnswer) ?? 0,
-            explanation: card.answer
-        )
-    }
-
-    // MARK: - Derived data (synchronous fallback)
-    var quizQuestions: [QuizQuestion] {
-        let approvedCards = flashcards
-        if approvedCards.isEmpty { return [] }
-
-        var questions: [QuizQuestion] = []
-        questions.reserveCapacity(approvedCards.count)
-
-        // Get all unique answers for the distractor pool
-        let allAnswers = uniqueAnswers(from: flashcards.map { $0.answer })
-
-        for card in approvedCards {
-            let correctAnswer = card.answer
-            let normalizedCorrect = normalizedAnswer(correctAnswer)
-
-            // Filter out the correct answer and get potential distractors
-            var pool = allAnswers.filter { normalizedAnswer($0) != normalizedCorrect }
-            
-            // Improve distractor quality by filtering out answers that are too long
-            // (Long answers make poor multiple choice options)
-            let maxReasonableLength = 120
-            pool = pool.filter { $0.count <= maxReasonableLength }
-            
-            // If correct answer is short (< 50 chars), prefer similar-length distractors
-            // This makes the quiz more challenging and realistic
-            if correctAnswer.count <= 50 {
-                let similarLengthPool = pool.filter { 
-                    abs($0.count - correctAnswer.count) <= 30 
-                }
-                if similarLengthPool.count >= 3 {
-                    pool = similarLengthPool
-                }
-            }
-
-            // Select 3 distractors randomly from the filtered pool
-            var distractors: [String] = []
-            let shuffledPool = pool.shuffled()
-            for answer in shuffledPool {
-                // Skip answers that are too similar to the correct one
-                let similarity = calculateSimilarity(answer, correctAnswer)
-                if similarity < 0.7 {  // Less than 70% similar
-                    distractors.append(answer)
-                }
-                if distractors.count == 3 { break }
-            }
-
-            // If still short on distractors, relax filters and try again
-            if distractors.count < 3 {
-                let relaxedPool = allAnswers
-                    .filter { normalizedAnswer($0) != normalizedCorrect }
-                    .filter { candidate in
-                        !distractors.contains(where: { normalizedAnswer($0) == normalizedAnswer(candidate) })
-                    }
-                for answer in relaxedPool.shuffled() {
-                    distractors.append(answer)
-                    if distractors.count == 3 { break }
-                }
-            }
-
-            // Only use generic fallbacks as a last resort
-            if distractors.count < 3 {
-                let fallbacks = [
-                    "None of the above",
-                    "All of the above",
-                    "Not covered in the material"
-                ]
-                for fallback in fallbacks {
-                    let normalizedFallback = normalizedAnswer(fallback)
-                    if normalizedFallback != normalizedCorrect
-                        && !distractors.contains(where: { normalizedAnswer($0) == normalizedFallback }) {
-                        distractors.append(fallback)
-                    }
-                    if distractors.count == 3 { break }
-                }
-            }
-
-            // Build choices and shuffle — ensure at least 2 options
-            var choices: [String] = [correctAnswer] + distractors
-            if choices.count < 2 {
-                choices.append("Not applicable")
-            }
-            choices.shuffle()
-
-            let correctIndex = choices.firstIndex(of: correctAnswer) ?? 0
-            let question = QuizQuestion(
-                cardID: card.id,
-                prompt: card.question,
-                choices: choices,
-                correctIndex: correctIndex,
-                explanation: card.answer
-            )
-            questions.append(question)
-        }
-
-        return questions
-    }
     
-    // Calculate similarity between two strings (0.0 = completely different, 1.0 = identical)
-    private func calculateSimilarity(_ str1: String, _ str2: String) -> Double {
-        let norm1 = normalizedAnswer(str1)
-        let norm2 = normalizedAnswer(str2)
-        
-        if norm1 == norm2 { return 1.0 }
-        
-        // Calculate word-level similarity
-        let words1 = Set(norm1.split(separator: " ").map { String($0) })
-        let words2 = Set(norm2.split(separator: " ").map { String($0) })
-        
-        guard !words1.isEmpty && !words2.isEmpty else { return 0.0 }
-        
-        let intersection = words1.intersection(words2)
-        let union = words1.union(words2)
-        
-        return Double(intersection.count) / Double(union.count)
-    }
 
     // MARK: - Persistence
     var persistenceURL: URL {
@@ -523,19 +344,6 @@ class StudyViewModel {
         return trimmed.lowercased()
     }
 
-    private func uniqueAnswers(from answers: [String]) -> [String] {
-        var seen: Set<String> = []
-        var result: [String] = []
-        result.reserveCapacity(answers.count)
-        for answer in answers {
-            let key = normalizedAnswer(answer)
-            if seen.insert(key).inserted {
-                result.append(answer)
-            }
-        }
-        return result
-    }
-
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
 #if canImport(FoundationModels)
@@ -676,7 +484,6 @@ class StudyViewModel {
         return trimmed.rangeOfCharacter(from: .decimalDigits) != nil
     }
 
-
     func normalizeOCRLines(_ rawText: String) -> [String] {
         let pieces = rawText.components(separatedBy: .newlines)
         var rawLines: [String] = []
@@ -765,7 +572,6 @@ class StudyViewModel {
                 isDemo: true
             )
         }
-
 
         savedSets = demoSets + savedSets
         saveSavedSets()

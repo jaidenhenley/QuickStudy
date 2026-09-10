@@ -11,6 +11,7 @@ struct TodayView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AppState.self) var appState
     @Environment(TodayViewModel.self) var todayViewModel
+    @Environment(SessionStore.self) var sessionStore
 
     @State private var showSettings = false
 
@@ -69,8 +70,8 @@ struct TodayView: View {
         }
         .background(BackgroundView())
         .sheet(isPresented: $showSettings) { SettingsView() }
-        .onAppear { todayViewModel.updateFromStudy(studyViewModel) }
-        .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel) }
+        .onAppear { todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore) }
+        .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore) }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showSettings = true } label: {

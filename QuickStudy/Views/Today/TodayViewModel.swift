@@ -49,44 +49,25 @@ class TodayViewModel {
     var generationsRemaining: Int = GenerationAllowance.remaining
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
 
-    init() {
-        StreakStore.purgeSeededStreak()
-        loadStreak()
-    }
-
     // MARK: Streak
-
-    private func loadStreak() {
-        streakCount = StreakStore.count
-    }
-
-    func recordStudySession() {
-        let today = Calendar.current.startOfDay(for: Date())
-        if let lastDate = StreakStore.lastStudied {
-            let lastDay = Calendar.current.startOfDay(for: lastDate)
-            guard let diff = Calendar.current.dateComponents([.day], from: lastDay, to: today).day else { return }
-            if diff == 1 {
-                streakCount += 1
-            } else if diff > 1 {
-                streakCount = 1
-            }
-        } else {
-            streakCount = 1
-        }
-        StreakStore.record(count: streakCount, on: Date())
-    }
 
     // MARK: - Derived
 
     func updateFromStudy(
         _ studyViewModel: StudyViewModel,
+        sessions: SessionStore,
         now: Date = Date(),
         calendar: Calendar = .current
     ) {
         let sets = studyViewModel.savedSets
         hasReviewableCards = sets.contains { !$0.cards.isEmpty }
         generationsRemaining = GenerationAllowance.remaining
-        loadStreak()
+        streakCount = StreakCalculator.summary(
+            studiedDays: sessions.studiedDays(calendar: calendar),
+            frozenDays: StreakStore.frozenDays,
+            now: now,
+            calendar: calendar
+        ).current
         computeTodaySession(from: sets, now: now, calendar: calendar)
         computeWeakestCard(from: sets)
         computeUpNext(from: sets, now: now, calendar: calendar)
