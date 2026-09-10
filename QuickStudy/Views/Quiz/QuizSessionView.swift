@@ -44,92 +44,101 @@ struct QuizSessionView: View {
 
                     SessionProgressBar(states: quizSessionViewModel.states)
 
-                    HStack {
-                        Text(question.setTitle.uppercased())
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .tracking(1)
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        if question.source != nil {
-                            Button {
-                                withAnimation { quizSessionViewModel.showsHint.toggle() }
-                            } label: {
-                                HStack(spacing: Spacing.xs) {
-                                    Image(systemName: "link")
-                                    Text("Why?")
-                                }
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                            }
-                        }
-                    }
-
-                    if quizSessionViewModel.showsHint, let excerpt = question.source?.excerpt {
-                        Text(excerpt)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(Spacing.md)
-                            .appGlassCard(cornerRadius: AppRadius.md)
-                    }
-
-                    if case let .revealed(correct) = quizSessionViewModel.phase {
-                        if !correct, let selected = quizSessionViewModel.selectedChoice {
-                            ResultCard(
-                                label: "YOUR ANSWER",
-                                text: question.choices[selected],
-                                tint: Theme.danger,
-                                symbol: "x.circle.fill"
-                            )
-                        }
-
-                        ResultCard(
-                            label: "CORRECT",
-                            text: question.choices[question.correctIndex],
-                            tint: Theme.success,
-                            symbol: "checkmark.circle.fill"
-                        )
-
-                        WhySourceCard(explanation: question.explanation, source: question.source)
-
-                        if !correct {
+                    // The counter, timer, progress bar and CTA stay pinned; only the
+                    // question body scrolls, so a long prompt or four long choices no
+                    // longer clip and Submit is always reachable.
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: Spacing.base) {
                             HStack {
-                                Text("We'll surface this one again tomorrow.")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                Spacer()
-                                Button("Undo") { quizSessionViewModel.undo(study: studyViewModel) }
+                                Text(question.setTitle.uppercased())
                                     .font(.caption)
                                     .fontWeight(.semibold)
+                                    .tracking(1)
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                if question.source != nil {
+                                    Button {
+                                        withAnimation { quizSessionViewModel.showsHint.toggle() }
+                                    } label: {
+                                        HStack(spacing: Spacing.xs) {
+                                            Image(systemName: "link")
+                                            Text("Why?")
+                                        }
+                                        .font(.caption)
+                                        .fontWeight(.semibold)
+                                    }
+                                }
+                            }
+
+                            if quizSessionViewModel.showsHint, let excerpt = question.source?.excerpt {
+                                Text(excerpt)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .padding(Spacing.md)
+                                    .appGlassCard(cornerRadius: AppRadius.md)
+                            }
+
+                            if case let .revealed(correct) = quizSessionViewModel.phase {
+                                if !correct, let selected = quizSessionViewModel.selectedChoice {
+                                    ResultCard(
+                                        label: "YOUR ANSWER",
+                                        text: question.choices[selected],
+                                        tint: Theme.danger,
+                                        symbol: "x.circle.fill"
+                                    )
+                                }
+
+                                ResultCard(
+                                    label: "CORRECT",
+                                    text: question.choices[question.correctIndex],
+                                    tint: Theme.success,
+                                    symbol: "checkmark.circle.fill"
+                                )
+
+                                WhySourceCard(explanation: question.explanation, source: question.source)
+
+                                if !correct {
+                                    HStack {
+                                        Text("We'll surface this one again tomorrow.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                        Spacer()
+                                        Button("Undo") { quizSessionViewModel.undo(study: studyViewModel) }
+                                            .font(.caption)
+                                            .fontWeight(.semibold)
+                                    }
+                                }
+                            } else {
+                                Text("QUESTION")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .tracking(1)
+                                    .foregroundStyle(.secondary)
+
+                                Text(question.prompt)
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(Spacing.base)
+                                    .appGlassCard(cornerRadius: AppRadius.lg)
+
+                                ForEach(question.choices.indices, id: \.self) { index in
+                                    QuizChoiceRow(
+                                        letter: letters[min(index, letters.count - 1)],
+                                        text: question.choices[index],
+                                        isSelected: quizSessionViewModel.selectedChoice == index
+                                    ) {
+                                        UISelectionFeedbackGenerator().selectionChanged()
+                                        quizSessionViewModel.selectedChoice = index
+                                    }
+                                }
                             }
                         }
-                    } else {
-                        Text("QUESTION")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .tracking(1)
-                            .foregroundStyle(.secondary)
-
-                        Text(question.prompt)
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(Spacing.base)
-                            .appGlassCard(cornerRadius: AppRadius.lg)
-
-                        ForEach(question.choices.indices, id: \.self) { index in
-                            QuizChoiceRow(
-                                letter: letters[min(index, letters.count - 1)],
-                                text: question.choices[index],
-                                isSelected: quizSessionViewModel.selectedChoice == index
-                            ) {
-                                UISelectionFeedbackGenerator().selectionChanged()
-                                quizSessionViewModel.selectedChoice = index
-                            }
-                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, Spacing.sm)
+                        .id(question.cardID)
                     }
-
-                    Spacer(minLength: 0)
+                    .scrollBounceBehavior(.basedOnSize)
 
                     if case .revealed = quizSessionViewModel.phase {
                         Button {

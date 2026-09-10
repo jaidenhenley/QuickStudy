@@ -16,7 +16,7 @@ struct ReinforcementRow: View {
                 Text(item.question)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .lineLimit(1)
+                    .lineLimit(2)
                 Text("Missed \(item.missed) · review tomorrow")
                     .font(.caption)
                     .foregroundStyle(.secondary)

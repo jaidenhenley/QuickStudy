@@ -30,7 +30,9 @@ struct APICardGenerationEngine: CardGenerating {
                 answer: $0.answer,
                 sourceExcerpt: $0.sourceExcerpt ?? "",
                 explanation: $0.explanation ?? "",
-                distractors: $0.distractors ?? []
+                distractors: DistractorRefiner.refine(
+                    $0.distractors ?? [], answer: $0.answer, source: text
+                )
             )
         }
     }
@@ -47,7 +49,9 @@ struct APICardGenerationEngine: CardGenerating {
                     answer: $0.answer,
                     sourceExcerpt: $0.sourceExcerpt ?? "",
                     explanation: $0.explanation ?? "",
-                    distractors: $0.distractors ?? []
+                    distractors: DistractorRefiner.refine(
+                        $0.distractors ?? [], answer: $0.answer, source: text
+                    )
                 )
             }
     }
