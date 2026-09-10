@@ -74,28 +74,6 @@ struct DocumentImportHelper {
 
     // MARK: OCR
 
-    private func ocrResult(images: [UIImage]) async -> (text: String, candidates: [[String]]) {
-        var fullTextLines: [String] = []
-        var allCandidates: [[String]] = []
-
-        for pageIndex in images.indices {
-            let image = images[pageIndex]
-            let pageCandidates = await ocrLines(for: image)
-            let pageLines = pageCandidates.map { $0.first ?? ""}
-            
-            
-            fullTextLines.append(contentsOf: pageLines)
-            allCandidates.append(contentsOf: pageCandidates)
-
-            if pageIndex < images.count - 1 {
-                fullTextLines.append("")
-                allCandidates.append([""])
-            }
-        }
-
-        return (fullTextLines.joined(separator: "\n"), allCandidates)
-    }
-
     func ocrLines(for image: UIImage) async -> [[String]] {
         // Simplified OCR: one normal pass, or a single handwriting-boosted pass.
         if isHandwritingMode {
