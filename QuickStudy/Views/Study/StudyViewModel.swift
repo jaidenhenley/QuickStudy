@@ -337,30 +337,43 @@ class StudyViewModel {
     
     // MARK: - Scan + generate
     @MainActor
-    func loadScannedText(
-        rawText: String,
-        candidateLines: [[String]]? = nil,
-        title: String = "Scanned Document"
-    ) async {
+    func load(_ extracted: ExtractedDocument, title: String) async {
         activeSetID = nil
         isTodaySession = false
-        lastRawText = rawText
+        lastRawText = extracted.joinedText
 
-        var workingText: String
-        if isSpellCheckEnabled {
-            workingText = spellCorrect(rawText)
-        } else {
-            workingText = rawText
-        }
-        if isHandwritingMode, let repaired = await contextCorrect(workingText, candidateLines: candidateLines) {
-            workingText = repaired
-        }
-        lastCorrectedText = workingText
+        var allLines: [String] = []
+        var pageBreaks: [Int] = []
 
-        let lines = normalizeOCRLines(workingText)
-        self.document = StudyDocument(title: title, lines: lines)
-        self.flashcards = []
-        await generateAICards(text: workingText)
+        for page in extracted.pages {
+            pageBreaks.append(allLines.count)
+            var working = isSpellCheckEnabled ? spellCorrect(page.text) : page.text
+            if isHandwritingMode,
+               let repaired = await contextCorrect(
+                   working,
+                   candidateLines: page.candidates.isEmpty ? nil : page.candidates
+               ) {
+                working = repaired
+            }
+            allLines.append(contentsOf: normalizeOCRLines(working))
+        }
+
+        lastCorrectedText = allLines.joined(separator: "\n")
+        document = StudyDocument(
+            title: title,
+            lines: allLines,
+            pageBreaks: extracted.pages.count > 1 ? pageBreaks : nil
+        )
+        flashcards = []
+        await generateAICards(text: lastCorrectedText)
+    }
+
+    @MainActor
+    func loadPastedText(_ text: String) async {
+        await load(
+            ExtractedDocument(pages: [.init(text: text, candidates: [])]),
+            title: "Pasted Notes"
+        )
     }
 
     @MainActor

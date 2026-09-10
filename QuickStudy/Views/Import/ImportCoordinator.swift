@@ -14,8 +14,15 @@ import VisionKit
 final class ImportCoordinator {
     enum ImportSource {
         case scan
+        case photo
         case pdf
         case paste
+    }
+
+    enum Stage: Equatable {
+        case idle
+        case reading(page: Int, of: Int)
+        case drafting
     }
 
     var navigateToCards = false
@@ -28,6 +35,9 @@ final class ImportCoordinator {
     var showPasteSheet = false
     var pendingSource: ImportSource? = nil
     var selectedPhotoItem: PhotosPickerItem? = nil
+    var showPhotoPicker = false
+    var showGenerating = false
+    var stage: Stage = .idle
 
     var isScannerSupported: Bool {
         #if targetEnvironment(simulator)
@@ -45,6 +55,8 @@ final class ImportCoordinator {
         switch source {
         case .scan:
             startScan()
+        case .photo:
+            showPhotoPicker = true
         case .pdf:
             showFileImporter = true
         case .paste:
@@ -67,21 +79,32 @@ final class ImportCoordinator {
             showErrorAlert = true
             return
         }
+        stage = .drafting
+        showGenerating = true
+        defer { stage = .idle; showGenerating = false }
+
         study.currentSourceType = .paste
-        await study.loadScannedText(rawText: trimmed, title: "Pasted Notes")
+        await study.loadPastedText(trimmed)
         navigateToCards = true
     }
 
     func processOCR(images: [UIImage], using helper: DocumentImportHelper, study: StudyViewModel) async {
+        stage = .reading(page: 0, of: images.count)
+        showGenerating = true
+        defer { stage = .idle; showGenerating = false }
+
         do {
-            let result = try await helper.extractText(from: images)
-            guard !result.text.isEmpty else {
+            let extracted = try await helper.extractText(from: images) { page, total in
+                Task { @MainActor in self.stage = .reading(page: page, of: total) }
+            }
+            guard !extracted.isEmpty else {
                 errorMessage = "No text found in the scanned image. Try scanning a different page."
                 showErrorAlert = true
                 return
             }
+            stage = .drafting
             study.currentSourceType = .scan
-            await study.loadScannedText(rawText: result.text, candidateLines: result.candidates)
+            await study.load(extracted, title: "Scanned Document")
             navigateToCards = true
         } catch {
             errorMessage = "Failed to process the scan. Please try again."
@@ -90,15 +113,22 @@ final class ImportCoordinator {
     }
 
     func processPDF(url: URL, using helper: DocumentImportHelper, study: StudyViewModel) async {
+        stage = .reading(page: 0, of: 1)
+        showGenerating = true
+        defer { stage = .idle; showGenerating = false }
+
         do {
-            let text = try await helper.extractText(from: url)
-            guard !text.isEmpty else {
+            let extracted = try await helper.extractText(from: url) { page, total in
+                Task { @MainActor in self.stage = .reading(page: page, of: total) }
+            }
+            guard !extracted.isEmpty else {
                 errorMessage = "No text found in the PDF. Try a different document."
                 showErrorAlert = true
                 return
             }
+            stage = .drafting
             study.currentSourceType = .pdf
-            await study.loadScannedText(rawText: text)
+            await study.load(extracted, title: url.deletingPathExtension().lastPathComponent)
             navigateToCards = true
         } catch {
             errorMessage = "Failed to import the PDF. Please check the file and try again."
@@ -116,14 +146,19 @@ final class ImportCoordinator {
                 showErrorAlert = true
                 return
             }
-            let result = try await helper.extractText(from: [image])
-            guard !result.text.isEmpty else {
+            stage = .reading(page: 0, of: 1)
+            showGenerating = true
+            defer { stage = .idle; showGenerating = false }
+
+            let extracted = try await helper.extractText(from: [image])
+            guard !extracted.isEmpty else {
                 errorMessage = "No text found in the photo. Try a different image."
                 showErrorAlert = true
                 return
             }
+            stage = .drafting
             study.currentSourceType = .photo
-            await study.loadScannedText(rawText: result.text, candidateLines: result.candidates)
+            await study.load(extracted, title: "Photo")
             navigateToCards = true
         } catch {
             errorMessage = "Failed to process the photo. Please try again."

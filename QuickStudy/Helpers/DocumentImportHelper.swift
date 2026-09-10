@@ -19,12 +19,29 @@ struct DocumentImportHelper {
 
     // MARK: Public API
 
-    func extractText(from images: [UIImage]) async throws -> (text: String, candidates: [[String]]) {
-        let result = await ocrResult(images: images)
-        return (result.text.trimmingCharacters(in: .whitespacesAndNewlines), result.candidates)
+    func extractText(
+        from images: [UIImage],
+        onPageComplete: @Sendable (Int, Int) -> Void = { _, _ in }
+    ) async throws -> ExtractedDocument {
+        var pages: [ExtractedDocument.Page] = []
+        for index in images.indices {
+            let candidates = await ocrLines(for: images[index])
+            let lines = candidates.map { $0.first ?? "" }
+            pages.append(
+                ExtractedDocument.Page(
+                    text: lines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines),
+                    candidates: candidates
+                )
+            )
+            onPageComplete(index + 1, images.count)
+        }
+        return ExtractedDocument(pages: pages)
     }
 
-    func extractText(from pdfURL: URL) async throws -> String {
+    func extractText(
+        from pdfURL: URL,
+        onPageComplete: @Sendable (Int, Int) -> Void = { _, _ in }
+    ) async throws -> ExtractedDocument {
         let accessGranted = pdfURL.startAccessingSecurityScopedResource()
         defer {
             if accessGranted {
@@ -32,20 +49,27 @@ struct DocumentImportHelper {
             }
         }
 
-        guard let document = PDFDocument(url: pdfURL) else { return "" }
+        guard let document = PDFDocument(url: pdfURL) else { return ExtractedDocument(pages: []) }
 
         if !isHandwritingMode {
-            let extracted = extractText(from: document)
-            let trimmed = extracted.trimmingCharacters(in: .whitespacesAndNewlines)
-            if trimmed.count >= 40 {
-                return trimmed
+            let embedded = ExtractedDocument(
+                pages: (0..<document.pageCount).map { index in
+                    ExtractedDocument.Page(
+                        text: document.page(at: index)?.string?
+                            .trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
+                        candidates: []
+                    )
+                }
+            )
+            if embedded.joinedText.count >= 40 {
+                onPageComplete(document.pageCount, document.pageCount)
+                return embedded
             }
         }
 
         let images = renderPDFPages(document, scale: isUltraHandwritingMode ? 3.0 : 2.5)
         let scaled = isUltraHandwritingMode ? scaleImages(images, maxDimension: 2200) : images
-        let result = try await extractText(from: scaled)
-        return result.text
+        return try await extractText(from: scaled, onPageComplete: onPageComplete)
     }
 
     // MARK: OCR

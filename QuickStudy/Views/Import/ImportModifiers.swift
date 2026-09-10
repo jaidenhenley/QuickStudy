@@ -5,6 +5,7 @@
 //  Created by Jaiden Henley on 5/1/26.
 //
 
+import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -53,6 +54,16 @@ struct ImportModifiers: ViewModifier {
             }
             .fileImporter(isPresented: $coordinator.showFileImporter, allowedContentTypes: [.pdf]) { result in
                 coordinator.handleFileImport(result, using: importHelper, study: studyViewModel)
+            }
+            .photosPicker(
+                isPresented: $coordinator.showPhotoPicker,
+                selection: $coordinator.selectedPhotoItem,
+                matching: .images
+            )
+            .fullScreenCover(isPresented: $coordinator.showGenerating) {
+                GeneratingView(stage: coordinator.stage) {
+                    coordinator.showGenerating = false
+                }
             }
             .onChange(of: coordinator.selectedPhotoItem) { _, _ in
                 Task { await coordinator.handleSelectedPhoto(using: importHelper, study: studyViewModel) }
