@@ -207,6 +207,7 @@ struct QuizQuestionView: View {
         } else {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             todayViewModel.recordStudySession()
+            viewModel.flushPendingChanges()
             isFinished = true
         }
     }

@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var appState = AppState()
     @State private var aiSettings = AISettings()
     @State private var todayViewModel = TodayViewModel()
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
     @State private var showOnboarding = false
@@ -48,6 +49,9 @@ struct ContentView: View {
         .environment(todayViewModel)
         .environment(viewModel)
         .environment(appState)
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active { viewModel.flushPendingChanges() }
+        }
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
         .overlay {

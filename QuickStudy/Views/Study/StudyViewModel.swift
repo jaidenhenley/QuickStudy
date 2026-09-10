@@ -44,6 +44,8 @@ class StudyViewModel {
    var isGeneratingQuiz: Bool = false
    var isTodaySession: Bool = false
 
+    @ObservationIgnored private var hasUnsavedChanges = false
+
     init() {
         loadSavedSets()
     }
@@ -70,6 +72,14 @@ class StudyViewModel {
             flashcards[workingIndex] = savedSets[setIndex].cards[cardIndex]
         }
 
+        hasUnsavedChanges = true
+    }
+
+    /// Structural edits (save, rename, delete) still write immediately — they are rare
+    /// and user-initiated. Only per-answer churn is deferred, since each write re-encodes
+    /// the entire library including every document's source text.
+    func flushPendingChanges() {
+        guard hasUnsavedChanges else { return }
         saveSavedSets()
     }
 
@@ -720,6 +730,7 @@ class StudyViewModel {
     }
 
     func saveSavedSets() {
+        hasUnsavedChanges = false
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
