@@ -22,7 +22,6 @@ struct CardGenerator {
             StudyCard(
                 question: aiCard.question,
                 answer: aiCard.answer,
-                approved: false,
                 source: CardSourceLocator.locate(excerpt: aiCard.sourceExcerpt, in: document),
                 explanation: aiCard.explanation.isEmpty ? nil : aiCard.explanation
             )
@@ -42,7 +41,6 @@ struct CardGenerator {
             StudyCard(
                 question: aiCard.question,
                 answer: aiCard.answer,
-                approved: false,
                 source: CardSourceLocator.locate(excerpt: aiCard.sourceExcerpt, in: document),
                 explanation: aiCard.explanation.isEmpty ? nil : aiCard.explanation
             )

@@ -13,7 +13,6 @@ enum DemoData {
     struct CardSpec {
         let question: String
         let answer: String
-        var approved: Bool = true
         var box: Int = 0
         var dueInDays: Int? = 0
         var missCount: Int = 0
@@ -128,10 +127,10 @@ enum DemoData {
                      box: 1, dueInDays: 3),
             CardSpec(question: "What is a fetch request?",
                      answer: "A query describing which objects to load.",
-                     approved: false, dueInDays: nil),
+                     dueInDays: nil),
             CardSpec(question: "What does a lightweight migration handle?",
                      answer: "Simple schema changes without custom code.",
-                     approved: false, dueInDays: nil)
+                     dueInDays: nil)
         ]
     )
 

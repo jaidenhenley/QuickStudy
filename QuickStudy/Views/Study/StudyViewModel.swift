@@ -52,7 +52,7 @@ class StudyViewModel {
 
     func loadTodaySession(asOf date: Date = Date(), calendar: Calendar = .current) {
         flashcards = savedSets
-            .flatMap(\.reviewableCards)
+            .flatMap(\.cards)
             .filter { $0.isDue(asOf: date, calendar: calendar) }
         isTodaySession = true
     }
@@ -90,7 +90,7 @@ class StudyViewModel {
     /// Falls back to the pool-based method if AI is unavailable or fails.
     @MainActor
     func generateAIQuizQuestions() async {
-        let approvedCards = flashcards.filter { $0.approved }
+        let approvedCards = flashcards
         guard !approvedCards.isEmpty else {
             aiQuizQuestions = []
             return
@@ -197,7 +197,7 @@ class StudyViewModel {
 
     // MARK: - Derived data (synchronous fallback)
     var quizQuestions: [QuizQuestion] {
-        let approvedCards = flashcards.filter { $0.approved }
+        let approvedCards = flashcards
         if approvedCards.isEmpty { return [] }
 
         var questions: [QuizQuestion] = []
@@ -337,11 +337,12 @@ class StudyViewModel {
     
     // MARK: - Scan + generate
     @MainActor
-    func load(_ extracted: ExtractedDocument, title: String) async {
-        activeSetID = nil
-        isTodaySession = false
-        lastRawText = extracted.joinedText
-
+    @MainActor
+    func makeDraft(
+        from extracted: ExtractedDocument,
+        title: String,
+        sourceType: StudySourceType
+    ) async -> DraftSet? {
         var allLines: [String] = []
         var pageBreaks: [Int] = []
 
@@ -358,22 +359,47 @@ class StudyViewModel {
             allLines.append(contentsOf: normalizeOCRLines(working))
         }
 
-        lastCorrectedText = allLines.joined(separator: "\n")
-        document = StudyDocument(
+        let document = StudyDocument(
             title: title,
             lines: allLines,
             pageBreaks: extracted.pages.count > 1 ? pageBreaks : nil
         )
-        flashcards = []
-        await generateAICards(text: lastCorrectedText)
+        let cards = await generateCards(for: document, countsAgainstAllowance: true)
+        guard !cards.isEmpty else { return nil }
+
+        return DraftSet(title: title, document: document, cards: cards, sourceType: sourceType)
     }
 
     @MainActor
-    func loadPastedText(_ text: String) async {
-        await load(
-            ExtractedDocument(pages: [.init(text: text, candidates: [])]),
-            title: "Pasted Notes"
+    func makePastedDraft(_ text: String) async -> DraftSet? {
+        await makeDraft(
+            from: ExtractedDocument(pages: [.init(text: text, candidates: [])]),
+            title: "Pasted Notes",
+            sourceType: .paste
         )
+    }
+
+    /// Regenerate re-rolls the same document, so it does not spend another generation.
+    @MainActor
+    func generateCards(for document: StudyDocument, countsAgainstAllowance: Bool) async -> [StudyCard] {
+        isGenerating = true
+        defer { isGenerating = false }
+        generationErrorMessage = nil
+
+        let text = document.lines.joined(separator: "\n")
+#if canImport(FoundationModels)
+        do {
+            let cards = try await CardGenerator.generateAI(from: text, document: document, settings: aiSettings)
+            if countsAgainstAllowance { GenerationAllowance.recordGeneration() }
+            return cards
+        } catch {
+            logger.error("AI generation failed: \(error.localizedDescription)")
+            return generateFallbackCards(from: text)
+        }
+#else
+        generationErrorMessage = "Apple Intelligence framework not available in this build."
+        return generateFallbackCards(from: text)
+#endif
     }
 
     @MainActor
@@ -436,10 +462,10 @@ class StudyViewModel {
 
     private func generateFallbackCards(from text: String) -> [StudyCard] {
         let rawLines = text.components(separatedBy: .newlines)
-        return generateCards(from: rawLines, approved: false, limit: 12)
+        return generateCards(from: rawLines, limit: 12)
     }
 
-    private func generateCards(from lines: [String], approved: Bool, limit: Int) -> [StudyCard] {
+    private func generateCards(from lines: [String], limit: Int) -> [StudyCard] {
         var cleanedLines: [String] = []
         cleanedLines.reserveCapacity(lines.count)
         for line in lines {
@@ -476,7 +502,7 @@ class StudyViewModel {
                 answer = line
             }
 
-            let card = StudyCard(question: question, answer: answer, approved: approved)
+            let card = StudyCard(question: question, answer: answer)
             cards.append(card)
         }
 
@@ -726,7 +752,6 @@ class StudyViewModel {
                 StudyCard(
                     question: card.question,
                     answer: card.answer,
-                    approved: card.approved,
                     missCount: card.missCount,
                     box: card.box,
                     dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },

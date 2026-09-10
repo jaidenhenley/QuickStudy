@@ -11,7 +11,6 @@ struct StudyCard: Identifiable, Codable, Equatable {
     let id: UUID
     var question: String
     var answer: String
-    var approved: Bool
     var missCount: Int
     var box: Int
     var dueDate: Date?
@@ -23,7 +22,6 @@ struct StudyCard: Identifiable, Codable, Equatable {
         id: UUID = UUID(),
         question: String,
         answer: String,
-        approved: Bool,
         missCount: Int = 0,
         box: Int = ReviewSchedule.newBox,
         dueDate: Date? = nil,
@@ -34,7 +32,6 @@ struct StudyCard: Identifiable, Codable, Equatable {
         self.id = id
         self.question = question
         self.answer = answer
-        self.approved = approved
         self.missCount = missCount
         self.box = box
         self.dueDate = dueDate
@@ -73,7 +70,6 @@ struct StudyCard: Identifiable, Codable, Equatable {
         case id
         case question
         case answer
-        case approved
         case missCount
         case box
         case dueDate
@@ -87,7 +83,6 @@ struct StudyCard: Identifiable, Codable, Equatable {
         id = try container.decode(UUID.self, forKey: .id)
         question = try container.decode(String.self, forKey: .question)
         answer = try container.decode(String.self, forKey: .answer)
-        approved = try container.decode(Bool.self, forKey: .approved)
         missCount = try container.decode(Int.self, forKey: .missCount)
         box = try container.decodeIfPresent(Int.self, forKey: .box) ?? ReviewSchedule.newBox
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
@@ -101,7 +96,6 @@ struct StudyCard: Identifiable, Codable, Equatable {
         try container.encode(id, forKey: .id)
         try container.encode(question, forKey: .question)
         try container.encode(answer, forKey: .answer)
-        try container.encode(approved, forKey: .approved)
         try container.encode(missCount, forKey: .missCount)
         try container.encode(box, forKey: .box)
         try container.encodeIfPresent(dueDate, forKey: .dueDate)

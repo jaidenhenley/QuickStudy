@@ -84,7 +84,7 @@ class TodayViewModel {
         calendar: Calendar = .current
     ) {
         let sets = studyViewModel.savedSets
-        hasReviewableCards = sets.contains { !$0.reviewableCards.isEmpty }
+        hasReviewableCards = sets.contains { !$0.cards.isEmpty }
         generationsRemaining = GenerationAllowance.remaining
         loadStreak()
         computeTodaySession(from: sets, now: now, calendar: calendar)
@@ -131,7 +131,7 @@ class TodayViewModel {
 
     private func computeTodaySession(from sets: [StudySet], now: Date, calendar: Calendar) {
         let due = sets
-            .flatMap(\.reviewableCards)
+            .flatMap(\.cards)
             .filter { $0.isDue(asOf: now, calendar: calendar) }
         todayCardCount = due.count
         estimatedMin = due.isEmpty ? 0 : max(1, Int(Double(due.count) * 0.5))
@@ -146,7 +146,7 @@ class TodayViewModel {
 
     private func computeWeakestCard(from sets: [StudySet]) {
         let missed = sets.flatMap { set in
-            set.reviewableCards
+            set.cards
                 .filter { $0.missCount > 0 }
                 .map { (card: $0, setID: set.id) }
         }

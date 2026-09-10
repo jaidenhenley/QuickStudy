@@ -44,23 +44,18 @@ struct StudySet: Identifiable, Codable, Equatable {
         self.isDemo = isDemo
     }
 
-    /// Drafts are not scheduled: an unapproved card creates no due work.
-    var reviewableCards: [StudyCard] {
-        cards.filter(\.approved)
-    }
-
     func dueCount(asOf date: Date = Date(), calendar: Calendar = .current) -> Int {
-        reviewableCards.filter { $0.isDue(asOf: date, calendar: calendar) }.count
+        cards.filter { $0.isDue(asOf: date, calendar: calendar) }.count
     }
 
     var progress: Double {
-        let scheduled = reviewableCards
+        let scheduled = cards
         guard !scheduled.isEmpty else { return 0 }
         return scheduled.reduce(0) { $0 + $1.progress } / Double(scheduled.count)
     }
 
     var masteryState: MasteryState {
-        let scheduled = reviewableCards
+        let scheduled = cards
         guard !scheduled.isEmpty else { return .empty }
         if scheduled.allSatisfy(\.isMastered) { return .mastered }
         if scheduled.contains(where: { $0.lastReviewedAt != nil }) { return .inProgress }
@@ -69,14 +64,14 @@ struct StudySet: Identifiable, Codable, Equatable {
 
     func nextDueDate(after date: Date = Date(), calendar: Calendar = .current) -> Date? {
         let today = calendar.startOfDay(for: date)
-        return reviewableCards
+        return cards
             .compactMap(\.dueDate)
             .filter { calendar.startOfDay(for: $0) > today }
             .min()
     }
 
     func cardsDue(on day: Date, calendar: Calendar = .current) -> Int {
-        reviewableCards.filter {
+        cards.filter {
             guard let due = $0.dueDate else { return false }
             return calendar.isDate(due, inSameDayAs: day)
         }.count

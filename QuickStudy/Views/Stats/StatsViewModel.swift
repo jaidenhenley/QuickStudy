@@ -39,7 +39,7 @@ final class StatsViewModel {
         streak = StreakStore.count
         setCount = sets.count
 
-        let scheduled = sets.flatMap(\.reviewableCards)
+        let scheduled = sets.flatMap(\.cards)
         scheduledCards = scheduled.count
         masteredCards = scheduled.filter(\.isMastered).count
         dueToday = scheduled.filter { $0.isDue(asOf: now, calendar: calendar) }.count
@@ -49,7 +49,7 @@ final class StatsViewModel {
 
         toughest = sets
             .flatMap { set in
-                set.reviewableCards
+                set.cards
                     .filter { $0.missCount > 0 }
                     .map { ToughCard(id: $0.id, question: $0.question, setTitle: set.title, missCount: $0.missCount) }
             }
@@ -58,7 +58,7 @@ final class StatsViewModel {
             .map { $0 }
 
         setProgress = sets
-            .filter { !$0.reviewableCards.isEmpty }
+            .filter { !$0.cards.isEmpty }
             .map { SetProgress(id: $0.id, title: $0.title, progress: $0.progress, mastery: $0.masteryState) }
             .sorted { $0.progress > $1.progress }
     }
