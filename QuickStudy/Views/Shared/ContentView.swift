@@ -13,6 +13,9 @@ struct ContentView: View {
     @State private var appState = AppState()
     @State private var aiSettings = AISettings()
     @State private var todayViewModel = TodayViewModel()
+    @State private var draftStore = DraftStore()
+    @State private var sessionStore = SessionStore()
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
     @State private var showOnboarding = false
@@ -46,8 +49,13 @@ struct ContentView: View {
             .tag(AppState.Tab.stats)
         }
         .environment(todayViewModel)
+        .environment(draftStore)
+        .environment(sessionStore)
         .environment(viewModel)
         .environment(appState)
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active { viewModel.flushPendingChanges() }
+        }
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
         .overlay {

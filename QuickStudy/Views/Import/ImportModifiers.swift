@@ -5,6 +5,7 @@
 //  Created by Jaiden Henley on 5/1/26.
 //
 
+import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -12,6 +13,7 @@ struct ImportModifiers: ViewModifier {
     @Bindable var coordinator: ImportCoordinator
     let studyViewModel: StudyViewModel
     let appState: AppState
+    let draftStore: DraftStore
     let importHelper: DocumentImportHelper
 
     func body(content: Content) -> some View {
@@ -26,11 +28,30 @@ struct ImportModifiers: ViewModifier {
             } message: {
                 Text(coordinator.errorMessage)
             }
-            .navigationDestination(isPresented: $coordinator.navigateToCards) {
-                CardsView()
-                    .environment(studyViewModel)
-                    .environment(appState)
+            .navigationDestination(isPresented: $coordinator.navigateToReview) {
+                if let draft = draftStore.pending {
+                    if draft.cards.contains(where: { $0.source?.lineRange != nil }) {
+                        ScanPreviewView(
+                            draft: draft,
+                            onContinue: { coordinator.previewConfirmed = true },
+                            onCancel: {
+                                draftStore.set(nil)
+                                coordinator.navigateToReview = false
+                            }
+                        )
+                        .navigationDestination(isPresented: $coordinator.previewConfirmed) {
+                            ReviewDraftsView(draft: draft)
+                                .environment(studyViewModel)
+                                .environment(draftStore)
+                        }
+                    } else {
+                        ReviewDraftsView(draft: draft)
+                            .environment(studyViewModel)
+                            .environment(draftStore)
+                    }
+                }
             }
+            .onAppear { coordinator.draftStore = draftStore }
             .sheet(
                 isPresented: $coordinator.showSourcePicker,
                 onDismiss: { coordinator.presentPendingSource() }
@@ -53,6 +74,16 @@ struct ImportModifiers: ViewModifier {
             }
             .fileImporter(isPresented: $coordinator.showFileImporter, allowedContentTypes: [.pdf]) { result in
                 coordinator.handleFileImport(result, using: importHelper, study: studyViewModel)
+            }
+            .photosPicker(
+                isPresented: $coordinator.showPhotoPicker,
+                selection: $coordinator.selectedPhotoItem,
+                matching: .images
+            )
+            .fullScreenCover(isPresented: $coordinator.showGenerating) {
+                GeneratingView(stage: coordinator.stage) {
+                    coordinator.showGenerating = false
+                }
             }
             .onChange(of: coordinator.selectedPhotoItem) { _, _ in
                 Task { await coordinator.handleSelectedPhoto(using: importHelper, study: studyViewModel) }

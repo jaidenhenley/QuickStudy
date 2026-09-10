@@ -12,18 +12,12 @@ enum PromptBuilder {
         """
         Create study flashcards from the source material below.
 
-        Return only JSON in this format:
-        {
-          "cards": [
-            { "question": "string", "answer": "string" }
-          ]
-        }
+        \(jsonShape)
 
         Rules:
-        - Only use information explicitly stated in the source material
-        - No outside knowledge
-        - Each question should test one concept
-        - Answers must be short and directly supported by the text
+        - Create one card for every distinct fact, definition, or step in the source.
+          Cover the whole passage rather than only its opening
+        \(sharedRules)
         - Skip unclear content
 
         Source:
@@ -35,86 +29,52 @@ enum PromptBuilder {
         """
         Create at most \(count) study flashcards about "\(topic)" from the source material below.
 
-        Return only JSON in this format:
-        {
-          "cards": [
-            { "question": "string", "answer": "string" }
-          ]
-        }
+        \(jsonShape)
 
         Rules:
         - Every card must be about "\(topic)"
-        - Only use information explicitly stated in the source material
-        - No outside knowledge
-        - Each question should test one concept
-        - Answers must be short and directly supported by the text
-        - If the source does not cover "\(topic)" in enough depth, return fewer cards rather than inventing facts
+        \(sharedRules)
+        - If the source does not cover "\(topic)" in enough depth, return fewer cards rather
+          than inventing facts
 
         Source:
         \(text)
         """
     }
 
-    static func distractorPrompt(
-        question: String,
-        correctAnswer: String,
-        otherAnswers: [String],
-        sourceText: String
-    ) -> String {
-        let contextBlock = otherAnswers.prefix(15).joined(separator: "\n- ")
-        let sourceExcerpt = String(sourceText.prefix(1500))
-
-        return """
-        Return only JSON in this format:
+    private static let jsonShape = """
+    Return only JSON in this format:
+    {
+      "cards": [
         {
-          "distractorAnswers": ["string", "string", "string"]
+          "question": "string",
+          "answer": "string",
+          "sourceExcerpt": "string",
+          "explanation": "string",
+          "distractors": ["string", "string", "string"]
         }
-
-        Source:
-        \(sourceExcerpt)
-
-        Other answers:
-        - \(contextBlock)
-
-        Question: \(question)
-        Correct answer: \(correctAnswer)
-
-        Rules:
-        - Exactly 3 wrong answers
-        - Plausible but incorrect
-        - Same style and approximate length as the correct answer
-        - Do not restate the correct answer
-        """
+      ]
     }
+    """
 
-    static func quizPrompt(
-        cards: [(question: String, answer: String)],
-        sourceText: String
-    ) -> String {
-        let sourceExcerpt = String(sourceText.prefix(2000))
-        let cardList = cards.enumerated().map {
-            "\($0.offset + 1). Q: \($0.element.question)\nA: \($0.element.answer)"
-        }.joined(separator: "\n")
-
-        return """
-        Return only JSON in this format:
-        {
-          "questions": [
-            { "wrongAnswers": ["string", "string", "string"] }
-          ]
-        }
-
-        Source:
-        \(sourceExcerpt)
-
-        Questions and answers:
-        \(cardList)
-
-        Rules:
-        - One output entry per input card
-        - Exactly 3 wrong answers per question
-        - Plausible and on-topic
-        - No filler like "None of the above"
-        """
-    }
+    /// Shared so the two prompts cannot drift apart. The topic prompt previously asked for
+    /// only question and answer, which left API-generated topic cards unable to build a
+    /// multiple-choice question.
+    private static let sharedRules = """
+    - Only use information explicitly stated in the source material
+    - No outside knowledge
+    - Each question should test one concept
+    - Answers must be short and directly supported by the text
+    - sourceExcerpt must be copied VERBATIM from the source — the exact sentence the
+      card is based on, so it can be located in the original document
+    - explanation is one or two sentences saying why the answer is correct, written
+      for a learner who just got it wrong
+    - distractors are exactly 3 wrong answers for this question, one of each kind: one that
+      swaps in a different term from the source that learners confuse with the right one,
+      one that states something the source supports but that does not answer this question,
+      and one that keeps the right shape while changing a single name, number, or step.
+      Each must use terminology from the source material and match the length and sentence
+      shape of the correct answer. Never restate the correct answer. No filler like
+      "None of the above"
+    """
 }

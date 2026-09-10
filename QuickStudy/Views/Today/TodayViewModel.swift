@@ -49,44 +49,34 @@ class TodayViewModel {
     var generationsRemaining: Int = GenerationAllowance.remaining
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
 
-    init() {
-        StreakStore.purgeSeededStreak()
-        loadStreak()
-    }
-
     // MARK: Streak
-
-    private func loadStreak() {
-        streakCount = StreakStore.count
-    }
-
-    func recordStudySession() {
-        let today = Calendar.current.startOfDay(for: Date())
-        if let lastDate = StreakStore.lastStudied {
-            let lastDay = Calendar.current.startOfDay(for: lastDate)
-            guard let diff = Calendar.current.dateComponents([.day], from: lastDay, to: today).day else { return }
-            if diff == 1 {
-                streakCount += 1
-            } else if diff > 1 {
-                streakCount = 1
-            }
-        } else {
-            streakCount = 1
-        }
-        StreakStore.record(count: streakCount, on: Date())
-    }
 
     // MARK: - Derived
 
     func updateFromStudy(
         _ studyViewModel: StudyViewModel,
+        sessions: SessionStore,
         now: Date = Date(),
         calendar: Calendar = .current
     ) {
         let sets = studyViewModel.savedSets
-        hasReviewableCards = sets.contains { !$0.reviewableCards.isEmpty }
+        hasReviewableCards = sets.contains { !$0.cards.isEmpty }
         generationsRemaining = GenerationAllowance.remaining
-        loadStreak()
+        let studied = sessions.studiedDays(calendar: calendar)
+        let frozen = StreakCalculator.applyingFreezes(
+            studiedDays: studied,
+            frozenDays: StreakStore.frozenDays,
+            now: now,
+            calendar: calendar
+        )
+        if frozen != StreakStore.frozenDays { StreakStore.setFrozenDays(frozen) }
+
+        streakCount = StreakCalculator.summary(
+            studiedDays: studied,
+            frozenDays: frozen,
+            now: now,
+            calendar: calendar
+        ).current
         computeTodaySession(from: sets, now: now, calendar: calendar)
         computeWeakestCard(from: sets)
         computeUpNext(from: sets, now: now, calendar: calendar)
@@ -131,7 +121,7 @@ class TodayViewModel {
 
     private func computeTodaySession(from sets: [StudySet], now: Date, calendar: Calendar) {
         let due = sets
-            .flatMap(\.reviewableCards)
+            .flatMap(\.cards)
             .filter { $0.isDue(asOf: now, calendar: calendar) }
         todayCardCount = due.count
         estimatedMin = due.isEmpty ? 0 : max(1, Int(Double(due.count) * 0.5))
@@ -146,7 +136,7 @@ class TodayViewModel {
 
     private func computeWeakestCard(from sets: [StudySet]) {
         let missed = sets.flatMap { set in
-            set.reviewableCards
+            set.cards
                 .filter { $0.missCount > 0 }
                 .map { (card: $0, setID: set.id) }
         }

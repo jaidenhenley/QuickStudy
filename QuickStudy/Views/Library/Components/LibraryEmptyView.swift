@@ -49,13 +49,13 @@ struct LibraryEmptyView: View {
                 .multilineTextAlignment(.center)
 
             HStack(spacing: 12) {
-                SourceOptionButton(title: "PDF", systemImage: "doc.text") {
+                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
                     coordinator.showFileImporter = true
                 }
-                SourceOptionButton(title: "Scan", systemImage: "camera", isProminent: true) {
+                SourceOptionButton(title: "Scan", subtitle: "Camera", systemImage: "camera") {
                     coordinator.startScan()
                 }
-                SourceOptionButton(title: "Paste", systemImage: "text.alignleft") {
+                SourceOptionButton(title: "Text", subtitle: "Paste", systemImage: "text.alignleft") {
                     coordinator.showPasteSheet = true
                 }
             }

@@ -11,30 +11,36 @@ struct StudyCard: Identifiable, Codable, Equatable {
     let id: UUID
     var question: String
     var answer: String
-    var approved: Bool
     var missCount: Int
     var box: Int
     var dueDate: Date?
     var lastReviewedAt: Date?
+    var source: CardSource?
+    var explanation: String?
+    var distractors: [String]
 
     init(
         id: UUID = UUID(),
         question: String,
         answer: String,
-        approved: Bool,
         missCount: Int = 0,
         box: Int = ReviewSchedule.newBox,
         dueDate: Date? = nil,
-        lastReviewedAt: Date? = nil
+        lastReviewedAt: Date? = nil,
+        source: CardSource? = nil,
+        explanation: String? = nil,
+        distractors: [String] = []
     ) {
         self.id = id
         self.question = question
         self.answer = answer
-        self.approved = approved
         self.missCount = missCount
         self.box = box
         self.dueDate = dueDate
         self.lastReviewedAt = lastReviewedAt
+        self.source = source
+        self.explanation = explanation
+        self.distractors = distractors
     }
 
     var isMastered: Bool {
@@ -67,11 +73,13 @@ struct StudyCard: Identifiable, Codable, Equatable {
         case id
         case question
         case answer
-        case approved
         case missCount
         case box
         case dueDate
         case lastReviewedAt
+        case source
+        case explanation
+        case distractors
     }
 
     init(from decoder: Decoder) throws {
@@ -79,11 +87,13 @@ struct StudyCard: Identifiable, Codable, Equatable {
         id = try container.decode(UUID.self, forKey: .id)
         question = try container.decode(String.self, forKey: .question)
         answer = try container.decode(String.self, forKey: .answer)
-        approved = try container.decode(Bool.self, forKey: .approved)
         missCount = try container.decode(Int.self, forKey: .missCount)
         box = try container.decodeIfPresent(Int.self, forKey: .box) ?? ReviewSchedule.newBox
         dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
         lastReviewedAt = try container.decodeIfPresent(Date.self, forKey: .lastReviewedAt)
+        source = try container.decodeIfPresent(CardSource.self, forKey: .source)
+        explanation = try container.decodeIfPresent(String.self, forKey: .explanation)
+        distractors = try container.decodeIfPresent([String].self, forKey: .distractors) ?? []
     }
 
     func encode(to encoder: Encoder) throws {
@@ -91,10 +101,12 @@ struct StudyCard: Identifiable, Codable, Equatable {
         try container.encode(id, forKey: .id)
         try container.encode(question, forKey: .question)
         try container.encode(answer, forKey: .answer)
-        try container.encode(approved, forKey: .approved)
         try container.encode(missCount, forKey: .missCount)
         try container.encode(box, forKey: .box)
         try container.encodeIfPresent(dueDate, forKey: .dueDate)
         try container.encodeIfPresent(lastReviewedAt, forKey: .lastReviewedAt)
+        try container.encodeIfPresent(source, forKey: .source)
+        try container.encodeIfPresent(explanation, forKey: .explanation)
+        try container.encode(distractors, forKey: .distractors)
     }
 }

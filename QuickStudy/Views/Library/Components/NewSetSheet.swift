@@ -12,25 +12,59 @@ struct NewSetSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("New Set")
-                .font(.title2)
-                .fontWeight(.bold)
+        VStack(alignment: .leading, spacing: Spacing.base) {
+            HStack {
+                Text("New set")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+                Button("Cancel") { dismiss() }
+            }
 
-            Text("Snap a page, drop in a PDF, or paste your notes — we'll draft flashcards in seconds.")
+            Text("Capture a page — cards draft automatically.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
-            HStack(spacing: 12) {
-                SourceOptionButton(title: "PDF", systemImage: "doc.text") {
+            Button {
+                coordinator.pendingSource = .scan
+                dismiss()
+            } label: {
+                HStack(spacing: Spacing.md) {
+                    Image(systemName: "camera")
+                        .font(.title3)
+                        .frame(width: 44, height: 44)
+                        .background(Color.white.opacity(0.2))
+                        .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Scan with camera")
+                            .font(.headline)
+                        Text("Fastest · recommended")
+                            .font(.caption)
+                            .opacity(0.8)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.footnote)
+                }
+                .foregroundStyle(.white)
+                .padding(Spacing.base)
+                .appGlassCard(cornerRadius: AppRadius.lg, tint: Color.appPrimary)
+            }
+            .buttonStyle(.plain)
+
+            HStack(spacing: Spacing.md) {
+                SourceOptionButton(title: "Photo", subtitle: "Library", systemImage: "photo") {
+                    coordinator.pendingSource = .photo
+                    dismiss()
+                }
+                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
                     coordinator.pendingSource = .pdf
                     dismiss()
                 }
-                SourceOptionButton(title: "Scan", systemImage: "camera", isProminent: true) {
-                    coordinator.pendingSource = .scan
-                    dismiss()
-                }
-                SourceOptionButton(title: "Paste", systemImage: "text.alignleft") {
+                SourceOptionButton(title: "Text", subtitle: "Paste", systemImage: "text.alignleft") {
                     coordinator.pendingSource = .paste
                     dismiss()
                 }
@@ -38,8 +72,8 @@ struct NewSetSheet: View {
 
             Spacer(minLength: 0)
         }
-        .padding(20)
-        .presentationDetents([.height(240)])
+        .padding(Spacing.lg)
+        .presentationDetents([.height(320)])
         .presentationDragIndicator(.visible)
     }
 }

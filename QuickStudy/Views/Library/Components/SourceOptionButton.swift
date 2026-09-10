@@ -9,27 +9,31 @@ import SwiftUI
 
 struct SourceOptionButton: View {
     let title: String
+    var subtitle: String? = nil
     let systemImage: String
-    var isProminent: Bool = false
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 10) {
+            VStack(spacing: Spacing.sm) {
                 Image(systemName: systemImage)
-                    .font(.title2)
-                    .foregroundStyle(isProminent ? Color.white : Color.appPrimary)
+                    .font(.title3)
+                    .foregroundStyle(Color.appPrimary)
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(isProminent ? Color.white : Theme.textPrimary)
-                    .minimumScaleFactor(0.8)
+                    .foregroundStyle(Theme.textPrimary)
+                if let subtitle {
+                    Text(subtitle)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 22)
-            .appGlassCard(cornerRadius: AppRadius.lg, tint: isProminent ? Color.appPrimary : nil)
+            .padding(.vertical, Spacing.base)
+            .appGlassCard(cornerRadius: AppRadius.lg)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(title)
+        .accessibilityLabel(subtitle.map { "\(title), \($0)" } ?? title)
     }
 }
