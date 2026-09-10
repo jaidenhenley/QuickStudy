@@ -337,7 +337,6 @@ class StudyViewModel {
     
     // MARK: - Scan + generate
     @MainActor
-    @MainActor
     func makeDraft(
         from extracted: ExtractedDocument,
         title: String,

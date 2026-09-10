@@ -87,7 +87,8 @@ struct TodayEmptyView: View {
             }
         }
         .navigationDestination(isPresented: $navigateToPractice) {
-            FlashcardPracticeView(cards: studyViewModel.savedSets.flatMap(\.cards))
+            QuizView(mode: .todaySession)
+                .environment(studyViewModel)
         }
     }
 }

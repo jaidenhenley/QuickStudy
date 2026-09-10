@@ -10,6 +10,7 @@ import SwiftUI
 struct LibraryView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(AppState.self) private var appState
+    @Environment(DraftStore.self) private var draftStore
 
     @State private var coordinator = ImportCoordinator()
     @State private var libraryViewModel = LibraryViewModel()
@@ -119,6 +120,7 @@ struct LibraryView: View {
                 coordinator: coordinator,
                 studyViewModel: studyViewModel,
                 appState: appState,
+                draftStore: draftStore,
                 importHelper: DocumentImportHelper(
                     isHandwritingMode: studyViewModel.isHandwritingMode,
                     isUltraHandwritingMode: studyViewModel.isUltraHandwritingMode

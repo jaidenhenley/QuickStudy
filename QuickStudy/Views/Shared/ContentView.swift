@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var appState = AppState()
     @State private var aiSettings = AISettings()
     @State private var todayViewModel = TodayViewModel()
+    @State private var draftStore = DraftStore()
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("didShowOnboarding") private var didShowOnboarding = false
     
@@ -47,6 +48,7 @@ struct ContentView: View {
             .tag(AppState.Tab.stats)
         }
         .environment(todayViewModel)
+        .environment(draftStore)
         .environment(viewModel)
         .environment(appState)
         .onChange(of: scenePhase) { _, phase in

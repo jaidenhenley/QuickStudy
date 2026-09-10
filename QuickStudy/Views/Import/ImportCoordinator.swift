@@ -25,7 +25,8 @@ final class ImportCoordinator {
         case drafting
     }
 
-    var navigateToCards = false
+    var navigateToReview = false
+    var draftStore: DraftStore?
     var showErrorAlert = false
     var errorMessage = ""
     var showScanCapture = false
@@ -83,9 +84,13 @@ final class ImportCoordinator {
         showGenerating = true
         defer { stage = .idle; showGenerating = false }
 
-        study.currentSourceType = .paste
-        await study.loadPastedText(trimmed)
-        navigateToCards = true
+        guard let draft = await study.makePastedDraft(trimmed) else {
+            errorMessage = "Couldn't draft any cards from those notes. Try a longer passage."
+            showErrorAlert = true
+            return
+        }
+        draftStore?.set(draft)
+        navigateToReview = true
     }
 
     func processOCR(images: [UIImage], using helper: DocumentImportHelper, study: StudyViewModel) async {
@@ -103,9 +108,13 @@ final class ImportCoordinator {
                 return
             }
             stage = .drafting
-            study.currentSourceType = .scan
-            await study.load(extracted, title: "Scanned Document")
-            navigateToCards = true
+            guard let draft = await study.makeDraft(from: extracted, title: "Scanned Document", sourceType: .scan) else {
+                errorMessage = "Couldn't draft any cards from this. Try a different source."
+                showErrorAlert = true
+                return
+            }
+            draftStore?.set(draft)
+            navigateToReview = true
         } catch {
             errorMessage = "Failed to process the scan. Please try again."
             showErrorAlert = true
@@ -127,9 +136,13 @@ final class ImportCoordinator {
                 return
             }
             stage = .drafting
-            study.currentSourceType = .pdf
-            await study.load(extracted, title: url.deletingPathExtension().lastPathComponent)
-            navigateToCards = true
+            guard let draft = await study.makeDraft(from: extracted, title: url.deletingPathExtension().lastPathComponent, sourceType: .pdf) else {
+                errorMessage = "Couldn't draft any cards from this. Try a different source."
+                showErrorAlert = true
+                return
+            }
+            draftStore?.set(draft)
+            navigateToReview = true
         } catch {
             errorMessage = "Failed to import the PDF. Please check the file and try again."
             showErrorAlert = true
@@ -157,9 +170,13 @@ final class ImportCoordinator {
                 return
             }
             stage = .drafting
-            study.currentSourceType = .photo
-            await study.load(extracted, title: "Photo")
-            navigateToCards = true
+            guard let draft = await study.makeDraft(from: extracted, title: "Photo", sourceType: .photo) else {
+                errorMessage = "Couldn't draft any cards from this. Try a different source."
+                showErrorAlert = true
+                return
+            }
+            draftStore?.set(draft)
+            navigateToReview = true
         } catch {
             errorMessage = "Failed to process the photo. Please try again."
             showErrorAlert = true

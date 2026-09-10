@@ -13,6 +13,7 @@ struct ImportModifiers: ViewModifier {
     @Bindable var coordinator: ImportCoordinator
     let studyViewModel: StudyViewModel
     let appState: AppState
+    let draftStore: DraftStore
     let importHelper: DocumentImportHelper
 
     func body(content: Content) -> some View {
@@ -27,11 +28,14 @@ struct ImportModifiers: ViewModifier {
             } message: {
                 Text(coordinator.errorMessage)
             }
-            .navigationDestination(isPresented: $coordinator.navigateToCards) {
-                CardsView()
-                    .environment(studyViewModel)
-                    .environment(appState)
+            .navigationDestination(isPresented: $coordinator.navigateToReview) {
+                if let draft = draftStore.pending {
+                    ReviewDraftsView(draft: draft)
+                        .environment(studyViewModel)
+                        .environment(draftStore)
+                }
             }
+            .onAppear { coordinator.draftStore = draftStore }
             .sheet(
                 isPresented: $coordinator.showSourcePicker,
                 onDismiss: { coordinator.presentPendingSource() }
