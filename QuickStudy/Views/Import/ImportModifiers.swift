@@ -30,9 +30,25 @@ struct ImportModifiers: ViewModifier {
             }
             .navigationDestination(isPresented: $coordinator.navigateToReview) {
                 if let draft = draftStore.pending {
-                    ReviewDraftsView(draft: draft)
-                        .environment(studyViewModel)
-                        .environment(draftStore)
+                    if draft.cards.contains(where: { $0.source?.lineRange != nil }) {
+                        ScanPreviewView(
+                            draft: draft,
+                            onContinue: { coordinator.previewConfirmed = true },
+                            onCancel: {
+                                draftStore.set(nil)
+                                coordinator.navigateToReview = false
+                            }
+                        )
+                        .navigationDestination(isPresented: $coordinator.previewConfirmed) {
+                            ReviewDraftsView(draft: draft)
+                                .environment(studyViewModel)
+                                .environment(draftStore)
+                        }
+                    } else {
+                        ReviewDraftsView(draft: draft)
+                            .environment(studyViewModel)
+                            .environment(draftStore)
+                    }
                 }
             }
             .onAppear { coordinator.draftStore = draftStore }

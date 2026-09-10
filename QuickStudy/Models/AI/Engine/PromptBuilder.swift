@@ -26,6 +26,8 @@ enum PromptBuilder {
         }
 
         Rules:
+        - Create one card for every distinct fact, definition, or step in the source.
+          Cover the whole passage rather than only its opening
         - Only use information explicitly stated in the source material
         - No outside knowledge
         - Each question should test one concept

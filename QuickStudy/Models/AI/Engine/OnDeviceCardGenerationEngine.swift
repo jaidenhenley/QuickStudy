@@ -17,16 +17,22 @@ import FoundationModels
 struct OnDeviceCardGenerationEngine: CardGenerating {
     
     func generateCards(from text: String) async throws -> [AIFlashcard] {
-        let chunks = chunkText(text, maxLength: 2500)
+        let chunks = chunkText(text, maxLength: 1200)
         var allCards: [AIFlashcard] = []
-        
+
         for chunk in chunks {
             let session = LanguageModelSession()
+            let target = max(4, chunk.count / 180)
             let prompt = """
             You are an expert educator creating high-quality study flashcards.
 
             SOURCE MATERIAL:
             \(chunk)
+
+            COVERAGE:
+            - Create roughly \(target) cards from this passage
+            - Every distinct fact, definition, or step in the source deserves its own card
+            - Do not stop early: work through the passage from beginning to end
 
             QUESTION RULES:
             - Each question must test exactly one fact, not multiple facts at once
@@ -99,24 +105,25 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
             ) }
     }
 
+    /// Accumulates whole lines up to the limit. The previous version split on blank
+    /// lines, which normalisation strips — so it never chunked at all.
     func chunkText(_ text: String, maxLength: Int) -> [String] {
         var chunks: [String] = []
         var current = ""
-        
-        for paragraph in text.components(separatedBy: "\n\n") {
-            if current.count + paragraph.count > maxLength {
-                if !current.isEmpty {
-                    chunks.append(current.trimmingCharacters(in: .whitespacesAndNewlines))
-                }
-                current = paragraph
+
+        for line in text.components(separatedBy: .newlines) {
+            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { continue }
+
+            if !current.isEmpty, current.count + trimmed.count + 1 > maxLength {
+                chunks.append(current)
+                current = trimmed
             } else {
-                current += (current.isEmpty ? "" : "\n\n") + paragraph
+                current += current.isEmpty ? trimmed : "\n" + trimmed
             }
         }
-        
-        if !current.isEmpty {
-            chunks.append(current.trimmingCharacters(in: .whitespacesAndNewlines))
-        }
+
+        if !current.isEmpty { chunks.append(current) }
         return chunks
     }
     
@@ -185,6 +192,7 @@ private struct AIFlashcardModel: Codable {
 
 @Generable
 private struct AIFLashcardSetModel: Codable {
+    @Guide(description: "One flashcard for every distinct fact, definition, or step in the source material. Cover the whole passage rather than only its opening.")
     let cards: [AIFlashcardModel]
 }
 

@@ -113,7 +113,7 @@ enum DemoData {
         ]
     )
 
-    // MARK: - Core Data — the "Thursday" row, plus unapproved drafts
+    // MARK: - Core Data — the "Thursday" row
 
     private static let coreDataSet = SetSpec(
         title: "Core Data",

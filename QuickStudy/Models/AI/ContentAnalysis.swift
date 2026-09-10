@@ -12,16 +12,13 @@ struct ContentAnalysis {
     let wordCount: Int
     let estimatedCards: Int
     let language: String?
-    /// The only field needing the model, so it arrives after the others have rendered.
-    var contentType: String?
 
     static func immediate(for text: String) -> ContentAnalysis {
         let words = text.split { $0.isWhitespace || $0.isNewline }.count
         return ContentAnalysis(
             wordCount: words,
             estimatedCards: max(1, words / 30),
-            language: detectLanguage(text),
-            contentType: nil
+            language: detectLanguage(text)
         )
     }
 

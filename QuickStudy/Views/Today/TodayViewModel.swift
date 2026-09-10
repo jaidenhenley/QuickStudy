@@ -62,9 +62,18 @@ class TodayViewModel {
         let sets = studyViewModel.savedSets
         hasReviewableCards = sets.contains { !$0.cards.isEmpty }
         generationsRemaining = GenerationAllowance.remaining
-        streakCount = StreakCalculator.summary(
-            studiedDays: sessions.studiedDays(calendar: calendar),
+        let studied = sessions.studiedDays(calendar: calendar)
+        let frozen = StreakCalculator.applyingFreezes(
+            studiedDays: studied,
             frozenDays: StreakStore.frozenDays,
+            now: now,
+            calendar: calendar
+        )
+        if frozen != StreakStore.frozenDays { StreakStore.setFrozenDays(frozen) }
+
+        streakCount = StreakCalculator.summary(
+            studiedDays: studied,
+            frozenDays: frozen,
             now: now,
             calendar: calendar
         ).current

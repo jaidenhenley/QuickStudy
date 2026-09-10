@@ -26,6 +26,7 @@ final class ImportCoordinator {
     }
 
     var navigateToReview = false
+    var previewConfirmed = false
     var draftStore: DraftStore?
     var showErrorAlert = false
     var errorMessage = ""
@@ -90,6 +91,7 @@ final class ImportCoordinator {
             return
         }
         draftStore?.set(draft)
+        previewConfirmed = false
         navigateToReview = true
     }
 
@@ -114,6 +116,7 @@ final class ImportCoordinator {
                 return
             }
             draftStore?.set(draft)
+            previewConfirmed = false
             navigateToReview = true
         } catch {
             errorMessage = "Failed to process the scan. Please try again."
@@ -142,6 +145,7 @@ final class ImportCoordinator {
                 return
             }
             draftStore?.set(draft)
+            previewConfirmed = false
             navigateToReview = true
         } catch {
             errorMessage = "Failed to import the PDF. Please check the file and try again."
@@ -176,6 +180,7 @@ final class ImportCoordinator {
                 return
             }
             draftStore?.set(draft)
+            previewConfirmed = false
             navigateToReview = true
         } catch {
             errorMessage = "Failed to process the photo. Please try again."

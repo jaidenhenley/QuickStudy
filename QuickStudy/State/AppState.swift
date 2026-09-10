@@ -25,15 +25,4 @@ class AppState {
 
     var selectedTab: Tab = .today
 
-    // MARK: - Scroll Coordination
-    var scrollToFlashcards: Bool = false
-
-    // MARK: - Quiz Entry
-    var isQuickQuizEntry: Bool = false
-
-    func resetNavigation() {
-        selectedTab = .today
-        isQuickQuizEntry = false
-        scrollToFlashcards = false
-    }
 }

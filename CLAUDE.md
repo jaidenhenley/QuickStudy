@@ -68,13 +68,37 @@ Screens supplied as annotated renders (capture → generation → review → qui
 4. **Notifications** are required for generation-complete and the daily reminder — needs `UNUserNotificationCenter`, a permission prompt, and the matching entitlement and privacy-manifest entries.
 
 Known state as of this branch:
-- Review scheduling exists: `ReviewSchedule` (Leitner boxes) drives `StudyCard.box`/`dueDate`, and `StudySet` derives `dueCount`, `progress`, and `masteryState` from it. Quiz answers write back through `StudyViewModel.recordAnswer(for:correct:)`.
-- Create flow is live in Library: `ImportCoordinator` + `ImportModifiers` back a floating create button and a Scan / PDF / Paste sheet.
-- Library is built: searchable tile grid, All / Due / In progress / Mastered chips, rename and delete via tile context menu. `SavedSetsView` has been deleted, its logic salvaged into `LibraryViewModel`.
-- `ReviewView` is orphaned — it predates the current import pipeline, which generates cards inside `loadScannedText` and goes straight to `CardsView`. Wire or delete.
-- Every generation path creates cards with `approved: false`, so a new set has no reviewable cards until the user approves them in `CardsView`.
-- `FlashcardPracticeView` has no grading affordance, so practice cannot move a card's box. The quiz is the only path that does.
-- The iPad branch in `ContentView` is an empty `else { }`. `AppState.Tab` has no `stats` case, though the design's tab bar shows one.
+- **Cards have no approval step.** Generation produces a `DraftSet` held in `DraftStore` (persisted, survives a crash); `ReviewDraftsView` edits it — tap to edit, swipe to remove — and Save commits a `StudySet`. Every saved card is live, so `dueCount`/`progress`/`masteryState` operate on `cards` directly.
+- Cards carry a `CardSource` (document, page, paragraph, line range, excerpt), an `explanation`, and three AI-generated `distractors`. All are produced in one generation call and stored on the card, so the quiz builds instantly and offline.
+- `CardGenerating` has exactly two methods, both `generateCards`. Wrong answers are no longer made at quiz time.
+- Sessions are real: `QuizSessionViewModel` drives `QuizSessionView`, records a `StudySession` into `SessionStore`, and `SessionCompleteView` reports from it.
+- **Streaks derive from session history** via `StreakCalculator`. `StreakStore` only persists the days a freeze was spent. There is no streak counter.
+- Import runs page by page (`ExtractedDocument`), so `StudyDocument.pageBreaks` survives spell-check, OCR repair and normalisation.
+- Persistence is batched: answers set a dirty flag and flush on session end or backgrounding, never per answer.
+
+Deliberately not built:
+- **Notifications** — no `UNUserNotificationCenter`, no entitlement. Anything in the designs promising one is superseded.
+- **Theme clustering / Drafts · Auto-organized** — deferred to iOS 27; do not add a `theme` property speculatively.
+- **Typed answers** — MC only for now. `AnswerGrading`/`AnswerGrader` were built and removed; re-add with the feature.
+- **Custom camera** — the system `VNDocumentCameraViewController` already does edge detection, multi-page and auto-capture.
+
+### File layout
+
+```
+Models/AI/{Engine/}   generation engines, prompts, CardGenerator, allowance
+Models/Draft/         DraftSet, DraftStore
+Models/Import/        ExtractedDocument
+Models/Quiz/          QuizQuestion
+Models/Scheduling/    ReviewSchedule
+Models/Session/       StudySession, SessionStore, StreakCalculator, StreakStore
+Models/Study/         StudyCard, StudySet, StudyDocument, CardSource, CardSourceLocator
+State/                AppState, StudyViewModel
+Views/DesignSystem/   Theme, DesignTokens, AppBackgroundView
+Views/<Screen>/       the screen and its view model
+Views/<Screen>/Components/   every subview, one struct per file
+```
+
+A view struct never shares a file with another view struct. If a screen needs a subview, it goes in that screen's `Components/`.
 
 ## Standards — Non-Negotiable
 

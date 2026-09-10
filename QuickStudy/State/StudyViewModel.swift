@@ -139,8 +139,6 @@ class StudyViewModel {
         return directory.appendingPathComponent("SavedSets.json")
     }
 
-    var currentDocument: StudyDocument? { document }
-
     private let spellCheckIgnoreList: Set<String> = [
         "swift",
         "swiftui",
@@ -253,33 +251,6 @@ class StudyViewModel {
         }
     }
 
-    @MainActor
-    func generateAICards(text: String) async {
-        self.isGenerating = true
-        defer { self.isGenerating = false }
-        generationErrorMessage = nil
-
-#if canImport(FoundationModels)
-        do {
-            let cards = try await CardGenerator.generateAI(
-                from: text,
-                document: document ?? StudyDocument(title: "", lines: []),
-                settings: aiSettings
-            )
-            GenerationAllowance.recordGeneration()
-            self.flashcards = cards
-            saveCurrentSet()
-        } catch {
-            logger.error("AI generation failed: \(error.localizedDescription)")
-            let fallback = generateFallbackCards(from: text)
-            self.flashcards = fallback
-            saveCurrentSet()
-        }
-#else
-        generationErrorMessage = "Apple Intelligence framework not available in this build."
-#endif
-    }
-
     private func generateFallbackCards(from text: String) -> [StudyCard] {
         let rawLines = text.components(separatedBy: .newlines)
         return generateCards(from: rawLines, limit: 12)
@@ -329,15 +300,6 @@ class StudyViewModel {
         return cards
     }
 
-    @MainActor
-    func generateCards() {
-        guard let doc = document else { return }
-        guard flashcards.isEmpty else { return }
-
-        Task { @MainActor in
-            await generateAICards(text: doc.lines.joined(separator: "\n"))
-        }
-    }
     // MARK: - Quiz helpers
     private func normalizedAnswer(_ answer: String) -> String {
         let trimmed = answer.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -588,42 +550,6 @@ class StudyViewModel {
         } catch {
             logger.error("Failed to save sets: \(error.localizedDescription)")
         }
-    }
-
-    func saveCurrentSet() {
-        guard !isTodaySession else { return }
-        guard let document else { return }
-        let title = document.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            ? "Study Set"
-            : document.title
-        let cards = flashcards
-
-        if let activeSetID,
-           let index = savedSets.firstIndex(where: { $0.id == activeSetID }) {
-            let existing = savedSets[index]
-            savedSets[index] = StudySet(
-                id: existing.id,
-                title: existing.title,
-                createdAt: existing.createdAt,
-                updatedAt: Date(),
-                document: document,
-                cards: cards,
-                sourceType: existing.sourceType,
-                isDemo: existing.isDemo
-            )
-        } else {
-            let newSet = StudySet(
-                title: title,
-                document: document,
-                cards: cards,
-                sourceType: currentSourceType,
-                isDemo: false
-            )
-            savedSets.insert(newSet, at: 0)
-            activeSetID = newSet.id
-        }
-
-        saveSavedSets()
     }
 
     func loadSet(_ set: StudySet) {

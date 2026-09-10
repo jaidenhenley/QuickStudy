@@ -31,10 +31,14 @@ struct TodayView: View {
                         .foregroundStyle(.secondary)
                     Spacer()
                     if todayViewModel.streakCount > 0 {
-                        Text("🔥 \(todayViewModel.streakCount) day streak")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.orange)
+                        NavigationLink {
+                            StreakView()
+                        } label: {
+                            Text("🔥 \(todayViewModel.streakCount) day streak")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.orange)
+                        }
                     }
                 }
 
