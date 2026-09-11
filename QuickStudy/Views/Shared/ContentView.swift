@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var todayViewModel = TodayViewModel()
     @State private var draftStore = DraftStore()
     @State private var sessionStore = SessionStore()
+    @State private var networkMonitor = NetworkMonitor()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -53,6 +54,7 @@ struct ContentView: View {
         }
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
+        .environment(networkMonitor)
         .onAppear {
             viewModel.aiSettings = aiSettings
         }

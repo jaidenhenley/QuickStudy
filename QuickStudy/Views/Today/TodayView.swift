@@ -12,6 +12,8 @@ struct TodayView: View {
     @Environment(AppState.self) var appState
     @Environment(TodayViewModel.self) var todayViewModel
     @Environment(SessionStore.self) var sessionStore
+    @Environment(AISettings.self) var aiSettings
+    @Environment(NetworkMonitor.self) var networkMonitor
 
     @State private var showSettings = false
 
@@ -20,6 +22,10 @@ struct TodayView: View {
             VStack(alignment: .leading, spacing: Spacing.md) {
                 Text("Today")
                     .font(.system(size: 40, weight: .bold))
+
+                if !networkMonitor.isOnline && aiSettings.mode == .externalAPI {
+                    OfflineBanner { showSettings = true }
+                }
 
                 if todayViewModel.todayCardCount > 0 {
                     AICardsLeftView()

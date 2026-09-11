@@ -228,12 +228,6 @@ class StudyViewModel {
             let cards = try await CardGenerator.generateAI(from: text, document: document, settings: aiSettings)
             if countsAgainstAllowance { GenerationAllowance.recordGeneration() }
             return cards
-        } catch CardGenerationError.deviceNotEligible {
-            // Permanent for this hardware, and the only remaining silent fallback.
-            // Onboarding should route these users to an API key before they ever scan;
-            // until it does, poor cards beat an app that cannot import anything at all.
-            logger.error("On-device AI unavailable on this hardware, using heuristic cards")
-            return generateFallbackCards(from: text)
         } catch {
             logger.error("AI generation failed: \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
