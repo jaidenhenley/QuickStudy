@@ -11,10 +11,6 @@ struct SettingsView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AISettings.self) var aiSettings
     @Environment(AppState.self) var appState
-    @Environment(\.dismiss) private var dismiss
-    @AppStorage("didShowOnboarding") private var didShowOnboarding = false
-
-    @State private var showOnboarding = false
     @State private var showClearDataAlert = false
     @State private var apiKeyDraft = ""
     @State private var keychainErrorMessage: String?
@@ -105,12 +101,6 @@ struct SettingsView: View {
                     Text("Adds three example sets you can study right away. Turning this off removes them; turning it back on restores them.")
                 }
 
-                Section("Help") {
-                    Button("How to use QuickStudy") {
-                        showOnboarding = true
-                    }
-                }
-
                 Section {
                     Button("Delete All Study Sets", role: .destructive) {
                         showClearDataAlert = true
@@ -155,21 +145,6 @@ struct SettingsView: View {
                     }
                 }
             }
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            WelcomeScreen(
-                onStart: {
-                    showOnboarding = false
-                    // Dismiss the Settings sheet, then signal ContentView to start the tutorial
-                    Task {
-                        try? await Task.sleep(for: .seconds(0.5))
-                        dismiss()
-                    }
-                },
-                onSkip: {
-                    showOnboarding = false
-                }
-            )
         }
         .alert("Delete All Data", isPresented: $showClearDataAlert) {
             Button("Delete Everything", role: .destructive) {

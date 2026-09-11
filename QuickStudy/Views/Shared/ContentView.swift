@@ -16,12 +16,7 @@ struct ContentView: View {
     @State private var draftStore = DraftStore()
     @State private var sessionStore = SessionStore()
     @Environment(\.scenePhase) private var scenePhase
-    @AppStorage("didShowOnboarding") private var didShowOnboarding = false
-    
-    @State private var showOnboarding = false
-    @State private var showTutorialOverlay = false
-    @State private var currentTutorialStep: TutorialStep = .welcome
-    
+
     var body: some View {
         TabView(selection: $appState.selectedTab) {
             NavigationStack {
@@ -58,81 +53,8 @@ struct ContentView: View {
         }
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
-        .overlay {
-            if showTutorialOverlay {
-                TutorialOverlay(
-                    step: currentTutorialStep,
-                    onNext: advanceTutorial,
-                    onSkip: {
-                        showTutorialOverlay = false
-                        didShowOnboarding = true
-                    }
-                )
-                .id(currentTutorialStep)
-                .transition(.opacity)
-            }
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            WelcomeScreen(
-                onStart: {
-                    showOnboarding = false
-                    startTutorial()
-                },
-                onSkip: {
-                    showOnboarding = false
-                    didShowOnboarding = true
-                }
-            )
-        }
         .onAppear {
             viewModel.aiSettings = aiSettings
-            if !didShowOnboarding {
-                showOnboarding = true
-            }
-        }
-        
-    }
-    
-    private func startTutorial() {
-        viewModel.demoModeEnabled = true
-        currentTutorialStep = .viewDemoSets
-        Task {
-            // sleep only throws on cancellation, where showing the overlay is still correct
-            try? await Task.sleep(for: .seconds(0.5))
-            showTutorialOverlay = true
-        }
-    }
-    
-    private func advanceTutorial() {
-        withAnimation {
-            switch currentTutorialStep {
-            case .welcome:
-                currentTutorialStep = .viewDemoSets
-            case .viewDemoSets:
-                currentTutorialStep = .tapFirstSet
-            case .tapFirstSet:
-                currentTutorialStep = .viewFlashcards
-            case .viewFlashcards:
-                currentTutorialStep = .approveCard
-            case .approveCard:
-                currentTutorialStep = .openStudyMode
-            case .openStudyMode:
-                currentTutorialStep = .viewStudyList
-            case .viewStudyList:
-                currentTutorialStep = .startPractice
-            case .startPractice:
-                currentTutorialStep = .flipCard
-            case .flipCard:
-                currentTutorialStep = .goToQuiz
-            case .goToQuiz:
-                currentTutorialStep = .startQuiz
-            case .startQuiz:
-                currentTutorialStep = .complete
-            case .complete:
-                showTutorialOverlay = false
-                didShowOnboarding = true
-            }
         }
     }
 }
-
