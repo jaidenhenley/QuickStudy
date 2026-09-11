@@ -58,4 +58,40 @@ enum CardGenerationError: LocalizedError {
             return "Failed to save API key (Keychain error \(status))."
         }
     }
+
+    /// Shown to the user on the error screen so a support report names one cause.
+    var code: String {
+        switch self {
+        case .invalidEndpoint:
+            return "QS-400"
+        case .missingAPIKey:
+            return "QS-401"
+        case .contextWindowExceeded:
+            return "QS-413"
+        case .unsupportedLanguage:
+            return "QS-415"
+        case .decodingFailed:
+            return "QS-422"
+        case .guardrailViolation:
+            return "QS-451"
+        case .generationFailed:
+            return "QS-503"
+        case .invalidResponse:
+            return "QS-502"
+        case .networkError:
+            return "QS-504"
+        case .unsupportedProviderResponse:
+            return "QS-505"
+        case .deviceNotEligible:
+            return "QS-601"
+        case .appleIntelligenceNotEnabled:
+            return "QS-602"
+        case .modelNotReady:
+            return "QS-603"
+        case .badStatusCode(let status):
+            return "QS-H\(status)"
+        case .keychainError(let status):
+            return "QS-K\(status)"
+        }
+    }
 }

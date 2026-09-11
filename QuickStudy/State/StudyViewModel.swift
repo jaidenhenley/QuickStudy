@@ -35,6 +35,7 @@ class StudyViewModel {
    var isHandwritingMode: Bool = false
    var isUltraHandwritingMode: Bool = true
    var generationErrorMessage: String? = nil
+   var generationErrorCode: String? = nil
    var lastRawText: String = ""
    var lastCorrectedText: String = ""
    var savedSets: [StudySet] = []
@@ -213,21 +214,13 @@ class StudyViewModel {
         return DraftSet(title: title, document: document, cards: cards, sourceType: sourceType)
     }
 
-    @MainActor
-    func makePastedDraft(_ text: String) async -> DraftSet? {
-        await makeDraft(
-            from: ExtractedDocument(pages: [.init(text: text, candidates: [])]),
-            title: "Pasted Notes",
-            sourceType: .paste
-        )
-    }
-
     /// Regenerate re-rolls the same document, so it does not spend another generation.
     @MainActor
     func generateCards(for document: StudyDocument, countsAgainstAllowance: Bool) async -> [StudyCard] {
         isGenerating = true
         defer { isGenerating = false }
         generationErrorMessage = nil
+        generationErrorCode = nil
 
         let text = document.lines.joined(separator: "\n")
 #if canImport(FoundationModels)
@@ -244,10 +237,12 @@ class StudyViewModel {
         } catch {
             logger.error("AI generation failed: \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
+            generationErrorCode = (error as? CardGenerationError)?.code
             return []
         }
 #else
         generationErrorMessage = "Apple Intelligence framework not available in this build."
+        generationErrorCode = "QS-600"
         return generateFallbackCards(from: text)
 #endif
     }
@@ -265,6 +260,7 @@ class StudyViewModel {
         isGenerating = true
         defer { isGenerating = false }
         generationErrorMessage = nil
+        generationErrorCode = nil
 
         let sourceText = savedSets[index].document.lines.joined(separator: "\n")
 
@@ -278,6 +274,7 @@ class StudyViewModel {
             )
             guard !cards.isEmpty else {
                 generationErrorMessage = "Couldn't find enough about \(topic) in this set to make new cards."
+                generationErrorCode = "QS-506"
                 return
             }
             savedSets[index].cards.append(contentsOf: cards)
@@ -286,6 +283,7 @@ class StudyViewModel {
             saveSavedSets()
         } catch {
             generationErrorMessage = Self.message(for: error)
+            generationErrorCode = (error as? CardGenerationError)?.code
         }
     }
 

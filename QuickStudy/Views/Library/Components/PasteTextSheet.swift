@@ -14,7 +14,12 @@ struct PasteTextSheet: View {
     @Environment(TodayViewModel.self) private var todayViewModel
     @Environment(\.dismiss) private var dismiss
 
-    @State private var text = ""
+    @State private var text: String
+
+    init(initialText: String = "", onSubmit: @escaping (String) -> Void) {
+        self.onSubmit = onSubmit
+        _text = State(initialValue: initialText)
+    }
 
     var body: some View {
         NavigationStack {

@@ -23,11 +23,6 @@ struct ImportModifiers: ViewModifier {
             } message: {
                 Text("Document scanning isn't available in the simulator. Try on a real device.")
             }
-            .alert("Error", isPresented: $coordinator.showErrorAlert) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text(coordinator.errorMessage)
-            }
             .navigationDestination(isPresented: $coordinator.navigateToReview) {
                 if let draft = draftStore.pending {
                     if draft.cards.contains(where: { $0.source?.lineRange != nil }) {
@@ -58,8 +53,11 @@ struct ImportModifiers: ViewModifier {
             ) {
                 NewSetSheet(coordinator: coordinator)
             }
-            .sheet(isPresented: $coordinator.showPasteSheet) {
-                PasteTextSheet { text in
+            .sheet(
+                isPresented: $coordinator.showPasteSheet,
+                onDismiss: { coordinator.pasteSeedText = "" }
+            ) {
+                PasteTextSheet(initialText: coordinator.pasteSeedText) { text in
                     Task { await coordinator.processPastedText(text, study: studyViewModel) }
                 }
             }
@@ -80,10 +78,24 @@ struct ImportModifiers: ViewModifier {
                 selection: $coordinator.selectedPhotoItem,
                 matching: .images
             )
-            .fullScreenCover(isPresented: $coordinator.showGenerating) {
+            .fullScreenCover(
+                isPresented: $coordinator.showGenerating,
+                onDismiss: { coordinator.presentPendingFailure() }
+            ) {
                 GeneratingView(stage: coordinator.stage) {
                     coordinator.showGenerating = false
                 }
+            }
+            .fullScreenCover(
+                item: $coordinator.failure,
+                onDismiss: { coordinator.resumeAfterError(using: importHelper, study: studyViewModel) }
+            ) { failure in
+                ImportErrorView(
+                    failure: failure,
+                    onDismiss: { coordinator.dismissFailure() },
+                    onPasteText: { coordinator.requestPasteRecovery() },
+                    onTryAgain: { coordinator.requestRetry() }
+                )
             }
             .onChange(of: coordinator.selectedPhotoItem) { _, _ in
                 Task { await coordinator.handleSelectedPhoto(using: importHelper, study: studyViewModel) }

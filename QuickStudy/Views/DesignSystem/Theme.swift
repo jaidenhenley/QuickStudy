@@ -9,6 +9,7 @@ struct Theme {
     static let textPrimary = Color("AppTextPrimary")
     static let success = Color("AppSuccess")
     static let danger = Color("AppDanger")
+    static let warning = Color("AppWarning")
 }
 
 extension View {
