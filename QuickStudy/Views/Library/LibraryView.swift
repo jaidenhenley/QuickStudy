@@ -11,6 +11,7 @@ struct LibraryView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(AppState.self) private var appState
     @Environment(DraftStore.self) private var draftStore
+    @Environment(AISettings.self) private var aiSettings
 
     @State private var coordinator = ImportCoordinator()
     @State private var libraryViewModel = LibraryViewModel()
@@ -19,6 +20,7 @@ struct LibraryView: View {
     @State private var showRenameAlert = false
     @State private var deletingSet: StudySet? = nil
     @State private var showDeleteAlert = false
+    @State private var showTypeCards = false
 
     var body: some View {
         @Bindable var libraryViewModel = libraryViewModel
@@ -34,53 +36,62 @@ struct LibraryView: View {
                         isEnabled: !studyViewModel.savedSets.isEmpty
                     )
 
-                    if studyViewModel.savedSets.isEmpty {
+                    // The empty state's three source buttons all require generation, so
+                    // manual-only devices get the ADD CARDS section in its place.
+                    if studyViewModel.savedSets.isEmpty && !libraryViewModel.isManualOnly {
                         LibraryEmptyView(coordinator: coordinator)
                             .padding(.top, 32)
                     } else {
-                        LibraryFilterChips(selection: $libraryViewModel.filter)
+                        if !studyViewModel.savedSets.isEmpty {
+                            LibraryFilterChips(selection: $libraryViewModel.filter)
 
-                        let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
-                        if visible.isEmpty {
-                            Text("No sets match this filter.")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity)
-                                .padding(.top, 48)
-                        } else {
-                            GlassEffectContainer {
-                                LazyVGrid(
-                                    columns: [
-                                        GridItem(.flexible(), spacing: Spacing.md),
-                                        GridItem(.flexible(), spacing: Spacing.md)
-                                    ],
-                                    spacing: Spacing.md
-                                ) {
-                                    ForEach(visible) { set in
-                                        NavigationLink {
-                                            StudySetDetailView(set: set)
-                                        } label: {
-                                            SetTile(set: set)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .contextMenu {
-                                            Button {
-                                                renameText = set.title
-                                                renamingSet = set
-                                                showRenameAlert = true
+                            let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
+                            if visible.isEmpty {
+                                Text("No sets match this filter.")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.top, 48)
+                            } else {
+                                GlassEffectContainer {
+                                    LazyVGrid(
+                                        columns: [
+                                            GridItem(.flexible(), spacing: Spacing.md),
+                                            GridItem(.flexible(), spacing: Spacing.md)
+                                        ],
+                                        spacing: Spacing.md
+                                    ) {
+                                        ForEach(visible) { set in
+                                            NavigationLink {
+                                                StudySetDetailView(set: set)
                                             } label: {
-                                                Label("Rename", systemImage: "pencil")
+                                                SetTile(set: set)
                                             }
-                                            Button(role: .destructive) {
-                                                deletingSet = set
-                                                showDeleteAlert = true
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
+                                            .buttonStyle(.plain)
+                                            .contextMenu {
+                                                Button {
+                                                    renameText = set.title
+                                                    renamingSet = set
+                                                    showRenameAlert = true
+                                                } label: {
+                                                    Label("Rename", systemImage: "pencil")
+                                                }
+                                                Button(role: .destructive) {
+                                                    deletingSet = set
+                                                    showDeleteAlert = true
+                                                } label: {
+                                                    Label("Delete", systemImage: "trash")
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                        }
+
+                        if libraryViewModel.isManualOnly {
+                            AddCardsSection { showTypeCards = true }
+                                .padding(.top, studyViewModel.savedSets.isEmpty ? 32 : Spacing.lg)
                         }
                     }
                 }
@@ -89,13 +100,25 @@ struct LibraryView: View {
             }
 
             FloatingCreateButton {
-                coordinator.showSourcePicker = true
+                if libraryViewModel.isManualOnly {
+                    showTypeCards = true
+                } else {
+                    coordinator.showSourcePicker = true
+                }
             }
             .padding(.trailing, 16)
             .padding(.bottom, 16)
         }
         .navigationTitle("Library")
         .navigationBarTitleDisplayMode(.large)
+        .onAppear { libraryViewModel.refreshCapability(settings: aiSettings) }
+        .onChange(of: aiSettings.mode) { _, _ in
+            libraryViewModel.refreshCapability(settings: aiSettings)
+        }
+        .sheet(isPresented: $showTypeCards) {
+            TypeCardsView()
+                .environment(studyViewModel)
+        }
         .alert("Rename Set", isPresented: $showRenameAlert) {
             TextField("Title", text: $renameText)
             Button("Save") {

@@ -34,6 +34,13 @@ final class LibraryViewModel {
 
     var searchText = ""
     var filter: Filter = .all
+    var isManualOnly = false
+
+    /// `AICapability` reads the Keychain, so this is refreshed on appear and on a
+    /// mode change rather than evaluated from a view body.
+    func refreshCapability(settings: AISettings) {
+        isManualOnly = AICapability.state(for: settings) == .unsupportedDevice
+    }
 
     func sets(from all: [StudySet], now: Date = Date(), calendar: Calendar = .current) -> [StudySet] {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
