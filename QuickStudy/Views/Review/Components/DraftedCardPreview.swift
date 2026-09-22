@@ -1,16 +1,14 @@
 //
-//  DraftedCardNavigator.swift
+//  DraftedCardPreview.swift
 //  QuickStudy
 //
 
 import SwiftUI
 
-struct DraftedCardNavigator: View {
+struct DraftedCardPreview: View {
     let card: StudyCard
     let position: Int
     let total: Int
-    let onPrevious: () -> Void
-    let onNext: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
@@ -19,14 +17,6 @@ struct DraftedCardNavigator: View {
                 Text("CARD \(position) OF \(total) · DRAFTED")
                     .tracking(0.5)
                 Spacer()
-                Button(action: onPrevious) {
-                    Image(systemName: "chevron.left")
-                }
-                .disabled(position == 1)
-                Button(action: onNext) {
-                    Image(systemName: "chevron.right")
-                }
-                .disabled(position == total)
             }
             .font(.caption)
             .fontWeight(.semibold)
@@ -38,6 +28,7 @@ struct DraftedCardNavigator: View {
             Text(card.answer)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+            Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)

@@ -39,22 +39,16 @@ struct ScanPreviewView: View {
                 .appGlassCard(cornerRadius: AppRadius.lg)
             }
 
-            if let card = currentCard {
-                DraftedCardNavigator(
-                    card: card,
-                    position: cardIndex + 1,
-                    total: draft.cards.count,
-                    onPrevious: { cardIndex = max(0, cardIndex - 1) },
-                    onNext: {
-                        if cardIndex + 1 < draft.cards.count {
-                            cardIndex += 1
-                        } else {
-                            onContinue()
-                        }
-                    }
-                )
-                .animation(.easeInOut(duration: 0.2), value: cardIndex)
+            TabView(selection: $cardIndex) {
+                ForEach(Array(draft.cards.enumerated()), id: \.element.id) { index, card in
+                    DraftedCardPreview(card: card, position: index + 1, total: draft.cards.count)
+                        .padding(.bottom, Spacing.lg)
+                        .tag(index)
+                }
             }
+            .tabViewStyle(.page(indexDisplayMode: draft.cards.count > 1 ? .always : .never))
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .frame(height: 190)
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
