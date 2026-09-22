@@ -47,6 +47,9 @@ class TodayViewModel {
     var suggestion: GenerationSuggestion? = nil
     var hasReviewableCards: Bool = false
     var generationsRemaining: Int = GenerationAllowance.remaining
+    var canGenerate: Bool = !GenerationAllowance.isExhausted
+    var showsGenerationsPill: Bool = GenerationAllowance.used > 0
+    var generationsResetLabel: String = TodayViewModel.resetLabel()
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
 
     // MARK: Streak
@@ -61,7 +64,10 @@ class TodayViewModel {
     ) {
         let sets = studyViewModel.savedSets
         hasReviewableCards = sets.contains { !$0.cards.isEmpty }
-        generationsRemaining = GenerationAllowance.remaining
+        generationsRemaining = GenerationAllowance.remaining(now: now)
+        canGenerate = !GenerationAllowance.isExhausted
+        showsGenerationsPill = hasReviewableCards || GenerationAllowance.used(now: now) > 0
+        generationsResetLabel = Self.resetLabel(now: now, calendar: calendar)
         let studied = sessions.studiedDays(calendar: calendar)
         let frozen = StreakCalculator.applyingFreezes(
             studiedDays: studied,
@@ -81,6 +87,11 @@ class TodayViewModel {
         computeWeakestCard(from: sets)
         computeUpNext(from: sets, now: now, calendar: calendar)
         computeSuggestion(from: sets, mode: studyViewModel.aiSettings.mode)
+    }
+
+    private static func resetLabel(now: Date = Date(), calendar: Calendar = .current) -> String {
+        GenerationAllowance.resetDate(now: now, calendar: calendar)
+            .formatted(.dateTime.month(.wide).day())
     }
 
     private func computeSuggestion(from sets: [StudySet], mode: CardGenerationMode) {

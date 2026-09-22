@@ -23,6 +23,16 @@ struct ImportModifiers: ViewModifier {
             } message: {
                 Text("Document scanning isn't available in the simulator. Try on a real device.")
             }
+            .alert(
+                "Replace your draft?",
+                isPresented: $coordinator.showReplaceDraftAlert,
+                presenting: draftStore.pending
+            ) { _ in
+                Button("Replace", role: .destructive) { coordinator.replacePendingDraft() }
+                Button("Cancel", role: .cancel) { coordinator.cancelReplaceDraft() }
+            } message: { draft in
+                Text("You have a draft from \(draft.title) waiting. Starting a new set will discard it.")
+            }
             .navigationDestination(isPresented: $coordinator.navigateToReview) {
                 if let draft = draftStore.pending {
                     if draft.cards.contains(where: { $0.source?.lineRange != nil }) {

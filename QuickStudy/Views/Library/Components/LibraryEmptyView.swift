@@ -50,13 +50,16 @@ struct LibraryEmptyView: View {
 
             HStack(spacing: 12) {
                 SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
-                    coordinator.showFileImporter = true
+                    coordinator.pendingSource = .pdf
+                    coordinator.presentPendingSource()
                 }
                 SourceOptionButton(title: "Scan", subtitle: "Camera", systemImage: "camera") {
-                    coordinator.startScan()
+                    coordinator.pendingSource = .scan
+                    coordinator.presentPendingSource()
                 }
                 SourceOptionButton(title: "Text", subtitle: "Paste", systemImage: "text.alignleft") {
-                    coordinator.showPasteSheet = true
+                    coordinator.pendingSource = .paste
+                    coordinator.presentPendingSource()
                 }
             }
             .padding(.top, 4)

@@ -21,6 +21,7 @@ struct FloatingCreateButton: View {
                 .clipShape(Circle())
                 .shadow(color: .black.opacity(0.18), radius: 8, y: 4)
         }
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .accessibilityLabel("New set")
     }
 }

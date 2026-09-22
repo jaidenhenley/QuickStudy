@@ -36,6 +36,19 @@ struct LibraryView: View {
                         isEnabled: !studyViewModel.savedSets.isEmpty
                     )
 
+                    if let draft = draftStore.pending,
+                       !coordinator.navigateToReview,
+                       !coordinator.showGenerating {
+                        PendingDraftRow(
+                            draft: draft,
+                            onResume: {
+                                coordinator.previewConfirmed = false
+                                coordinator.navigateToReview = true
+                            },
+                            onDiscard: { draftStore.set(nil) }
+                        )
+                    }
+
                     // The empty state's three source buttons all require generation, so
                     // manual-only devices get the ADD CARDS section in its place.
                     if studyViewModel.savedSets.isEmpty && !libraryViewModel.isManualOnly {
@@ -102,6 +115,8 @@ struct LibraryView: View {
             FloatingCreateButton {
                 if libraryViewModel.isManualOnly {
                     showTypeCards = true
+                } else if GenerationAllowance.isExhausted {
+                    coordinator.presentQuotaExhausted()
                 } else {
                     coordinator.showSourcePicker = true
                 }

@@ -77,6 +77,23 @@ extension ImportFailure {
         )
     }
 
+    static func quotaExhausted(resetDate: Date) -> ImportFailure {
+        ImportFailure(
+            severity: .warning,
+            navigationTitle: "Free generations",
+            dismissLabel: "Done",
+            title: "Free generations used",
+            message: "You've used all \(GenerationAllowance.monthlyLimit) free generations this month. They reset on \(resetDate.formatted(.dateTime.month(.wide).day())).",
+            recoveryNote: nil,
+            code: "QS-200",
+            tips: [
+                "Existing sets still work — study, quiz and edit as usual.",
+                "Type cards by hand from the Library in the meantime."
+            ],
+            recoveries: []
+        )
+    }
+
     static let emptyPaste = ImportFailure(
         severity: .warning,
         navigationTitle: "Error",

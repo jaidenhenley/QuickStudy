@@ -7,32 +7,41 @@
 
 import Foundation
 
-/// Monthly free-generation quota. Rolls over on its own: the stored month key is
+/// Monthly free-generation quota. Rolls over on its own: the stored month stamp is
 /// compared on read, so a new month resets the count without a scheduled task.
 enum GenerationAllowance {
     static let monthlyLimit = 10
 
     private static let usedKey = "qs_aiGenerationsUsed"
     private static let monthKey = "qs_aiGenerationsMonth"
-    private static let defaults = UserDefaults.standard
 
-    static var used: Int {
-        guard defaults.string(forKey: monthKey) == currentMonth else { return 0 }
+    static var used: Int { used() }
+
+    static var remaining: Int { remaining() }
+
+    static var isExhausted: Bool { remaining() == 0 }
+
+    static func used(now: Date = Date(), defaults: UserDefaults = .standard) -> Int {
+        guard defaults.integer(forKey: monthKey) == monthStamp(for: now) else { return 0 }
         return defaults.integer(forKey: usedKey)
     }
 
-    static var remaining: Int {
-        max(0, monthlyLimit - used)
+    static func remaining(now: Date = Date(), defaults: UserDefaults = .standard) -> Int {
+        max(0, monthlyLimit - used(now: now, defaults: defaults))
     }
 
-    static func recordGeneration() {
-        let next = used + 1
-        defaults.set(next, forKey: usedKey)
-        defaults.set(currentMonth, forKey: monthKey)
+    static func recordGeneration(now: Date = Date(), defaults: UserDefaults = .standard) {
+        defaults.set(used(now: now, defaults: defaults) + 1, forKey: usedKey)
+        defaults.set(monthStamp(for: now), forKey: monthKey)
     }
 
-    private static var currentMonth: String {
-        let components = Calendar.current.dateComponents([.year, .month], from: Date())
-        return "\(components.year ?? 0)-\(components.month ?? 0)"
+    static func resetDate(now: Date = Date(), calendar: Calendar = .current) -> Date {
+        let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) ?? now
+        return calendar.date(byAdding: .month, value: 1, to: monthStart) ?? now
+    }
+
+    private static func monthStamp(for date: Date, calendar: Calendar = .current) -> Int {
+        let components = calendar.dateComponents([.year, .month], from: date)
+        return (components.year ?? 0) * 12 + (components.month ?? 0)
     }
 }

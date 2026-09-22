@@ -27,7 +27,7 @@ struct TodayView: View {
                     OfflineBanner { showSettings = true }
                 }
 
-                if todayViewModel.todayCardCount > 0 {
+                if todayViewModel.showsGenerationsPill {
                     AICardsLeftView()
                 }
 
@@ -63,7 +63,7 @@ struct TodayView: View {
                         WeakestCardRow(weakest: weakest)
                     }
 
-                    if let suggestion = todayViewModel.suggestion {
+                    if todayViewModel.canGenerate, let suggestion = todayViewModel.suggestion {
                         Text("SUGGESTED")
                             .font(.caption)
                             .fontWeight(.semibold)

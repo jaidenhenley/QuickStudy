@@ -14,7 +14,11 @@ struct AICardsLeftView: View {
         HStack(spacing: Spacing.xs) {
             Image(systemName: "sparkles")
                 .font(.caption)
-            Text("\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month")
+            Text(
+                todayViewModel.canGenerate
+                    ? "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month"
+                    : "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left · resets \(todayViewModel.generationsResetLabel)"
+            )
                 .font(.caption)
                 .fontWeight(.medium)
             Spacer()

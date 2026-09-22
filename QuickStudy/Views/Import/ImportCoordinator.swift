@@ -52,6 +52,7 @@ final class ImportCoordinator {
     var selectedPhotoItem: PhotosPickerItem? = nil
     var showPhotoPicker = false
     var showGenerating = false
+    var showReplaceDraftAlert = false
     var stage: Stage = .idle
 
     private var pendingFailure: ImportFailure? = nil
@@ -71,6 +72,17 @@ final class ImportCoordinator {
     /// picker records a choice and this runs once it has fully dismissed.
     func presentPendingSource() {
         guard let source = pendingSource else { return }
+        guard !GenerationAllowance.isExhausted else {
+            pendingSource = nil
+            retrySource = nil
+            presentQuotaExhausted()
+            return
+        }
+        // A second draft would overwrite the first, and the first cost a generation.
+        guard draftStore?.pending == nil else {
+            showReplaceDraftAlert = true
+            return
+        }
         pendingSource = nil
         retrySource = nil
         retainedText = ""
@@ -87,6 +99,19 @@ final class ImportCoordinator {
         case .paste:
             showPasteSheet = true
         }
+    }
+
+    func presentQuotaExhausted() {
+        fail(.quotaExhausted(resetDate: GenerationAllowance.resetDate()))
+    }
+
+    func replacePendingDraft() {
+        draftStore?.set(nil)
+        presentPendingSource()
+    }
+
+    func cancelReplaceDraft() {
+        pendingSource = nil
     }
 
     func startScan() {
@@ -169,6 +194,11 @@ final class ImportCoordinator {
         sourceType: StudySourceType,
         study: StudyViewModel
     ) async {
+        guard !GenerationAllowance.isExhausted else {
+            retrySource = nil
+            presentQuotaExhausted()
+            return
+        }
         retrySource = .document(extracted, title: title, sourceType: sourceType)
         retainedText = extracted.joinedText
 

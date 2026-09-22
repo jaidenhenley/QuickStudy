@@ -69,30 +69,32 @@ struct ImportErrorView: View {
 
                 Spacer()
 
-                HStack(spacing: Spacing.md) {
-                    if failure.recoveries.contains(.pasteText) {
-                        Button {
-                            onPasteText()
-                        } label: {
-                            Text("Paste text")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, Spacing.md)
+                if !failure.recoveries.isEmpty {
+                    HStack(spacing: Spacing.md) {
+                        if failure.recoveries.contains(.pasteText) {
+                            Button {
+                                onPasteText()
+                            } label: {
+                                Text("Paste text")
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, Spacing.md)
+                            }
+                            .buttonStyle(.plain)
+                            .appGlassCard(cornerRadius: AppRadius.md)
                         }
-                        .buttonStyle(.plain)
-                        .appGlassCard(cornerRadius: AppRadius.md)
-                    }
 
-                    if failure.recoveries.contains(.tryAgain) {
-                        Button {
-                            onTryAgain()
-                        } label: {
-                            Text("Try again")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, Spacing.xs)
+                        if failure.recoveries.contains(.tryAgain) {
+                            Button {
+                                onTryAgain()
+                            } label: {
+                                Text("Try again")
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, Spacing.xs)
+                            }
+                            .appProminentButtonStyle(tint: Theme.primary)
                         }
-                        .appProminentButtonStyle(tint: Theme.primary)
                     }
                 }
             }
