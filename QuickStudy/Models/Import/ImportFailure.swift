@@ -88,7 +88,8 @@ extension ImportFailure {
             code: "QS-200",
             tips: [
                 "Existing sets still work — study, quiz and edit as usual.",
-                "Type cards by hand from the Library in the meantime."
+                "Type cards by hand from the Library in the meantime.",
+                "QuickStudy Pro generates without a monthly cap, on any iPhone."
             ],
             recoveries: []
         )

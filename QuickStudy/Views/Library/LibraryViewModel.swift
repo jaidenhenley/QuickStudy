@@ -37,9 +37,11 @@ final class LibraryViewModel {
     var isManualOnly = false
 
     /// `AICapability` reads the Keychain, so this is refreshed on appear and on a
-    /// mode change rather than evaluated from a view body.
-    func refreshCapability(settings: AISettings) {
-        isManualOnly = AICapability.state(for: settings) == .unsupportedDevice
+    /// mode change rather than evaluated from a view body. A device with no local model
+    /// can still generate on the server while its free hosted generation is unspent.
+    func refreshCapability(settings: AISettings, store: StoreController) {
+        let noLocalModel = AICapability.state(for: settings) == .unsupportedDevice
+        isManualOnly = noLocalModel && !store.isPro && store.freeHostedGenerationUsed
     }
 
     func sets(from all: [StudySet], now: Date = Date(), calendar: Calendar = .current) -> [StudySet] {

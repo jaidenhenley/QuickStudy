@@ -26,6 +26,7 @@ class StudyViewModel {
     }
     
     var aiSettings: AISettings = AISettings()
+    var store: StoreController = StoreController()
 
     // MARK: - Published state
    var document: StudyDocument? = nil
@@ -216,8 +217,9 @@ class StudyViewModel {
         let text = document.lines.joined(separator: "\n")
 #if canImport(FoundationModels)
         do {
-            let cards = try await CardGenerator.generateAI(from: text, document: document, settings: aiSettings)
-            if countsAgainstAllowance { GenerationAllowance.recordGeneration() }
+            let engine = try AIController.makeGenerator(settings: aiSettings, store: store)
+            let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
+            if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
             return cards
         } catch {
             logger.error("AI generation failed: \(error.localizedDescription)")
@@ -250,12 +252,13 @@ class StudyViewModel {
         let sourceText = savedSets[index].document.lines.joined(separator: "\n")
 
         do {
+            let engine = try AIController.makeGenerator(settings: aiSettings, store: store)
             let cards = try await CardGenerator.generateTopicCards(
                 from: sourceText,
                 document: savedSets[index].document,
                 topic: topic,
                 count: count,
-                settings: aiSettings
+                engine: engine
             )
             guard !cards.isEmpty else {
                 generationErrorMessage = "Couldn't find enough about \(topic) in this set to make new cards."
@@ -264,7 +267,7 @@ class StudyViewModel {
             }
             savedSets[index].cards.append(contentsOf: cards)
             savedSets[index].updatedAt = Date()
-            GenerationAllowance.recordGeneration()
+            if engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
             saveSavedSets()
         } catch {
             generationErrorMessage = Self.message(for: error)

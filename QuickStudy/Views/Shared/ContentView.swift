@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var draftStore = DraftStore()
     @State private var sessionStore = SessionStore()
     @State private var networkMonitor = NetworkMonitor()
+    @State private var store = StoreController()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -55,8 +56,11 @@ struct ContentView: View {
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
         .environment(networkMonitor)
+        .environment(store)
+        .task { await store.refreshEntitlement() }
         .onAppear {
             viewModel.aiSettings = aiSettings
+            viewModel.store = store
         }
     }
 }

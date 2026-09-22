@@ -12,6 +12,7 @@ struct LibraryView: View {
     @Environment(AppState.self) private var appState
     @Environment(DraftStore.self) private var draftStore
     @Environment(AISettings.self) private var aiSettings
+    @Environment(StoreController.self) private var store
 
     @State private var coordinator = ImportCoordinator()
     @State private var libraryViewModel = LibraryViewModel()
@@ -115,8 +116,8 @@ struct LibraryView: View {
             FloatingCreateButton {
                 if libraryViewModel.isManualOnly {
                     showTypeCards = true
-                } else if GenerationAllowance.isExhausted {
-                    coordinator.presentQuotaExhausted()
+                } else if !coordinator.canStartGeneration {
+                    coordinator.presentPaywall()
                 } else {
                     coordinator.showSourcePicker = true
                 }
@@ -126,10 +127,10 @@ struct LibraryView: View {
         }
         .navigationTitle("Library")
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { libraryViewModel.refreshCapability(settings: aiSettings) }
-        .onChange(of: aiSettings.mode) { _, _ in
-            libraryViewModel.refreshCapability(settings: aiSettings)
-        }
+        .onAppear { refreshEntitlement() }
+        .onChange(of: aiSettings.mode) { _, _ in refreshEntitlement() }
+        .onChange(of: store.isPro) { _, _ in refreshEntitlement() }
+        .onChange(of: store.freeHostedGenerationUsed) { _, _ in refreshEntitlement() }
         .sheet(isPresented: $showTypeCards) {
             TypeCardsView()
                 .environment(studyViewModel)
@@ -165,5 +166,10 @@ struct LibraryView: View {
                 )
             )
         )
+    }
+
+    private func refreshEntitlement() {
+        coordinator.hasUnlimitedGenerations = store.isPro
+        libraryViewModel.refreshCapability(settings: aiSettings, store: store)
     }
 }

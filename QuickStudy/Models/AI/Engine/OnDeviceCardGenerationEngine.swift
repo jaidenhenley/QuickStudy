@@ -15,6 +15,7 @@ import FoundationModels
 // The rest of the app talks to simple Swift models only.
 
 struct OnDeviceCardGenerationEngine: CardGenerating {
+    let countsAgainstAllowance = true
 
     private static let chunkLength = 1200
 

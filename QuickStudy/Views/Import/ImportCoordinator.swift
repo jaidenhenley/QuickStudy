@@ -53,6 +53,8 @@ final class ImportCoordinator {
     var showPhotoPicker = false
     var showGenerating = false
     var showReplaceDraftAlert = false
+    var showPaywall = false
+    var hasUnlimitedGenerations = false
     var stage: Stage = .idle
 
     private var pendingFailure: ImportFailure? = nil
@@ -72,10 +74,10 @@ final class ImportCoordinator {
     /// picker records a choice and this runs once it has fully dismissed.
     func presentPendingSource() {
         guard let source = pendingSource else { return }
-        guard !GenerationAllowance.isExhausted else {
+        guard canStartGeneration else {
             pendingSource = nil
             retrySource = nil
-            presentQuotaExhausted()
+            presentPaywall()
             return
         }
         // A second draft would overwrite the first, and the first cost a generation.
@@ -101,7 +103,15 @@ final class ImportCoordinator {
         }
     }
 
-    func presentQuotaExhausted() {
+    var canStartGeneration: Bool {
+        hasUnlimitedGenerations || !GenerationAllowance.isExhausted
+    }
+
+    func presentPaywall() {
+        showPaywall = true
+    }
+
+    private func presentQuotaExhausted() {
         fail(.quotaExhausted(resetDate: GenerationAllowance.resetDate()))
     }
 
@@ -194,7 +204,7 @@ final class ImportCoordinator {
         sourceType: StudySourceType,
         study: StudyViewModel
     ) async {
-        guard !GenerationAllowance.isExhausted else {
+        guard canStartGeneration else {
             retrySource = nil
             presentQuotaExhausted()
             return

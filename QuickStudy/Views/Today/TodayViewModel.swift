@@ -50,7 +50,10 @@ class TodayViewModel {
     var canGenerate: Bool = !GenerationAllowance.isExhausted
     var showsGenerationsPill: Bool = GenerationAllowance.used > 0
     var generationsResetLabel: String = TodayViewModel.resetLabel()
+    var isPro: Bool = false
+    var hostedRemaining: Int? = nil
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
+    let hostedLimit: Int = ProProduct.hostedMonthlyLimit
 
     // MARK: Streak
 
@@ -59,14 +62,17 @@ class TodayViewModel {
     func updateFromStudy(
         _ studyViewModel: StudyViewModel,
         sessions: SessionStore,
+        store: StoreController,
         now: Date = Date(),
         calendar: Calendar = .current
     ) {
         let sets = studyViewModel.savedSets
         hasReviewableCards = sets.contains { !$0.cards.isEmpty }
+        isPro = store.isPro
+        hostedRemaining = store.hostedRemaining
         generationsRemaining = GenerationAllowance.remaining(now: now)
-        canGenerate = !GenerationAllowance.isExhausted
-        showsGenerationsPill = hasReviewableCards || GenerationAllowance.used(now: now) > 0
+        canGenerate = isPro || !GenerationAllowance.isExhausted
+        showsGenerationsPill = isPro || hasReviewableCards || GenerationAllowance.used(now: now) > 0
         generationsResetLabel = Self.resetLabel(now: now, calendar: calendar)
         let studied = sessions.studiedDays(calendar: calendar)
         let frozen = StreakCalculator.applyingFreezes(

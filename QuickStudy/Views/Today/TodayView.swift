@@ -14,8 +14,10 @@ struct TodayView: View {
     @Environment(SessionStore.self) var sessionStore
     @Environment(AISettings.self) var aiSettings
     @Environment(NetworkMonitor.self) var networkMonitor
+    @Environment(StoreController.self) var store
 
     @State private var showSettings = false
+    @State private var showPaywall = false
 
     var body: some View {
         ScrollView {
@@ -28,7 +30,7 @@ struct TodayView: View {
                 }
 
                 if todayViewModel.showsGenerationsPill {
-                    AICardsLeftView()
+                    AICardsLeftView { showPaywall = true }
                 }
 
                 HStack {
@@ -80,8 +82,11 @@ struct TodayView: View {
         }
         .background(BackgroundView())
         .sheet(isPresented: $showSettings) { SettingsView() }
-        .onAppear { todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore) }
-        .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore) }
+        .sheet(isPresented: $showPaywall) { PaywallView() }
+        .onAppear { refreshToday() }
+        .onChange(of: studyViewModel.savedSets) { _, _ in refreshToday() }
+        .onChange(of: store.isPro) { _, _ in refreshToday() }
+        .onChange(of: store.hostedRemaining) { _, _ in refreshToday() }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showSettings = true } label: {
@@ -91,6 +96,10 @@ struct TodayView: View {
                 }
             }
         }
+    }
+
+    private func refreshToday() {
+        todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore, store: store)
     }
 
     private var formattedDate: String {

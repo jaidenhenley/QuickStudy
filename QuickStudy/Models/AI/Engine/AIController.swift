@@ -12,9 +12,11 @@ enum CardGenerationMode: String, Codable, Hashable {
 }
 
 enum AIController {
-    static func makeGenerator(settings: AISettings) throws -> any CardGenerating {
+    @MainActor
+    static func makeGenerator(settings: AISettings, store: StoreController) throws -> any CardGenerating {
         switch settings.mode {
         case .onDevice:
+            if let hosted = hostedEngine(settings: settings, store: store) { return hosted }
             return OnDeviceCardGenerationEngine()
 
         case .externalAPI:
@@ -40,6 +42,18 @@ enum AIController {
                 apiKey: key,
                 apiFormat: settings.apiFormat
             )
+        }
+    }
+
+    /// Pro always generates on the server. Without Pro, only a device with no on-device
+    /// model gets its single free hosted generation; everyone else stays on this iPhone.
+    @MainActor
+    private static func hostedEngine(settings: AISettings, store: StoreController) -> HostedCardGenerationEngine? {
+        let transaction = store.transactionJWS
+        let noLocalModel = AICapability.state(for: settings) == .unsupportedDevice
+        guard transaction != nil || (noLocalModel && !store.freeHostedGenerationUsed) else { return nil }
+        return HostedCardGenerationEngine(api: .configured(), transaction: transaction) { remaining in
+            store.recordHostedGeneration(remaining: remaining, usedFreeGeneration: transaction == nil)
         }
     }
 }

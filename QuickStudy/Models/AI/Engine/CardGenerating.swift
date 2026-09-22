@@ -8,6 +8,7 @@
 import Foundation
 
 protocol CardGenerating {
+    var countsAgainstAllowance: Bool { get }
     func generateCards(from text: String) async throws -> [AIFlashcard]
     func generateCards(from text: String, topic: String, count: Int) async throws -> [AIFlashcard]
 }

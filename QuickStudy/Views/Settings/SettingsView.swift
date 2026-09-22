@@ -5,13 +5,17 @@
 //  Created by Jaiden Henley on 2/26/26.
 //
 
+import StoreKit
 import SwiftUI
- 
+
 struct SettingsView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AISettings.self) var aiSettings
     @Environment(AppState.self) var appState
+    @Environment(StoreController.self) var store
     @State private var showClearDataAlert = false
+    @State private var showPaywall = false
+    @State private var showManageSubscription = false
     @State private var apiKeyDraft = ""
     @State private var keychainErrorMessage: String?
     @State private var showKeychainError = false
@@ -94,6 +98,26 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    if store.isPro {
+                        HStack {
+                            Text("QuickStudy Pro")
+                            Spacer()
+                            Text("Active")
+                                .foregroundStyle(.secondary)
+                        }
+                        Button("Manage Subscription") { showManageSubscription = true }
+                    } else {
+                        Button("Upgrade to QuickStudy Pro") { showPaywall = true }
+                    }
+                } header: {
+                    Text("Pro")
+                } footer: {
+                    Text(store.isPro
+                         ? "Cards are generated on QuickStudy's server. Your text isn't stored."
+                         : "Better cards on any iPhone, generated in the cloud.")
+                }
+
+                Section {
                     Toggle("Show Sample Sets", isOn: $studyViewModel.demoModeEnabled)
                 } header: {
                     Text("Sample Content")
@@ -121,6 +145,8 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .sheet(isPresented: $showPaywall) { PaywallView() }
+            .manageSubscriptionsSheet(isPresented: $showManageSubscription)
             .onAppear { apiKeyDraft = aiSettings.apiKey ?? "" }
             .alert("Couldn't Save API Key", isPresented: $showKeychainError) {
                 Button("OK", role: .cancel) {}

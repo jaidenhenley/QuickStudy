@@ -33,7 +33,11 @@ struct PasteTextSheet: View {
                     Spacer()
                     HStack(spacing: Spacing.xs) {
                         Image(systemName: "sparkles")
-                        Text("\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free left")
+                        Text(
+                            todayViewModel.isPro
+                                ? "QuickStudy Pro"
+                                : "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free left"
+                        )
                     }
                     .font(.caption)
                     .fontWeight(.medium)

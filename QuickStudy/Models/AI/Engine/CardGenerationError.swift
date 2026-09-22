@@ -23,6 +23,12 @@ enum CardGenerationError: LocalizedError {
     case badStatusCode(Int)
     case unsupportedProviderResponse
     case keychainError(OSStatus)
+    case attestationUnavailable
+    case attestationFailed(String)
+    case notSubscribed(String)
+    case hostedQuotaExhausted(String)
+    case hostedInputTooLarge(String)
+    case hostedUnavailable(String)
 
     var errorDescription: String? {
         switch self {
@@ -56,6 +62,14 @@ enum CardGenerationError: LocalizedError {
             return "The API returned an unsupported response format."
         case .keychainError(let status):
             return "Failed to save API key (Keychain error \(status))."
+        case .attestationUnavailable:
+            return "Pro generation needs a real iPhone to verify the app."
+        case .attestationFailed(let message),
+             .notSubscribed(let message),
+             .hostedQuotaExhausted(let message),
+             .hostedInputTooLarge(let message),
+             .hostedUnavailable(let message):
+            return message
         }
     }
 
@@ -92,6 +106,18 @@ enum CardGenerationError: LocalizedError {
             return "QS-H\(status)"
         case .keychainError(let status):
             return "QS-K\(status)"
+        case .attestationUnavailable:
+            return "QS-701"
+        case .attestationFailed:
+            return "QS-702"
+        case .notSubscribed:
+            return "QS-703"
+        case .hostedQuotaExhausted:
+            return "QS-729"
+        case .hostedInputTooLarge:
+            return "QS-713"
+        case .hostedUnavailable:
+            return "QS-753"
         }
     }
 }
