@@ -48,6 +48,14 @@ final class StoreController {
         if current == nil { hostedRemaining = nil }
     }
 
+    /// The server is the authority on the free hosted generation. When it says the
+    /// allowance is spent — after a reinstall, say — local state has to agree or the
+    /// app will keep trying an engine it can no longer use.
+    func markFreeHostedGenerationUsed() {
+        freeHostedGenerationUsed = true
+        UserDefaults.standard.set(true, forKey: Self.freeHostedUsedKey)
+    }
+
     func recordHostedGeneration(remaining: Int, usedFreeGeneration: Bool) {
         hostedRemaining = remaining
         if usedFreeGeneration {

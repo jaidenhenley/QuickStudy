@@ -25,6 +25,7 @@ enum CardGenerationError: LocalizedError {
     case keychainError(OSStatus)
     case attestationUnavailable
     case attestationFailed(String)
+    case attestationKeyUnknown
     case notSubscribed(String)
     case hostedQuotaExhausted(String)
     case hostedInputTooLarge(String)
@@ -64,6 +65,8 @@ enum CardGenerationError: LocalizedError {
             return "Failed to save API key (Keychain error \(status))."
         case .attestationUnavailable:
             return "Pro generation needs a real iPhone to verify the app."
+        case .attestationKeyUnknown:
+            return "This iPhone needs to re-verify with QuickStudy. Try again."
         case .attestationFailed(let message),
              .notSubscribed(let message),
              .hostedQuotaExhausted(let message),
@@ -110,6 +113,8 @@ enum CardGenerationError: LocalizedError {
             return "QS-701"
         case .attestationFailed:
             return "QS-702"
+        case .attestationKeyUnknown:
+            return "QS-704"
         case .notSubscribed:
             return "QS-703"
         case .hostedQuotaExhausted:

@@ -18,6 +18,8 @@ struct HostedCardGenerationEngine: CardGenerating {
     let transaction: String?
     let onRemaining: @MainActor @Sendable (Int) -> Void
     let countsAgainstAllowance = false
+    let sourceChunkLimit: Int? = nil
+    let expectedSeconds: Double = 22
 
     func generateCards(from text: String) async throws -> [AIFlashcard] {
         try await request(text: text, topic: nil, count: nil)
@@ -28,6 +30,15 @@ struct HostedCardGenerationEngine: CardGenerating {
     }
 
     private func request(text: String, topic: String?, count: Int?) async throws -> [AIFlashcard] {
+        do {
+            return try await attempt(text: text, topic: topic, count: count)
+        } catch CardGenerationError.attestationKeyUnknown {
+            try await AppAttestClient.shared.resetRegistration()
+            return try await attempt(text: text, topic: topic, count: count)
+        }
+    }
+
+    private func attempt(text: String, topic: String?, count: Int?) async throws -> [AIFlashcard] {
         let challenge = try await api.challenge()
         let body = try JSONEncoder().encode(
             GenerateRequest(challenge: challenge, text: text, transaction: transaction, topic: topic, count: count)

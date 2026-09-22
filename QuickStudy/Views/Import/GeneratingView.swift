@@ -11,6 +11,8 @@ struct GeneratingView: View {
     let stage: ImportCoordinator.Stage
     let onCancel: () -> Void
 
+    @Environment(StudyViewModel.self) private var studyViewModel
+
     var body: some View {
         VStack(spacing: Spacing.lg) {
             HStack {
@@ -40,28 +42,31 @@ struct GeneratingView: View {
                 }
                 .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
 
-            VStack(spacing: Spacing.sm) {
-                HStack(spacing: Spacing.xs) {
-                    Image(systemName: "sparkles")
-                    Text("DRAFTING CARDS")
-                        .tracking(1)
+            // Redraws on a timer so elapsed time and the bar stay live for the whole run.
+            TimelineView(.periodic(from: .now, by: 0.25)) { context in
+                VStack(spacing: Spacing.sm) {
+                    HStack(spacing: Spacing.xs) {
+                        Image(systemName: "sparkles")
+                        Text("DRAFTING CARDS")
+                            .tracking(1)
+                    }
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.appPrimary)
+
+                    Text(headline(at: context.date))
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text(detail(at: context.date))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    ProgressView(value: fraction(at: context.date))
+                        .tint(Color.appPrimary)
+                        .padding(.top, Spacing.sm)
                 }
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.appPrimary)
-
-                Text(headline)
-                    .font(.title2)
-                    .fontWeight(.bold)
-
-                Text("This usually takes 4–6 seconds.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-
-                ProgressView(value: fraction)
-                    .tint(Color.appPrimary)
-                    .padding(.top, Spacing.sm)
             }
 
             Spacer()
@@ -70,23 +75,37 @@ struct GeneratingView: View {
         .background(BackgroundView())
     }
 
-    private var headline: String {
+    private func headline(at now: Date) -> String {
+        let progress = studyViewModel.generationProgress
         switch stage {
-        case .idle, .drafting:
-            return "Drafting cards"
         case let .reading(page, total):
             return "Reading page \(max(1, page)) of \(total)"
+        case .idle, .drafting:
+            guard progress.isChunked else { return "Drafting cards" }
+            return "Drafting cards · \(min(progress.completedUnits + 1, progress.totalUnits)) of \(progress.totalUnits)"
         }
     }
 
-    private var fraction: Double {
+    private func detail(at now: Date) -> String {
+        let progress = studyViewModel.generationProgress
+        guard case .reading = stage else {
+            if progress.isOverrunning(now: now) { return "Still working…" }
+            if progress.isChunked { return "Working through your notes in sections." }
+            return progress.readsWholeDocument
+                ? "Reading the whole document."
+                : "Drafting on this iPhone."
+        }
+        return "Reading your pages before drafting."
+    }
+
+    private func fraction(at now: Date) -> Double {
         switch stage {
         case .idle:
             return 0
         case let .reading(page, total):
             return total == 0 ? 0 : Double(page) / Double(total + 1)
         case .drafting:
-            return 0.9
+            return studyViewModel.generationProgress.fraction(now: now)
         }
     }
 }

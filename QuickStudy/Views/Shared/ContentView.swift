@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var sessionStore = SessionStore()
     @State private var networkMonitor = NetworkMonitor()
     @State private var store = StoreController()
+    @State private var analytics = AnalyticsRecorder()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -51,16 +52,24 @@ struct ContentView: View {
         .environment(viewModel)
         .environment(appState)
         .onChange(of: scenePhase) { _, phase in
-            if phase != .active { viewModel.flushPendingChanges() }
+            if phase != .active {
+                viewModel.flushPendingChanges()
+                Task { await analytics.flush() }
+            }
         }
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
         .environment(networkMonitor)
         .environment(store)
-        .task { await store.refreshEntitlement() }
+        .environment(analytics)
+        .task {
+            await store.refreshEntitlement()
+            analytics.record(.deviceCapability(hasOnDeviceModel: AICapability.state(for: aiSettings) != .unsupportedDevice))
+        }
         .onAppear {
             viewModel.aiSettings = aiSettings
             viewModel.store = store
+            viewModel.analytics = analytics
         }
     }
 }

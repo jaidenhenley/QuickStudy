@@ -14,6 +14,13 @@ actor AppAttestClient {
 
     var isSupported: Bool { service.isSupported }
 
+    /// The server no longer knows this key — its record was rotated or lost. Keychain
+    /// survives app deletion, so without this the device would send the orphaned key
+    /// forever and could never recover, even after a reinstall.
+    func resetRegistration() throws {
+        try KeychainManager.delete(account: .appAttestKeyID)
+    }
+
     func sign(_ body: Data, using api: HostedAPI) async throws -> HostedAPI.Signature {
         let hash = Data(SHA256.hash(data: body))
         let keyID = try await registeredKeyID(using: api)

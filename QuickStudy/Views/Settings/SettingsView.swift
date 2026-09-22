@@ -13,6 +13,7 @@ struct SettingsView: View {
     @Environment(AISettings.self) var aiSettings
     @Environment(AppState.self) var appState
     @Environment(StoreController.self) var store
+    @Environment(AnalyticsRecorder.self) var analytics
     @State private var showClearDataAlert = false
     @State private var showPaywall = false
     @State private var showManageSubscription = false
@@ -46,6 +47,13 @@ struct SettingsView: View {
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                 aiSettings.modelName = cleaned.isEmpty ? nil : cleaned
             }
+        )
+    }
+
+    private var analyticsBinding: Binding<Bool> {
+        Binding(
+            get: { analytics.isEnabled },
+            set: { analytics.setEnabled($0) }
         )
     }
 
@@ -126,6 +134,14 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Toggle("Share anonymous usage", isOn: analyticsBinding)
+                } header: {
+                    Text("Privacy")
+                } footer: {
+                    Text("Sends anonymous counts — like whether onboarding finished or a paywall was shown — to help improve QuickStudy. Never card text, never document text.")
+                }
+
+                Section {
                     Button("Delete All Study Sets", role: .destructive) {
                         showClearDataAlert = true
                     }
@@ -145,7 +161,7 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .sheet(isPresented: $showPaywall) { PaywallView() }
+            .sheet(isPresented: $showPaywall) { PaywallView(surface: .settings) }
             .manageSubscriptionsSheet(isPresented: $showManageSubscription)
             .onAppear { apiKeyDraft = aiSettings.apiKey ?? "" }
             .alert("Couldn't Save API Key", isPresented: $showKeychainError) {

@@ -16,6 +16,9 @@ import FoundationModels
 
 struct OnDeviceCardGenerationEngine: CardGenerating {
     let countsAgainstAllowance = true
+    var sourceChunkLimit: Int? { Self.chunkLength }
+    let expectedSeconds: Double = 6
+    var progress: GenerationProgress?
 
     private static let chunkLength = 1200
 
@@ -71,9 +74,13 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
         let sentences = SentenceIndexer.sentences(in: text, maxLength: Self.chunkLength)
         guard !sentences.isEmpty else { return [] }
 
+        let chunks = SentenceIndexer.chunks(of: sentences, maxLength: Self.chunkLength)
+        await progress?.setTotalUnits(chunks.count)
+
         var allCards: [AIFlashcard] = []
-        for chunk in SentenceIndexer.chunks(of: sentences, maxLength: Self.chunkLength) {
+        for chunk in chunks {
             allCards += try await cards(for: chunk)
+            await progress?.advance()
         }
         return allCards
     }

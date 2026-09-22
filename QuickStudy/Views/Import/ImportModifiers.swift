@@ -58,7 +58,7 @@ struct ImportModifiers: ViewModifier {
             }
             .onAppear { coordinator.draftStore = draftStore }
             .sheet(isPresented: $coordinator.showPaywall) {
-                PaywallView()
+                PaywallView(surface: .exhausted)
             }
             .sheet(
                 isPresented: $coordinator.showSourcePicker,

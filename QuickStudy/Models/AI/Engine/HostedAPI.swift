@@ -24,6 +24,10 @@ struct HostedAPI {
         let remaining: Int
     }
 
+    struct MetricsResponse: Decodable {
+        let ok: Bool
+    }
+
     private struct ChallengeResponse: Decodable {
         let challenge: String
     }
@@ -77,17 +81,23 @@ struct HostedAPI {
     }
 
     func generate(signedBody: Data, signature: Signature?) async throws -> GenerateResponse {
-        var headers: [String: String] = [:]
-        if let signature {
-            headers["X-Key-Id"] = signature.keyID
-            headers["X-Assertion"] = signature.assertion
-        } else if let token = Self.developmentBypassToken {
-            headers["X-Dev-Token"] = token
-        } else {
-            throw CardGenerationError.attestationUnavailable
-        }
-        let data = try await send(path: "/generate", body: signedBody, headers: headers)
+        let data = try await send(path: "/generate", body: signedBody, headers: attestationHeaders(signature: signature))
         return try decode(GenerateResponse.self, from: data)
+    }
+
+    func postMetrics(signedBody: Data, signature: Signature?) async throws -> MetricsResponse {
+        let data = try await send(path: "/metrics", body: signedBody, headers: attestationHeaders(signature: signature))
+        return try decode(MetricsResponse.self, from: data)
+    }
+
+    private func attestationHeaders(signature: Signature?) throws -> [String: String] {
+        if let signature {
+            return ["X-Key-Id": signature.keyID, "X-Assertion": signature.assertion]
+        }
+        if let token = Self.developmentBypassToken {
+            return ["X-Dev-Token": token]
+        }
+        throw CardGenerationError.attestationUnavailable
     }
 
     private func send(path: String, body: Data, headers: [String: String]) async throws -> Data {
@@ -130,6 +140,8 @@ struct HostedAPI {
         switch code {
         case "unauthorized":
             return .attestationFailed(message)
+        case "unregistered_key":
+            return .attestationKeyUnknown
         case "not_subscribed":
             return .notSubscribed(message)
         case "quota_exhausted":

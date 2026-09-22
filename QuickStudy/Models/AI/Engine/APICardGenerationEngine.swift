@@ -9,6 +9,8 @@ import Foundation
 
 struct APICardGenerationEngine: CardGenerating {
     let countsAgainstAllowance = true
+    let sourceChunkLimit: Int? = nil
+    let expectedSeconds: Double = 8
     let endpoint: URL
     let model: String
     let apiKey: String

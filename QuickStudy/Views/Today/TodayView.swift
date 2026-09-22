@@ -15,6 +15,7 @@ struct TodayView: View {
     @Environment(AISettings.self) var aiSettings
     @Environment(NetworkMonitor.self) var networkMonitor
     @Environment(StoreController.self) var store
+    @Environment(AnalyticsRecorder.self) var analytics
 
     @State private var showSettings = false
     @State private var showPaywall = false
@@ -82,7 +83,7 @@ struct TodayView: View {
         }
         .background(BackgroundView())
         .sheet(isPresented: $showSettings) { SettingsView() }
-        .sheet(isPresented: $showPaywall) { PaywallView() }
+        .sheet(isPresented: $showPaywall) { PaywallView(surface: .pill) }
         .onAppear { refreshToday() }
         .onChange(of: studyViewModel.savedSets) { _, _ in refreshToday() }
         .onChange(of: store.isPro) { _, _ in refreshToday() }
@@ -100,6 +101,8 @@ struct TodayView: View {
 
     private func refreshToday() {
         todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore, store: store)
+        analytics.record(.generationsUsed(bucket: todayViewModel.generationsUsedBucket))
+        if !todayViewModel.canGenerate { analytics.record(.allowanceExhausted) }
     }
 
     private var formattedDate: String {

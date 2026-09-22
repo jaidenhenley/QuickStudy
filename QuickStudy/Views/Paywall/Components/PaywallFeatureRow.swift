@@ -14,9 +14,9 @@ struct PaywallFeatureRow: View {
             Image(systemName: symbol)
                 .font(.headline)
                 .foregroundStyle(.appPrimary)
-                .frame(width: 28)
+                .frame(width: 26)
             Text(text)
-                .font(.body)
+                .font(.callout)
             Spacer(minLength: 0)
         }
     }

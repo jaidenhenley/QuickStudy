@@ -27,6 +27,8 @@ class StudyViewModel {
     
     var aiSettings: AISettings = AISettings()
     var store: StoreController = StoreController()
+    var analytics: AnalyticsRecorder = AnalyticsRecorder()
+    let generationProgress = GenerationProgress()
 
     // MARK: - Published state
    var document: StudyDocument? = nil
@@ -35,6 +37,7 @@ class StudyViewModel {
    var isSpellCheckEnabled: Bool = true
    var isHandwritingMode: Bool = false
    var isUltraHandwritingMode: Bool = true
+   private(set) var lastGenerationWasTruncated = false
    var generationErrorMessage: String? = nil
    var generationErrorCode: String? = nil
    var savedSets: [StudySet] = []
@@ -203,7 +206,13 @@ class StudyViewModel {
         let cards = await generateCards(for: document, countsAgainstAllowance: true)
         guard !cards.isEmpty else { return nil }
 
-        return DraftSet(title: title, document: document, cards: cards, sourceType: sourceType)
+        return DraftSet(
+            title: title,
+            document: document,
+            cards: cards,
+            sourceType: sourceType,
+            wasTruncated: lastGenerationWasTruncated
+        )
     }
 
     /// Regenerate re-rolls the same document, so it does not spend another generation.
@@ -215,12 +224,22 @@ class StudyViewModel {
         generationErrorCode = nil
 
         let text = document.lines.joined(separator: "\n")
+        lastGenerationWasTruncated = false
 #if canImport(FoundationModels)
         do {
-            let engine = try AIController.makeGenerator(settings: aiSettings, store: store)
-            let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
-            if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
-            return cards
+            return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
+        } catch CardGenerationError.notSubscribed where !store.isPro {
+            // The server refused the free hosted generation, so this iPhone drafts it
+            // instead. Failing the whole import over a lost perk would be worse.
+            store.markFreeHostedGenerationUsed()
+            do {
+                return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
+            } catch {
+                logger.error("AI generation failed: \(error.localizedDescription)")
+                generationErrorMessage = Self.message(for: error)
+                generationErrorCode = (error as? CardGenerationError)?.code
+                return []
+            }
         } catch {
             logger.error("AI generation failed: \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
@@ -232,6 +251,37 @@ class StudyViewModel {
         generationErrorCode = "QS-600"
         return []
 #endif
+    }
+
+    @MainActor
+    private func draft(
+        text: String,
+        document: StudyDocument,
+        countsAgainstAllowance: Bool
+    ) async throws -> [StudyCard] {
+        let engine = try AIController.makeGenerator(settings: aiSettings, store: store, progress: generationProgress)
+        lastGenerationWasTruncated = engine.sourceChunkLimit.map { text.count > $0 } ?? false
+        let startedAt = Date()
+        generationProgress.begin(
+            expectedSeconds: engine.expectedSeconds,
+            readsWholeDocument: engine.sourceChunkLimit == nil
+        )
+        defer { generationProgress.end() }
+        let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
+        if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
+        analytics.record(.firstGenerationCompleted(durationBucket: Self.durationBucket(since: startedAt)))
+        return cards
+    }
+
+    /// 0: under 5s, 1: under 10s, 2: under 20s, 3: under 45s, 4: slower.
+    private static func durationBucket(since start: Date, now: Date = Date()) -> Int {
+        switch now.timeIntervalSince(start) {
+        case ..<5: return 0
+        case ..<10: return 1
+        case ..<20: return 2
+        case ..<45: return 3
+        default: return 4
+        }
     }
 
     /// A raw URLError description is not user-facing copy.

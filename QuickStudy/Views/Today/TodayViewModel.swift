@@ -55,6 +55,16 @@ class TodayViewModel {
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
     let hostedLimit: Int = ProProduct.hostedMonthlyLimit
 
+    /// 0: none used, 1: 1-3, 2: 4-9, 3: the whole allowance.
+    var generationsUsedBucket: Int {
+        switch generationsLimit - generationsRemaining {
+        case 0: return 0
+        case 1...3: return 1
+        case 4...9: return 2
+        default: return 3
+        }
+    }
+
     // MARK: Streak
 
     // MARK: - Derived
