@@ -35,7 +35,7 @@ struct SessionCompleteView: View {
 
                 HStack {
                     Image(systemName: "flame.fill")
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.appStreak)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(summary.streak) day streak")
                             .font(.subheadline)

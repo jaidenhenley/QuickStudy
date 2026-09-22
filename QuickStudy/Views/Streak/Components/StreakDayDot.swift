@@ -40,7 +40,7 @@ struct StreakDayDot: View {
 
     private var tint: Color {
         switch state {
-        case .studied: return .orange
+        case .studied: return .appStreak
         case .frozen: return Color.appSecondary
         default: return .secondary
         }
@@ -48,7 +48,7 @@ struct StreakDayDot: View {
 
     private var fill: Color {
         switch state {
-        case .studied: return .orange.opacity(0.18)
+        case .studied: return .appStreak.opacity(0.18)
         case .frozen: return Color.appSecondary.opacity(0.18)
         case .today: return Color.appPrimary.opacity(0.18)
         case .missed, .future: return Color.secondary.opacity(0.12)

@@ -24,7 +24,7 @@ struct StatsView: View {
                         Text("No stats yet")
                             .font(.title2)
                             .fontWeight(.bold)
-                        Text("Approve some cards and finish a session to start tracking your progress.")
+                        Text("Save a set and finish a session to start tracking your progress.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -40,7 +40,7 @@ struct StatsView: View {
                             ],
                             spacing: Spacing.md
                         ) {
-                            StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .orange)
+                            StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .appStreak)
                             StatTile(value: "\(statsViewModel.dueToday)", label: "Cards due today")
                             StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.success)
                             StatTile(value: "\(statsViewModel.scheduledCards)", label: "Cards in rotation")

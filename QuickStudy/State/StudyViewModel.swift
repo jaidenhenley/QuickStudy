@@ -36,12 +36,8 @@ class StudyViewModel {
    var isUltraHandwritingMode: Bool = true
    var generationErrorMessage: String? = nil
    var generationErrorCode: String? = nil
-   var lastRawText: String = ""
-   var lastCorrectedText: String = ""
    var savedSets: [StudySet] = []
    var activeSetID: UUID? = nil
-   var currentSourceType: StudySourceType = .scan
-   var isTodaySession: Bool = false
 
     @ObservationIgnored private var hasUnsavedChanges = false
 
@@ -53,7 +49,6 @@ class StudyViewModel {
         flashcards = savedSets
             .flatMap(\.cards)
             .filter { $0.isDue(asOf: date, calendar: calendar) }
-        isTodaySession = true
     }
 
     func box(for cardID: UUID) -> Int? {
@@ -154,10 +149,6 @@ class StudyViewModel {
         saveSavedSets()
     }
 
-    // MARK: - AI Quiz Generation
-
-    
-
     // MARK: - Persistence
     var persistenceURL: URL {
         let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -237,7 +228,7 @@ class StudyViewModel {
 #else
         generationErrorMessage = "Apple Intelligence framework not available in this build."
         generationErrorCode = "QS-600"
-        return generateFallbackCards(from: text)
+        return []
 #endif
     }
 
@@ -281,60 +272,7 @@ class StudyViewModel {
         }
     }
 
-    private func generateFallbackCards(from text: String) -> [StudyCard] {
-        let rawLines = text.components(separatedBy: .newlines)
-        return generateCards(from: rawLines, limit: 12)
-    }
-
-    private func generateCards(from lines: [String], limit: Int) -> [StudyCard] {
-        var cleanedLines: [String] = []
-        cleanedLines.reserveCapacity(lines.count)
-        for line in lines {
-            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmed.isEmpty {
-                cleanedLines.append(trimmed)
-            }
-        }
-
-        var cards: [StudyCard] = []
-        cards.reserveCapacity(min(cleanedLines.count, limit))
-
-        for line in cleanedLines.prefix(limit) {
-            let question: String
-            let answer: String
-
-            if let separatorRange = line.range(of: ":") {
-                let left = line[..<separatorRange.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
-                let right = line[separatorRange.upperBound...].trimmingCharacters(in: .whitespacesAndNewlines)
-                question = left.isEmpty ? "Explain this concept" : String(left)
-                answer = right.isEmpty ? line : String(right)
-            } else if let range = line.range(of: " is ") {
-                let subject = line[..<range.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
-                question = subject.isEmpty ? "What is this?" : "What is \(subject)?"
-                answer = line
-            } else if let range = line.range(of: " are ") {
-                let subject = line[..<range.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
-                question = subject.isEmpty ? "What are these?" : "What are \(subject)?"
-                answer = line
-            } else {
-                let prefixWords = line.split(whereSeparator: { $0.isWhitespace }).prefix(6)
-                let prefix = prefixWords.joined(separator: " ")
-                question = prefix.isEmpty ? "Explain this concept" : "Explain: \(prefix)"
-                answer = line
-            }
-
-            let card = StudyCard(question: question, answer: answer)
-            cards.append(card)
-        }
-
-        return cards
-    }
-
     // MARK: - Quiz helpers
-    private func normalizedAnswer(_ answer: String) -> String {
-        let trimmed = answer.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.lowercased()
-    }
 
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
@@ -586,8 +524,6 @@ class StudyViewModel {
         document = set.document
         flashcards = set.cards
         activeSetID = set.id
-        currentSourceType = set.sourceType
-        isTodaySession = false
     }
 
     private func isDemoSet(_ set: StudySet) -> Bool {
@@ -601,7 +537,6 @@ class StudyViewModel {
                 document = higSet.document
                 flashcards = higSet.cards
                 activeSetID = higSet.id
-                currentSourceType = .demo
             }
         } else {
             let demoIDs = Set(savedSets.filter { isDemoSet($0) }.map { $0.id })
@@ -609,11 +544,9 @@ class StudyViewModel {
                 self.activeSetID = nil
                 self.document = nil
                 self.flashcards = []
-                self.currentSourceType = .scan
             } else if let document, ["Human Interface Guidelines", "SwiftUI", "SpriteKit"].contains(document.title) {
                 self.document = nil
                 self.flashcards = []
-                self.currentSourceType = .scan
             }
 
             savedSets.removeAll { isDemoSet($0) }

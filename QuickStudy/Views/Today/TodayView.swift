@@ -43,7 +43,7 @@ struct TodayView: View {
                             Text("🔥 \(todayViewModel.streakCount) day streak")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(.appStreak)
                         }
                     }
                 }
@@ -86,7 +86,7 @@ struct TodayView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showSettings = true } label: {
                     Image(systemName: "gearshape")
-                        .font(.system(size: 18))
+                        .font(.title3)
                         .foregroundStyle(.secondary)
                 }
             }

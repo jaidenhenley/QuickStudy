@@ -22,11 +22,11 @@ struct StreakView: View {
             VStack(spacing: Spacing.base) {
                 ZStack {
                     Circle()
-                        .fill(Color.orange.opacity(0.18))
+                        .fill(Color.appStreak.opacity(0.18))
                         .frame(width: 76, height: 76)
                     Image(systemName: "flame.fill")
                         .font(.title)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.appStreak)
                 }
                 .padding(.top, Spacing.lg)
 

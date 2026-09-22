@@ -14,6 +14,7 @@ struct ReviewDraftsView: View {
 
     @State private var draft: DraftSet
     @State private var isRegenerating = false
+    @State private var showRegenerateError = false
 
     init(draft: DraftSet) {
         _draft = State(initialValue: draft)
@@ -92,6 +93,17 @@ struct ReviewDraftsView: View {
             }
         }
         .onChange(of: draft.cards) { _, _ in draftStore.set(draft) }
+        .alert("Couldn't regenerate", isPresented: $showRegenerateError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(regenerateErrorMessage)
+        }
+    }
+
+    private var regenerateErrorMessage: String {
+        let base = studyViewModel.generationErrorMessage ?? "Your current draft is unchanged. Try again in a moment."
+        guard let code = studyViewModel.generationErrorCode else { return base }
+        return "\(base) · \(code)"
     }
 
     private var relativeAge: String {
@@ -111,7 +123,10 @@ struct ReviewDraftsView: View {
         isRegenerating = true
         defer { isRegenerating = false }
         let cards = await studyViewModel.generateCards(for: draft.document, countsAgainstAllowance: false)
-        guard !cards.isEmpty else { return }
+        guard !cards.isEmpty else {
+            showRegenerateError = true
+            return
+        }
         draft.cards = cards
         draftStore.set(draft)
     }

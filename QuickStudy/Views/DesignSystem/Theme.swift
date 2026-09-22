@@ -10,6 +10,7 @@ struct Theme {
     static let success = Color("AppSuccess")
     static let danger = Color("AppDanger")
     static let warning = Color("AppWarning")
+    static let streak = Color("AppStreak")
 }
 
 extension View {

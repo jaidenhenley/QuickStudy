@@ -12,10 +12,9 @@ struct FloatingCreateButton: View {
 
     var body: some View {
         Button(action: action) {
-            // Fixed size: the design pins the button to 56pt, so a Dynamic Type
-            // glyph would outgrow the circle.
             Image(systemName: "plus")
-                .font(.system(size: 24, weight: .semibold))
+                .font(.title2)
+                .fontWeight(.semibold)
                 .foregroundStyle(.white)
                 .frame(width: 56, height: 56)
                 .background(Color.appPrimary)

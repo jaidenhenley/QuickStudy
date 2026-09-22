@@ -37,7 +37,7 @@ struct TodayEmptyView: View {
                         .frame(width: 8, height: 8)
                         .offset(x: 54, y: 8)
                     Circle()
-                        .fill(.orange)
+                        .fill(.appStreak)
                         .frame(width: 8, height: 8)
                         .offset(x: -48, y: 32)
                 }
