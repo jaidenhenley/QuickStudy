@@ -12,6 +12,7 @@ struct PasteTextSheet: View {
 
     @Environment(AISettings.self) private var aiSettings
     @Environment(TodayViewModel.self) private var todayViewModel
+    @Environment(StoreController.self) private var store
     @Environment(\.dismiss) private var dismiss
 
     @State private var text: String
@@ -98,11 +99,16 @@ struct PasteTextSheet: View {
                 .appProminentButtonStyle(tint: Theme.primary)
                 .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
 
-                // Only truthful on-device: an external API means the notes do leave the phone.
+                // The promise has to match the engine that will actually run: an external
+                // API or a hosted generation both mean the notes leave the phone.
                 if aiSettings.mode == .onDevice {
                     HStack(spacing: Spacing.xs) {
-                        Image(systemName: "checkmark.shield")
-                        Text("On this iPhone · no upload · works offline")
+                        Image(systemName: store.willUseHostedGeneration ? "network" : "checkmark.shield")
+                        Text(
+                            store.willUseHostedGeneration
+                                ? "Sent to QuickStudy's server · not stored"
+                                : "On this iPhone · no upload · works offline"
+                        )
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)

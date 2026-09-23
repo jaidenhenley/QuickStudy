@@ -21,6 +21,11 @@ final class StoreController {
 
     var isPro: Bool { activeTransaction != nil }
 
+    /// Single source of truth for whether the next generation leaves this iPhone.
+    /// `AIController` routes on it and the paste sheet's privacy promise depends on it —
+    /// they must never disagree.
+    var willUseHostedGeneration: Bool { transactionJWS != nil || !freeHostedGenerationUsed }
+
     init() {
         updates = Task { [weak self] in
             for await result in Transaction.updates {

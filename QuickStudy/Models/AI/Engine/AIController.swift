@@ -54,8 +54,8 @@ enum AIController {
     /// its weakest.
     @MainActor
     private static func hostedEngine(settings: AISettings, store: StoreController) -> HostedCardGenerationEngine? {
+        guard store.willUseHostedGeneration else { return nil }
         let transaction = store.transactionJWS
-        guard transaction != nil || !store.freeHostedGenerationUsed else { return nil }
         return HostedCardGenerationEngine(api: .configured(), transaction: transaction) { remaining in
             store.recordHostedGeneration(remaining: remaining, usedFreeGeneration: transaction == nil)
         }
