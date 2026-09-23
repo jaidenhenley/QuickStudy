@@ -6,11 +6,18 @@
 import SwiftUI
 
 struct OfflineBanner: View {
+    let canSwitchToOnDevice: Bool
     let onOpenSettings: () -> Void
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+
         Button(action: onOpenSettings) {
-            HStack(spacing: Spacing.md) {
+            layout {
                 Image(systemName: "wifi.slash")
                     .font(.subheadline)
                     .foregroundStyle(Theme.warning)
@@ -20,7 +27,7 @@ struct OfflineBanner: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)
-                    Text("Switch to On-Device in Settings to keep generating")
+                    Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.leading)
@@ -36,5 +43,11 @@ struct OfflineBanner: View {
         }
         .buttonStyle(.plain)
         .appGlassCard(cornerRadius: AppRadius.lg)
+    }
+
+    private var subtitle: String {
+        canSwitchToOnDevice
+            ? "Switch to On-Device in Settings to keep generating"
+            : "Generation will resume once you're back online"
     }
 }

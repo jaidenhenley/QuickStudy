@@ -14,9 +14,9 @@ enum HostedConsent {
 
     private static let key = "qs_hostedConsent"
 
-    static var decision: Decision? { decision() }
+    static var decision: Decision? { storedDecision() }
 
-    static func decision(defaults: UserDefaults = .standard) -> Decision? {
+    static func storedDecision(defaults: UserDefaults = .standard) -> Decision? {
         defaults.string(forKey: key).flatMap(Decision.init(rawValue:))
     }
 

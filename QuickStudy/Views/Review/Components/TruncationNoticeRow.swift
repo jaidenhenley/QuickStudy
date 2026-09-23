@@ -17,18 +17,18 @@ struct TruncationNoticeRow: View {
                     .font(.caption2)
                     .fontWeight(.bold)
                     .tracking(1)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.aiAccentText)
                     .padding(.horizontal, Spacing.sm)
                     .padding(.vertical, 2)
-                    .background(Color.appAIAccent, in: Capsule())
-                Text("Only the first 1,200 characters were used")
+                    .background(Color.appAIAccent.opacity(0.15), in: Capsule())
+                Text("Some sections weren't drafted")
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(Theme.textPrimary)
             }
 
-            // Names the plan as the cause — without it the cut reads as a bug, not a limit.
-            Text("The free plan drafts from the start of long notes. Pro reads your whole document, so your cards cover all of it.")
+            // Names the cause — without it the missing cards read as a bug, not a limit.
+            Text("Apple Intelligence couldn't process part of this document, so those sections have no cards. Pro drafts with QuickStudy's cloud model instead.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -40,7 +40,7 @@ struct TruncationNoticeRow: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .appProminentButtonStyle(tint: Theme.aiAccent)
+            .appProminentButtonStyle(tint: Theme.primary)
             .padding(.top, Spacing.xs)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

@@ -27,6 +27,7 @@ struct MetricsSnapshot: Codable, Equatable {
     var paywallDismissedExhausted = 0
     var paywallDismissedTruncation = 0
     var purchaseInitiated = 0
+    var purchaseCompleted = 0
     var allowanceExhausted = false
     var generationsUsedBucket: Int?
     var truncationEvents = 0
@@ -63,6 +64,8 @@ struct MetricsSnapshot: Codable, Equatable {
             }
         case .purchaseInitiated:
             purchaseInitiated += 1
+        case .purchaseCompleted:
+            purchaseCompleted += 1
         case .allowanceExhausted:
             allowanceExhausted = true
         case .generationsUsed(let bucket):

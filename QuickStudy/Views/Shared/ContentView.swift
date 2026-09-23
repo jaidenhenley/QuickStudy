@@ -8,20 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
-    // Shared app state for the whole flow
-    @State private var viewModel = StudyViewModel()
+    @State private var viewModel: StudyViewModel
     @State private var appState = AppState()
-    @State private var aiSettings = AISettings()
+    @State private var aiSettings: AISettings
     @State private var todayViewModel = TodayViewModel()
     @State private var draftStore = DraftStore()
     @State private var sessionStore = SessionStore()
     @State private var networkMonitor = NetworkMonitor()
-    @State private var store = StoreController()
-    @State private var analytics = AnalyticsRecorder()
+    @State private var store: StoreController
+    @State private var analytics: AnalyticsRecorder
     @State private var onboarding: OnboardingViewModel?
     @State private var showOnboarding = false
     @State private var showOnboardingPaywall = false
     @Environment(\.scenePhase) private var scenePhase
+
+    /// One instance of each, shared with the view model — a second `StoreController`
+    /// would mean a second `Transaction.updates` listener and a second view of entitlement.
+    init() {
+        let aiSettings = AISettings()
+        let analytics = AnalyticsRecorder()
+        let store = StoreController(analytics: analytics)
+        _aiSettings = State(initialValue: aiSettings)
+        _analytics = State(initialValue: analytics)
+        _store = State(initialValue: store)
+        _viewModel = State(initialValue: StudyViewModel(aiSettings: aiSettings, store: store, analytics: analytics))
+    }
 
     var body: some View {
         TabView(selection: $appState.selectedTab) {
@@ -55,7 +66,10 @@ struct ContentView: View {
         .environment(viewModel)
         .environment(appState)
         .onChange(of: scenePhase) { _, phase in
-            if phase != .active {
+            if phase == .active {
+                // Catches a renewal, lapse, refund or restore that happened while away.
+                Task { await store.refreshEntitlement() }
+            } else {
                 viewModel.flushPendingChanges()
                 Task { await analytics.flush() }
             }
@@ -66,13 +80,11 @@ struct ContentView: View {
         .environment(store)
         .environment(analytics)
         .task {
+            store.startObservingTransactions()
             await store.refreshEntitlement()
             analytics.record(.deviceCapability(hasOnDeviceModel: AICapability.state(for: aiSettings) != .unsupportedDevice))
         }
         .onAppear {
-            viewModel.aiSettings = aiSettings
-            viewModel.store = store
-            viewModel.analytics = analytics
             startOnboardingIfNeeded()
         }
         .fullScreenCover(isPresented: $showOnboarding, onDismiss: finishOnboarding) {

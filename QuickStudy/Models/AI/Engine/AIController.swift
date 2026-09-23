@@ -58,6 +58,7 @@ enum AIController {
         #endif
     }
 
+    @MainActor
     static var isOnDeviceModelAvailable: Bool {
         #if canImport(FoundationModels)
         return OnDeviceModelAvailability.isAvailable
@@ -77,7 +78,8 @@ enum AIController {
     /// back on anything but oversized input; Pro users only when the server can't serve
     /// them right now, so a real outage still surfaces instead of quietly downgrading.
     static func fallsBackOnDevice(after error: Error, isPro: Bool) -> Bool {
-        guard !(error is CancellationError), let error = error as? CardGenerationError else { return !isPro }
+        if error is CancellationError { return false }
+        guard let error = error as? CardGenerationError else { return !isPro }
         switch error {
         case .hostedInputTooLarge:
             return isPro

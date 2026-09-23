@@ -25,10 +25,14 @@ class StudyViewModel {
         }
     }
     
-    var aiSettings: AISettings = AISettings()
-    var store: StoreController = StoreController()
-    var analytics: AnalyticsRecorder = AnalyticsRecorder()
+    let aiSettings: AISettings
+    let store: StoreController
+    let analytics: AnalyticsRecorder
     let generationProgress = GenerationProgress()
+
+    /// Suggestion top-ups only ever draft on this iPhone, so without a local model there
+    /// is nothing to offer.
+    var canGenerateSuggestions: Bool { AIController.isOnDeviceModelAvailable }
 
     var userSetCount: Int { savedSets.filter { !$0.isDemo }.count }
 
@@ -48,7 +52,10 @@ class StudyViewModel {
 
     @ObservationIgnored private var hasUnsavedChanges = false
 
-    init() {
+    init(aiSettings: AISettings, store: StoreController, analytics: AnalyticsRecorder) {
+        self.aiSettings = aiSettings
+        self.store = store
+        self.analytics = analytics
         loadSavedSets()
     }
 
@@ -234,21 +241,28 @@ class StudyViewModel {
         let text = document.lines.joined(separator: "\n")
         lastGenerationWasTruncated = false
         lastGenerationProvenance = nil
-#if canImport(FoundationModels)
+
         do {
-            return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
-        } catch CardGenerationError.notSubscribed {
-            // The server is the authority on entitlement. Whatever the app believes, a
-            // refusal means this iPhone drafts instead — losing hosted quality is better
-            // than losing the import.
-            if !store.isPro { store.markFreeHostedGenerationUsed() }
+            var engine = try AIController.makeGenerator(settings: aiSettings, store: store, progress: generationProgress)
+            // The server refuses oversized input outright, so sending it would only
+            // spend a round trip to learn that.
+            if engine is HostedCardGenerationEngine,
+               text.utf16.count > HostedCardGenerationEngine.maxInputLength,
+               AIController.isOnDeviceModelAvailable {
+                engine = try AIController.makeOnDeviceGenerator(progress: generationProgress)
+            }
             do {
-                return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
-            } catch {
-                logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
-                generationErrorMessage = Self.message(for: error)
-                generationErrorCode = Self.code(for: error)
-                return []
+                return try await draft(text: text, document: document, engine: engine, countsAgainstAllowance: countsAgainstAllowance)
+            } catch let error where engine is HostedCardGenerationEngine {
+                if !store.isPro && AIController.spendsFreeHostedGeneration(error) {
+                    store.markFreeHostedGenerationUsed()
+                }
+                guard !Task.isCancelled,
+                      AIController.fallsBackOnDevice(after: error, isPro: store.isPro),
+                      AIController.isOnDeviceModelAvailable else { throw error }
+                logger.notice("Hosted generation failed; drafting on device instead.")
+                let fallback = try AIController.makeOnDeviceGenerator(progress: generationProgress)
+                return try await draft(text: text, document: document, engine: fallback, countsAgainstAllowance: countsAgainstAllowance)
             }
         } catch {
             logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
@@ -256,21 +270,15 @@ class StudyViewModel {
             generationErrorCode = Self.code(for: error)
             return []
         }
-#else
-        generationErrorMessage = "Apple Intelligence framework not available in this build."
-        generationErrorCode = "QS-600"
-        return []
-#endif
     }
 
     @MainActor
     private func draft(
         text: String,
         document: StudyDocument,
+        engine: any CardGenerating,
         countsAgainstAllowance: Bool
     ) async throws -> [StudyCard] {
-        let engine = try AIController.makeGenerator(settings: aiSettings, store: store, progress: generationProgress)
-        lastGenerationWasTruncated = engine.sourceChunkLimit.map { text.count > $0 } ?? false
         let startedAt = Date()
         generationProgress.begin(
             expectedSeconds: engine.expectedSeconds,
@@ -278,6 +286,7 @@ class StudyViewModel {
         )
         defer { generationProgress.end() }
         let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
+        lastGenerationWasTruncated = engine.skippedSourceSections > 0
         lastGenerationProvenance = engine.provenance
         if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
         analytics.record(.firstGenerationCompleted(durationBucket: Self.durationBucket(since: startedAt)))
@@ -322,7 +331,7 @@ class StudyViewModel {
         let sourceText = savedSets[index].document.lines.joined(separator: "\n")
 
         do {
-            let engine = try AIController.makeGenerator(settings: aiSettings, store: store)
+            let engine = try AIController.makeOnDeviceGenerator()
             let cards = try await CardGenerator.generateTopicCards(
                 from: sourceText,
                 document: savedSets[index].document,

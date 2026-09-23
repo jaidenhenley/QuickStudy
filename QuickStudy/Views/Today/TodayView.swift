@@ -16,6 +16,8 @@ struct TodayView: View {
     @Environment(NetworkMonitor.self) var networkMonitor
     @Environment(StoreController.self) var store
     @Environment(AnalyticsRecorder.self) var analytics
+    @Environment(DraftStore.self) var draftStore
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var showSettings = false
     @State private var showPaywall = false
@@ -26,27 +28,44 @@ struct TodayView: View {
                 Text("Today")
                     .font(.system(size: 40, weight: .bold))
 
-                if !networkMonitor.isOnline && aiSettings.mode == .externalAPI {
-                    OfflineBanner { showSettings = true }
+                if !networkMonitor.isOnline && (aiSettings.mode == .externalAPI || store.willUseHostedGeneration) {
+                    OfflineBanner(
+                        canSwitchToOnDevice: aiSettings.mode == .externalAPI && !store.willUseHostedGeneration,
+                        onOpenSettings: { showSettings = true }
+                    )
                 }
 
                 if todayViewModel.showsGenerationsPill {
                     AICardsLeftView { showPaywall = true }
                 }
 
-                HStack {
+                if let draft = draftStore.pending {
+                    RecoveredDraftRow(draft: draft) { appState.selectedTab = .library }
+                }
+
+                let dateLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+                    : AnyLayout(HStackLayout())
+
+                dateLayout {
                     Text(formattedDate)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
+                    }
                     if todayViewModel.streakCount > 0 {
                         NavigationLink {
                             StreakView()
                         } label: {
-                            Text("🔥 \(todayViewModel.streakCount) day streak")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.appStreak)
+                            Label {
+                                Text("\(todayViewModel.streakCount) day streak")
+                            } icon: {
+                                Image(systemName: "flame.fill")
+                            }
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.appStreak)
                         }
                     }
                 }
@@ -63,10 +82,21 @@ struct TodayView: View {
                             .foregroundStyle(.secondary)
                             .tracking(1)
                             .padding(.top, Spacing.sm)
-                        WeakestCardRow(weakest: weakest)
+
+                        if let weakestSet = studyViewModel.savedSets.first(where: { $0.id == weakest.setID }) {
+                            NavigationLink {
+                                QuizSessionView(cards: weakestSet.cards)
+                                    .environment(studyViewModel)
+                            } label: {
+                                WeakestCardRow(weakest: weakest)
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            WeakestCardRow(weakest: weakest)
+                        }
                     }
 
-                    if todayViewModel.canGenerate, let suggestion = todayViewModel.suggestion {
+                    if studyViewModel.canGenerateSuggestions, let suggestion = todayViewModel.suggestion {
                         Text("SUGGESTED")
                             .font(.caption)
                             .fontWeight(.semibold)

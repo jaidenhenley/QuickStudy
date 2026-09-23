@@ -73,12 +73,19 @@ enum CardGenerationError: LocalizedError {
             return "This iPhone couldn't verify with QuickStudy. Try again in a moment."
         case .unexpected:
             return "Couldn't draft cards from this. Try a different source."
-        case .attestationFailed(let message),
-             .notSubscribed(let message),
-             .hostedQuotaExhausted(let message),
-             .hostedInputTooLarge(let message),
-             .hostedUnavailable(let message):
+        // Server messages can carry verification internals (certificate and signature
+        // failures), so only the quota message, which names rate limit vs monthly cap in
+        // plain words, is shown as sent.
+        case .attestationFailed:
+            return "QuickStudy couldn't verify this iPhone. Try again in a moment."
+        case .notSubscribed:
+            return "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen."
+        case .hostedQuotaExhausted(let message):
             return message
+        case .hostedInputTooLarge:
+            return "This is too long to draft in one go. Try importing fewer pages at once."
+        case .hostedUnavailable:
+            return "Cloud generation is unavailable right now. Try again shortly."
         }
     }
 

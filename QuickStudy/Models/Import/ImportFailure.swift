@@ -14,6 +14,7 @@ struct ImportFailure: Identifiable {
     enum Recovery: Hashable {
         case pasteText
         case tryAgain
+        case typeCards
     }
 
     let id = UUID()
@@ -98,6 +99,22 @@ extension ImportFailure {
                 "QuickStudy Pro adds \(ProProduct.hostedMonthlyLimit) cloud generations a month, on any iPhone."
             ],
             recoveries: []
+        )
+    }
+
+    /// Apple Intelligence is off or still downloading. `Try again` would just repeat the
+    /// same failure, so the only real recovery is typing cards by hand.
+    static func deviceNotReady(message: String, code: String) -> ImportFailure {
+        ImportFailure(
+            severity: .warning,
+            navigationTitle: "Apple Intelligence",
+            dismissLabel: "Not now",
+            title: "On-device AI isn't ready",
+            message: message,
+            recoveryNote: nil,
+            code: code,
+            tips: [],
+            recoveries: [.typeCards]
         )
     }
 

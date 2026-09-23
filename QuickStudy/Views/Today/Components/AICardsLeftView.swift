@@ -27,7 +27,7 @@ struct AICardsLeftView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .foregroundStyle(todayViewModel.isPro ? .appAIAccent : .appSecondary)
+            .foregroundStyle(todayViewModel.isPro ? Theme.aiAccentText : Color.appSecondary)
             .padding(.horizontal, Spacing.md)
             .padding(.vertical, Spacing.sm)
             .background((todayViewModel.isPro ? Color.appAIAccent : Color.appSecondary).opacity(0.1))
@@ -38,6 +38,9 @@ struct AICardsLeftView: View {
     }
 
     private var label: String {
+        if todayViewModel.isManualOnly {
+            return "AI generation isn't available on this iPhone"
+        }
         if todayViewModel.isPro {
             let left = todayViewModel.hostedRemaining ?? todayViewModel.hostedLimit
             return "QuickStudy Pro · \(left) of \(todayViewModel.hostedLimit) generations left this month"
