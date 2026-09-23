@@ -127,7 +127,11 @@ struct LibraryView: View {
         }
         .navigationTitle("Library")
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { refreshEntitlement() }
+        .onAppear {
+            refreshEntitlement()
+            consumePendingSource()
+        }
+        .onChange(of: appState.pendingImportSource) { _, _ in consumePendingSource() }
         .onChange(of: aiSettings.mode) { _, _ in refreshEntitlement() }
         .onChange(of: store.isPro) { _, _ in refreshEntitlement() }
         .onChange(of: store.freeHostedGenerationUsed) { _, _ in refreshEntitlement() }
@@ -166,6 +170,13 @@ struct LibraryView: View {
                 )
             )
         )
+    }
+
+    private func consumePendingSource() {
+        guard let source = appState.pendingImportSource else { return }
+        appState.pendingImportSource = nil
+        coordinator.pendingSource = source
+        coordinator.presentPendingSource()
     }
 
     private func refreshEntitlement() {

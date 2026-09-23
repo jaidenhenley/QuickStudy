@@ -25,4 +25,7 @@ class AppState {
 
     var selectedTab: Tab = .today
 
+    /// Handed from onboarding to Library, which owns the import coordinator.
+    var pendingImportSource: ImportCoordinator.ImportSource? = nil
+
 }

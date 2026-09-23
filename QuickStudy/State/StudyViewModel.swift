@@ -30,6 +30,8 @@ class StudyViewModel {
     var analytics: AnalyticsRecorder = AnalyticsRecorder()
     let generationProgress = GenerationProgress()
 
+    var userSetCount: Int { savedSets.filter { !$0.isDemo }.count }
+
     // MARK: - Published state
    var document: StudyDocument? = nil
    var flashcards: [StudyCard] = []
