@@ -13,16 +13,21 @@ struct ReviewDraftsView: View {
     @Environment(StoreController.self) private var storeController
     @Environment(AnalyticsRecorder.self) private var analytics
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var draft: DraftSet
+    @State private var lastGeneratedCards: [StudyCard]
     @State private var isRegenerating = false
     @State private var showRegenerateError = false
+    @State private var showRegenerateConfirm = false
     @State private var showPaywall = false
     @State private var showNamePrompt = false
     @State private var nameEntry = ""
+    @AccessibilityFocusState private var isDraftHeaderFocused: Bool
 
     init(draft: DraftSet) {
         _draft = State(initialValue: draft)
+        _lastGeneratedCards = State(initialValue: draft.cards)
     }
 
     var body: some View {
@@ -33,10 +38,10 @@ struct ReviewDraftsView: View {
                         .font(.title3)
                         .foregroundStyle(Color.appPrimary)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(draft.title)
+                        TextField("Set title", text: $draft.title)
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .lineLimit(1)
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                         Text("\(draft.pageCount) \(draft.pageCount == 1 ? "page" : "pages") · \(relativeAge)")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -46,7 +51,11 @@ struct ReviewDraftsView: View {
                         ProgressView()
                     } else {
                         Button("Regenerate") {
-                            Task { await regenerate() }
+                            if hasUnsavedEdits {
+                                showRegenerateConfirm = true
+                            } else {
+                                Task { await regenerate() }
+                            }
                         }
                         .font(.subheadline)
                         .fontWeight(.semibold)
@@ -59,12 +68,25 @@ struct ReviewDraftsView: View {
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
             } header: {
-                HStack {
-                    Text("DRAFT · \(draft.cards.count) CARDS")
-                        .foregroundStyle(Color.appPrimary)
-                    Spacer()
-                    Text("From \(draft.title)")
-                        .lineLimit(1)
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("DRAFT · \(draft.cards.count) CARDS")
+                                .foregroundStyle(Color.appPrimary)
+                                .accessibilityFocused($isDraftHeaderFocused)
+                            Text("From \(draft.title)")
+                                .lineLimit(2)
+                        }
+                    } else {
+                        HStack {
+                            Text("DRAFT · \(draft.cards.count) CARDS")
+                                .foregroundStyle(Color.appPrimary)
+                                .accessibilityFocused($isDraftHeaderFocused)
+                            Spacer()
+                            Text("From \(draft.title)")
+                                .lineLimit(1)
+                        }
+                    }
                 }
                 .font(.caption)
                 .fontWeight(.semibold)
@@ -81,12 +103,12 @@ struct ReviewDraftsView: View {
             }
 
             ForEach($draft.cards) { $card in
-                DraftCardRow(card: $card)
+                DraftCardRow(card: $card, onRemove: { removeCard(card.id) })
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-                            draft.remove(card.id)
+                            removeCard(card.id)
                         } label: {
                             Label("Remove", systemImage: "trash")
                         }
@@ -100,14 +122,25 @@ struct ReviewDraftsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
+                Button(saveLabel) {
                     nameEntry = ""
                     showNamePrompt = true
                 }
-                .disabled(draft.cards.isEmpty)
+                .disabled(!canSave)
             }
         }
         .onChange(of: draft.cards) { _, _ in draftStore.set(draft) }
+        .onChange(of: draft.title) { _, _ in draftStore.set(draft) }
+        .confirmationDialog(
+            "Replace \(draft.cards.count) \(draft.cards.count == 1 ? "card" : "cards")?",
+            isPresented: $showRegenerateConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Replace", role: .destructive) { Task { await regenerate() } }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Your edits will be lost.")
+        }
         .alert("Couldn't regenerate", isPresented: $showRegenerateError) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -125,6 +158,26 @@ struct ReviewDraftsView: View {
         }
     }
 
+    private var validCards: [StudyCard] {
+        draft.cards.filter {
+            !$0.question.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            !$0.answer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+    }
+
+    private var canSave: Bool {
+        !validCards.isEmpty
+    }
+
+    private var saveLabel: String {
+        let count = validCards.count
+        return count == 1 ? "Save 1 card" : "Save \(count) cards"
+    }
+
+    private var hasUnsavedEdits: Bool {
+        draft.cards != lastGeneratedCards
+    }
+
     private var regenerateErrorMessage: String {
         let base = studyViewModel.generationErrorMessage ?? "Your current draft is unchanged. Try again in a moment."
         guard let code = studyViewModel.generationErrorCode else { return base }
@@ -137,9 +190,15 @@ struct ReviewDraftsView: View {
         return formatter.localizedString(for: draft.createdAt, relativeTo: Date())
     }
 
+    private func removeCard(_ id: UUID) {
+        draft.remove(id)
+        isDraftHeaderFocused = true
+    }
+
     private func save(named name: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty { draft.title = trimmed }
+        draft.cards = validCards
         studyViewModel.savedSets.insert(draft.committed(), at: 0)
         studyViewModel.saveSavedSets()
         analytics.record(.setCreated)
@@ -157,6 +216,7 @@ struct ReviewDraftsView: View {
         }
         draft.cards = cards
         draft.provenance = studyViewModel.lastGenerationProvenance
+        lastGeneratedCards = cards
         draftStore.set(draft)
     }
 }

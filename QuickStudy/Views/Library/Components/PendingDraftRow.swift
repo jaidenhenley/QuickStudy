@@ -11,6 +11,7 @@ struct PendingDraftRow: View {
     let onDiscard: () -> Void
 
     @State private var showDiscardAlert = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private static let ageFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
@@ -31,7 +32,7 @@ struct PendingDraftRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(draft.title)
                         .font(.headline)
-                        .lineLimit(1)
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -63,12 +64,22 @@ struct PendingDraftRow: View {
             Button("Discard", role: .destructive, action: onDiscard)
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("The \(draft.cards.count) drafted \(noun) will be deleted. This used one of your free generations.")
+            Text(discardWarning)
         }
     }
 
     private var noun: String {
         draft.cards.count == 1 ? "card" : "cards"
+    }
+
+    private var discardWarning: String {
+        let base = "The \(draft.cards.count) drafted \(noun) will be deleted."
+        switch draft.provenance?.engine {
+        case .onDevice:
+            return base + " This used one of your free generations."
+        case .cloud, .externalAPI, .none:
+            return base
+        }
     }
 
     private var subtitle: String {

@@ -10,8 +10,11 @@ import Foundation
 protocol CardGenerating {
     var countsAgainstAllowance: Bool { get }
     /// Length an engine splits the source at, or nil when it reads the whole document in
-    /// one pass. Drives the truncation notice on the drafts screen.
+    /// one pass.
     var sourceChunkLimit: Int? { get }
+    /// Sections of the last `generateCards(from:)` source the engine failed on and so
+    /// drafted nothing from. Drives the truncation notice on the drafts screen.
+    var skippedSourceSections: Int { get }
     /// Measured typical duration, used by the drafting screen when an engine has no
     /// finer-grained progress to report.
     var expectedSeconds: Double { get }

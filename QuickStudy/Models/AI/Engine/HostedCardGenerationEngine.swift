@@ -10,15 +10,21 @@ struct HostedCardGenerationEngine: CardGenerating {
         let challenge: String
         let text: String
         let transaction: String?
+        let renewalInfo: String?
         let topic: String?
         let count: Int?
     }
 
+    /// The server's `MAX_INPUT_CHARS`, measured as it measures: UTF-16 code units.
+    static let maxInputLength = 40_000
+
     let api: HostedAPI
     let transaction: String?
+    var renewalInfo: String? = nil
     let onRemaining: @MainActor @Sendable (Int) -> Void
     let countsAgainstAllowance = false
     let sourceChunkLimit: Int? = nil
+    let skippedSourceSections = 0
     let expectedSeconds: Double = 22
     let provenance = GenerationProvenance(engine: .cloud, model: nil)
 
@@ -42,7 +48,14 @@ struct HostedCardGenerationEngine: CardGenerating {
     private func attempt(text: String, topic: String?, count: Int?) async throws -> [AIFlashcard] {
         let challenge = try await api.challenge()
         let body = try JSONEncoder().encode(
-            GenerateRequest(challenge: challenge, text: text, transaction: transaction, topic: topic, count: count)
+            GenerateRequest(
+                challenge: challenge,
+                text: text,
+                transaction: transaction,
+                renewalInfo: renewalInfo,
+                topic: topic,
+                count: count
+            )
         )
         // The exact bytes that are signed are the bytes that are sent; the server hashes them the same way.
         let signature = HostedAPI.developmentBypassToken == nil

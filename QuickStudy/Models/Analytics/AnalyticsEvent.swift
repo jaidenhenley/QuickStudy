@@ -17,6 +17,7 @@ enum AnalyticsEvent {
     case paywallShown(PaywallSurface)
     case paywallDismissed(PaywallSurface)
     case purchaseInitiated
+    case purchaseCompleted
     case allowanceExhausted
     case generationsUsed(bucket: Int)
     case truncationEvent

@@ -21,8 +21,10 @@ enum GenerationAllowance {
 
     static var isExhausted: Bool { remaining() == 0 }
 
+    /// A stored month later than now means the clock was set back. The stored count
+    /// stands rather than resetting, or winding the date back would refill the allowance.
     static func used(now: Date = Date(), defaults: UserDefaults = .standard) -> Int {
-        guard defaults.integer(forKey: monthKey) == monthStamp(for: now) else { return 0 }
+        guard defaults.integer(forKey: monthKey) >= monthStamp(for: now) else { return 0 }
         return defaults.integer(forKey: usedKey)
     }
 
@@ -32,7 +34,7 @@ enum GenerationAllowance {
 
     static func recordGeneration(now: Date = Date(), defaults: UserDefaults = .standard) {
         defaults.set(used(now: now, defaults: defaults) + 1, forKey: usedKey)
-        defaults.set(monthStamp(for: now), forKey: monthKey)
+        defaults.set(max(monthStamp(for: now), defaults.integer(forKey: monthKey)), forKey: monthKey)
     }
 
     static func resetDate(now: Date = Date(), calendar: Calendar = .current) -> Date {
@@ -40,7 +42,7 @@ enum GenerationAllowance {
         return calendar.date(byAdding: .month, value: 1, to: monthStart) ?? now
     }
 
-    private static func monthStamp(for date: Date, calendar: Calendar = .current) -> Int {
+    static func monthStamp(for date: Date, calendar: Calendar = .current) -> Int {
         let components = calendar.dateComponents([.year, .month], from: date)
         return (components.year ?? 0) * 12 + (components.month ?? 0)
     }

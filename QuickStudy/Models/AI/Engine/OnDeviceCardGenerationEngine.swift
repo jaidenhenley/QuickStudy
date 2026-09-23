@@ -17,9 +17,11 @@ import FoundationModels
 struct OnDeviceCardGenerationEngine: CardGenerating {
     let countsAgainstAllowance = true
     var sourceChunkLimit: Int? { Self.chunkLength }
+    var skippedSourceSections: Int { skipped.count }
     let expectedSeconds: Double = 6
     let provenance = GenerationProvenance(engine: .onDevice, model: "Apple Intelligence")
     var progress: GenerationProgress?
+    let skipped = SkippedSectionCounter()
 
     private static let chunkLength = 1200
 
@@ -87,6 +89,7 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
                 // A guardrail trip or a bad passage in one section shouldn't cost the
                 // user every card drafted from the rest of the document.
                 if firstFailure == nil { firstFailure = error }
+                skipped.count += 1
             }
             await progress?.advance()
         }
@@ -262,6 +265,12 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
         \(candidateBlock.joined(separator: "\n"))
         """
     }
+}
+
+/// The engine is a value type whose generate methods are non-mutating; the count has
+/// to outlive the call so the caller can read it afterwards.
+final class SkippedSectionCounter {
+    var count = 0
 }
 
 // MARK: - FoundationModels types
