@@ -75,7 +75,7 @@ struct ImportErrorView: View {
                             Button {
                                 onPasteText()
                             } label: {
-                                Text("Paste text")
+                                Text(failure.pasteRecoveryLabel)
                                     .font(.headline)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, Spacing.md)

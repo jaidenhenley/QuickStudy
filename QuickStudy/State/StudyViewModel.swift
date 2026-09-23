@@ -290,8 +290,10 @@ class StudyViewModel {
     /// An unrecognised error type used to render as QS-503, indistinguishable from a real
     /// generation failure. The suffix names the type so a report points at the cause.
     private static func code(for error: Error) -> String {
-        (error as? CardGenerationError)?.code
-            ?? CardGenerationError.unexpected(String(describing: type(of: error))).code
+        if let known = error as? CardGenerationError { return known.code }
+        let bridged = error as NSError
+        let domain = bridged.domain.split(separator: ".").last.map(String.init) ?? bridged.domain
+        return CardGenerationError.unexpected("\(domain)-\(bridged.code)").code
     }
 
     /// A raw URLError description is not user-facing copy.

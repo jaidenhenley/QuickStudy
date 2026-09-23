@@ -26,6 +26,7 @@ enum CardGenerationError: LocalizedError {
     case attestationUnavailable
     case attestationFailed(String)
     case attestationKeyUnknown
+    case deviceAttestationFailed(Int)
     case unexpected(String)
     case notSubscribed(String)
     case hostedQuotaExhausted(String)
@@ -68,6 +69,8 @@ enum CardGenerationError: LocalizedError {
             return "Pro generation needs a real iPhone to verify the app."
         case .attestationKeyUnknown:
             return "This iPhone needs to re-verify with QuickStudy. Try again."
+        case .deviceAttestationFailed:
+            return "This iPhone couldn't verify with QuickStudy. Try again in a moment."
         case .unexpected:
             return "Couldn't draft cards from this. Try a different source."
         case .attestationFailed(let message),
@@ -118,6 +121,8 @@ enum CardGenerationError: LocalizedError {
             return "QS-702"
         case .attestationKeyUnknown:
             return "QS-704"
+        case .deviceAttestationFailed(let code):
+            return "QS-705-\(code)"
         case .unexpected(let label):
             return "QS-599-\(label)"
         case .notSubscribed:

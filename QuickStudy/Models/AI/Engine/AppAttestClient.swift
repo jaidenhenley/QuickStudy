@@ -23,15 +23,27 @@ actor AppAttestClient {
 
     func sign(_ body: Data, using api: HostedAPI) async throws -> HostedAPI.Signature {
         let hash = Data(SHA256.hash(data: body))
+        let hadStoredKey = KeychainManager.load(account: .appAttestKeyID) != nil
         let keyID = try await registeredKeyID(using: api)
         do {
             return try await assertion(for: hash, keyID: keyID)
-        } catch let error as DCError where error.code == .invalidKey {
-            // Apple revoked the key (restore, OS reinstall). Register a fresh one once.
+        } catch {
+            // Keychain outlives a reinstall but the Secure Enclave key it names does not,
+            // and iOS doesn't reliably report that as `.invalidKey`. Any assertion failure
+            // on a stored key gets exactly one fresh registration.
+            guard hadStoredKey else { throw Self.deviceFailure(error) }
             try KeychainManager.delete(account: .appAttestKeyID)
             let fresh = try await registeredKeyID(using: api)
-            return try await assertion(for: hash, keyID: fresh)
+            do {
+                return try await assertion(for: hash, keyID: fresh)
+            } catch {
+                throw Self.deviceFailure(error)
+            }
         }
+    }
+
+    private static func deviceFailure(_ error: Error) -> CardGenerationError {
+        .deviceAttestationFailed((error as NSError).code)
     }
 
     private func assertion(for hash: Data, keyID: String) async throws -> HostedAPI.Signature {

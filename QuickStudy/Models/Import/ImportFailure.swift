@@ -29,15 +29,21 @@ struct ImportFailure: Identifiable {
 }
 
 extension ImportFailure {
-    static func generation(cause: String?, code: String?, retainedNoun: String?) -> ImportFailure {
+    /// With text kept, the recovery opens the sheet already filled in — there's nothing
+    /// to paste, only something to edit.
+    var pasteRecoveryLabel: String { recoveryNote == nil ? "Paste text" : "Edit text" }
+
+    /// `retained` names what the coordinator is still holding. It lives in memory only for
+    /// this screen's buttons, so the note must never promise it was saved anywhere.
+    static func generation(cause: String?, code: String?, retained: String?) -> ImportFailure {
         ImportFailure(
             severity: .error,
             navigationTitle: "Error",
             dismissLabel: "Cancel",
             title: "Something went wrong",
             message: cause ?? "We couldn't draft cards from this source.",
-            recoveryNote: retainedNoun.map {
-                "Your \($0) was saved — you can try again or paste the text manually."
+            recoveryNote: retained.map {
+                "We kept \($0). Try again, or edit it first — cancelling discards it."
             },
             code: code ?? "QS-503",
             tips: [],

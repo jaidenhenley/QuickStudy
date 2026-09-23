@@ -216,7 +216,7 @@ final class ImportCoordinator {
             fail(.generation(
                 cause: study.generationErrorMessage,
                 code: study.generationErrorCode,
-                retainedNoun: sourceType == .scan || sourceType == .photo ? "scan" : "text"
+                retained: sourceType == .scan || sourceType == .photo ? "the text from your scan" : "your text"
             ))
             return
         }
