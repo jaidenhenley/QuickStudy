@@ -23,6 +23,7 @@ struct HostedConsentSheet: View {
 
             Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
                 .font(.subheadline)
+                .foregroundStyle(.blue)
 
             Spacer(minLength: 0)
 
