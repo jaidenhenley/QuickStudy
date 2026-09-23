@@ -30,7 +30,7 @@ struct DraftedDeckSummary: View {
 
             Spacer(minLength: Spacing.sm)
 
-            DeckPageDots(count: pageCount, current: pageIndex)
+            PageDots(count: pageCount, current: pageIndex)
         }
         .frame(maxWidth: .infinity)
         .padding(Spacing.base)
