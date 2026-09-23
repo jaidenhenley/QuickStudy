@@ -44,7 +44,7 @@ extension ImportFailure {
             title: "Something went wrong",
             message: cause ?? "We couldn't draft cards from this source.",
             recoveryNote: retained.map {
-                "We kept \($0). Try again, or edit it first — cancelling discards it."
+                "We kept \($0). Try again, or edit it first. Cancelling discards it."
             },
             code: code ?? "QS-503",
             tips: [],
@@ -94,7 +94,7 @@ extension ImportFailure {
             recoveryNote: nil,
             code: "QS-200",
             tips: [
-                "Existing sets still work — study, quiz and edit as usual.",
+                "Existing sets still work. Study, quiz and edit as usual.",
                 "Type cards by hand from the Library in the meantime.",
                 "QuickStudy Pro adds \(ProProduct.hostedMonthlyLimit) cloud generations a month, on any iPhone."
             ],

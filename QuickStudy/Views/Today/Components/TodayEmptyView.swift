@@ -71,7 +71,7 @@ struct TodayEmptyView: View {
                         .font(.title2)
                         .fontWeight(.bold)
 
-                    Text("Scan a page, drop in a PDF, or paste your notes — your first cards start here.")
+                    Text("Scan a page, drop in a PDF, or paste your notes. Your first cards start here.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)

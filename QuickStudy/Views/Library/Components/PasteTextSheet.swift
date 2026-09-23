@@ -45,7 +45,7 @@ struct PasteTextSheet: View {
                     .foregroundStyle(.appSecondary)
                 }
 
-                Text("Anything — lecture notes, a chapter, a syllabus.")
+                Text("Anything works: lecture notes, a chapter or a syllabus.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 

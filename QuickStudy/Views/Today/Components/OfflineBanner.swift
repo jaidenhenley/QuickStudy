@@ -23,7 +23,7 @@ struct OfflineBanner: View {
                     .foregroundStyle(Theme.warning)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("You're offline — card generation needs a connection")
+                    Text("You're offline. Card generation needs a connection.")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.leading)

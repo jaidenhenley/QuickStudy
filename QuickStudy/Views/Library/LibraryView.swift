@@ -83,6 +83,9 @@ struct LibraryView: View {
                                                 SetTile(set: set)
                                             }
                                             .buttonStyle(.plain)
+                                            // Without this the lift uses the link's full rectangle,
+                                            // which shows as a grey platter around the rounded glass.
+                                            .contentShape(.contextMenuPreview, .rect(cornerRadius: AppRadius.lg))
                                             .contextMenu {
                                                 Button {
                                                     renameText = set.title

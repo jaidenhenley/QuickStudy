@@ -23,7 +23,7 @@ struct OnboardingHowItWorksPage: View {
                 OnboardingStepRow(
                     number: 1,
                     title: "Capture your source",
-                    detail: "Photo, PDF, or paste — anything with text."
+                    detail: "Photo, PDF, or paste. Anything with text works."
                 )
                 OnboardingStepRow(
                     number: 2,

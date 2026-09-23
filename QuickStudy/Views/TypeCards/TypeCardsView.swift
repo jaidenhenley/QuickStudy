@@ -48,7 +48,7 @@ struct TypeCardsView: View {
                     .appGlassCard(cornerRadius: AppRadius.md)
 
                     if viewModel.wantsMoreCards {
-                        Text("Four or more cards make better quiz questions — each card's answer becomes a wrong option for the others.")
+                        Text("Four or more cards make better quiz questions, because each card's answer becomes a wrong option for the others.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

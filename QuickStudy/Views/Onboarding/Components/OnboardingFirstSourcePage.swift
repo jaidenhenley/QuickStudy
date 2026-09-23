@@ -29,7 +29,7 @@ struct OnboardingFirstSourcePage: View {
                     Text("Try a demo set")
                         .font(.title3)
                         .fontWeight(.bold)
-                    Text("4 sample sets — feel the loop before you add your own.")
+                    Text("4 sample sets. Feel the loop before you add your own.")
                         .font(.subheadline)
                         .opacity(0.9)
                 }

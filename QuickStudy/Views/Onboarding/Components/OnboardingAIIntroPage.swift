@@ -26,7 +26,7 @@ struct OnboardingAIIntroPage: View {
                 // never be told they can.
                 Text(
                     hasOnDeviceModel
-                        ? "QuickStudy turns notes into flashcards using Apple Intelligence — right on this iPhone."
+                        ? "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone."
                         : "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud."
                 )
                 .font(.body)

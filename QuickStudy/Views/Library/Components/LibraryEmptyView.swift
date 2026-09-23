@@ -44,7 +44,7 @@ struct LibraryEmptyView: View {
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Snap a page, drop in a PDF, or paste your notes — we'll draft flashcards in seconds.")
+            Text("Snap a page, drop in a PDF, or paste your notes. We'll draft flashcards in seconds.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

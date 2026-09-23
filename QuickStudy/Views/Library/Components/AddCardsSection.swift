@@ -100,7 +100,7 @@ struct AddCardsSection: View {
     private var infoText: String {
         switch reason {
         case .noOnDeviceModel:
-            return "AI card generation needs an iPhone with Apple Intelligence (iPhone 15 Pro or later), unless you're on Pro. Everything else — sets, sessions, streaks — works fully on this device."
+            return "AI card generation needs an iPhone with Apple Intelligence (iPhone 15 Pro or later), unless you're on Pro. Everything else, including sets, sessions and streaks, works fully on this device."
         case .allowanceExhausted:
             return "You've used this month's free AI generations. Type cards by hand, or go Pro for more."
         }

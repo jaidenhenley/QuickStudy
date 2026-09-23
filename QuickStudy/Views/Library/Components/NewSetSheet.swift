@@ -21,7 +21,7 @@ struct NewSetSheet: View {
                 Button("Cancel") { dismiss() }
             }
 
-            Text("Capture a page — cards draft automatically.")
+            Text("Capture a page and cards draft automatically.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 

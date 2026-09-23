@@ -155,7 +155,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Privacy")
                 } footer: {
-                    Text("Sends anonymous counts — like whether onboarding finished or a paywall was shown — to help improve QuickStudy. Never card text, never document text.")
+                    Text("Sends anonymous counts, like whether onboarding finished or a paywall was shown, to help improve QuickStudy. It never sends card text or document text.")
                 }
 
                 Section {

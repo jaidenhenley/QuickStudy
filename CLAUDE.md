@@ -174,7 +174,9 @@ Until those exist, match the design's scale exactly. Do not introduce new radius
 
 ### Copy
 
-All user-facing text must match the Final v2 designs exactly — including capitalization, the middle dot separator (`·`), and the em dash. Do not paraphrase or shorten.
+All user-facing text must match the Final v2 designs exactly — including capitalization and the middle dot separator (`·`). Do not paraphrase or shorten.
+
+**Exception: no em dashes (`—`) in user-facing copy.** Where a Final v2 string uses one, rewrite it with ordinary punctuation (a period, comma, colon, or `·` for compact labels) and keep the wording otherwise intact. This applies to every string a user can see; comments, logs, and prompt text sent only to the model are exempt.
 
 Section headers are uppercase with letter tracking (`TODAY'S SESSION`, `WEAKEST CARD`, `SUGGESTED`, `UP NEXT`). Empty states describe the next action; they never apologize and never show a disabled CTA.
 
