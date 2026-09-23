@@ -181,6 +181,11 @@ struct LibraryView: View {
     private func consumePendingSource() {
         guard let source = appState.pendingImportSource else { return }
         appState.pendingImportSource = nil
+        // The onboarding handoff can land before ImportModifiers' onAppear has injected
+        // these, and without them the consent and replace-draft checks are silently skipped.
+        coordinator.draftStore = draftStore
+        coordinator.aiSettings = aiSettings
+        coordinator.storeController = store
         coordinator.pendingSource = source
         coordinator.presentPendingSource()
     }

@@ -17,7 +17,7 @@ struct HostedConsentSheet: View {
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Your document's text is sent to QuickStudy's server, which uses Cloudflare Workers AI — running open models from OpenAI and DeepSeek — to draft your cards. Your text isn't stored after drafting. Later free sets are drafted on this iPhone.")
+            Text("Your document's text is sent to QuickStudy's server and drafted by AI running on Cloudflare. Your text isn't stored after drafting. Later free sets are drafted on this iPhone.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
