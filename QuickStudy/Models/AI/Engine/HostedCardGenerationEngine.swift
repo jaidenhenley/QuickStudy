@@ -20,6 +20,7 @@ struct HostedCardGenerationEngine: CardGenerating {
     let countsAgainstAllowance = false
     let sourceChunkLimit: Int? = nil
     let expectedSeconds: Double = 22
+    let provenance = GenerationProvenance(engine: .cloud, model: nil)
 
     func generateCards(from text: String) async throws -> [AIFlashcard] {
         try await request(text: text, topic: nil, count: nil)

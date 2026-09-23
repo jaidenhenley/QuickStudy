@@ -91,4 +91,35 @@ struct StudyModelCodingTests {
         #expect(decoded.explanation == nil)
         #expect(decoded.distractors == [])
     }
+
+    @Test func studySetKeepsItsProvenanceThroughJSON() throws {
+        let set = StudySet(
+            title: "Cells",
+            document: StudyDocument(title: "Cells", lines: ["Mitochondria make ATP."]),
+            cards: [StudyCard(question: "What makes ATP?", answer: "Mitochondria")],
+            sourceType: .pdf,
+            provenance: GenerationProvenance(engine: .cloud, model: nil)
+        )
+
+        let decoded = try makeDecoder().decode(StudySet.self, from: makeEncoder().encode(set))
+
+        #expect(decoded.provenance == GenerationProvenance(engine: .cloud, model: nil))
+    }
+
+    @Test func studySetSavedBeforeProvenanceStillDecodes() throws {
+        let set = StudySet(
+            title: "Cells",
+            document: StudyDocument(title: "Cells", lines: ["Mitochondria make ATP."]),
+            cards: [],
+            sourceType: .paste
+        )
+        var json = try JSONSerialization.jsonObject(with: makeEncoder().encode(set)) as! [String: Any]
+        json.removeValue(forKey: "provenance")
+        let legacy = try JSONSerialization.data(withJSONObject: json)
+
+        let decoded = try makeDecoder().decode(StudySet.self, from: legacy)
+
+        #expect(decoded.title == "Cells")
+        #expect(decoded.provenance == nil)
+    }
 }

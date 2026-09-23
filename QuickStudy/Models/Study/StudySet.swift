@@ -23,6 +23,7 @@ struct StudySet: Identifiable, Codable, Equatable {
     var cards: [StudyCard]
     var sourceType: StudySourceType
     var isDemo: Bool
+    var provenance: GenerationProvenance?
 
     init(
         id: UUID = UUID(),
@@ -32,7 +33,8 @@ struct StudySet: Identifiable, Codable, Equatable {
         document: StudyDocument,
         cards: [StudyCard],
         sourceType: StudySourceType,
-        isDemo: Bool = false
+        isDemo: Bool = false,
+        provenance: GenerationProvenance? = nil
     ) {
         self.id = id
         self.title = title
@@ -42,6 +44,7 @@ struct StudySet: Identifiable, Codable, Equatable {
         self.cards = cards
         self.sourceType = sourceType
         self.isDemo = isDemo
+        self.provenance = provenance
     }
 
     func dueCount(asOf date: Date = Date(), calendar: Calendar = .current) -> Int {
@@ -86,6 +89,7 @@ struct StudySet: Identifiable, Codable, Equatable {
         case cards
         case sourceType
         case isDemo
+        case provenance
     }
 
     init(from decoder: Decoder) throws {
@@ -98,6 +102,7 @@ struct StudySet: Identifiable, Codable, Equatable {
         cards = try container.decode([StudyCard].self, forKey: .cards)
         sourceType = try container.decode(StudySourceType.self, forKey: .sourceType)
         isDemo = try container.decodeIfPresent(Bool.self, forKey: .isDemo) ?? false
+        provenance = try container.decodeIfPresent(GenerationProvenance.self, forKey: .provenance)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -110,5 +115,6 @@ struct StudySet: Identifiable, Codable, Equatable {
         try container.encode(cards, forKey: .cards)
         try container.encode(sourceType, forKey: .sourceType)
         try container.encode(isDemo, forKey: .isDemo)
+        try container.encodeIfPresent(provenance, forKey: .provenance)
     }
 }

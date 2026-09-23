@@ -18,6 +18,7 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
     let countsAgainstAllowance = true
     var sourceChunkLimit: Int? { Self.chunkLength }
     let expectedSeconds: Double = 6
+    let provenance = GenerationProvenance(engine: .onDevice, model: "Apple Intelligence")
     var progress: GenerationProgress?
 
     private static let chunkLength = 1200

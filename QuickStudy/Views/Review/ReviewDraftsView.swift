@@ -140,6 +140,7 @@ struct ReviewDraftsView: View {
             return
         }
         draft.cards = cards
+        draft.provenance = studyViewModel.lastGenerationProvenance
         draftStore.set(draft)
     }
 }

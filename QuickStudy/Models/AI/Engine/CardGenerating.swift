@@ -15,6 +15,7 @@ protocol CardGenerating {
     /// Measured typical duration, used by the drafting screen when an engine has no
     /// finer-grained progress to report.
     var expectedSeconds: Double { get }
+    var provenance: GenerationProvenance { get }
     func generateCards(from text: String) async throws -> [AIFlashcard]
     func generateCards(from text: String, topic: String, count: Int) async throws -> [AIFlashcard]
 }

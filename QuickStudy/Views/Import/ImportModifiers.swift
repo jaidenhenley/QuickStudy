@@ -57,6 +57,14 @@ struct ImportModifiers: ViewModifier {
                 }
             }
             .onAppear { coordinator.draftStore = draftStore }
+            // Saving or discarding clears the draft that the preview and drafts screens are
+            // built from. Close the whole import stack rather than popping one level back
+            // onto a screen with nothing left to show.
+            .onChange(of: draftStore.pending?.id) { _, id in
+                guard id == nil else { return }
+                coordinator.previewConfirmed = false
+                coordinator.navigateToReview = false
+            }
             .sheet(isPresented: $coordinator.showPaywall) {
                 PaywallView(surface: .exhausted)
             }

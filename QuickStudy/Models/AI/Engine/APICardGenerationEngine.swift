@@ -11,6 +11,7 @@ struct APICardGenerationEngine: CardGenerating {
     let countsAgainstAllowance = true
     let sourceChunkLimit: Int? = nil
     let expectedSeconds: Double = 8
+    var provenance: GenerationProvenance { GenerationProvenance(engine: .externalAPI, model: model) }
     let endpoint: URL
     let model: String
     let apiKey: String

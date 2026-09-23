@@ -19,6 +19,10 @@ struct StudySetDetailView: View {
 
     var body: some View {
         List {
+            SetProvenanceRow(sourceType: set.sourceType, provenance: set.provenance)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+
             ForEach(set.cards) { card in
                 VStack(alignment: .leading, spacing: Spacing.sm) {
                     Text(card.question)

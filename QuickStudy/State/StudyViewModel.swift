@@ -40,6 +40,7 @@ class StudyViewModel {
    var isHandwritingMode: Bool = false
    var isUltraHandwritingMode: Bool = true
    private(set) var lastGenerationWasTruncated = false
+   private(set) var lastGenerationProvenance: GenerationProvenance?
    var generationErrorMessage: String? = nil
    var generationErrorCode: String? = nil
    var savedSets: [StudySet] = []
@@ -213,7 +214,8 @@ class StudyViewModel {
             document: document,
             cards: cards,
             sourceType: sourceType,
-            wasTruncated: lastGenerationWasTruncated
+            wasTruncated: lastGenerationWasTruncated,
+            provenance: lastGenerationProvenance
         )
     }
 
@@ -227,6 +229,7 @@ class StudyViewModel {
 
         let text = document.lines.joined(separator: "\n")
         lastGenerationWasTruncated = false
+        lastGenerationProvenance = nil
 #if canImport(FoundationModels)
         do {
             return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
@@ -271,6 +274,7 @@ class StudyViewModel {
         )
         defer { generationProgress.end() }
         let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
+        lastGenerationProvenance = engine.provenance
         if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
         analytics.record(.firstGenerationCompleted(durationBucket: Self.durationBucket(since: startedAt)))
         return cards

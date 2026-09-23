@@ -16,6 +16,7 @@ struct DraftSet: Identifiable, Codable {
     var cards: [StudyCard]
     var sourceType: StudySourceType
     var wasTruncated: Bool
+    var provenance: GenerationProvenance?
     let createdAt: Date
 
     init(
@@ -25,6 +26,7 @@ struct DraftSet: Identifiable, Codable {
         cards: [StudyCard],
         sourceType: StudySourceType,
         wasTruncated: Bool = false,
+        provenance: GenerationProvenance? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -33,6 +35,7 @@ struct DraftSet: Identifiable, Codable {
         self.cards = cards
         self.sourceType = sourceType
         self.wasTruncated = wasTruncated
+        self.provenance = provenance
         self.createdAt = createdAt
     }
 
@@ -44,6 +47,7 @@ struct DraftSet: Identifiable, Codable {
         cards = try container.decode([StudyCard].self, forKey: .cards)
         sourceType = try container.decode(StudySourceType.self, forKey: .sourceType)
         wasTruncated = try container.decodeIfPresent(Bool.self, forKey: .wasTruncated) ?? false
+        provenance = try container.decodeIfPresent(GenerationProvenance.self, forKey: .provenance)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
     }
 
@@ -54,6 +58,6 @@ struct DraftSet: Identifiable, Codable {
     }
 
     func committed() -> StudySet {
-        StudySet(title: title, document: document, cards: cards, sourceType: sourceType)
+        StudySet(title: title, document: document, cards: cards, sourceType: sourceType, provenance: provenance)
     }
 }
