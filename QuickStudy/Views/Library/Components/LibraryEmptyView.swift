@@ -38,6 +38,7 @@ struct LibraryEmptyView: View {
                     }
             }
             .padding(.bottom, 6)
+            .accessibilityHidden(true)
 
             Text("Build your first set")
                 .font(.title2)
@@ -48,13 +49,17 @@ struct LibraryEmptyView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
-            HStack(spacing: 12) {
-                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
-                    coordinator.pendingSource = .pdf
-                    coordinator.presentPendingSource()
-                }
+            HStack(spacing: 10) {
                 SourceOptionButton(title: "Scan", subtitle: "Camera", systemImage: "camera") {
                     coordinator.pendingSource = .scan
+                    coordinator.presentPendingSource()
+                }
+                SourceOptionButton(title: "Photo", subtitle: "Library", systemImage: "photo") {
+                    coordinator.pendingSource = .photo
+                    coordinator.presentPendingSource()
+                }
+                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
+                    coordinator.pendingSource = .pdf
                     coordinator.presentPendingSource()
                 }
                 SourceOptionButton(title: "Text", subtitle: "Paste", systemImage: "text.alignleft") {

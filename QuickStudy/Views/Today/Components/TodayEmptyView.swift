@@ -10,8 +10,10 @@ import SwiftUI
 struct TodayEmptyView: View {
     @Environment(TodayViewModel.self) var todayViewModel
     @Environment(StudyViewModel.self) var studyViewModel
+    @Environment(AppState.self) var appState
 
     @State private var navigateToPractice = false
+    @State private var practiceCards: [StudyCard] = []
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.base) {
@@ -23,7 +25,7 @@ struct TodayEmptyView: View {
                     Circle()
                         .fill(Color.appPrimary)
                         .frame(width: 76, height: 76)
-                    Image(systemName: "checkmark")
+                    Image(systemName: todayViewModel.hasAnySets ? "checkmark" : "sparkles")
                         .font(.title)
                         .fontWeight(.semibold)
                         .foregroundStyle(.white)
@@ -41,22 +43,43 @@ struct TodayEmptyView: View {
                         .frame(width: 8, height: 8)
                         .offset(x: -48, y: 32)
                 }
+                .accessibilityHidden(true)
 
-                Text("All caught up")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                if todayViewModel.hasAnySets {
+                    Text("All caught up")
+                        .font(.title2)
+                        .fontWeight(.bold)
 
-                Text("No cards due today. New ones unlock as your review cycle picks back up.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
+                    Text("No cards due today. New ones unlock as your review cycle picks back up.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
 
-                if todayViewModel.hasReviewableCards {
+                    if todayViewModel.hasReviewableCards {
+                        Button {
+                            practiceCards = todayViewModel.practiceAnywayCards(from: studyViewModel.savedSets)
+                            navigateToPractice = true
+                        } label: {
+                            Text("Practice anyway")
+                                .font(.headline)
+                                .padding(.horizontal, Spacing.sm)
+                        }
+                        .appProminentButtonStyle(tint: Theme.primary)
+                    }
+                } else {
+                    Text("Build your first set")
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text("Scan a page, drop in a PDF, or paste your notes — your first cards start here.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+
                     Button {
-                        studyViewModel.loadTodaySession()
-                        navigateToPractice = true
+                        appState.selectedTab = .library
                     } label: {
-                        Text("Practice anyway")
+                        Text("Go to Library")
                             .font(.headline)
                             .padding(.horizontal, Spacing.sm)
                     }
@@ -87,7 +110,7 @@ struct TodayEmptyView: View {
             }
         }
         .navigationDestination(isPresented: $navigateToPractice) {
-            QuizSessionView(cards: studyViewModel.savedSets.flatMap(\.cards))
+            QuizSessionView(cards: practiceCards)
                 .environment(studyViewModel)
         }
     }

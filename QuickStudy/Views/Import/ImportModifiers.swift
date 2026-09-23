@@ -21,7 +21,7 @@ struct ImportModifiers: ViewModifier {
             .alert("Camera Unavailable", isPresented: $coordinator.showScannerUnavailableAlert) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("Document scanning isn't available in the simulator. Try on a real device.")
+                Text("Document scanning isn't available on this device. Import a photo or PDF instead.")
             }
             .alert(
                 "Replace your draft?",
@@ -56,7 +56,11 @@ struct ImportModifiers: ViewModifier {
                     }
                 }
             }
-            .onAppear { coordinator.draftStore = draftStore }
+            .onAppear {
+                coordinator.draftStore = draftStore
+                coordinator.aiSettings = studyViewModel.aiSettings
+                coordinator.storeController = studyViewModel.store
+            }
             // Saving or discarding clears the draft that the preview and drafts screens are
             // built from. Close the whole import stack rather than popping one level back
             // onto a screen with nothing left to show.
@@ -75,18 +79,34 @@ struct ImportModifiers: ViewModifier {
                 NewSetSheet(coordinator: coordinator)
             }
             .sheet(
+                isPresented: $coordinator.showHostedConsent,
+                onDismiss: { coordinator.resumeAfterConsent() }
+            ) {
+                HostedConsentSheet(
+                    onAllow: { coordinator.recordConsentChoice(.granted) },
+                    onNotNow: { coordinator.recordConsentChoice(.declined) }
+                )
+            }
+            .sheet(
                 isPresented: $coordinator.showPasteSheet,
-                onDismiss: { coordinator.pasteSeedText = "" }
+                onDismiss: { coordinator.finishPasteSheetDismiss(study: studyViewModel) }
             ) {
                 PasteTextSheet(initialText: coordinator.pasteSeedText) { text in
-                    Task { await coordinator.processPastedText(text, study: studyViewModel) }
+                    coordinator.stashPastedText(text)
                 }
             }
-            .sheet(isPresented: $coordinator.showScanCapture) {
+            .sheet(isPresented: $coordinator.showTypeCards) {
+                TypeCardsView()
+                    .environment(studyViewModel)
+            }
+            .fullScreenCover(
+                isPresented: $coordinator.showScanCapture,
+                onDismiss: { coordinator.startPendingOCR(using: importHelper, study: studyViewModel) }
+            ) {
                 DocumentScannerView(
                     onComplete: { images in
+                        coordinator.stashScannedImages(images)
                         coordinator.showScanCapture = false
-                        Task { await coordinator.processOCR(images: images, using: importHelper, study: studyViewModel) }
                     },
                     onCancel: { coordinator.showScanCapture = false }
                 )
@@ -103,8 +123,8 @@ struct ImportModifiers: ViewModifier {
                 isPresented: $coordinator.showGenerating,
                 onDismiss: { coordinator.presentPendingFailure() }
             ) {
-                GeneratingView(stage: coordinator.stage) {
-                    coordinator.showGenerating = false
+                GeneratingView(stage: coordinator.stage, source: coordinator.activeSource) {
+                    coordinator.cancelGeneration()
                 }
             }
             .fullScreenCover(
@@ -115,11 +135,12 @@ struct ImportModifiers: ViewModifier {
                     failure: failure,
                     onDismiss: { coordinator.dismissFailure() },
                     onPasteText: { coordinator.requestPasteRecovery() },
-                    onTryAgain: { coordinator.requestRetry() }
+                    onTryAgain: { coordinator.requestRetry() },
+                    onTypeCards: { coordinator.requestTypeCards() }
                 )
             }
             .onChange(of: coordinator.selectedPhotoItem) { _, _ in
-                Task { await coordinator.handleSelectedPhoto(using: importHelper, study: studyViewModel) }
+                coordinator.startPhotoProcessing(using: importHelper, study: studyViewModel)
             }
     }
 }

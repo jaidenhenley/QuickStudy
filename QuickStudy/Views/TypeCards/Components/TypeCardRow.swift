@@ -24,6 +24,8 @@ struct TypeCardRow: View {
                     Button(role: .destructive, action: onRemove) {
                         Image(systemName: "minus.circle")
                             .font(.footnote)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(.secondary)

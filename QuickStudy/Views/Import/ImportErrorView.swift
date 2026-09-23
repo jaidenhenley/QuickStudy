@@ -10,6 +10,7 @@ struct ImportErrorView: View {
     let onDismiss: () -> Void
     let onPasteText: () -> Void
     let onTryAgain: () -> Void
+    let onTypeCards: () -> Void
 
     @ScaledMetric(relativeTo: .largeTitle) private var iconDiameter: CGFloat = 92
 
@@ -89,6 +90,18 @@ struct ImportErrorView: View {
                                 onTryAgain()
                             } label: {
                                 Text("Try again")
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, Spacing.xs)
+                            }
+                            .appProminentButtonStyle(tint: Theme.primary)
+                        }
+
+                        if failure.recoveries.contains(.typeCards) {
+                            Button {
+                                onTypeCards()
+                            } label: {
+                                Text("Type cards by hand")
                                     .font(.headline)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, Spacing.xs)

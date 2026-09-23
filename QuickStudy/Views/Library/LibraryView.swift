@@ -22,6 +22,7 @@ struct LibraryView: View {
     @State private var deletingSet: StudySet? = nil
     @State private var showDeleteAlert = false
     @State private var showTypeCards = false
+    @State private var showPaywall = false
 
     var body: some View {
         @Bindable var libraryViewModel = libraryViewModel
@@ -51,8 +52,8 @@ struct LibraryView: View {
                     }
 
                     // The empty state's three source buttons all require generation, so
-                    // manual-only devices get the ADD CARDS section in its place.
-                    if studyViewModel.savedSets.isEmpty && !libraryViewModel.isManualOnly {
+                    // devices that can't generate right now get the ADD CARDS section instead.
+                    if studyViewModel.savedSets.isEmpty && !libraryViewModel.showsAddCardsSection {
                         LibraryEmptyView(coordinator: coordinator)
                             .padding(.top, 32)
                     } else {
@@ -103,9 +104,13 @@ struct LibraryView: View {
                             }
                         }
 
-                        if libraryViewModel.isManualOnly {
-                            AddCardsSection { showTypeCards = true }
-                                .padding(.top, studyViewModel.savedSets.isEmpty ? 32 : Spacing.lg)
+                        if let reason = libraryViewModel.addCardsReason {
+                            AddCardsSection(
+                                reason: reason,
+                                onTypeCards: { showTypeCards = true },
+                                onUpgrade: { showPaywall = true }
+                            )
+                            .padding(.top, studyViewModel.savedSets.isEmpty ? 32 : Spacing.lg)
                         }
                     }
                 }
@@ -139,6 +144,7 @@ struct LibraryView: View {
             TypeCardsView()
                 .environment(studyViewModel)
         }
+        .sheet(isPresented: $showPaywall) { PaywallView(surface: .exhausted) }
         .alert("Rename Set", isPresented: $showRenameAlert) {
             TextField("Title", text: $renameText)
             Button("Save") {

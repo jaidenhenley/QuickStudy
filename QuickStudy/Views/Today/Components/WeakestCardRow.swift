@@ -10,6 +10,8 @@ import SwiftUI
 struct WeakestCardRow: View {
     let weakest: TodayViewModel.WeakestCardInfo
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
         HStack {
             ZStack {
@@ -19,14 +21,14 @@ struct WeakestCardRow: View {
                 Text("\(weakest.missCount)×")
                     .font(.caption)
                     .fontWeight(.bold)
-                    .foregroundStyle(Theme.danger)
+                    .foregroundStyle(Theme.dangerText)
             }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(weakest.question)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                    .lineLimit(1)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                 Text("Missed \(weakest.missCount) \(weakest.missCount == 1 ? "time" : "times") — drill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -40,5 +42,6 @@ struct WeakestCardRow: View {
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
     }
 }

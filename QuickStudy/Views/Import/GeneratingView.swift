@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GeneratingView: View {
     let stage: ImportCoordinator.Stage
+    let source: ImportCoordinator.ImportSource?
     let onCancel: () -> Void
 
     @Environment(StudyViewModel.self) private var studyViewModel
@@ -18,7 +19,7 @@ struct GeneratingView: View {
             HStack {
                 Button("Cancel", action: onCancel)
                 Spacer()
-                Text("Scanning…")
+                Text(headerTitle)
                     .font(.headline)
                 Spacer()
                 Text("Cancel").opacity(0)
@@ -73,6 +74,14 @@ struct GeneratingView: View {
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
+    }
+
+    private var headerTitle: String {
+        switch source {
+        case .scan: return "Scanning…"
+        case .photo, .pdf: return "Importing…"
+        case .paste, .none: return "Drafting…"
+        }
     }
 
     private func headline(at now: Date) -> String {

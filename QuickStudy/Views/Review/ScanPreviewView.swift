@@ -15,11 +15,13 @@ struct ScanPreviewView: View {
     let onCancel: () -> Void
 
     @State private var cardIndex = 0
+    @State private var showDiscardAlert = false
+    @ScaledMetric(relativeTo: .body) private var tabHeight: CGFloat = 228
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.base) {
             HStack {
-                Button("Cancel", action: onCancel)
+                Button("Cancel") { showDiscardAlert = true }
                 Spacer()
                 Text(pageLabel)
                     .font(.headline)
@@ -65,11 +67,21 @@ struct ScanPreviewView: View {
                 .tag(draft.cards.count)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 228)
+            .frame(height: tabHeight)
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
+        .alert("Discard draft?", isPresented: $showDiscardAlert) {
+            Button("Discard", role: .destructive, action: onCancel)
+            Button("Keep editing", role: .cancel) {}
+        } message: {
+            Text("The \(draft.cards.count) drafted \(cardNoun) will be deleted. This used one of your free generations.")
+        }
+    }
+
+    private var cardNoun: String {
+        draft.cards.count == 1 ? "card" : "cards"
     }
 
     private var pageTotal: Int { draft.cards.count + 1 }

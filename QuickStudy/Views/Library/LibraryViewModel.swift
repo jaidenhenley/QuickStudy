@@ -10,6 +10,11 @@ import Foundation
 @MainActor
 @Observable
 final class LibraryViewModel {
+    enum AddCardsReason {
+        case noOnDeviceModel
+        case allowanceExhausted
+    }
+
     enum Filter: String, CaseIterable, Identifiable {
         case all
         case due
@@ -35,13 +40,26 @@ final class LibraryViewModel {
     var searchText = ""
     var filter: Filter = .all
     var isManualOnly = false
+    var addCardsReason: AddCardsReason? = nil
+
+    var showsAddCardsSection: Bool { addCardsReason != nil }
 
     /// `AICapability` reads the Keychain, so this is refreshed on appear and on a
     /// mode change rather than evaluated from a view body. A device with no local model
-    /// can still generate on the server while its free hosted generation is unspent.
+    /// can still generate on the server while its free hosted generation is unspent and
+    /// consent hasn't been declined.
     func refreshCapability(settings: AISettings, store: StoreController) {
         let noLocalModel = AICapability.state(for: settings) == .unsupportedDevice
-        isManualOnly = noLocalModel && !store.isPro && store.freeHostedGenerationUsed
+        isManualOnly = noLocalModel && !store.isPro
+            && (store.freeHostedGenerationUsed || HostedConsent.decision == .declined)
+
+        if isManualOnly {
+            addCardsReason = .noOnDeviceModel
+        } else if !store.isPro && GenerationAllowance.isExhausted {
+            addCardsReason = .allowanceExhausted
+        } else {
+            addCardsReason = nil
+        }
     }
 
     func sets(from all: [StudySet], now: Date = Date(), calendar: Calendar = .current) -> [StudySet] {

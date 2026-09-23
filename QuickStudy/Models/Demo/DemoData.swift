@@ -34,7 +34,7 @@ enum DemoData {
         cards: [
             CardSpec(question: "What is Deference?",
                      answer: "UI should support content, not compete with it.",
-                     box: 1, dueInDays: 0, missCount: 3),
+                     box: 1, dueInDays: 0),
             CardSpec(question: "What is Clarity?",
                      answer: "Text, icons, and controls should be easy to understand.",
                      box: 3, dueInDays: 0),
@@ -46,7 +46,7 @@ enum DemoData {
                      box: 2, dueInDays: 0),
             CardSpec(question: "How should color be used?",
                      answer: "As a supplement, never as the only signal.",
-                     box: 1, dueInDays: 0, missCount: 1),
+                     box: 1, dueInDays: 0),
             CardSpec(question: "What belongs in an empty state?",
                      answer: "A clear next action, not an apology.",
                      box: 3, dueInDays: 4),
@@ -109,7 +109,7 @@ enum DemoData {
                      box: 3, dueInDays: 0),
             CardSpec(question: "What do physics categories do?",
                      answer: "Filter which bodies collide and generate contacts.",
-                     box: 3, dueInDays: 0, missCount: 2)
+                     box: 3, dueInDays: 0)
         ]
     )
 

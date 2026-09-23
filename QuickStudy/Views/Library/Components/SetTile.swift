@@ -44,7 +44,7 @@ struct SetTile: View {
                 Text("Mastered")
                     .font(.caption2)
                     .fontWeight(.semibold)
-                    .foregroundStyle(Theme.success)
+                    .foregroundStyle(Theme.successText)
             } else {
                 Text("\(Int((set.progress * 100).rounded()))%")
                     .font(.caption2)
@@ -55,6 +55,18 @@ struct SetTile: View {
         .frame(maxWidth: .infinity, minHeight: 152, alignment: .leading)
         .appGlassCard(cornerRadius: AppRadius.lg)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(set.title), \(set.cards.count) cards")
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var accessibilityLabel: String {
+        let dueCount = set.dueCount()
+        var parts = ["\(set.title), \(set.cards.count) cards"]
+        if dueCount > 0 { parts.append("\(dueCount) due") }
+        parts.append(
+            set.masteryState == .mastered
+                ? "Mastered"
+                : "\(Int((set.progress * 100).rounded()))% complete"
+        )
+        return parts.joined(separator: ", ")
     }
 }

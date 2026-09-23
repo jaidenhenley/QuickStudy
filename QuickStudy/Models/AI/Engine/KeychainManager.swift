@@ -12,6 +12,7 @@ enum KeychainManager {
     enum Account: String {
         case externalAPIKey = "external-api-key"
         case appAttestKeyID = "app-attest-key-id"
+        case generationAllowance = "generation-allowance"
     }
 
     private static let service = "com.jaidenhenley.quickstudy"
