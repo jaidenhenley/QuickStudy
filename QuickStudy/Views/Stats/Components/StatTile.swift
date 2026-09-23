@@ -26,5 +26,8 @@ struct StatTile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityValue(value)
     }
 }

@@ -24,7 +24,7 @@ struct OnboardingCameraPage: View {
                 Text("Snap your notes")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                Text("We'll ask for camera access next. Photos are read on this iPhone and never uploaded.")
+                Text("We'll ask for camera access next. Photos are read on this iPhone; the text from them helps draft your cards.")
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

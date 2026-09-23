@@ -23,6 +23,7 @@ struct QuizChoiceRow: View {
                     .frame(width: 26, height: 26)
                     .background(isSelected ? Color.appPrimary : Color.secondary.opacity(0.15))
                     .clipShape(Circle())
+                    .accessibilityHidden(true)
 
                 Text(text)
                     .font(.subheadline)
@@ -34,5 +35,8 @@ struct QuizChoiceRow: View {
             .appGlassCard(cornerRadius: AppRadius.lg, tint: isSelected ? Color.appPrimary.opacity(0.35) : nil)
         }
         .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Option \(letter): \(text)")
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }

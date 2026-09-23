@@ -209,8 +209,12 @@ class StudyViewModel {
         let cards = await generateCards(for: document, countsAgainstAllowance: true)
         guard !cards.isEmpty else { return nil }
 
+        // A PDF's file name is usually meaningful; the generic "Pasted Notes" and
+        // "Scanned Document" titles never are.
+        let suggestedTitle = sourceType == .pdf ? title : (SetTitleSuggester.title(from: allLines) ?? title)
+
         return DraftSet(
-            title: title,
+            title: suggestedTitle,
             document: document,
             cards: cards,
             sourceType: sourceType,

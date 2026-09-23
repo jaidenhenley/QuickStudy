@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StreakDayDot: View {
     let letter: String
+    let dayName: String
     let state: StreakSummary.DayState
 
     var body: some View {
@@ -28,13 +29,28 @@ struct StreakDayDot: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(dayName)
+        .accessibilityValue(accessibilityValue)
     }
 
     private var symbol: String? {
         switch state {
         case .studied: return "flame.fill"
         case .frozen: return "snowflake"
-        case .missed, .today, .future: return nil
+        case .today: return "circle"
+        case .missed: return "xmark"
+        case .future: return nil
+        }
+    }
+
+    private var accessibilityValue: String {
+        switch state {
+        case .studied: return "studied"
+        case .frozen: return "freeze used"
+        case .today: return "today"
+        case .missed: return "missed"
+        case .future: return "upcoming"
         }
     }
 

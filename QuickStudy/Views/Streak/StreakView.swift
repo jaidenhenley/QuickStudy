@@ -11,6 +11,7 @@ struct StreakView: View {
     @Environment(SessionStore.self) private var sessionStore
 
     private let weekdayLetters = ["M", "T", "W", "T", "F", "S", "S"]
+    private let weekdayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     var body: some View {
         let summary = StreakCalculator.summary(
@@ -31,7 +32,8 @@ struct StreakView: View {
                 .padding(.top, Spacing.lg)
 
                 Text("\(summary.current) \(summary.current == 1 ? "day" : "days")")
-                    .font(.system(size: 44, weight: .bold))
+                    .font(.system(.largeTitle, design: .rounded))
+                    .fontWeight(.bold)
 
                 Text(subtitle(for: summary))
                     .font(.subheadline)
@@ -41,6 +43,7 @@ struct StreakView: View {
                     ForEach(summary.week.indices, id: \.self) { index in
                         StreakDayDot(
                             letter: weekdayLetters[index % weekdayLetters.count],
+                            dayName: weekdayNames[index % weekdayNames.count],
                             state: summary.week[index]
                         )
                     }

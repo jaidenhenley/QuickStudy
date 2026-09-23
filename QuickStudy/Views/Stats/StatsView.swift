@@ -24,7 +24,7 @@ struct StatsView: View {
                         Text("No stats yet")
                             .font(.title2)
                             .fontWeight(.bold)
-                        Text("Save a set and finish a session to start tracking your progress.")
+                        Text("Save a set to start tracking your progress.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -42,7 +42,7 @@ struct StatsView: View {
                         ) {
                             StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .appStreak)
                             StatTile(value: "\(statsViewModel.dueToday)", label: "Cards due today")
-                            StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.success)
+                            StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.successText)
                             StatTile(value: "\(statsViewModel.scheduledCards)", label: "Cards in rotation")
                         }
                     }
@@ -84,7 +84,7 @@ struct StatsView: View {
                                     Text("\(card.missCount)×")
                                         .font(.caption)
                                         .fontWeight(.bold)
-                                        .foregroundStyle(Theme.danger)
+                                        .foregroundStyle(Theme.dangerText)
                                 }
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(card.question)

@@ -18,6 +18,8 @@ struct ReviewDraftsView: View {
     @State private var isRegenerating = false
     @State private var showRegenerateError = false
     @State private var showPaywall = false
+    @State private var showNamePrompt = false
+    @State private var nameEntry = ""
 
     init(draft: DraftSet) {
         _draft = State(initialValue: draft)
@@ -98,8 +100,11 @@ struct ReviewDraftsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") { save() }
-                    .disabled(draft.cards.isEmpty)
+                Button("Save") {
+                    nameEntry = ""
+                    showNamePrompt = true
+                }
+                .disabled(draft.cards.isEmpty)
             }
         }
         .onChange(of: draft.cards) { _, _ in draftStore.set(draft) }
@@ -109,6 +114,15 @@ struct ReviewDraftsView: View {
             Text(regenerateErrorMessage)
         }
         .sheet(isPresented: $showPaywall) { PaywallView(surface: .truncation) }
+        // The field starts empty with the suggestion as its placeholder, so "Keep
+        // suggestion" skips naming and "Save" with nothing typed falls back to it too.
+        .alert("Name this set", isPresented: $showNamePrompt) {
+            TextField(draft.title, text: $nameEntry)
+            Button("Keep suggestion") { save(named: draft.title) }
+            Button("Save") { save(named: nameEntry) }
+        } message: {
+            Text("You can rename it later from your Library.")
+        }
     }
 
     private var regenerateErrorMessage: String {
@@ -123,7 +137,9 @@ struct ReviewDraftsView: View {
         return formatter.localizedString(for: draft.createdAt, relativeTo: Date())
     }
 
-    private func save() {
+    private func save(named name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmed.isEmpty { draft.title = trimmed }
         studyViewModel.savedSets.insert(draft.committed(), at: 0)
         studyViewModel.saveSavedSets()
         analytics.record(.setCreated)

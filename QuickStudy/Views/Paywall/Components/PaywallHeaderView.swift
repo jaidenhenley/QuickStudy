@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct PaywallHeaderView: View {
+    let surface: PaywallSurface?
+
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             Image(systemName: "sparkles")
@@ -16,11 +18,22 @@ struct PaywallHeaderView: View {
                 .font(.title)
                 .fontWeight(.bold)
 
+            if surface == .exhausted {
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    Text("Your free generations for this month are used up.")
+                        .font(.body)
+                    Text("They reset on \(GenerationAllowance.resetDate().formatted(.dateTime.month(.wide).day())).")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, Spacing.sm)
+            }
+
             VStack(alignment: .leading, spacing: Spacing.md) {
                 PaywallFeatureRow(symbol: "brain", text: "Better cards, generated in the cloud")
                 PaywallFeatureRow(symbol: "iphone", text: "Works on every iPhone")
                 PaywallFeatureRow(symbol: "doc.text", text: "Whole documents, not chunks")
-                PaywallFeatureRow(symbol: "infinity", text: "\(ProProduct.hostedMonthlyLimit) generations a month")
+                PaywallFeatureRow(symbol: "sparkles", text: "\(ProProduct.hostedMonthlyLimit) generations a month")
             }
             .padding(.top, Spacing.xs)
 

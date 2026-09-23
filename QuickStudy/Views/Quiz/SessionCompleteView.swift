@@ -12,6 +12,8 @@ struct SessionCompleteView: View {
     let onAgain: () -> Void
     let onDone: () -> Void
 
+    @AccessibilityFocusState private var headlineFocused: Bool
+
     var body: some View {
         ScrollView {
             VStack(spacing: Spacing.base) {
@@ -24,10 +26,12 @@ struct SessionCompleteView: View {
                     .font(.largeTitle)
                     .foregroundStyle(Color.appPrimary)
                     .padding(.top, Spacing.lg)
+                    .accessibilityHidden(true)
 
-                Text("Nicely done")
+                Text(summary.headline)
                     .font(.title)
                     .fontWeight(.bold)
+                    .accessibilityFocused($headlineFocused)
 
                 Text("Session complete · \(summary.elapsedLabel)")
                     .font(.subheadline)
@@ -85,5 +89,6 @@ struct SessionCompleteView: View {
         }
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
+        .onAppear { headlineFocused = true }
     }
 }

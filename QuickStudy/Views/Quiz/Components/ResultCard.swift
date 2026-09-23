@@ -17,6 +17,7 @@ struct ResultCard: View {
         HStack(alignment: .top, spacing: Spacing.md) {
             Image(systemName: symbol)
                 .foregroundStyle(tint)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(label)
                     .font(.caption2)
@@ -31,5 +32,6 @@ struct ResultCard: View {
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg, tint: tint.opacity(0.18))
+        .accessibilityElement(children: .combine)
     }
 }

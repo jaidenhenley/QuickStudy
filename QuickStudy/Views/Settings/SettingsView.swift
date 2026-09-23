@@ -20,6 +20,8 @@ struct SettingsView: View {
     @State private var apiKeyDraft = ""
     @State private var keychainErrorMessage: String?
     @State private var showKeychainError = false
+    @State private var showExternalAPIConfirmation = false
+    @State private var pendingAPIMode: CardGenerationMode?
     @FocusState private var apiKeyFocused: Bool
 
     private var appVersion: String {
@@ -76,21 +78,31 @@ struct SettingsView: View {
         @Bindable var aiSettings = aiSettings
         NavigationStack {
             Form {
-                Section("AI + Input") {
+                Section {
                     Toggle("Handwriting Mode", isOn: $studyViewModel.isHandwritingMode)
                     Toggle("Spell Check", isOn: $studyViewModel.isSpellCheckEnabled)
-                    
-                    Picker("AI Source", selection: $aiSettings.mode) {
-                        Text("On-Device").tag(CardGenerationMode.onDevice)
+
+                    Picker("AI Source", selection: Binding(
+                        get: { aiSettings.mode },
+                        set: { newValue in
+                            if newValue == .externalAPI && aiSettings.mode != .externalAPI {
+                                pendingAPIMode = newValue
+                                showExternalAPIConfirmation = true
+                            } else {
+                                aiSettings.mode = newValue
+                            }
+                        }
+                    )) {
+                        Text(store.isPro ? "QuickStudy's Server" : "On-Device").tag(CardGenerationMode.onDevice)
                         Text("External API").tag(CardGenerationMode.externalAPI)
                     }
-                    
+
                     if aiSettings.mode == .externalAPI {
                         Picker("API Provider", selection: $aiSettings.apiFormat) {
                             Text("OpenAI").tag(APIFormat.openAI)
                             Text("Anthropic").tag(APIFormat.anthropic)
                         }
-                        
+
                         SecureField("API Key", text: $apiKeyDraft)
                             .focused($apiKeyFocused)
                             .onChange(of: apiKeyFocused) { _, isFocused in
@@ -102,7 +114,12 @@ struct SettingsView: View {
                             .autocorrectionDisabled()
                         TextField("Model Name", text: modelNameBinding)
                     }
-                    
+                } header: {
+                    Text("AI + Input")
+                } footer: {
+                    if aiSettings.mode == .externalAPI {
+                        Text("Your notes will be sent to your chosen provider using your key, under that provider's privacy policy.")
+                    }
                 }
 
                 Section {
@@ -130,7 +147,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Sample Content")
                 } footer: {
-                    Text("Adds three example sets you can study right away. Turning this off removes them; turning it back on restores them.")
+                    Text("Adds four example sets you can study right away. Turning this off removes them; turning it back on restores them.")
                 }
 
                 Section {
@@ -158,12 +175,26 @@ struct SettingsView: View {
                         Text(appVersion)
                             .foregroundStyle(.secondary)
                     }
+                    Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
                 }
             }
             .navigationTitle("Settings")
             .sheet(isPresented: $showPaywall) { PaywallView(surface: .settings) }
             .manageSubscriptionsSheet(isPresented: $showManageSubscription)
             .onAppear { apiKeyDraft = aiSettings.apiKey ?? "" }
+            .confirmationDialog("Use External API", isPresented: $showExternalAPIConfirmation) {
+                Button("Use External API") {
+                    if let mode = pendingAPIMode {
+                        aiSettings.mode = mode
+                    }
+                    pendingAPIMode = nil
+                }
+                Button("Cancel", role: .cancel) {
+                    pendingAPIMode = nil
+                }
+            } message: {
+                Text("Your notes will be sent to your chosen provider using your key, under that provider's privacy policy.")
+            }
             .alert("Couldn't Save API Key", isPresented: $showKeychainError) {
                 Button("OK", role: .cancel) {}
             } message: {

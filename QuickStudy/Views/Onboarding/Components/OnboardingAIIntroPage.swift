@@ -39,12 +39,12 @@ struct OnboardingAIIntroPage: View {
                     OnboardingFeatureRow(
                         symbol: "checkmark.shield",
                         title: "On this iPhone",
-                        detail: "Your free generations run on-device and never leave it."
+                        detail: "After your first set, generations run on-device and never leave it."
                     )
                     OnboardingFeatureRow(
                         symbol: "bolt",
                         title: "Works offline",
-                        detail: "Generate and study on the plane, in the basement stacks."
+                        detail: "Study, quiz and edit offline anytime, anywhere."
                     )
                     OnboardingFeatureRow(
                         symbol: "sparkles",
@@ -66,7 +66,7 @@ struct OnboardingAIIntroPage: View {
             }
             .padding(.top, Spacing.sm)
 
-            Text("Your first set is drafted in the cloud with our best model, so you see what QuickStudy can do. Your text isn't stored.")
+            Text("Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Your text isn't stored.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

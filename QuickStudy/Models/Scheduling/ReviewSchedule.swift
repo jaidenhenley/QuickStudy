@@ -11,8 +11,10 @@ enum ReviewSchedule {
     static let newBox = 0
     static let masteredBox = 5
     
-    /// Box 0 is same-day: a new or freshly-missed card is due immediately.
-    private static let intervalDays = [0, 1, 3, 7, 14, 30]
+    /// A brand-new card is due immediately via a nil `dueDate`, never through this
+    /// table. Box 0 is therefore only reached here after a miss demotes into it, so
+    /// its interval is 1, not 0 — "we'll surface this one again tomorrow" has to be true.
+    private static let intervalDays = [1, 1, 3, 7, 14, 30]
     
     static func interval(forBox box: Int) -> Int {
         intervalDays[min(max(box, newBox), intervalDays.count - 1)]

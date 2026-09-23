@@ -95,7 +95,7 @@ extension ImportFailure {
             tips: [
                 "Existing sets still work — study, quiz and edit as usual.",
                 "Type cards by hand from the Library in the meantime.",
-                "QuickStudy Pro generates without a monthly cap, on any iPhone."
+                "QuickStudy Pro adds \(ProProduct.hostedMonthlyLimit) cloud generations a month, on any iPhone."
             ],
             recoveries: []
         )

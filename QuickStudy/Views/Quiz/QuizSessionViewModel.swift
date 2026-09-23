@@ -16,7 +16,7 @@ final class QuizSessionViewModel {
         case finished
     }
 
-    enum QuestionState {
+    enum QuestionState: Equatable {
         case correct
         case wrong
         case current
@@ -38,6 +38,7 @@ final class QuizSessionViewModel {
         let streak: Int
         let cardsVsYesterday: Int?
         let reinforcement: [Reinforcement]
+        let headline: String
     }
 
     private(set) var questions: [QuizQuestion] = []
@@ -111,6 +112,14 @@ final class QuizSessionViewModel {
         }
     }
 
+    /// Leaving mid-session still counts the questions the user actually answered.
+    func recordPartialSessionIfNeeded(study: StudyViewModel, sessions: SessionStore) {
+        guard phase != .finished, !session.results.isEmpty else { return }
+        session.endedAt = Date()
+        sessions.record(session)
+        study.flushPendingChanges()
+    }
+
     /// A misread question shouldn't cost the user their scheduling progress.
     func undo(study: StudyViewModel) {
         guard let question = current,
@@ -153,7 +162,8 @@ final class QuizSessionViewModel {
             elapsedLabel: session.elapsedLabel,
             streak: streak,
             cardsVsYesterday: yesterdayCards > 0 ? session.cardCount - yesterdayCards : nil,
-            reinforcement: reinforcement
+            reinforcement: reinforcement,
+            headline: session.accuracy >= 0.5 ? "Nicely done" : "Session complete"
         )
     }
 
