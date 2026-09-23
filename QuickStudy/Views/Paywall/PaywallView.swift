@@ -54,8 +54,9 @@ struct PaywallView: View {
         .background(BackgroundView())
         .onAppear { analytics.record(.paywallShown(surface)) }
         .onDisappear {
-            guard !store.isPro else { return }
-            analytics.record(.paywallDismissed(surface))
+            if !store.isPro { analytics.record(.paywallDismissed(surface)) }
+            // Restore Purchases syncs with the App Store but reports no completion to this view.
+            Task { await store.refreshEntitlement() }
         }
         .alert("Purchase didn't finish", isPresented: $showPurchaseMessage) {
             Button("OK", role: .cancel) {}

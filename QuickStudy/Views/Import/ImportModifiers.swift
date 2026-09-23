@@ -108,7 +108,11 @@ struct ImportModifiers: ViewModifier {
                         coordinator.stashScannedImages(images)
                         coordinator.showScanCapture = false
                     },
-                    onCancel: { coordinator.showScanCapture = false }
+                    onCancel: { coordinator.showScanCapture = false },
+                    onError: {
+                        coordinator.stashScannerFailure()
+                        coordinator.showScanCapture = false
+                    }
                 )
             }
             .fileImporter(isPresented: $coordinator.showFileImporter, allowedContentTypes: [.pdf]) { result in

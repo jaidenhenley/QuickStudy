@@ -60,6 +60,21 @@ struct GenerationAllowanceTests {
         #expect(GenerationAllowance.remaining(now: nextMonth, defaults: defaults) == GenerationAllowance.monthlyLimit)
     }
 
+    @Test func clockSetBackAMonthKeepsTheStoredCount() {
+        let defaults = makeDefaults()
+        let calendar = Calendar(identifier: .gregorian)
+        let now = calendar.date(from: DateComponents(year: 2026, month: 4, day: 10))!
+        let earlier = calendar.date(from: DateComponents(year: 2026, month: 3, day: 10))!
+
+        GenerationAllowance.recordGeneration(now: now, defaults: defaults)
+        GenerationAllowance.recordGeneration(now: now, defaults: defaults)
+
+        #expect(GenerationAllowance.used(now: earlier, defaults: defaults) == 2)
+        GenerationAllowance.recordGeneration(now: earlier, defaults: defaults)
+        #expect(GenerationAllowance.used(now: earlier, defaults: defaults) == 3)
+        #expect(GenerationAllowance.used(now: now, defaults: defaults) == 3)
+    }
+
     @Test func resetDateIsFirstOfNextMonthAtStartOfDay() {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "UTC")!

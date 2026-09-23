@@ -44,6 +44,9 @@ final class LibraryViewModel {
 
     var showsAddCardsSection: Bool { addCardsReason != nil }
 
+    // Only the exhausted surface tells the user their free generations are used up.
+    var upgradeSurface: PaywallSurface { addCardsReason == .allowanceExhausted ? .exhausted : .pill }
+
     /// `AICapability` reads the Keychain, so this is refreshed on appear and on a
     /// mode change rather than evaluated from a view body. A device with no local model
     /// can still generate on the server while its free hosted generation is unspent and

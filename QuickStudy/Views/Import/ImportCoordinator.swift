@@ -70,6 +70,7 @@ final class ImportCoordinator {
     private var retrySource: RetrySource? = nil
     private var retainedText = ""
     private var pendingOCRImages: [UIImage]? = nil
+    private var pendingScannerFailure = false
     private var pendingPasteText: String? = nil
     private var pendingConsentDecision: HostedConsent.Decision? = nil
     /// Owned so Cancel on the Generating screen can actually stop the in-flight work
@@ -217,7 +218,16 @@ final class ImportCoordinator {
         pendingOCRImages = images
     }
 
+    func stashScannerFailure() {
+        pendingScannerFailure = true
+    }
+
     func startPendingOCR(using helper: DocumentImportHelper, study: StudyViewModel) {
+        if pendingScannerFailure {
+            pendingScannerFailure = false
+            fail(.processing(message: "The camera stopped before the scan finished. Please try again.", code: "QS-113"))
+            return
+        }
         guard let images = pendingOCRImages else { return }
         pendingOCRImages = nil
         generationTask = Task { await self.processOCR(images: images, using: helper, study: study) }

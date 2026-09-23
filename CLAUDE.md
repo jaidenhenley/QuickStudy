@@ -118,7 +118,7 @@ Every line of code written in this project is production code. There is no "we'l
 ### Privacy & Credentials
 - API keys and tokens live in Keychain only, via `KeychainManager` — never `UserDefaults`, never `@AppStorage`, never a plist
 - `AISettings` may persist non-secret preferences (mode, endpoint, model name) to `UserDefaults`; the key itself is read through `KeychainManager.loadAPIKey()` and never cached in a stored property
-- Scanned document text and generated cards are user content — never log them, never send them to any endpoint other than the user's configured AI endpoint or the QuickStudy Pro server (`HostedAPI.production`), and only to the latter when `StoreController` says the user is Pro or the device has no on-device model and its one free hosted generation is unspent
+- Scanned document text and generated cards are user content — never log them, never send them to any endpoint other than the user's configured AI endpoint or the QuickStudy Pro server (`HostedAPI.production`), and only to the latter when the user has granted `HostedConsent` **and** either `StoreController` says the user is Pro or the one free hosted generation is unspent. Every first-time user's first generation is hosted, on every device, but only after the consent sheet; declining drafts on-device (or routes to Type cards on devices without an on-device model) and never blocks
 - On-device generation is the default mode. Do not silently fall back to a network call without the user having configured one or subscribed to Pro.
 
 ### App Store Submission Readiness

@@ -144,7 +144,7 @@ struct LibraryView: View {
             TypeCardsView()
                 .environment(studyViewModel)
         }
-        .sheet(isPresented: $showPaywall) { PaywallView(surface: .exhausted) }
+        .sheet(isPresented: $showPaywall) { PaywallView(surface: libraryViewModel.upgradeSurface) }
         .alert("Rename Set", isPresented: $showRenameAlert) {
             TextField("Title", text: $renameText)
             Button("Save") {

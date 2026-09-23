@@ -9,7 +9,7 @@ import Testing
 
 struct ReviewScheduleTests {
     @Test(arguments: [
-        (0, 0), (1, 1), (2, 3), (3, 7), (4, 14), (5, 30),
+        (0, 1), (1, 1), (2, 3), (3, 7), (4, 14), (5, 30),
     ])
     func intervalsMatchTable(box: Int, expectedDays: Int) {
         #expect(ReviewSchedule.interval(forBox: box) == expectedDays)
@@ -45,5 +45,19 @@ struct ReviewScheduleTests {
         let expected = calendar.date(from: DateComponents(year: 2026, month: 6, day: 22))!
 
         #expect(dueDate == expected)
+    }
+
+    @Test func missedCardIsDueTomorrowNotToday() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        let from = calendar.date(from: DateComponents(year: 2026, month: 6, day: 15, hour: 9, minute: 45))!
+
+        let demotedBox = ReviewSchedule.demote(ReviewSchedule.newBox)
+        let dueDate = ReviewSchedule.newDueDate(forBox: demotedBox, from: from, calendar: calendar)
+        let startOfToday = calendar.startOfDay(for: from)
+        let startOfTomorrow = calendar.date(byAdding: .day, value: 1, to: startOfToday)!
+
+        #expect(dueDate == startOfTomorrow)
+        #expect(dueDate > startOfToday)
     }
 }

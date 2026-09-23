@@ -12,6 +12,7 @@ import VisionKit
 struct DocumentScannerView: UIViewControllerRepresentable {
     let onComplete: ([UIImage]) -> Void
     let onCancel: () -> Void
+    let onError: () -> Void
 
     func makeCoordinator() -> ScannerCoordinator {
         ScannerCoordinator(parent: self)

@@ -286,6 +286,7 @@ class StudyViewModel {
         )
         defer { generationProgress.end() }
         let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
+        try Task.checkCancellation()
         lastGenerationWasTruncated = engine.skippedSourceSections > 0
         lastGenerationProvenance = engine.provenance
         if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }

@@ -81,6 +81,19 @@ enum KeychainManager {
         return key
     }
 
+    #if DEBUG
+    static func deleteAllItems() throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service
+        ]
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw CardGenerationError.keychainError(status)
+        }
+    }
+    #endif
+
     static func delete(account: Account) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
