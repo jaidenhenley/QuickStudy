@@ -281,16 +281,16 @@ final class SkippedSectionCounter {
 @Generable
 private enum DistractorKind: String, Codable {
     case commonConfusion
-    case partiallyTrue
+    case relatedTerm
     case wrongDetail
 }
 
 @Generable
 private struct AIDistractorModel: Codable {
-    @Guide(description: "How this option is wrong. commonConfusion swaps in a different term from the source that learners mix up with the right one. partiallyTrue states something the source supports but that does not answer this question. wrongDetail keeps the right shape and changes one name, number, or step.")
+    @Guide(description: "How this option is wrong. commonConfusion swaps in a different term from the source that learners mix up with the right one. relatedTerm is another item of the same kind from the source (another group, date, number, or term) that is not the answer to this question — clearly wrong to someone who knows the material, never a second correct answer. wrongDetail keeps the right shape and changes one name, number, or step.")
     let kind: DistractorKind
 
-    @Guide(description: "The wrong answer itself. It must read like a real answer to the question, use terms that appear in the source sentences, and match the length and sentence shape of the correct answer. Never state the correct answer in different words.")
+    @Guide(description: "The wrong answer itself. It must read like a real answer to the question, use terms that appear in the source sentences, and be the same kind of thing and the same grammatical form as the correct answer: if the answer is a short phrase, this is a short phrase, not a sentence; if the answer is a number or percentage, this is a different number or percentage. Never state the correct answer in different words.")
     let text: String
 }
 
@@ -308,7 +308,7 @@ private struct AIFlashcardModel: Codable {
     @Guide(description: "One or two sentences explaining why the answer is correct, written for a learner who just answered incorrectly. Explain the concept, do not restate the answer.")
     let explanation: String
 
-    @Guide(description: "Exactly three wrong answers, one commonConfusion, one partiallyTrue, and one wrongDetail. No filler like 'None of the above'.", .count(3))
+    @Guide(description: "Exactly three wrong answers, one commonConfusion, one relatedTerm, and one wrongDetail. No filler like 'None of the above'.", .count(3))
     let distractors: [AIDistractorModel]
 }
 

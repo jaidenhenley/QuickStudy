@@ -86,7 +86,7 @@ class StudyViewModel {
             var wrong = DistractorRefiner.refine(
                 card.distractors,
                 answer: card.answer,
-                source: card.source?.excerpt ?? card.answer
+                source: nil
             )
 
             if wrong.count < 3 {
