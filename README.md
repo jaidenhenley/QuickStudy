@@ -41,8 +41,9 @@ Solo project. Everything runs on-device by default with no network layer unless 
 
 No data collected. No accounts, no analytics, no tracking. If you use the cloud fallback, your text goes to whatever API provider you configure — nothing touches any server I control.
 
-- [Privacy Policy](https://jaidenhenley.github.io/JaidenHenleyPort/quickstudy-privacy.html)
-- [Support](https://jaidenhenley.github.io/JaidenHenleyPort/quickstudy-support.html)
+- [Privacy Policy](https://www.quick-study.app/privacy)
+- [Support](https://www.quick-study.app/support)
+- [Terms of Service](https://www.quick-study.app/terms)
 
 ## Requirements
 
