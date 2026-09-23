@@ -228,22 +228,23 @@ class StudyViewModel {
 #if canImport(FoundationModels)
         do {
             return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
-        } catch CardGenerationError.notSubscribed where !store.isPro {
-            // The server refused the free hosted generation, so this iPhone drafts it
-            // instead. Failing the whole import over a lost perk would be worse.
-            store.markFreeHostedGenerationUsed()
+        } catch CardGenerationError.notSubscribed {
+            // The server is the authority on entitlement. Whatever the app believes, a
+            // refusal means this iPhone drafts instead — losing hosted quality is better
+            // than losing the import.
+            if !store.isPro { store.markFreeHostedGenerationUsed() }
             do {
                 return try await draft(text: text, document: document, countsAgainstAllowance: countsAgainstAllowance)
             } catch {
-                logger.error("AI generation failed: \(error.localizedDescription)")
+                logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
                 generationErrorMessage = Self.message(for: error)
-                generationErrorCode = (error as? CardGenerationError)?.code
+                generationErrorCode = Self.code(for: error)
                 return []
             }
         } catch {
-            logger.error("AI generation failed: \(error.localizedDescription)")
+            logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
-            generationErrorCode = (error as? CardGenerationError)?.code
+            generationErrorCode = Self.code(for: error)
             return []
         }
 #else
@@ -284,6 +285,13 @@ class StudyViewModel {
         }
     }
 
+    /// An unrecognised error type used to render as QS-503, indistinguishable from a real
+    /// generation failure. The suffix names the type so a report points at the cause.
+    private static func code(for error: Error) -> String {
+        (error as? CardGenerationError)?.code
+            ?? CardGenerationError.unexpected(String(describing: type(of: error))).code
+    }
+
     /// A raw URLError description is not user-facing copy.
     private static func message(for error: Error) -> String {
         (error as? CardGenerationError)?.errorDescription
@@ -321,7 +329,7 @@ class StudyViewModel {
             saveSavedSets()
         } catch {
             generationErrorMessage = Self.message(for: error)
-            generationErrorCode = (error as? CardGenerationError)?.code
+            generationErrorCode = Self.code(for: error)
         }
     }
 

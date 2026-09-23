@@ -24,10 +24,12 @@ struct ScanPreviewView: View {
                 Text(pageLabel)
                     .font(.headline)
                 Spacer()
-                Button("Skip", action: onContinue)
+                Button(reviewLabel, action: onContinue)
                     .fontWeight(.semibold)
             }
 
+            // Glass belongs on the scroll view, not its content: inside, the scroll view
+            // clips the card's rounded corners flat as soon as the text overflows.
             ScrollView {
                 SourcePageView(
                     lines: Array(draft.document.lines[pageRange]),
@@ -36,27 +38,50 @@ struct ScanPreviewView: View {
                 )
                 .padding(Spacing.base)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .appGlassCard(cornerRadius: AppRadius.lg)
             }
+            .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+            .appGlassCard(cornerRadius: AppRadius.lg)
 
             TabView(selection: $cardIndex) {
                 ForEach(Array(draft.cards.enumerated()), id: \.element.id) { index, card in
-                    DraftedCardPreview(card: card, position: index + 1, total: draft.cards.count)
-                        .padding(.bottom, Spacing.lg)
-                        .tag(index)
+                    DraftedCardPreview(
+                        card: card,
+                        position: index + 1,
+                        cardCount: draft.cards.count,
+                        pageIndex: index,
+                        pageCount: pageTotal
+                    )
+                    .padding(.bottom, Spacing.xs)
+                    .tag(index)
                 }
+
+                DraftedDeckSummary(
+                    cardCount: draft.cards.count,
+                    pageIndex: draft.cards.count,
+                    pageCount: pageTotal,
+                    onReview: onContinue
+                )
+                .padding(.bottom, Spacing.xs)
+                .tag(draft.cards.count)
             }
-            .tabViewStyle(.page(indexDisplayMode: draft.cards.count > 1 ? .always : .never))
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .frame(height: 190)
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: 228)
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
     }
 
+    private var pageTotal: Int { draft.cards.count + 1 }
+
+    private var reviewLabel: String {
+        draft.cards.count == 1 ? "Review 1 card" : "Review \(draft.cards.count) cards"
+    }
+
+    /// The closing page holds the last card's highlight so the source doesn't blank out.
     private var currentCard: StudyCard? {
-        draft.cards.indices.contains(cardIndex) ? draft.cards[cardIndex] : draft.cards.first
+        if draft.cards.indices.contains(cardIndex) { return draft.cards[cardIndex] }
+        return draft.cards.last
     }
 
     private var pageLabel: String {

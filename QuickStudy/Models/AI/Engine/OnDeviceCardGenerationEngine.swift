@@ -78,10 +78,18 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
         await progress?.setTotalUnits(chunks.count)
 
         var allCards: [AIFlashcard] = []
+        var firstFailure: Error?
         for chunk in chunks {
-            allCards += try await cards(for: chunk)
+            do {
+                allCards += try await cards(for: chunk)
+            } catch {
+                // A guardrail trip or a bad passage in one section shouldn't cost the
+                // user every card drafted from the rest of the document.
+                if firstFailure == nil { firstFailure = error }
+            }
             await progress?.advance()
         }
+        if allCards.isEmpty, let firstFailure { throw firstFailure }
         return allCards
     }
 

@@ -8,13 +8,15 @@ import SwiftUI
 struct DraftedCardPreview: View {
     let card: StudyCard
     let position: Int
-    let total: Int
+    let cardCount: Int
+    let pageIndex: Int
+    let pageCount: Int
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.xs) {
                 Image(systemName: "sparkles")
-                Text("CARD \(position) OF \(total) · DRAFTED")
+                Text("CARD \(position) OF \(cardCount) · DRAFTED")
                     .tracking(0.5)
                 Spacer()
             }
@@ -25,10 +27,15 @@ struct DraftedCardPreview: View {
             Text(card.question)
                 .font(.subheadline)
                 .fontWeight(.bold)
+                .fixedSize(horizontal: false, vertical: true)
             Text(card.answer)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-            Spacer(minLength: 0)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: Spacing.sm)
+
+            DeckPageDots(count: pageCount, current: pageIndex)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)
