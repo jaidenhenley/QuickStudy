@@ -91,22 +91,26 @@ struct TodayEmptyView: View {
             .appGlassCard(cornerRadius: AppRadius.xl)
 
             if !todayViewModel.upNext.isEmpty {
-                Text("UP NEXT")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
-                    .tracking(1)
+                Group {
+                    Text("UP NEXT")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                        .tracking(1)
 
-                ForEach(todayViewModel.upNext) { entry in
-                    if let set = studyViewModel.savedSets.first(where: { $0.id == entry.id }) {
-                        NavigationLink {
-                            StudySetDetailView(set: set)
-                        } label: {
-                            UpNextRow(entry: entry)
+                    ForEach(todayViewModel.upNext) { entry in
+                        if let set = studyViewModel.savedSets.first(where: { $0.id == entry.id }) {
+                            NavigationLink {
+                                StudySetDetailView(set: set)
+                            } label: {
+                                UpNextRow(entry: entry)
+                            }
+                            .buttonStyle(.plain)
+                            .appTransition(.opacity.combined(with: .move(edge: .leading)))
                         }
-                        .buttonStyle(.plain)
                     }
                 }
+                .appAnimation(Motion.standard, value: todayViewModel.upNext.map(\.id))
             }
         }
         .navigationDestination(isPresented: $navigateToPractice) {

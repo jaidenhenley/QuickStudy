@@ -16,6 +16,7 @@ struct PasteTextSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var text: String
+    @State private var appeared = false
 
     init(initialText: String = "", onSubmit: @escaping (String) -> Void) {
         self.onSubmit = onSubmit
@@ -34,6 +35,7 @@ struct PasteTextSheet: View {
                     Spacer()
                     HStack(spacing: Spacing.xs) {
                         Image(systemName: "sparkles")
+                            .symbolEffect(.bounce, value: appeared)
                         Text(
                             todayViewModel.isPro
                                 ? "QuickStudy Pro"
@@ -123,6 +125,9 @@ struct PasteTextSheet: View {
                     Button("Cancel") { dismiss() }
                 }
             }
+        }
+        .onAppear {
+            appeared = true
         }
     }
 }

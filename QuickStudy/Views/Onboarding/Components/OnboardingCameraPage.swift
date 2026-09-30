@@ -9,6 +9,8 @@ struct OnboardingCameraPage: View {
     let onAllow: () -> Void
     let onLater: () -> Void
 
+    @State private var appeared = false
+
     var body: some View {
         VStack(spacing: Spacing.lg) {
             Spacer()
@@ -19,6 +21,8 @@ struct OnboardingCameraPage: View {
                 .frame(width: 80, height: 80)
                 .background(Color.appPrimary, in: RoundedRectangle(cornerRadius: AppRadius.xl))
                 .shadow(color: Color.appPrimary.opacity(0.35), radius: 16, y: 8)
+                .symbolEffect(.bounce, value: appeared)
+                .appStagedReveal(0, shown: appeared)
 
             VStack(spacing: Spacing.sm) {
                 Text("Snap your notes")
@@ -29,6 +33,7 @@ struct OnboardingCameraPage: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
+            .appStagedReveal(1, shown: appeared)
 
             Spacer()
 
@@ -44,8 +49,12 @@ struct OnboardingCameraPage: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+            .appStagedReveal(2, shown: appeared)
         }
         .padding(.horizontal, Spacing.lg)
         .padding(.top, Spacing.xl)
+        .onAppear {
+            appeared = true
+        }
     }
 }

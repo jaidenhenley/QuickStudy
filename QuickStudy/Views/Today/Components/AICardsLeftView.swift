@@ -19,6 +19,7 @@ struct AICardsLeftView: View {
                 Text(label)
                     .font(.caption)
                     .fontWeight(.medium)
+                    .contentTransition(.numericText())
                 Spacer()
                 if !todayViewModel.isPro {
                     Text("Pro ›")

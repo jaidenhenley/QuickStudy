@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ReinforcementRow: View {
     let item: QuizSessionViewModel.Reinforcement
+    let index: Int
+    let appeared: Bool
+
 
     var body: some View {
         HStack {
@@ -25,5 +28,6 @@ struct ReinforcementRow: View {
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .appStagedReveal(index, shown: appeared)
     }
 }

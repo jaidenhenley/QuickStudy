@@ -60,6 +60,7 @@ struct PendingDraftRow: View {
         }
         .padding(Spacing.md)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .appTransition(.move(edge: .top).combined(with: .opacity))
         .alert("Discard draft?", isPresented: $showDiscardAlert) {
             Button("Discard", role: .destructive, action: onDiscard)
             Button("Cancel", role: .cancel) {}

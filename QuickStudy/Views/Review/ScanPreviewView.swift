@@ -17,6 +17,7 @@ struct ScanPreviewView: View {
     @State private var cardIndex = 0
     @State private var showDiscardAlert = false
     @ScaledMetric(relativeTo: .body) private var tabHeight: CGFloat = 228
+    @Namespace private var highlightNamespace
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.base) {
@@ -36,13 +37,19 @@ struct ScanPreviewView: View {
                 SourcePageView(
                     lines: Array(draft.document.lines[pageRange]),
                     highlighted: currentCard?.source?.lineRange,
-                    lineOffset: pageRange.lowerBound
+                    lineOffset: pageRange.lowerBound,
+                    namespace: highlightNamespace
                 )
+                .id(pageIndex)
+                // The outgoing page leaves at once: crossfading two pages of text
+                // stacks both legibly on top of each other.
+                .appTransition(.asymmetric(insertion: .opacity, removal: .identity))
                 .padding(Spacing.base)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
             .appGlassCard(cornerRadius: AppRadius.lg)
+            .appAnimation(Motion.standard, value: cardIndex)
 
             TabView(selection: $cardIndex) {
                 ForEach(Array(draft.cards.enumerated()), id: \.element.id) { index, card in
@@ -67,6 +74,7 @@ struct ScanPreviewView: View {
                 .tag(draft.cards.count)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+            .sensoryFeedback(.impact(weight: .light), trigger: cardIndex)
             .frame(height: tabHeight)
         }
         .padding(Spacing.lg)

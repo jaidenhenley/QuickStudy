@@ -32,6 +32,7 @@ struct StatSetRow: View {
             }
             ProgressView(value: entry.progress)
                 .tint(entry.mastery == .mastered ? Theme.success : Color.appPrimary)
+                .appAnimation(Motion.standard, value: entry.progress)
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)

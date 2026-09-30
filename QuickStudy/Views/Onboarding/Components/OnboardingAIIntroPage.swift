@@ -9,6 +9,8 @@ struct OnboardingAIIntroPage: View {
     let hasOnDeviceModel: Bool
     let onContinue: () -> Void
 
+    @State private var appeared = false
+
     var body: some View {
         VStack(spacing: Spacing.lg) {
             Image(systemName: "sparkles")
@@ -16,14 +18,14 @@ struct OnboardingAIIntroPage: View {
                 .foregroundStyle(.appPrimary)
                 .frame(width: 64, height: 64)
                 .background(Color.appPrimary.opacity(0.12), in: Circle())
+                .symbolEffect(.bounce, value: appeared)
+                .appStagedReveal(0, shown: appeared)
 
             VStack(spacing: Spacing.sm) {
                 Text("Private by default")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
-                // Devices without Apple Intelligence can't draft on-device, so they must
-                // never be told they can.
                 Text(
                     hasOnDeviceModel
                         ? "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone."
@@ -33,35 +35,34 @@ struct OnboardingAIIntroPage: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             }
+            .appStagedReveal(1, shown: appeared)
 
             VStack(alignment: .leading, spacing: Spacing.base) {
                 if hasOnDeviceModel {
-                    OnboardingFeatureRow(
-                        symbol: "checkmark.shield",
-                        title: "On this iPhone",
-                        detail: "After your first set, generations run on-device and never leave it."
-                    )
-                    OnboardingFeatureRow(
-                        symbol: "bolt",
-                        title: "Works offline",
-                        detail: "Study, quiz and edit offline anytime, anywhere."
-                    )
-                    OnboardingFeatureRow(
-                        symbol: "sparkles",
-                        title: "10 free generations a month",
-                        detail: "Manual cards and every study mode are always unlimited."
-                    )
+                    ForEach(Array([
+                        (symbol: "checkmark.shield", title: "On this iPhone", detail: "After your first set, generations run on-device and never leave it."),
+                        (symbol: "bolt", title: "Works offline", detail: "Study, quiz and edit offline anytime, anywhere."),
+                        (symbol: "sparkles", title: "10 free generations a month", detail: "Manual cards and every study mode are always unlimited.")
+                    ].enumerated()), id: \.offset) { index, item in
+                        OnboardingFeatureRow(
+                            symbol: item.symbol,
+                            title: item.title,
+                            detail: item.detail
+                        )
+                        .appStagedReveal(2 + index, shown: appeared)
+                    }
                 } else {
-                    OnboardingFeatureRow(
-                        symbol: "square.and.pencil",
-                        title: "Manual cards, always free",
-                        detail: "Type your own cards and study with every mode, unlimited."
-                    )
-                    OnboardingFeatureRow(
-                        symbol: "icloud",
-                        title: "More with Pro",
-                        detail: "Cloud drafting on any iPhone, whenever you need it."
-                    )
+                    ForEach(Array([
+                        (symbol: "square.and.pencil", title: "Manual cards, always free", detail: "Type your own cards and study with every mode, unlimited."),
+                        (symbol: "icloud", title: "More with Pro", detail: "Cloud drafting on any iPhone, whenever you need it.")
+                    ].enumerated()), id: \.offset) { index, item in
+                        OnboardingFeatureRow(
+                            symbol: item.symbol,
+                            title: item.title,
+                            detail: item.detail
+                        )
+                        .appStagedReveal(2 + index, shown: appeared)
+                    }
                 }
             }
             .padding(.top, Spacing.sm)
@@ -79,8 +80,12 @@ struct OnboardingAIIntroPage: View {
             }
             .appProminentButtonStyle(tint: Theme.primary)
             .controlSize(.large)
+            .appStagedReveal(hasOnDeviceModel ? 5 : 4, shown: appeared)
         }
         .padding(.horizontal, Spacing.lg)
         .padding(.top, Spacing.xl)
+        .onAppear {
+            appeared = true
+        }
     }
 }

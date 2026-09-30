@@ -8,6 +8,8 @@ import SwiftUI
 struct OnboardingWelcomePage: View {
     let onContinue: () -> Void
 
+    @State private var appeared = false
+
     var body: some View {
         VStack(spacing: Spacing.lg) {
             Spacer()
@@ -25,9 +27,11 @@ struct OnboardingWelcomePage: View {
                         Image(systemName: "sparkles")
                             .font(.title)
                             .foregroundStyle(.white)
+                            .symbolEffect(.bounce, value: appeared)
                     }
                     .shadow(color: Color.appPrimary.opacity(0.35), radius: 16, y: 8)
             }
+            .appStagedReveal(0, shown: appeared)
 
             Spacer()
 
@@ -41,6 +45,7 @@ struct OnboardingWelcomePage: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
+            .appStagedReveal(1, shown: appeared)
 
             Button(action: onContinue) {
                 Text("Get Started")
@@ -48,8 +53,12 @@ struct OnboardingWelcomePage: View {
             }
             .appProminentButtonStyle(tint: Theme.primary)
             .controlSize(.large)
+            .appStagedReveal(2, shown: appeared)
         }
         .padding(.horizontal, Spacing.lg)
         .padding(.top, Spacing.xl)
+        .onAppear {
+            appeared = true
+        }
     }
 }

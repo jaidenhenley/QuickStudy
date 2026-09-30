@@ -28,12 +28,15 @@ struct StreakView: View {
                     Image(systemName: "flame.fill")
                         .font(.title)
                         .foregroundStyle(.appStreak)
+                        .symbolEffect(.pulse, options: .nonRepeating, value: summary.current)
                 }
                 .padding(.top, Spacing.lg)
 
                 Text("\(summary.current) \(summary.current == 1 ? "day" : "days")")
                     .font(.system(.largeTitle, design: .rounded))
                     .fontWeight(.bold)
+                    .contentTransition(.numericText())
+                    .appAnimation(Motion.snappy, value: summary.current)
 
                 Text(subtitle(for: summary))
                     .font(.subheadline)
@@ -62,6 +65,7 @@ struct StreakView: View {
                         Text(freezeTitle(for: summary))
                             .font(.subheadline)
                             .fontWeight(.semibold)
+                            .contentTransition(.numericText())
                         Text("Auto-applies if you miss a day. Earn one per full study week.")
                             .font(.caption)
                             .foregroundStyle(.secondary)

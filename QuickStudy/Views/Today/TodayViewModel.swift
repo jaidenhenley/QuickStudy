@@ -11,6 +11,7 @@ import Foundation
 @Observable
 class TodayViewModel {
     struct WeakestCardInfo {
+        let id: UUID
         let question: String
         let missCount: Int
         let setID: UUID
@@ -191,6 +192,7 @@ class TodayViewModel {
             return
         }
         weakestCard = WeakestCardInfo(
+            id: worst.card.id,
             question: worst.card.question,
             missCount: worst.card.missCount,
             setID: worst.setID

@@ -13,6 +13,7 @@ struct GeneratingView: View {
     let onCancel: () -> Void
 
     @Environment(StudyViewModel.self) private var studyViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: Spacing.lg) {
@@ -31,20 +32,27 @@ struct GeneratingView: View {
                 .fill(Theme.surface)
                 .frame(width: 200, height: 260)
                 .overlay {
-                    VStack(alignment: .leading, spacing: Spacing.sm) {
-                        ForEach(0..<9, id: \.self) { row in
-                            Capsule()
-                                .fill(Color.secondary.opacity(0.25))
-                                .frame(height: 8)
-                                .padding(.trailing, row % 3 == 2 ? 48 : 0)
+                    PhaseAnimator(reduceMotion ? [1] : [0.35, 0.7]) { phase in
+                        VStack(alignment: .leading, spacing: Spacing.sm) {
+                            ForEach(0..<9, id: \.self) { row in
+                                Capsule()
+                                    .fill(Color.secondary.opacity(0.25))
+                                    .frame(height: 8)
+                                    .padding(.trailing, row % 3 == 2 ? 48 : 0)
+                            }
                         }
-                    }
-                    .padding(Spacing.lg)
+                        .padding(Spacing.lg)
+                        .opacity(phase)
+                    } animation: { _ in Motion.shimmer }
                 }
                 .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
 
             // Redraws on a timer so elapsed time and the bar stay live for the whole run.
             TimelineView(.periodic(from: .now, by: 0.25)) { context in
+                let currentHeadline = headline(at: context.date)
+                let currentFraction = fraction(at: context.date)
+                let isReadingPhase: Bool = if case .reading = stage { true } else { false }
+
                 VStack(spacing: Spacing.sm) {
                     HStack(spacing: Spacing.xs) {
                         Image(systemName: "sparkles")
@@ -55,19 +63,26 @@ struct GeneratingView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.appPrimary)
 
-                    Text(headline(at: context.date))
+                    Text(currentHeadline)
                         .font(.title2)
                         .fontWeight(.bold)
+                        .contentTransition(.numericText())
+                        .appAnimation(Motion.snappy, value: currentHeadline)
 
                     Text(detail(at: context.date))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
 
-                    ProgressView(value: fraction(at: context.date))
+                    ProgressView(value: currentFraction)
                         .tint(Color.appPrimary)
                         .padding(.top, Spacing.sm)
+                        .appAnimation(Motion.progressTick, value: currentFraction)
                 }
+                .id(isReadingPhase)
+                .appTransition(.opacity)
+                .appAnimation(Motion.standard, value: isReadingPhase)
+                .sensoryFeedback(.levelChange, trigger: isReadingPhase)
             }
 
             Spacer()

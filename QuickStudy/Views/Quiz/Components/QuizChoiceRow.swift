@@ -25,14 +25,22 @@ struct QuizChoiceRow: View {
                     .clipShape(Circle())
                     .accessibilityHidden(true)
 
+                // Sized by the semibold rendering so the heavier selected weight can never re-wrap the row.
                 Text(text)
                     .font(.subheadline)
-                    .fontWeight(isSelected ? .semibold : .regular)
-                    .foregroundStyle(isSelected ? Color.appPrimary : Theme.textPrimary)
+                    .fontWeight(.semibold)
+                    .hidden()
+                    .overlay(alignment: .topLeading) {
+                        Text(text)
+                            .font(.subheadline)
+                            .fontWeight(isSelected ? .semibold : .regular)
+                            .foregroundStyle(isSelected ? Color.appPrimary : Theme.textPrimary)
+                    }
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(Spacing.base)
             .appGlassCard(cornerRadius: AppRadius.lg, tint: isSelected ? Color.appPrimary.opacity(0.35) : nil)
+            .appAnimation(Motion.snappy, value: isSelected)
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)

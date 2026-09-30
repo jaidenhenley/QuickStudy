@@ -8,15 +8,20 @@ import SwiftUI
 struct PaywallHeaderView: View {
     let surface: PaywallSurface?
 
+    @State private var appeared = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             Image(systemName: "sparkles")
                 .font(.system(size: 32, weight: .semibold))
                 .foregroundStyle(.appAIAccent)
+                .symbolEffect(.bounce, value: appeared)
+                .appStagedReveal(0, shown: appeared)
 
             Text("QuickStudy Pro")
                 .font(.title)
                 .fontWeight(.bold)
+                .appStagedReveal(1, shown: appeared)
 
             if surface == .exhausted {
                 VStack(alignment: .leading, spacing: Spacing.sm) {
@@ -30,10 +35,15 @@ struct PaywallHeaderView: View {
             }
 
             VStack(alignment: .leading, spacing: Spacing.md) {
-                PaywallFeatureRow(symbol: "brain", text: "Better cards, generated in the cloud")
-                PaywallFeatureRow(symbol: "iphone", text: "Works on every iPhone")
-                PaywallFeatureRow(symbol: "doc.text", text: "Whole documents, not chunks")
-                PaywallFeatureRow(symbol: "sparkles", text: "\(ProProduct.hostedMonthlyLimit) generations a month")
+                ForEach(Array([
+                    (symbol: "brain", text: "Better cards, generated in the cloud"),
+                    (symbol: "iphone", text: "Works on every iPhone"),
+                    (symbol: "doc.text", text: "Whole documents, not chunks"),
+                    (symbol: "sparkles", text: "\(ProProduct.hostedMonthlyLimit) generations a month")
+                ].enumerated()), id: \.offset) { index, item in
+                    PaywallFeatureRow(symbol: item.symbol, text: item.text)
+                        .appStagedReveal(2 + index, shown: appeared)
+                }
             }
             .padding(.top, Spacing.xs)
 
@@ -41,8 +51,10 @@ struct PaywallHeaderView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
-        // Without this the store view centres short marketing content, leaving a gap under the close button.
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(.horizontal, Spacing.lg)
+        .onAppear {
+            appeared = true
+        }
     }
 }

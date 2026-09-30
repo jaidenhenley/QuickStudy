@@ -14,6 +14,7 @@ struct ReviewDraftsView: View {
     @Environment(AnalyticsRecorder.self) private var analytics
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var draft: DraftSet
     @State private var lastGeneratedCards: [StudyCard]
@@ -100,12 +101,14 @@ struct ReviewDraftsView: View {
                     .onAppear { analytics.record(.truncationEvent) }
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
+                    .appTransition(.opacity.combined(with: .move(edge: .top)))
             }
 
             ForEach($draft.cards) { $card in
                 DraftCardRow(card: $card, onRemove: { removeCard(card.id) })
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
+                    .appTransition(.asymmetric(insertion: .opacity, removal: .move(edge: .trailing).combined(with: .opacity)))
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             removeCard(card.id)
@@ -122,13 +125,19 @@ struct ReviewDraftsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button(saveLabel) {
+                Button {
                     nameEntry = ""
                     showNamePrompt = true
+                } label: {
+                    Text(saveLabel)
+                        .contentTransition(.numericText(value: Double(validCards.count)))
                 }
+                .appAnimation(Motion.snappy, value: validCards.count)
                 .disabled(!canSave)
             }
         }
+        .sensoryFeedback(.impact(weight: .medium), trigger: draft.cards.count) { old, new in new < old }
+        .sensoryFeedback(.success, trigger: draftStore.pending?.id) { old, new in old != nil && new == nil }
         .onChange(of: draft.cards) { _, _ in draftStore.set(draft) }
         .onChange(of: draft.title) { _, _ in draftStore.set(draft) }
         .confirmationDialog(
@@ -191,7 +200,9 @@ struct ReviewDraftsView: View {
     }
 
     private func removeCard(_ id: UUID) {
-        draft.remove(id)
+        withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+            draft.remove(id)
+        }
         isDraftHeaderFocused = true
     }
 

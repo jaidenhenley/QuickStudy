@@ -41,16 +41,21 @@ struct SuggestionRow: View {
 
             Spacer()
 
-            if isGenerating {
-                ProgressView()
-            } else {
-                Button("Yes") {
-                    Task { await generate() }
+            Group {
+                if isGenerating {
+                    ProgressView()
+                        .appTransition(.scale.combined(with: .opacity))
+                } else {
+                    Button("Yes") {
+                        Task { await generate() }
+                    }
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.appPrimary)
+                    .appTransition(.scale.combined(with: .opacity))
                 }
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.appPrimary)
             }
+            .appAnimation(Motion.snappy, value: isGenerating)
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)

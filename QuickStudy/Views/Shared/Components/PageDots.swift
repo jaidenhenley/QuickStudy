@@ -18,6 +18,6 @@ struct PageDots: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .animation(.easeInOut(duration: 0.2), value: current)
+        .appAnimation(Motion.snappy, value: current)
     }
 }
