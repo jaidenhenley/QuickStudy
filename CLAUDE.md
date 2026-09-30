@@ -91,6 +91,7 @@ Models/AI/{Engine/}   generation engines, prompts, CardGenerator, allowance
 Models/Draft/         DraftSet, DraftStore
 Models/Import/        ExtractedDocument
 Models/Quiz/          QuizQuestion
+Models/Release/       ReleaseNote, ReleaseNotes (the announced release), ReleaseTracker
 Models/Scheduling/    ReviewSchedule
 Models/Session/       StudySession, SessionStore, StreakCalculator, StreakStore
 Models/Store/         ProProduct, StoreController

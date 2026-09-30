@@ -22,6 +22,7 @@ struct SettingsView: View {
     @State private var showKeychainError = false
     @State private var showExternalAPIConfirmation = false
     @State private var pendingAPIMode: CardGenerationMode?
+    @State private var whatsNew: WhatsNewViewModel?
     @FocusState private var apiKeyFocused: Bool
 
     private var appVersion: String {
@@ -175,11 +176,18 @@ struct SettingsView: View {
                         Text(appVersion)
                             .foregroundStyle(.secondary)
                     }
+                    Button("What's New") {
+                        whatsNew = WhatsNewViewModel(note: ReleaseNotes.current)
+                    }
                     Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
                 }
             }
             .navigationTitle("Settings")
             .sheet(isPresented: $showPaywall) { PaywallView(surface: .settings) }
+            .sheet(item: $whatsNew) { presented in
+                WhatsNewView()
+                    .environment(presented)
+            }
             .manageSubscriptionsSheet(isPresented: $showManageSubscription)
             .onAppear { apiKeyDraft = aiSettings.apiKey ?? "" }
             .confirmationDialog("Use External API", isPresented: $showExternalAPIConfirmation) {

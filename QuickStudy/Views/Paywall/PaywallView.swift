@@ -7,7 +7,8 @@ import StoreKit
 import SwiftUI
 
 struct PaywallView: View {
-    let surface: PaywallSurface
+    /// Nil for entry points that aren't tracked, such as What's New.
+    let surface: PaywallSurface?
 
     @Environment(StoreController.self) private var store
     @Environment(AnalyticsRecorder.self) private var analytics
@@ -52,9 +53,11 @@ struct PaywallView: View {
             }
         }
         .background(BackgroundView())
-        .onAppear { analytics.record(.paywallShown(surface)) }
+        .onAppear {
+            if let surface { analytics.record(.paywallShown(surface)) }
+        }
         .onDisappear {
-            if !store.isPro { analytics.record(.paywallDismissed(surface)) }
+            if let surface, !store.isPro { analytics.record(.paywallDismissed(surface)) }
             // Restore Purchases syncs with the App Store but reports no completion to this view.
             Task { await store.refreshEntitlement() }
         }

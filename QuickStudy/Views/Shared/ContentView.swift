@@ -20,7 +20,10 @@ struct ContentView: View {
     @State private var onboarding: OnboardingViewModel?
     @State private var showOnboarding = false
     @State private var showOnboardingPaywall = false
+    @State private var whatsNew: WhatsNewViewModel?
     @Environment(\.scenePhase) private var scenePhase
+
+    private let releaseTracker = ReleaseTracker()
 
     /// One instance of each, shared with the view model — a second `StoreController`
     /// would mean a second `Transaction.updates` listener and a second view of entitlement.
@@ -85,7 +88,7 @@ struct ContentView: View {
             analytics.record(.deviceCapability(hasOnDeviceModel: AICapability.state(for: aiSettings) != .unsupportedDevice))
         }
         .onAppear {
-            startOnboardingIfNeeded()
+            presentLaunchSheetIfNeeded()
         }
         .fullScreenCover(isPresented: $showOnboarding, onDismiss: finishOnboarding) {
             if let onboarding {
@@ -106,17 +109,34 @@ struct ContentView: View {
                 .environment(store)
                 .environment(analytics)
         }
+        .sheet(item: $whatsNew, onDismiss: { releaseTracker.markSeen() }) { presented in
+            WhatsNewView()
+                .environment(presented)
+                .environment(store)
+                .environment(aiSettings)
+                .environment(analytics)
+        }
     }
 
-    private func startOnboardingIfNeeded() {
-        guard onboarding == nil, !OnboardingViewModel.hasCompleted else { return }
-        // Anyone upgrading with sets already saved has been using the app; don't onboard them.
-        guard viewModel.userSetCount == 0 else {
+    private func presentLaunchSheetIfNeeded() {
+        guard onboarding == nil, whatsNew == nil else { return }
+        switch releaseTracker.launchSheet(
+            hasUserSets: viewModel.userSetCount > 0,
+            hasCompletedOnboarding: OnboardingViewModel.hasCompleted
+        ) {
+        case .onboarding:
+            // Marked now, not on finish, so quitting mid-onboarding and making sets later
+            // can't make this install look like an upgrader.
+            releaseTracker.markSeen()
+            onboarding = OnboardingViewModel(settings: aiSettings)
+            showOnboarding = true
+        case .whatsNew(let note):
+            // Upgraders have been using the app; they get release notes, not onboarding.
             OnboardingViewModel.markCompleted()
-            return
+            whatsNew = WhatsNewViewModel(note: note)
+        case nil:
+            break
         }
-        onboarding = OnboardingViewModel(settings: aiSettings)
-        showOnboarding = true
     }
 
     /// Runs once the cover is fully down — presenting the import sheet mid-dismissal
