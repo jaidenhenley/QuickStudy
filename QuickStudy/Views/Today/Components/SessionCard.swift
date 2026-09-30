@@ -11,7 +11,6 @@ struct SessionCard: View {
     @Environment(TodayViewModel.self) var todayViewModel
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AppState.self) var appState
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var navigateToSession = false
     @State private var showBreakdown = false
@@ -47,11 +46,7 @@ struct SessionCard: View {
             }
 
             Button {
-                if reduceMotion {
-                    showBreakdown.toggle()
-                } else {
-                    withAnimation { showBreakdown.toggle() }
-                }
+                showBreakdown.toggle()
             } label: {
                 HStack(spacing: Spacing.xs) {
                     Text("What's in this?")
@@ -76,7 +71,7 @@ struct SessionCard: View {
                         .foregroundStyle(.white.opacity(0.8))
                     }
                 }
-                .transition(reduceMotion ? .identity : .opacity)
+                .appTransition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .padding()
@@ -90,6 +85,7 @@ struct SessionCard: View {
                 }
         )
         .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl))
+        .appAnimation(Motion.snappy, value: showBreakdown)
         .navigationDestination(isPresented: $navigateToSession) {
             QuizSessionView(cards: studyViewModel.flashcards)
                 .environment(studyViewModel)

@@ -13,6 +13,7 @@ struct SessionCompleteView: View {
     let onDone: () -> Void
 
     @AccessibilityFocusState private var headlineFocused: Bool
+    @State private var appeared = false
 
     var body: some View {
         ScrollView {
@@ -27,6 +28,7 @@ struct SessionCompleteView: View {
                     .foregroundStyle(Color.appPrimary)
                     .padding(.top, Spacing.lg)
                     .accessibilityHidden(true)
+                    .symbolEffect(.bounce, value: appeared)
 
                 Text(summary.headline)
                     .font(.title)
@@ -54,14 +56,16 @@ struct SessionCompleteView: View {
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
+                .appStagedReveal(0, shown: appeared)
 
                 HStack(spacing: 0) {
-                    SessionStatCell(value: "\(summary.cardCount)", label: "CARDS")
-                    SessionStatCell(value: "\(summary.correctCount)", label: "CORRECT")
-                    SessionStatCell(value: "\(Int((summary.accuracy * 100).rounded()))%", label: "ACCURACY")
+                    SessionStatCell(target: summary.cardCount, label: "CARDS")
+                    SessionStatCell(target: summary.correctCount, label: "CORRECT")
+                    SessionStatCell(target: Int((summary.accuracy * 100).rounded()), suffix: "%", label: "ACCURACY")
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
+                .appStagedReveal(1, shown: appeared)
 
                 if !summary.reinforcement.isEmpty {
                     Text("NEEDS REINFORCEMENT")
@@ -71,9 +75,10 @@ struct SessionCompleteView: View {
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top, Spacing.sm)
+                        .appStagedReveal(2, shown: appeared)
 
-                    ForEach(summary.reinforcement) { item in
-                        ReinforcementRow(item: item)
+                    ForEach(Array(summary.reinforcement.enumerated()), id: \.element.id) { index, item in
+                        ReinforcementRow(item: item, index: index + 3, appeared: appeared)
                     }
                 }
 
@@ -84,11 +89,16 @@ struct SessionCompleteView: View {
                 }
                 .appProminentButtonStyle(tint: Theme.primary)
                 .padding(.top, Spacing.base)
+                .appStagedReveal(3 + summary.reinforcement.count, shown: appeared)
             }
             .padding(Spacing.lg)
         }
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
-        .onAppear { headlineFocused = true }
+        .sensoryFeedback(.success, trigger: appeared) { _, new in new }
+        .onAppear {
+            headlineFocused = true
+            appeared = true
+        }
     }
 }

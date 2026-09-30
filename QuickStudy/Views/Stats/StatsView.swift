@@ -10,6 +10,7 @@ import SwiftUI
 struct StatsView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(SessionStore.self) private var sessionStore
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var statsViewModel = StatsViewModel()
 
@@ -58,8 +59,10 @@ struct StatsView: View {
                         Text("\(Int((statsViewModel.overallProgress * 100).rounded()))%")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .contentTransition(.numericText())
                         ProgressView(value: statsViewModel.overallProgress)
                             .tint(Color.appPrimary)
+                            .appAnimation(Motion.standard, value: statsViewModel.overallProgress)
                         Text("Across \(statsViewModel.setCount) \(statsViewModel.setCount == 1 ? "set" : "sets")")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -99,6 +102,7 @@ struct StatsView: View {
                             }
                             .padding(Spacing.base)
                             .appGlassCard(cornerRadius: AppRadius.lg)
+                            .appTransition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
 
@@ -120,9 +124,15 @@ struct StatsView: View {
         .background(BackgroundView())
         .navigationTitle("Stats")
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore) }
+        .onAppear {
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
+            }
+        }
         .onChange(of: studyViewModel.savedSets) { _, _ in
-            statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
+            }
         }
     }
 }

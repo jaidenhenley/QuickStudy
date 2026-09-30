@@ -41,7 +41,7 @@ struct OnboardingView: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .animation(.easeInOut, value: onboarding.current)
+            .appAnimation(Motion.standard, value: onboarding.current)
 
             PageDots(count: onboarding.pages.count, current: onboarding.currentIndex)
                 .padding(.bottom, Spacing.sm)

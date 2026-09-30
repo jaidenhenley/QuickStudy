@@ -13,6 +13,7 @@ struct ImportErrorView: View {
     let onTypeCards: () -> Void
 
     @ScaledMetric(relativeTo: .largeTitle) private var iconDiameter: CGFloat = 92
+    @State private var appeared = false
 
     var body: some View {
         NavigationStack {
@@ -26,7 +27,9 @@ struct ImportErrorView: View {
                         Image(systemName: symbol)
                             .font(.largeTitle)
                             .foregroundStyle(tint)
+                            .symbolEffect(.bounce, value: appeared)
                     }
+                    .appStagedReveal(0, shown: appeared)
 
                 VStack(spacing: Spacing.md) {
                     Text(failure.title)
@@ -66,6 +69,7 @@ struct ImportErrorView: View {
                         }
                     }
                     .appGlassCard(cornerRadius: AppRadius.lg)
+                    .appStagedReveal(1, shown: appeared)
                 }
 
                 Spacer()
@@ -109,6 +113,7 @@ struct ImportErrorView: View {
                             .appProminentButtonStyle(tint: Theme.primary)
                         }
                     }
+                    .appStagedReveal(2, shown: appeared)
                 }
             }
             .padding(Spacing.lg)
@@ -121,6 +126,7 @@ struct ImportErrorView: View {
                     Button(failure.dismissLabel, action: onDismiss)
                 }
             }
+            .onAppear { appeared = true }
         }
     }
 

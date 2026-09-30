@@ -22,6 +22,7 @@ struct WeakestCardRow: View {
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(Theme.dangerText)
+                    .contentTransition(.numericText())
             }
 
             VStack(alignment: .leading, spacing: 2) {

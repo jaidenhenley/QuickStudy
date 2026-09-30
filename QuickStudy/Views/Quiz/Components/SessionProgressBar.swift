@@ -22,16 +22,19 @@ struct SessionProgressBar: View {
                             Image(systemName: "checkmark")
                                 .font(.system(size: 5, weight: .bold))
                                 .foregroundStyle(.white)
+                                .appTransition(.scale.combined(with: .opacity))
                         case .wrong:
                             Image(systemName: "xmark")
                                 .font(.system(size: 5, weight: .bold))
                                 .foregroundStyle(.white)
+                                .appTransition(.scale.combined(with: .opacity))
                         case .current, .upcoming:
                             EmptyView()
                         }
                     }
             }
         }
+        .appAnimation(Motion.snappy, value: states)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Session progress")
         .accessibilityValue(accessibilityValue)

@@ -8,6 +8,7 @@ import SwiftUI
 struct TypeCardsView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var viewModel = TypeCardsViewModel()
 
@@ -28,12 +29,15 @@ struct TypeCardsView: View {
                             index: index + 1,
                             entry: $entry,
                             canRemove: viewModel.entries.count > 1,
-                            onRemove: { viewModel.removeEntry(id: entry.id) }
+                            onRemove: { withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { viewModel.removeEntry(id: entry.id) } }
                         )
+                        .appTransition(.opacity.combined(with: .move(edge: .top)))
                     }
 
                     Button {
-                        viewModel.addEntry()
+                        withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                            viewModel.addEntry()
+                        }
                     } label: {
                         HStack(spacing: Spacing.sm) {
                             Image(systemName: "plus")
@@ -55,6 +59,7 @@ struct TypeCardsView: View {
                 }
                 .padding(Spacing.lg)
             }
+            .sensoryFeedback(.impact(weight: .light), trigger: viewModel.entries.count)
             .background(BackgroundView())
             .navigationTitle("Type cards")
             .navigationBarTitleDisplayMode(.inline)

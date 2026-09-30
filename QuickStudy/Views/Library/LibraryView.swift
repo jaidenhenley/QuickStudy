@@ -23,6 +23,7 @@ struct LibraryView: View {
     @State private var showDeleteAlert = false
     @State private var showTypeCards = false
     @State private var showPaywall = false
+    @Namespace private var tileTransition
 
     var body: some View {
         @Bindable var libraryViewModel = libraryViewModel
@@ -61,50 +62,61 @@ struct LibraryView: View {
                             LibraryFilterChips(selection: $libraryViewModel.filter)
 
                             let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
-                            if visible.isEmpty {
-                                Text("No sets match this filter.")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.top, 48)
-                            } else {
-                                GlassEffectContainer {
-                                    LazyVGrid(
-                                        columns: [
-                                            GridItem(.flexible(), spacing: Spacing.md),
-                                            GridItem(.flexible(), spacing: Spacing.md)
-                                        ],
-                                        spacing: Spacing.md
-                                    ) {
-                                        ForEach(visible) { set in
-                                            NavigationLink {
-                                                StudySetDetailView(set: set)
-                                            } label: {
-                                                SetTile(set: set)
-                                            }
-                                            .buttonStyle(.plain)
-                                            // Without this the lift uses the link's full rectangle,
-                                            // which shows as a grey platter around the rounded glass.
-                                            .contentShape(.contextMenuPreview, .rect(cornerRadius: AppRadius.lg))
-                                            .contextMenu {
-                                                Button {
-                                                    renameText = set.title
-                                                    renamingSet = set
-                                                    showRenameAlert = true
+                            Group {
+                                if visible.isEmpty {
+                                    Text("No sets match this filter.")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.top, 48)
+                                        .appTransition(.opacity)
+                                } else {
+                                    GlassEffectContainer {
+                                        LazyVGrid(
+                                            columns: [
+                                                GridItem(.flexible(), spacing: Spacing.md),
+                                                GridItem(.flexible(), spacing: Spacing.md)
+                                            ],
+                                            spacing: Spacing.md
+                                        ) {
+                                            ForEach(visible) { set in
+                                                NavigationLink {
+                                                    StudySetDetailView(set: set)
+                                                        .navigationTransition(.zoom(sourceID: set.id, in: tileTransition))
                                                 } label: {
-                                                    Label("Rename", systemImage: "pencil")
+                                                    SetTile(set: set)
                                                 }
-                                                Button(role: .destructive) {
-                                                    deletingSet = set
-                                                    showDeleteAlert = true
-                                                } label: {
-                                                    Label("Delete", systemImage: "trash")
+                                                .buttonStyle(.plain)
+                                                // Without this the lift uses the link's full rectangle,
+                                                // which shows as a grey platter around the rounded glass.
+                                                .contentShape(.contextMenuPreview, .rect(cornerRadius: AppRadius.lg))
+                                                .matchedTransitionSource(id: set.id, in: tileTransition) {
+                                                    $0.clipShape(.rect(cornerRadius: AppRadius.lg))
                                                 }
+                                                .contextMenu {
+                                                    Button {
+                                                        renameText = set.title
+                                                        renamingSet = set
+                                                        showRenameAlert = true
+                                                    } label: {
+                                                        Label("Rename", systemImage: "pencil")
+                                                    }
+                                                    Button(role: .destructive) {
+                                                        deletingSet = set
+                                                        showDeleteAlert = true
+                                                    } label: {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
+                                                }
+                                                .appTransition(.opacity.combined(with: .scale(scale: 0.95)))
                                             }
                                         }
+                                        .appAnimation(Motion.standard, value: libraryViewModel.filter)
+                                        .appAnimation(Motion.standard, value: libraryViewModel.searchText)
                                     }
                                 }
                             }
+                            .appAnimation(Motion.standard, value: visible.isEmpty)
                         }
 
                         if let reason = libraryViewModel.addCardsReason {

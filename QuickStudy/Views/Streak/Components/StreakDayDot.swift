@@ -22,8 +22,11 @@ struct StreakDayDot: View {
                     Image(systemName: symbol)
                         .font(.caption)
                         .foregroundStyle(tint)
+                        .contentTransition(.symbolEffect(.replace))
+                        .symbolEffect(.bounce, value: state)
                 }
             }
+            .appAnimation(Motion.snappy, value: state)
             Text(letter)
                 .font(.caption2)
                 .foregroundStyle(.secondary)

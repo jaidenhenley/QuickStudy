@@ -22,7 +22,7 @@ struct SetTile: View {
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(Color.appPrimary.opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
             }
 
             Text(set.title)
@@ -39,6 +39,7 @@ struct SetTile: View {
 
             ProgressView(value: set.progress)
                 .tint(set.masteryState == .mastered ? Theme.success : Color.appPrimary)
+                .appAnimation(Motion.standard, value: set.progress)
 
             if set.masteryState == .mastered {
                 Text("Mastered")

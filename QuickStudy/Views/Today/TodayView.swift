@@ -18,6 +18,7 @@ struct TodayView: View {
     @Environment(AnalyticsRecorder.self) var analytics
     @Environment(DraftStore.self) var draftStore
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var showSettings = false
     @State private var showPaywall = false
@@ -33,14 +34,17 @@ struct TodayView: View {
                         canSwitchToOnDevice: aiSettings.mode == .externalAPI && !store.willUseHostedGeneration,
                         onOpenSettings: { showSettings = true }
                     )
+                    .appTransition(.move(edge: .top).combined(with: .opacity))
                 }
 
                 if todayViewModel.showsGenerationsPill {
                     AICardsLeftView { showPaywall = true }
+                        .appTransition(.opacity)
                 }
 
                 if let draft = draftStore.pending {
                     RecoveredDraftRow(draft: draft) { appState.selectedTab = .library }
+                        .appTransition(.move(edge: .top).combined(with: .opacity))
                 }
 
                 let dateLayout = dynamicTypeSize.isAccessibilitySize
@@ -76,48 +80,67 @@ struct TodayView: View {
                     SessionCard()
 
                     if let weakest = todayViewModel.weakestCard {
-                        Text("WEAKEST CARD")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .tracking(1)
-                            .padding(.top, Spacing.sm)
+                        Group {
+                            Text("WEAKEST CARD")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .tracking(1)
+                                .padding(.top, Spacing.sm)
 
-                        if let weakestSet = studyViewModel.savedSets.first(where: { $0.id == weakest.setID }) {
-                            NavigationLink {
-                                QuizSessionView(cards: weakestSet.cards)
-                                    .environment(studyViewModel)
-                            } label: {
+                            if let weakestSet = studyViewModel.savedSets.first(where: { $0.id == weakest.setID }) {
+                                NavigationLink {
+                                    QuizSessionView(cards: weakestSet.cards)
+                                        .environment(studyViewModel)
+                                } label: {
+                                    WeakestCardRow(weakest: weakest)
+                                }
+                                .buttonStyle(.plain)
+                                .id(weakest.id)
+                                .appTransition(.opacity)
+                            } else {
                                 WeakestCardRow(weakest: weakest)
+                                    .id(weakest.id)
+                                    .appTransition(.opacity)
                             }
-                            .buttonStyle(.plain)
-                        } else {
-                            WeakestCardRow(weakest: weakest)
                         }
+                        .appTransition(.opacity)
+                        .appAnimation(Motion.standard, value: todayViewModel.weakestCard?.id)
                     }
 
                     if studyViewModel.canGenerateSuggestions, let suggestion = todayViewModel.suggestion {
-                        Text("SUGGESTED")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .tracking(1)
-                            .padding(.top, Spacing.sm)
-                        SuggestionRow(suggestion: suggestion)
+                        Group {
+                            Text("SUGGESTED")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .tracking(1)
+                                .padding(.top, Spacing.sm)
+                            SuggestionRow(suggestion: suggestion)
+                        }
+                        .appTransition(.opacity)
                     }
                 }
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.top, Spacing.sm)
             .padding(.bottom, Spacing.xl)
+            .appAnimation(Motion.standard, value: networkMonitor.isOnline)
+            .appAnimation(Motion.standard, value: draftStore.pending?.id)
         }
         .background(BackgroundView())
         .sheet(isPresented: $showSettings) { SettingsView() }
         .sheet(isPresented: $showPaywall) { PaywallView(surface: .pill) }
-        .onAppear { refreshToday() }
-        .onChange(of: studyViewModel.savedSets) { _, _ in refreshToday() }
-        .onChange(of: store.isPro) { _, _ in refreshToday() }
-        .onChange(of: store.hostedRemaining) { _, _ in refreshToday() }
+        .onAppear { withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() } }
+        .onChange(of: studyViewModel.savedSets) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
+        .onChange(of: store.isPro) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
+        .onChange(of: store.hostedRemaining) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showSettings = true } label: {
