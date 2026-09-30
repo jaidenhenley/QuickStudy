@@ -38,25 +38,33 @@ struct LibraryEmptyView: View {
                     }
             }
             .padding(.bottom, 6)
+            .accessibilityHidden(true)
 
             Text("Build your first set")
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Snap a page, drop in a PDF, or paste your notes — we'll draft flashcards in seconds.")
+            Text("Snap a page, drop in a PDF, or paste your notes. We'll draft flashcards in seconds.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
-            HStack(spacing: 12) {
-                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
-                    coordinator.showFileImporter = true
-                }
+            HStack(spacing: 10) {
                 SourceOptionButton(title: "Scan", subtitle: "Camera", systemImage: "camera") {
-                    coordinator.startScan()
+                    coordinator.pendingSource = .scan
+                    coordinator.presentPendingSource()
+                }
+                SourceOptionButton(title: "Photo", subtitle: "Library", systemImage: "photo") {
+                    coordinator.pendingSource = .photo
+                    coordinator.presentPendingSource()
+                }
+                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
+                    coordinator.pendingSource = .pdf
+                    coordinator.presentPendingSource()
                 }
                 SourceOptionButton(title: "Text", subtitle: "Paste", systemImage: "text.alignleft") {
-                    coordinator.showPasteSheet = true
+                    coordinator.pendingSource = .paste
+                    coordinator.presentPendingSource()
                 }
             }
             .padding(.top, 4)

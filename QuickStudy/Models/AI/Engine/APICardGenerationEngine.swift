@@ -8,6 +8,11 @@
 import Foundation
 
 struct APICardGenerationEngine: CardGenerating {
+    let countsAgainstAllowance = false
+    let sourceChunkLimit: Int? = nil
+    let skippedSourceSections = 0
+    let expectedSeconds: Double = 8
+    var provenance: GenerationProvenance { GenerationProvenance(engine: .externalAPI, model: model) }
     let endpoint: URL
     let model: String
     let apiKey: String

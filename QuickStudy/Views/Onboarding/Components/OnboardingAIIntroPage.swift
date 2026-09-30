@@ -1,0 +1,91 @@
+//
+//  OnboardingAIIntroPage.swift
+//  QuickStudy
+//
+
+import SwiftUI
+
+struct OnboardingAIIntroPage: View {
+    let hasOnDeviceModel: Bool
+    let onContinue: () -> Void
+
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(spacing: Spacing.lg) {
+            Image(systemName: "sparkles")
+                .font(.title)
+                .foregroundStyle(.appPrimary)
+                .frame(width: 64, height: 64)
+                .background(Color.appPrimary.opacity(0.12), in: Circle())
+                .symbolEffect(.bounce, value: appeared)
+                .appStagedReveal(0, shown: appeared)
+
+            VStack(spacing: Spacing.sm) {
+                Text("Private by default")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                Text(
+                    hasOnDeviceModel
+                        ? "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone."
+                        : "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud."
+                )
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            }
+            .appStagedReveal(1, shown: appeared)
+
+            VStack(alignment: .leading, spacing: Spacing.base) {
+                if hasOnDeviceModel {
+                    ForEach(Array([
+                        (symbol: "checkmark.shield", title: "On this iPhone", detail: "After your first set, generations run on-device and never leave it."),
+                        (symbol: "bolt", title: "Works offline", detail: "Study, quiz and edit offline anytime, anywhere."),
+                        (symbol: "sparkles", title: "10 free generations a month", detail: "Manual cards and every study mode are always unlimited.")
+                    ].enumerated()), id: \.offset) { index, item in
+                        OnboardingFeatureRow(
+                            symbol: item.symbol,
+                            title: item.title,
+                            detail: item.detail
+                        )
+                        .appStagedReveal(2 + index, shown: appeared)
+                    }
+                } else {
+                    ForEach(Array([
+                        (symbol: "square.and.pencil", title: "Manual cards, always free", detail: "Type your own cards and study with every mode, unlimited."),
+                        (symbol: "icloud", title: "More with Pro", detail: "Cloud drafting on any iPhone, whenever you need it.")
+                    ].enumerated()), id: \.offset) { index, item in
+                        OnboardingFeatureRow(
+                            symbol: item.symbol,
+                            title: item.title,
+                            detail: item.detail
+                        )
+                        .appStagedReveal(2 + index, shown: appeared)
+                    }
+                }
+            }
+            .padding(.top, Spacing.sm)
+
+            Text("Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Your text isn't stored.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
+            Spacer()
+
+            Button(action: onContinue) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+            }
+            .appProminentButtonStyle(tint: Theme.primary)
+            .controlSize(.large)
+            .appStagedReveal(hasOnDeviceModel ? 5 : 4, shown: appeared)
+        }
+        .padding(.horizontal, Spacing.lg)
+        .padding(.top, Spacing.xl)
+        .onAppear {
+            appeared = true
+        }
+    }
+}

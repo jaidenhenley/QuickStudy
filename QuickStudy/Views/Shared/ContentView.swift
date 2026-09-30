@@ -8,20 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
-    // Shared app state for the whole flow
-    @State private var viewModel = StudyViewModel()
+    @State private var viewModel: StudyViewModel
     @State private var appState = AppState()
-    @State private var aiSettings = AISettings()
+    @State private var aiSettings: AISettings
     @State private var todayViewModel = TodayViewModel()
     @State private var draftStore = DraftStore()
     @State private var sessionStore = SessionStore()
-    @Environment(\.scenePhase) private var scenePhase
-    @AppStorage("didShowOnboarding") private var didShowOnboarding = false
-    
+    @State private var networkMonitor = NetworkMonitor()
+    @State private var store: StoreController
+    @State private var analytics: AnalyticsRecorder
+    @State private var onboarding: OnboardingViewModel?
     @State private var showOnboarding = false
-    @State private var showTutorialOverlay = false
-    @State private var currentTutorialStep: TutorialStep = .welcome
-    
+    @State private var showOnboardingPaywall = false
+    @Environment(\.scenePhase) private var scenePhase
+
+    /// One instance of each, shared with the view model — a second `StoreController`
+    /// would mean a second `Transaction.updates` listener and a second view of entitlement.
+    init() {
+        let aiSettings = AISettings()
+        let analytics = AnalyticsRecorder()
+        let store = StoreController(analytics: analytics)
+        _aiSettings = State(initialValue: aiSettings)
+        _analytics = State(initialValue: analytics)
+        _store = State(initialValue: store)
+        _viewModel = State(initialValue: StudyViewModel(aiSettings: aiSettings, store: store, analytics: analytics))
+    }
+
     var body: some View {
         TabView(selection: $appState.selectedTab) {
             NavigationStack {
@@ -54,85 +66,72 @@ struct ContentView: View {
         .environment(viewModel)
         .environment(appState)
         .onChange(of: scenePhase) { _, phase in
-            if phase != .active { viewModel.flushPendingChanges() }
+            if phase == .active {
+                // Catches a renewal, lapse, refund or restore that happened while away.
+                Task { await store.refreshEntitlement() }
+            } else {
+                viewModel.flushPendingChanges()
+                Task { await analytics.flush() }
+            }
         }
         .foregroundStyle(Theme.textPrimary)
         .environment(aiSettings)
-        .overlay {
-            if showTutorialOverlay {
-                TutorialOverlay(
-                    step: currentTutorialStep,
-                    onNext: advanceTutorial,
-                    onSkip: {
-                        showTutorialOverlay = false
-                        didShowOnboarding = true
-                    }
-                )
-                .id(currentTutorialStep)
-                .transition(.opacity)
-            }
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            WelcomeScreen(
-                onStart: {
-                    showOnboarding = false
-                    startTutorial()
-                },
-                onSkip: {
-                    showOnboarding = false
-                    didShowOnboarding = true
-                }
-            )
+        .environment(networkMonitor)
+        .environment(store)
+        .environment(analytics)
+        .task {
+            store.startObservingTransactions()
+            await store.refreshEntitlement()
+            analytics.record(.deviceCapability(hasOnDeviceModel: AICapability.state(for: aiSettings) != .unsupportedDevice))
         }
         .onAppear {
-            viewModel.aiSettings = aiSettings
-            if !didShowOnboarding {
-                showOnboarding = true
+            startOnboardingIfNeeded()
+        }
+        .fullScreenCover(isPresented: $showOnboarding, onDismiss: finishOnboarding) {
+            if let onboarding {
+                OnboardingView()
+                    .environment(onboarding)
+                    .environment(analytics)
             }
         }
-        
-    }
-    
-    private func startTutorial() {
-        viewModel.demoModeEnabled = true
-        currentTutorialStep = .viewDemoSets
-        Task {
-            // sleep only throws on cancellation, where showing the overlay is still correct
-            try? await Task.sleep(for: .seconds(0.5))
-            showTutorialOverlay = true
+        // Onboarding's paywall waits for the first set the user made themselves, so the
+        // ask follows real value rather than landing before it.
+        .onChange(of: viewModel.userSetCount) { old, new in
+            guard new > old, OnboardingViewModel.isPaywallPending, !store.isPro else { return }
+            OnboardingViewModel.setPaywallPending(false)
+            showOnboardingPaywall = true
+        }
+        .sheet(isPresented: $showOnboardingPaywall) {
+            PaywallView(surface: .onboarding)
+                .environment(store)
+                .environment(analytics)
         }
     }
-    
-    private func advanceTutorial() {
-        withAnimation {
-            switch currentTutorialStep {
-            case .welcome:
-                currentTutorialStep = .viewDemoSets
-            case .viewDemoSets:
-                currentTutorialStep = .tapFirstSet
-            case .tapFirstSet:
-                currentTutorialStep = .viewFlashcards
-            case .viewFlashcards:
-                currentTutorialStep = .approveCard
-            case .approveCard:
-                currentTutorialStep = .openStudyMode
-            case .openStudyMode:
-                currentTutorialStep = .viewStudyList
-            case .viewStudyList:
-                currentTutorialStep = .startPractice
-            case .startPractice:
-                currentTutorialStep = .flipCard
-            case .flipCard:
-                currentTutorialStep = .goToQuiz
-            case .goToQuiz:
-                currentTutorialStep = .startQuiz
-            case .startQuiz:
-                currentTutorialStep = .complete
-            case .complete:
-                showTutorialOverlay = false
-                didShowOnboarding = true
-            }
+
+    private func startOnboardingIfNeeded() {
+        guard onboarding == nil, !OnboardingViewModel.hasCompleted else { return }
+        // Anyone upgrading with sets already saved has been using the app; don't onboard them.
+        guard viewModel.userSetCount == 0 else {
+            OnboardingViewModel.markCompleted()
+            return
         }
+        onboarding = OnboardingViewModel(settings: aiSettings)
+        showOnboarding = true
+    }
+
+    /// Runs once the cover is fully down — presenting the import sheet mid-dismissal
+    /// would drop it.
+    private func finishOnboarding() {
+        guard let choice = onboarding?.choice else { return }
+        if !store.isPro { OnboardingViewModel.setPaywallPending(true) }
+        switch choice {
+        case .demo:
+            viewModel.demoModeEnabled = true
+            appState.selectedTab = .today
+        case .source(let source):
+            appState.selectedTab = .library
+            appState.pendingImportSource = source
+        }
+        onboarding = nil
     }
 }
-

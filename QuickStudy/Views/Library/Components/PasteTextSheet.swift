@@ -12,9 +12,16 @@ struct PasteTextSheet: View {
 
     @Environment(AISettings.self) private var aiSettings
     @Environment(TodayViewModel.self) private var todayViewModel
+    @Environment(StoreController.self) private var store
     @Environment(\.dismiss) private var dismiss
 
-    @State private var text = ""
+    @State private var text: String
+    @State private var appeared = false
+
+    init(initialText: String = "", onSubmit: @escaping (String) -> Void) {
+        self.onSubmit = onSubmit
+        _text = State(initialValue: initialText)
+    }
 
     var body: some View {
         NavigationStack {
@@ -28,14 +35,19 @@ struct PasteTextSheet: View {
                     Spacer()
                     HStack(spacing: Spacing.xs) {
                         Image(systemName: "sparkles")
-                        Text("\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free left")
+                            .symbolEffect(.bounce, value: appeared)
+                        Text(
+                            todayViewModel.isPro
+                                ? "QuickStudy Pro"
+                                : "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free left"
+                        )
                     }
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.appSecondary)
                 }
 
-                Text("Anything — lecture notes, a chapter, a syllabus.")
+                Text("Anything works: lecture notes, a chapter or a syllabus.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
@@ -89,11 +101,16 @@ struct PasteTextSheet: View {
                 .appProminentButtonStyle(tint: Theme.primary)
                 .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
 
-                // Only truthful on-device: an external API means the notes do leave the phone.
+                // The promise has to match the engine that will actually run: an external
+                // API or a hosted generation both mean the notes leave the phone.
                 if aiSettings.mode == .onDevice {
                     HStack(spacing: Spacing.xs) {
-                        Image(systemName: "checkmark.shield")
-                        Text("On this iPhone · no upload · works offline")
+                        Image(systemName: store.willUseHostedGeneration ? "network" : "checkmark.shield")
+                        Text(
+                            store.willUseHostedGeneration
+                                ? "Sent to QuickStudy's server · not stored"
+                                : "On this iPhone · no upload · works offline"
+                        )
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -108,6 +125,9 @@ struct PasteTextSheet: View {
                     Button("Cancel") { dismiss() }
                 }
             }
+        }
+        .onAppear {
+            appeared = true
         }
     }
 }

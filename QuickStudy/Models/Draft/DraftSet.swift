@@ -15,6 +15,8 @@ struct DraftSet: Identifiable, Codable {
     var document: StudyDocument
     var cards: [StudyCard]
     var sourceType: StudySourceType
+    var wasTruncated: Bool
+    var provenance: GenerationProvenance?
     let createdAt: Date
 
     init(
@@ -23,6 +25,8 @@ struct DraftSet: Identifiable, Codable {
         document: StudyDocument,
         cards: [StudyCard],
         sourceType: StudySourceType,
+        wasTruncated: Bool = false,
+        provenance: GenerationProvenance? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -30,7 +34,21 @@ struct DraftSet: Identifiable, Codable {
         self.document = document
         self.cards = cards
         self.sourceType = sourceType
+        self.wasTruncated = wasTruncated
+        self.provenance = provenance
         self.createdAt = createdAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        document = try container.decode(StudyDocument.self, forKey: .document)
+        cards = try container.decode([StudyCard].self, forKey: .cards)
+        sourceType = try container.decode(StudySourceType.self, forKey: .sourceType)
+        wasTruncated = try container.decodeIfPresent(Bool.self, forKey: .wasTruncated) ?? false
+        provenance = try container.decodeIfPresent(GenerationProvenance.self, forKey: .provenance)
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
     }
 
     var pageCount: Int { document.pageBreaks?.count ?? 1 }
@@ -40,6 +58,6 @@ struct DraftSet: Identifiable, Codable {
     }
 
     func committed() -> StudySet {
-        StudySet(title: title, document: document, cards: cards, sourceType: sourceType)
+        StudySet(title: title, document: document, cards: cards, sourceType: sourceType, provenance: provenance)
     }
 }

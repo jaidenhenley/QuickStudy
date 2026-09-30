@@ -12,8 +12,16 @@ struct TodayView: View {
     @Environment(AppState.self) var appState
     @Environment(TodayViewModel.self) var todayViewModel
     @Environment(SessionStore.self) var sessionStore
+    @Environment(AISettings.self) var aiSettings
+    @Environment(NetworkMonitor.self) var networkMonitor
+    @Environment(StoreController.self) var store
+    @Environment(AnalyticsRecorder.self) var analytics
+    @Environment(DraftStore.self) var draftStore
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var showSettings = false
+    @State private var showPaywall = false
 
     var body: some View {
         ScrollView {
@@ -21,23 +29,47 @@ struct TodayView: View {
                 Text("Today")
                     .font(.system(size: 40, weight: .bold))
 
-                if todayViewModel.todayCardCount > 0 {
-                    AICardsLeftView()
+                if !networkMonitor.isOnline && (aiSettings.mode == .externalAPI || store.willUseHostedGeneration) {
+                    OfflineBanner(
+                        canSwitchToOnDevice: aiSettings.mode == .externalAPI && !store.willUseHostedGeneration,
+                        onOpenSettings: { showSettings = true }
+                    )
+                    .appTransition(.move(edge: .top).combined(with: .opacity))
                 }
 
-                HStack {
+                if todayViewModel.showsGenerationsPill {
+                    AICardsLeftView { showPaywall = true }
+                        .appTransition(.opacity)
+                }
+
+                if let draft = draftStore.pending {
+                    RecoveredDraftRow(draft: draft) { appState.selectedTab = .library }
+                        .appTransition(.move(edge: .top).combined(with: .opacity))
+                }
+
+                let dateLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+                    : AnyLayout(HStackLayout())
+
+                dateLayout {
                     Text(formattedDate)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    Spacer()
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
+                    }
                     if todayViewModel.streakCount > 0 {
                         NavigationLink {
                             StreakView()
                         } label: {
-                            Text("🔥 \(todayViewModel.streakCount) day streak")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.orange)
+                            Label {
+                                Text("\(todayViewModel.streakCount) day streak")
+                            } icon: {
+                                Image(systemName: "flame.fill")
+                            }
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.appStreak)
                         }
                     }
                 }
@@ -48,43 +80,82 @@ struct TodayView: View {
                     SessionCard()
 
                     if let weakest = todayViewModel.weakestCard {
-                        Text("WEAKEST CARD")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .tracking(1)
-                            .padding(.top, Spacing.sm)
-                        WeakestCardRow(weakest: weakest)
+                        Group {
+                            Text("WEAKEST CARD")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .tracking(1)
+                                .padding(.top, Spacing.sm)
+
+                            if let weakestSet = studyViewModel.savedSets.first(where: { $0.id == weakest.setID }) {
+                                NavigationLink {
+                                    QuizSessionView(cards: weakestSet.cards)
+                                        .environment(studyViewModel)
+                                } label: {
+                                    WeakestCardRow(weakest: weakest)
+                                }
+                                .buttonStyle(.plain)
+                                .id(weakest.id)
+                                .appTransition(.opacity)
+                            } else {
+                                WeakestCardRow(weakest: weakest)
+                                    .id(weakest.id)
+                                    .appTransition(.opacity)
+                            }
+                        }
+                        .appTransition(.opacity)
+                        .appAnimation(Motion.standard, value: todayViewModel.weakestCard?.id)
                     }
 
-                    if let suggestion = todayViewModel.suggestion {
-                        Text("SUGGESTED")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.secondary)
-                            .tracking(1)
-                            .padding(.top, Spacing.sm)
-                        SuggestionRow(suggestion: suggestion)
+                    if studyViewModel.canGenerateSuggestions, let suggestion = todayViewModel.suggestion {
+                        Group {
+                            Text("SUGGESTED")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .tracking(1)
+                                .padding(.top, Spacing.sm)
+                            SuggestionRow(suggestion: suggestion)
+                        }
+                        .appTransition(.opacity)
                     }
                 }
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.top, Spacing.sm)
             .padding(.bottom, Spacing.xl)
+            .appAnimation(Motion.standard, value: networkMonitor.isOnline)
+            .appAnimation(Motion.standard, value: draftStore.pending?.id)
         }
         .background(BackgroundView())
         .sheet(isPresented: $showSettings) { SettingsView() }
-        .onAppear { todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore) }
-        .onChange(of: studyViewModel.savedSets) { _, _ in todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore) }
+        .sheet(isPresented: $showPaywall) { PaywallView(surface: .pill) }
+        .onAppear { withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() } }
+        .onChange(of: studyViewModel.savedSets) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
+        .onChange(of: store.isPro) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
+        .onChange(of: store.hostedRemaining) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button { showSettings = true } label: {
                     Image(systemName: "gearshape")
-                        .font(.system(size: 18))
+                        .font(.title3)
                         .foregroundStyle(.secondary)
                 }
             }
         }
+    }
+
+    private func refreshToday() {
+        todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore, store: store)
+        analytics.record(.generationsUsed(bucket: todayViewModel.generationsUsedBucket))
+        if !todayViewModel.canGenerate { analytics.record(.allowanceExhausted) }
     }
 
     private var formattedDate: String {

@@ -14,9 +14,8 @@ struct CardGenerator {
     static func generateAI(
         from rawText: String,
         document: StudyDocument,
-        settings: AISettings
+        engine: any CardGenerating
     ) async throws -> [StudyCard] {
-        let engine = try AIController.makeGenerator(settings: settings)
         let cards = try await engine.generateCards(from: rawText)
         return cards.map { aiCard in
             StudyCard(
@@ -34,9 +33,8 @@ struct CardGenerator {
         document: StudyDocument,
         topic: String,
         count: Int,
-        settings: AISettings
+        engine: any CardGenerating
     ) async throws -> [StudyCard] {
-        let engine = try AIController.makeGenerator(settings: settings)
         let cards = try await engine.generateCards(from: rawText, topic: topic, count: count)
         return cards.map { aiCard in
             StudyCard(

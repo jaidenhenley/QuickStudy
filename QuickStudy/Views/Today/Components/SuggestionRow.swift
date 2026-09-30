@@ -12,6 +12,7 @@ struct SuggestionRow: View {
 
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(AppState.self) private var appState
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var isGenerating = false
     @State private var showError = false
@@ -32,24 +33,29 @@ struct SuggestionRow: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .lineLimit(2)
-                Text("From \(suggestion.sourceTitle) · \(suggestion.engineLabel)")
+                Text("From \(suggestion.sourceTitle) · on-device")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
             }
 
             Spacer()
 
-            if isGenerating {
-                ProgressView()
-            } else {
-                Button("Yes") {
-                    Task { await generate() }
+            Group {
+                if isGenerating {
+                    ProgressView()
+                        .appTransition(.scale.combined(with: .opacity))
+                } else {
+                    Button("Yes") {
+                        Task { await generate() }
+                    }
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.appPrimary)
+                    .appTransition(.scale.combined(with: .opacity))
                 }
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.appPrimary)
             }
+            .appAnimation(Motion.snappy, value: isGenerating)
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)

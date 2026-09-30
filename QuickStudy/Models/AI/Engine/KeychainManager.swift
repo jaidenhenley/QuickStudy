@@ -9,24 +9,40 @@ import Foundation
 import Security
 
 enum KeychainManager {
-    private static let service = "com.jaidenhenley.quickstudy"
-    private static let account = "external-api-key"
+    enum Account: String {
+        case externalAPIKey = "external-api-key"
+        case appAttestKeyID = "app-attest-key-id"
+        case generationAllowance = "generation-allowance"
+    }
 
-    /// Update-then-add rather than delete-then-add: a failed write must never
-    /// destroy the key that was already stored.
+    private static let service = "com.jaidenhenley.quickstudy"
+
     static func saveAPIKey(_ key: String) throws {
         let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             try deleteAPIKey()
             return
         }
+        try save(trimmed, account: .externalAPIKey)
+    }
 
+    static func loadAPIKey() -> String? {
+        load(account: .externalAPIKey)
+    }
+
+    static func deleteAPIKey() throws {
+        try delete(account: .externalAPIKey)
+    }
+
+    /// Update-then-add rather than delete-then-add: a failed write must never
+    /// destroy the value that was already stored.
+    static func save(_ value: String, account: Account) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account
+            kSecAttrAccount as String: account.rawValue
         ]
-        let data = Data(trimmed.utf8)
+        let data = Data(value.utf8)
 
         let updateStatus = SecItemUpdate(
             query as CFDictionary,
@@ -44,11 +60,11 @@ enum KeychainManager {
         }
     }
 
-    static func loadAPIKey() -> String? {
+    static func load(account: Account) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
+            kSecAttrAccount as String: account.rawValue,
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
@@ -65,11 +81,24 @@ enum KeychainManager {
         return key
     }
 
-    static func deleteAPIKey() throws {
+    #if DEBUG
+    static func deleteAllItems() throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service
+        ]
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw CardGenerationError.keychainError(status)
+        }
+    }
+    #endif
+
+    static func delete(account: Account) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account
+            kSecAttrAccount as String: account.rawValue
         ]
 
         let status = SecItemDelete(query as CFDictionary)

@@ -46,7 +46,7 @@ struct SessionCard: View {
             }
 
             Button {
-                withAnimation { showBreakdown.toggle() }
+                showBreakdown.toggle()
             } label: {
                 HStack(spacing: Spacing.xs) {
                     Text("What's in this?")
@@ -71,7 +71,7 @@ struct SessionCard: View {
                         .foregroundStyle(.white.opacity(0.8))
                     }
                 }
-                .transition(.opacity)
+                .appTransition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .padding()
@@ -85,6 +85,7 @@ struct SessionCard: View {
                 }
         )
         .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl))
+        .appAnimation(Motion.snappy, value: showBreakdown)
         .navigationDestination(isPresented: $navigateToSession) {
             QuizSessionView(cards: studyViewModel.flashcards)
                 .environment(studyViewModel)

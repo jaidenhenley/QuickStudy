@@ -12,6 +12,7 @@ struct SourcePageView: View {
     let lines: [String]
     let highlighted: ClosedRange<Int>?
     let lineOffset: Int
+    let namespace: Namespace.ID
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
@@ -25,10 +26,13 @@ struct SourcePageView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, isHighlighted ? Spacing.sm : 0)
                     .padding(.vertical, isHighlighted ? 2 : 0)
-                    .background(
-                        isHighlighted ? Color.appPrimary.opacity(0.15) : Color.clear,
-                        in: RoundedRectangle(cornerRadius: AppRadius.sm)
-                    )
+                    .background {
+                        if isHighlighted {
+                            RoundedRectangle(cornerRadius: AppRadius.sm)
+                                .fill(Color.appPrimary.opacity(0.15))
+                                .matchedGeometryEffect(id: "highlight", in: namespace)
+                        }
+                    }
             }
         }
     }

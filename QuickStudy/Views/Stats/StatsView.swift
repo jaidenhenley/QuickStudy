@@ -10,6 +10,7 @@ import SwiftUI
 struct StatsView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(SessionStore.self) private var sessionStore
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var statsViewModel = StatsViewModel()
 
@@ -24,7 +25,7 @@ struct StatsView: View {
                         Text("No stats yet")
                             .font(.title2)
                             .fontWeight(.bold)
-                        Text("Approve some cards and finish a session to start tracking your progress.")
+                        Text("Save a set to start tracking your progress.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -40,9 +41,9 @@ struct StatsView: View {
                             ],
                             spacing: Spacing.md
                         ) {
-                            StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .orange)
+                            StatTile(value: "\(statsViewModel.streak)", label: "Day streak", tint: .appStreak)
                             StatTile(value: "\(statsViewModel.dueToday)", label: "Cards due today")
-                            StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.success)
+                            StatTile(value: "\(statsViewModel.masteredCards)", label: "Cards mastered", tint: Theme.successText)
                             StatTile(value: "\(statsViewModel.scheduledCards)", label: "Cards in rotation")
                         }
                     }
@@ -58,8 +59,10 @@ struct StatsView: View {
                         Text("\(Int((statsViewModel.overallProgress * 100).rounded()))%")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .contentTransition(.numericText())
                         ProgressView(value: statsViewModel.overallProgress)
                             .tint(Color.appPrimary)
+                            .appAnimation(Motion.standard, value: statsViewModel.overallProgress)
                         Text("Across \(statsViewModel.setCount) \(statsViewModel.setCount == 1 ? "set" : "sets")")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -84,7 +87,7 @@ struct StatsView: View {
                                     Text("\(card.missCount)×")
                                         .font(.caption)
                                         .fontWeight(.bold)
-                                        .foregroundStyle(Theme.danger)
+                                        .foregroundStyle(Theme.dangerText)
                                 }
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(card.question)
@@ -99,6 +102,7 @@ struct StatsView: View {
                             }
                             .padding(Spacing.base)
                             .appGlassCard(cornerRadius: AppRadius.lg)
+                            .appTransition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
 
@@ -120,9 +124,15 @@ struct StatsView: View {
         .background(BackgroundView())
         .navigationTitle("Stats")
         .navigationBarTitleDisplayMode(.large)
-        .onAppear { statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore) }
+        .onAppear {
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
+            }
+        }
         .onChange(of: studyViewModel.savedSets) { _, _ in
-            statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                statsViewModel.update(from: studyViewModel.savedSets, sessions: sessionStore)
+            }
         }
     }
 }

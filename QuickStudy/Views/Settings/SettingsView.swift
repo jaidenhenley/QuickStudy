@@ -5,20 +5,23 @@
 //  Created by Jaiden Henley on 2/26/26.
 //
 
+import StoreKit
 import SwiftUI
- 
+
 struct SettingsView: View {
     @Environment(StudyViewModel.self) var studyViewModel
     @Environment(AISettings.self) var aiSettings
     @Environment(AppState.self) var appState
-    @Environment(\.dismiss) private var dismiss
-    @AppStorage("didShowOnboarding") private var didShowOnboarding = false
-
-    @State private var showOnboarding = false
+    @Environment(StoreController.self) var store
+    @Environment(AnalyticsRecorder.self) var analytics
     @State private var showClearDataAlert = false
+    @State private var showPaywall = false
+    @State private var showManageSubscription = false
     @State private var apiKeyDraft = ""
     @State private var keychainErrorMessage: String?
     @State private var showKeychainError = false
+    @State private var showExternalAPIConfirmation = false
+    @State private var pendingAPIMode: CardGenerationMode?
     @FocusState private var apiKeyFocused: Bool
 
     private var appVersion: String {
@@ -49,6 +52,13 @@ struct SettingsView: View {
         )
     }
 
+    private var analyticsBinding: Binding<Bool> {
+        Binding(
+            get: { analytics.isEnabled },
+            set: { analytics.setEnabled($0) }
+        )
+    }
+
     private var endpointBinding: Binding<String> {
         Binding(
             get: { aiSettings.endpoint?.absoluteString ?? "" },
@@ -68,21 +78,31 @@ struct SettingsView: View {
         @Bindable var aiSettings = aiSettings
         NavigationStack {
             Form {
-                Section("AI + Input") {
+                Section {
                     Toggle("Handwriting Mode", isOn: $studyViewModel.isHandwritingMode)
                     Toggle("Spell Check", isOn: $studyViewModel.isSpellCheckEnabled)
-                    
-                    Picker("AI Source", selection: $aiSettings.mode) {
-                        Text("On-Device").tag(CardGenerationMode.onDevice)
+
+                    Picker("AI Source", selection: Binding(
+                        get: { aiSettings.mode },
+                        set: { newValue in
+                            if newValue == .externalAPI && aiSettings.mode != .externalAPI {
+                                pendingAPIMode = newValue
+                                showExternalAPIConfirmation = true
+                            } else {
+                                aiSettings.mode = newValue
+                            }
+                        }
+                    )) {
+                        Text(store.isPro ? "QuickStudy's Server" : "On-Device").tag(CardGenerationMode.onDevice)
                         Text("External API").tag(CardGenerationMode.externalAPI)
                     }
-                    
+
                     if aiSettings.mode == .externalAPI {
                         Picker("API Provider", selection: $aiSettings.apiFormat) {
                             Text("OpenAI").tag(APIFormat.openAI)
                             Text("Anthropic").tag(APIFormat.anthropic)
                         }
-                        
+
                         SecureField("API Key", text: $apiKeyDraft)
                             .focused($apiKeyFocused)
                             .onChange(of: apiKeyFocused) { _, isFocused in
@@ -94,7 +114,32 @@ struct SettingsView: View {
                             .autocorrectionDisabled()
                         TextField("Model Name", text: modelNameBinding)
                     }
-                    
+                } header: {
+                    Text("AI + Input")
+                } footer: {
+                    if aiSettings.mode == .externalAPI {
+                        Text("Your notes will be sent to your chosen provider using your key, under that provider's privacy policy.")
+                    }
+                }
+
+                Section {
+                    if store.isPro {
+                        HStack {
+                            Text("QuickStudy Pro")
+                            Spacer()
+                            Text("Active")
+                                .foregroundStyle(.secondary)
+                        }
+                        Button("Manage Subscription") { showManageSubscription = true }
+                    } else {
+                        Button("Upgrade to QuickStudy Pro") { showPaywall = true }
+                    }
+                } header: {
+                    Text("Pro")
+                } footer: {
+                    Text(store.isPro
+                         ? "Cards are generated on QuickStudy's server. Your text isn't stored."
+                         : "Better cards on any iPhone, generated in the cloud.")
                 }
 
                 Section {
@@ -102,13 +147,15 @@ struct SettingsView: View {
                 } header: {
                     Text("Sample Content")
                 } footer: {
-                    Text("Adds three example sets you can study right away. Turning this off removes them; turning it back on restores them.")
+                    Text("Adds four example sets you can study right away. Turning this off removes them; turning it back on restores them.")
                 }
 
-                Section("Help") {
-                    Button("How to use QuickStudy") {
-                        showOnboarding = true
-                    }
+                Section {
+                    Toggle("Share anonymous usage", isOn: analyticsBinding)
+                } header: {
+                    Text("Privacy")
+                } footer: {
+                    Text("Sends anonymous counts, like whether onboarding finished or a paywall was shown, to help improve QuickStudy. It never sends card text or document text.")
                 }
 
                 Section {
@@ -128,10 +175,26 @@ struct SettingsView: View {
                         Text(appVersion)
                             .foregroundStyle(.secondary)
                     }
+                    Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
                 }
             }
             .navigationTitle("Settings")
+            .sheet(isPresented: $showPaywall) { PaywallView(surface: .settings) }
+            .manageSubscriptionsSheet(isPresented: $showManageSubscription)
             .onAppear { apiKeyDraft = aiSettings.apiKey ?? "" }
+            .confirmationDialog("Use External API", isPresented: $showExternalAPIConfirmation) {
+                Button("Use External API") {
+                    if let mode = pendingAPIMode {
+                        aiSettings.mode = mode
+                    }
+                    pendingAPIMode = nil
+                }
+                Button("Cancel", role: .cancel) {
+                    pendingAPIMode = nil
+                }
+            } message: {
+                Text("Your notes will be sent to your chosen provider using your key, under that provider's privacy policy.")
+            }
             .alert("Couldn't Save API Key", isPresented: $showKeychainError) {
                 Button("OK", role: .cancel) {}
             } message: {
@@ -155,21 +218,6 @@ struct SettingsView: View {
                     }
                 }
             }
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            WelcomeScreen(
-                onStart: {
-                    showOnboarding = false
-                    // Dismiss the Settings sheet, then signal ContentView to start the tutorial
-                    Task {
-                        try? await Task.sleep(for: .seconds(0.5))
-                        dismiss()
-                    }
-                },
-                onSkip: {
-                    showOnboarding = false
-                }
-            )
         }
         .alert("Delete All Data", isPresented: $showClearDataAlert) {
             Button("Delete Everything", role: .destructive) {

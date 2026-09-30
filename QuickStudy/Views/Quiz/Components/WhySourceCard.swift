@@ -16,6 +16,7 @@ struct WhySourceCard: View {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "lightbulb")
                     .foregroundStyle(Color.appPrimary)
+                    .accessibilityHidden(true)
                 Text("Why")
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -28,10 +29,13 @@ struct WhySourceCard: View {
             if let source {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: "link")
+                        .accessibilityHidden(true)
                     Text(source.longLabel)
                 }
                 .font(.caption)
                 .foregroundStyle(Color.appPrimary)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Source: \(source.longLabel)")
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

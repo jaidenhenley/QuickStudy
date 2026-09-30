@@ -9,6 +9,12 @@ import SwiftUI
 
 @main
 struct MyApp: App {
+    init() {
+        #if DEBUG
+        FreshInstallReset.performIfRequested()
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

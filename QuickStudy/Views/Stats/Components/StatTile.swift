@@ -18,6 +18,7 @@ struct StatTile: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundStyle(tint)
+                .contentTransition(.numericText())
             Text(label)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -26,5 +27,8 @@ struct StatTile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityValue(value)
     }
 }

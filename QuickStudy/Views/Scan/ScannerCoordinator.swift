@@ -20,7 +20,7 @@ class ScannerCoordinator: NSObject, VNDocumentCameraViewControllerDelegate, @unc
     }
 
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-        Task { @MainActor in self.parent.onCancel() }
+        Task { @MainActor in self.parent.onError() }
     }
 
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {

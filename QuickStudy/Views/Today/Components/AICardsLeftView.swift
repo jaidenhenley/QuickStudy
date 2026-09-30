@@ -9,21 +9,45 @@ import SwiftUI
 
 struct AICardsLeftView: View {
     @Environment(TodayViewModel.self) var todayViewModel
+    let onUpgrade: () -> Void
 
     var body: some View {
-        HStack(spacing: Spacing.xs) {
-            Image(systemName: "sparkles")
-                .font(.caption)
-            Text("\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month")
-                .font(.caption)
-                .fontWeight(.medium)
-            Spacer()
+        Button(action: onUpgrade) {
+            HStack(spacing: Spacing.xs) {
+                Image(systemName: "sparkles")
+                    .font(.caption)
+                Text(label)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .contentTransition(.numericText())
+                Spacer()
+                if !todayViewModel.isPro {
+                    Text("Pro ›")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .foregroundStyle(todayViewModel.isPro ? Theme.aiAccentText : Color.appSecondary)
+            .padding(.horizontal, Spacing.md)
+            .padding(.vertical, Spacing.sm)
+            .background((todayViewModel.isPro ? Color.appAIAccent : Color.appSecondary).opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
         }
-        .frame(maxWidth: .infinity)
-        .foregroundStyle(.appSecondary)
-        .padding(.horizontal, Spacing.md)
-        .padding(.vertical, Spacing.sm)
-        .background(Color.appSecondary.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+        .buttonStyle(.plain)
+        .disabled(todayViewModel.isPro)
+    }
+
+    private var label: String {
+        if todayViewModel.isManualOnly {
+            return "AI generation isn't available on this iPhone"
+        }
+        if todayViewModel.isPro {
+            let left = todayViewModel.hostedRemaining ?? todayViewModel.hostedLimit
+            return "QuickStudy Pro · \(left) of \(todayViewModel.hostedLimit) generations left this month"
+        }
+        return todayViewModel.canGenerate
+            ? "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month"
+            : "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left · resets \(todayViewModel.generationsResetLabel)"
     }
 }

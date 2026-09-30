@@ -2,43 +2,51 @@
 //  OnboardingView.swift
 //  QuickStudy
 //
-//  Created by Jaiden Henley on 2/28/26.
-//
 
 import SwiftUI
 
-enum TutorialStep: CustomStringConvertible {
-    case welcome           // Initial welcome
-    case viewDemoSets      // See the demo sets
-    case tapFirstSet       // Tap on a study set
-    case viewFlashcards    // See the generated cards
-    case approveCard       // Approve a flashcard
-    case openStudyMode     // Tap Study button
-    case viewStudyList     // See the study list
-    case startPractice     // Tap Start Practice
-    case flipCard          // Try flipping a card
-    case goToQuiz          // Navigate to quiz tab
-    case startQuiz         // See quiz questions
-    case complete          // Tutorial done
-    
-    var description: String {
-        switch self {
-        case .welcome: return "welcome"
-        case .viewDemoSets: return "viewDemoSets"
-        case .tapFirstSet: return "tapFirstSet"
-        case .viewFlashcards: return "viewFlashcards"
-        case .approveCard: return "approveCard"
-        case .openStudyMode: return "openStudyMode"
-        case .viewStudyList: return "viewStudyList"
-        case .startPractice: return "startPractice"
-        case .flipCard: return "flipCard"
-        case .goToQuiz: return "goToQuiz"
-        case .startQuiz: return "startQuiz"
-        case .complete: return "complete"
+struct OnboardingView: View {
+    @Environment(OnboardingViewModel.self) private var onboarding
+    @Environment(AnalyticsRecorder.self) private var analytics
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        @Bindable var onboarding = onboarding
+
+        VStack(spacing: Spacing.base) {
+            TabView(selection: $onboarding.current) {
+                ForEach(onboarding.pages, id: \.self) { page in
+                    Group {
+                        switch page {
+                        case .welcome:
+                            OnboardingWelcomePage { onboarding.advance() }
+                        case .howItWorks:
+                            OnboardingHowItWorksPage { onboarding.advance() }
+                        case .aiIntro:
+                            OnboardingAIIntroPage(hasOnDeviceModel: onboarding.hasOnDeviceModel) { onboarding.advance() }
+                        case .camera:
+                            OnboardingCameraPage(
+                                onAllow: { Task { await onboarding.requestCameraAccess() } },
+                                onLater: { onboarding.advance() }
+                            )
+                        case .firstSource:
+                            OnboardingFirstSourcePage { choice in
+                                analytics.record(.onboardingCompleted)
+                                onboarding.choose(choice)
+                                dismiss()
+                            }
+                        }
+                    }
+                    .tag(page)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .appAnimation(Motion.standard, value: onboarding.current)
+
+            PageDots(count: onboarding.pages.count, current: onboarding.currentIndex)
+                .padding(.bottom, Spacing.sm)
         }
+        .background(BackgroundView())
+        .onAppear { analytics.record(.onboardingStarted) }
     }
 }
-
-// Welcome screen with Start/Skip options
-
-// Circular timer indicator that shows countdown

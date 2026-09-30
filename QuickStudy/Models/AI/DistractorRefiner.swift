@@ -14,15 +14,20 @@ enum DistractorRefiner {
     private nonisolated static let maxLengthRatio = 2.5
     private nonisolated static let absoluteSlack = 20
 
-    nonisolated static func refine(_ candidates: [String], answer: String, source: String) -> [String] {
-        accept(candidates, answer: answer, existing: [], needed: 3, sourceTokens: tokens(source))
+    /// Pass the whole document as `source` at generation time. At quiz time pass nil: a card
+    /// only keeps its one-sentence excerpt, and a good confusable term from elsewhere in the
+    /// notes shares no words with it.
+    nonisolated static func refine(_ candidates: [String], answer: String, source: String?) -> [String] {
+        accept(candidates, answer: answer, existing: [], needed: 3, sourceTokens: source.map(tokens))
     }
 
     /// Other cards' answers, used when the model produced fewer than three usable options.
     /// These legitimately share no vocabulary with this card's source, so the source check
     /// is skipped.
+    /// Another card's answer is only a believable option when it is the same kind of thing:
+    /// a percentage question offered "a severe fiscal crisis" gives itself away.
     nonisolated static func backfill(_ pool: [String], answer: String, existing: [String], needed: Int) -> [String] {
-        accept(pool, answer: answer, existing: existing, needed: needed, sourceTokens: nil)
+        accept(pool, answer: answer, existing: existing, needed: needed, sourceTokens: nil, matchesNumericKind: true)
     }
 
     /// Last resort. Every quality rule is dropped except exact duplication, because a
@@ -37,7 +42,8 @@ enum DistractorRefiner {
         existing: [String],
         needed: Int,
         sourceTokens: Set<String>?,
-        enforceQuality: Bool = true
+        enforceQuality: Bool = true,
+        matchesNumericKind: Bool = false
     ) -> [String] {
         guard needed > 0 else { return [] }
 
@@ -55,6 +61,9 @@ enum DistractorRefiner {
 
             if enforceQuality {
                 guard text.count >= band.lower, text.count <= band.upper else { continue }
+                // A full sentence among short phrases, or the reverse, marks itself as wrong.
+                guard isSentence(text) == isSentence(answer) else { continue }
+                if matchesNumericKind, containsDigit(text) != containsDigit(answer) { continue }
 
                 // The token rules do not apply when there are no tokens to compare, which
                 // is the case for any answer whose words are all under three characters.
@@ -62,6 +71,10 @@ enum DistractorRefiner {
                 if !candidateTokens.isEmpty {
                     if !answerTokens.isEmpty,
                        similarity(candidateTokens, answerTokens) >= paraphraseThreshold { continue }
+                    // "about 97 percent" restates "roughly 97 percent" even though most words differ.
+                    let answerNumbers = answerTokens.filter { $0.contains(where: \.isNumber) }
+                    if !answerNumbers.isEmpty,
+                       candidateTokens.filter({ $0.contains(where: \.isNumber) }) == answerNumbers { continue }
                     if let sourceTokens, candidateTokens.isDisjoint(with: sourceTokens) { continue }
                     if seen.contains(where: { similarity(tokens($0), candidateTokens) >= paraphraseThreshold }) { continue }
                 }
@@ -86,12 +99,23 @@ enum DistractorRefiner {
 
     /// Words of three or more characters stand in for a stopword list. A real one would
     /// need to be per-language, and the threshold comparisons are tolerant enough without it.
+    /// Numbers are kept at any length: dropping "97" made "roughly 3 percent" read as a
+    /// paraphrase of "roughly 97 percent", so every changed-number distractor was discarded.
     nonisolated private static func tokens(_ text: String) -> Set<String> {
         Set(
             text.lowercased()
                 .components(separatedBy: CharacterSet.alphanumerics.inverted)
-                .filter { $0.count > 2 }
+                .filter { $0.count > 2 || $0.contains(where: \.isNumber) }
         )
+    }
+
+    nonisolated private static func isSentence(_ text: String) -> Bool {
+        guard let last = text.last else { return false }
+        return ".!?".contains(last) && text.split(separator: " ").count > 3
+    }
+
+    nonisolated private static func containsDigit(_ text: String) -> Bool {
+        text.contains(where: \.isNumber)
     }
 
     nonisolated private static func similarity(_ a: Set<String>, _ b: Set<String>) -> Double {

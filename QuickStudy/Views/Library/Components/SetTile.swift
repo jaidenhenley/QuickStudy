@@ -22,7 +22,7 @@ struct SetTile: View {
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(Color.appPrimary.opacity(0.12))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
             }
 
             Text(set.title)
@@ -39,12 +39,13 @@ struct SetTile: View {
 
             ProgressView(value: set.progress)
                 .tint(set.masteryState == .mastered ? Theme.success : Color.appPrimary)
+                .appAnimation(Motion.standard, value: set.progress)
 
             if set.masteryState == .mastered {
                 Text("Mastered")
                     .font(.caption2)
                     .fontWeight(.semibold)
-                    .foregroundStyle(Theme.success)
+                    .foregroundStyle(Theme.successText)
             } else {
                 Text("\(Int((set.progress * 100).rounded()))%")
                     .font(.caption2)
@@ -55,6 +56,18 @@ struct SetTile: View {
         .frame(maxWidth: .infinity, minHeight: 152, alignment: .leading)
         .appGlassCard(cornerRadius: AppRadius.lg)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(set.title), \(set.cards.count) cards")
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var accessibilityLabel: String {
+        let dueCount = set.dueCount()
+        var parts = ["\(set.title), \(set.cards.count) cards"]
+        if dueCount > 0 { parts.append("\(dueCount) due") }
+        parts.append(
+            set.masteryState == .mastered
+                ? "Mastered"
+                : "\(Int((set.progress * 100).rounded()))% complete"
+        )
+        return parts.joined(separator: ", ")
     }
 }

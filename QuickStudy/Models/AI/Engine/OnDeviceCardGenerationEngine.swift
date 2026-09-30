@@ -15,6 +15,13 @@ import FoundationModels
 // The rest of the app talks to simple Swift models only.
 
 struct OnDeviceCardGenerationEngine: CardGenerating {
+    let countsAgainstAllowance = true
+    var sourceChunkLimit: Int? { Self.chunkLength }
+    var skippedSourceSections: Int { skipped.count }
+    let expectedSeconds: Double = 6
+    let provenance = GenerationProvenance(engine: .onDevice, model: "Apple Intelligence")
+    var progress: GenerationProgress?
+    let skipped = SkippedSectionCounter()
 
     private static let chunkLength = 1200
 
@@ -70,10 +77,23 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
         let sentences = SentenceIndexer.sentences(in: text, maxLength: Self.chunkLength)
         guard !sentences.isEmpty else { return [] }
 
+        let chunks = SentenceIndexer.chunks(of: sentences, maxLength: Self.chunkLength)
+        await progress?.setTotalUnits(chunks.count)
+
         var allCards: [AIFlashcard] = []
-        for chunk in SentenceIndexer.chunks(of: sentences, maxLength: Self.chunkLength) {
-            allCards += try await cards(for: chunk)
+        var firstFailure: Error?
+        for chunk in chunks {
+            do {
+                allCards += try await cards(for: chunk)
+            } catch {
+                // A guardrail trip or a bad passage in one section shouldn't cost the
+                // user every card drafted from the rest of the document.
+                if firstFailure == nil { firstFailure = error }
+                skipped.count += 1
+            }
+            await progress?.advance()
         }
+        if allCards.isEmpty, let firstFailure { throw firstFailure }
         return allCards
     }
 
@@ -247,6 +267,12 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
     }
 }
 
+/// The engine is a value type whose generate methods are non-mutating; the count has
+/// to outlive the call so the caller can read it afterwards.
+final class SkippedSectionCounter {
+    var count = 0
+}
+
 // MARK: - FoundationModels types
 
 // Naming the kind of wrongness is what improves distractor quality. Asked for three
@@ -255,16 +281,16 @@ struct OnDeviceCardGenerationEngine: CardGenerating {
 @Generable
 private enum DistractorKind: String, Codable {
     case commonConfusion
-    case partiallyTrue
+    case relatedTerm
     case wrongDetail
 }
 
 @Generable
 private struct AIDistractorModel: Codable {
-    @Guide(description: "How this option is wrong. commonConfusion swaps in a different term from the source that learners mix up with the right one. partiallyTrue states something the source supports but that does not answer this question. wrongDetail keeps the right shape and changes one name, number, or step.")
+    @Guide(description: "How this option is wrong. commonConfusion swaps in a different term from the source that learners mix up with the right one. relatedTerm is another item of the same kind from the source (another group, date, number, or term) that is not the answer to this question — clearly wrong to someone who knows the material, never a second correct answer. wrongDetail keeps the right shape and changes one name, number, or step.")
     let kind: DistractorKind
 
-    @Guide(description: "The wrong answer itself. It must read like a real answer to the question, use terms that appear in the source sentences, and match the length and sentence shape of the correct answer. Never state the correct answer in different words.")
+    @Guide(description: "The wrong answer itself. It must read like a real answer to the question, use terms that appear in the source sentences, and be the same kind of thing and the same grammatical form as the correct answer: if the answer is a short phrase, this is a short phrase, not a sentence; if the answer is a number or percentage, this is a different number or percentage. Never state the correct answer in different words.")
     let text: String
 }
 
@@ -282,7 +308,7 @@ private struct AIFlashcardModel: Codable {
     @Guide(description: "One or two sentences explaining why the answer is correct, written for a learner who just answered incorrectly. Explain the concept, do not restate the answer.")
     let explanation: String
 
-    @Guide(description: "Exactly three wrong answers, one commonConfusion, one partiallyTrue, and one wrongDetail. No filler like 'None of the above'.", .count(3))
+    @Guide(description: "Exactly three wrong answers, one commonConfusion, one relatedTerm, and one wrongDetail. No filler like 'None of the above'.", .count(3))
     let distractors: [AIDistractorModel]
 }
 

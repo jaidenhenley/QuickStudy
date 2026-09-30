@@ -76,6 +76,8 @@ Known state as of this branch:
 - Import runs page by page (`ExtractedDocument`), so `StudyDocument.pageBreaks` survives spell-check, OCR repair and normalisation.
 - Persistence is batched: answers set a dirty flag and flush on session end or backgrounding, never per answer.
 
+**QuickStudy Pro** (added 2026-09-22): a $4.99/mo · $29.99/yr subscription whose feature is hosted generation. `AIController` picks `HostedCardGenerationEngine` when `StoreController.isPro`; the engine signs every request with App Attest (`AppAttestClient`) and sends the StoreKit `jwsRepresentation`, and the server verifies both — the app never decides entitlement on its own. The server is a separate project (`~/Desktop/CurrentProjects/quickstudy-api`, contract in its README). Product IDs live in `ProProduct` and must match App Store Connect exactly. Hosted generations do not touch `GenerationAllowance`; engines report `countsAgainstAllowance` themselves. The paywall is Apple's `SubscriptionStoreView` — there is no Final v2 paywall design, so no custom layout was invented.
+
 Deliberately not built:
 - **Notifications** — no `UNUserNotificationCenter`, no entitlement. Anything in the designs promising one is superseded.
 - **Theme clustering / Drafts · Auto-organized** — deferred to iOS 27; do not add a `theme` property speculatively.
@@ -91,6 +93,7 @@ Models/Import/        ExtractedDocument
 Models/Quiz/          QuizQuestion
 Models/Scheduling/    ReviewSchedule
 Models/Session/       StudySession, SessionStore, StreakCalculator, StreakStore
+Models/Store/         ProProduct, StoreController
 Models/Study/         StudyCard, StudySet, StudyDocument, CardSource, CardSourceLocator
 State/                AppState, StudyViewModel
 Views/DesignSystem/   Theme, DesignTokens, AppBackgroundView
@@ -115,8 +118,8 @@ Every line of code written in this project is production code. There is no "we'l
 ### Privacy & Credentials
 - API keys and tokens live in Keychain only, via `KeychainManager` — never `UserDefaults`, never `@AppStorage`, never a plist
 - `AISettings` may persist non-secret preferences (mode, endpoint, model name) to `UserDefaults`; the key itself is read through `KeychainManager.loadAPIKey()` and never cached in a stored property
-- Scanned document text and generated cards are user content — never log them, never send them to any endpoint other than the user's configured AI endpoint
-- On-device generation is the default mode. Do not silently fall back to a network call without the user having configured one.
+- Scanned document text and generated cards are user content — never log them, never send them to any endpoint other than the user's configured AI endpoint or the QuickStudy Pro server (`HostedAPI.production`), and only to the latter when the user has granted `HostedConsent` **and** either `StoreController` says the user is Pro or the one free hosted generation is unspent. Every first-time user's first generation is hosted, on every device, but only after the consent sheet; declining drafts on-device (or routes to Type cards on devices without an on-device model) and never blocks
+- On-device generation is the default mode. Do not silently fall back to a network call without the user having configured one or subscribed to Pro.
 
 ### App Store Submission Readiness
 - Every feature must be built with App Store review in mind — no private APIs, no undocumented behaviors
@@ -171,7 +174,9 @@ Until those exist, match the design's scale exactly. Do not introduce new radius
 
 ### Copy
 
-All user-facing text must match the Final v2 designs exactly — including capitalization, the middle dot separator (`·`), and the em dash. Do not paraphrase or shorten.
+All user-facing text must match the Final v2 designs exactly — including capitalization and the middle dot separator (`·`). Do not paraphrase or shorten.
+
+**Exception: no em dashes (`—`) in user-facing copy.** Where a Final v2 string uses one, rewrite it with ordinary punctuation (a period, comma, colon, or `·` for compact labels) and keep the wording otherwise intact. This applies to every string a user can see; comments, logs, and prompt text sent only to the model are exempt.
 
 Section headers are uppercase with letter tracking (`TODAY'S SESSION`, `WEAKEST CARD`, `SUGGESTED`, `UP NEXT`). Empty states describe the next action; they never apologize and never show a disabled CTA.
 
@@ -180,7 +185,7 @@ Section headers are uppercase with letter tracking (`TODAY'S SESSION`, `WEAKEST 
 These differ from the designs deliberately. Do not "correct" them back:
 
 - **Today's trailing toolbar item is a gear, not the mock's sun/appearance icon.** The gear is the only route to Settings in the app; swapping it would orphan API key configuration and the sample-sets toggle.
-- **No `Pro ›` affordance on the generations pill.** Monetization is out of scope for now, and there is no StoreKit in the target — a chevron that opens nothing is worse than omitting it.
+- **The generations pill's `Pro ›` opens the paywall** and the pill turns teal (`appAIAccent`) with the hosted count when Pro is active. The mock's pill is informational only.
 - **No `Edit` button in Today's empty state.** Nothing in the flow gives it a target.
 
 ## Output Style

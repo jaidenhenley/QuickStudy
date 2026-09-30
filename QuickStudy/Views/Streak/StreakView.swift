@@ -11,6 +11,7 @@ struct StreakView: View {
     @Environment(SessionStore.self) private var sessionStore
 
     private let weekdayLetters = ["M", "T", "W", "T", "F", "S", "S"]
+    private let weekdayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     var body: some View {
         let summary = StreakCalculator.summary(
@@ -22,16 +23,20 @@ struct StreakView: View {
             VStack(spacing: Spacing.base) {
                 ZStack {
                     Circle()
-                        .fill(Color.orange.opacity(0.18))
+                        .fill(Color.appStreak.opacity(0.18))
                         .frame(width: 76, height: 76)
                     Image(systemName: "flame.fill")
                         .font(.title)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.appStreak)
+                        .symbolEffect(.pulse, options: .nonRepeating, value: summary.current)
                 }
                 .padding(.top, Spacing.lg)
 
                 Text("\(summary.current) \(summary.current == 1 ? "day" : "days")")
-                    .font(.system(size: 44, weight: .bold))
+                    .font(.system(.largeTitle, design: .rounded))
+                    .fontWeight(.bold)
+                    .contentTransition(.numericText())
+                    .appAnimation(Motion.snappy, value: summary.current)
 
                 Text(subtitle(for: summary))
                     .font(.subheadline)
@@ -41,6 +46,7 @@ struct StreakView: View {
                     ForEach(summary.week.indices, id: \.self) { index in
                         StreakDayDot(
                             letter: weekdayLetters[index % weekdayLetters.count],
+                            dayName: weekdayNames[index % weekdayNames.count],
                             state: summary.week[index]
                         )
                     }
@@ -59,6 +65,7 @@ struct StreakView: View {
                         Text(freezeTitle(for: summary))
                             .font(.subheadline)
                             .fontWeight(.semibold)
+                            .contentTransition(.numericText())
                         Text("Auto-applies if you miss a day. Earn one per full study week.")
                             .font(.caption)
                             .foregroundStyle(.secondary)

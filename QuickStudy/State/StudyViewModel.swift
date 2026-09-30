@@ -25,7 +25,16 @@ class StudyViewModel {
         }
     }
     
-    var aiSettings: AISettings = AISettings()
+    let aiSettings: AISettings
+    let store: StoreController
+    let analytics: AnalyticsRecorder
+    let generationProgress = GenerationProgress()
+
+    /// Suggestion top-ups only ever draft on this iPhone, so without a local model there
+    /// is nothing to offer.
+    var canGenerateSuggestions: Bool { AIController.isOnDeviceModelAvailable }
+
+    var userSetCount: Int { savedSets.filter { !$0.isDemo }.count }
 
     // MARK: - Published state
    var document: StudyDocument? = nil
@@ -34,17 +43,19 @@ class StudyViewModel {
    var isSpellCheckEnabled: Bool = true
    var isHandwritingMode: Bool = false
    var isUltraHandwritingMode: Bool = true
+   private(set) var lastGenerationWasTruncated = false
+   private(set) var lastGenerationProvenance: GenerationProvenance?
    var generationErrorMessage: String? = nil
-   var lastRawText: String = ""
-   var lastCorrectedText: String = ""
+   var generationErrorCode: String? = nil
    var savedSets: [StudySet] = []
    var activeSetID: UUID? = nil
-   var currentSourceType: StudySourceType = .scan
-   var isTodaySession: Bool = false
 
     @ObservationIgnored private var hasUnsavedChanges = false
 
-    init() {
+    init(aiSettings: AISettings, store: StoreController, analytics: AnalyticsRecorder) {
+        self.aiSettings = aiSettings
+        self.store = store
+        self.analytics = analytics
         loadSavedSets()
     }
 
@@ -52,7 +63,6 @@ class StudyViewModel {
         flashcards = savedSets
             .flatMap(\.cards)
             .filter { $0.isDue(asOf: date, calendar: calendar) }
-        isTodaySession = true
     }
 
     func box(for cardID: UUID) -> Int? {
@@ -76,7 +86,7 @@ class StudyViewModel {
             var wrong = DistractorRefiner.refine(
                 card.distractors,
                 answer: card.answer,
-                source: card.source?.excerpt ?? card.answer
+                source: nil
             )
 
             if wrong.count < 3 {
@@ -153,10 +163,6 @@ class StudyViewModel {
         saveSavedSets()
     }
 
-    // MARK: - AI Quiz Generation
-
-    
-
     // MARK: - Persistence
     var persistenceURL: URL {
         let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -210,15 +216,17 @@ class StudyViewModel {
         let cards = await generateCards(for: document, countsAgainstAllowance: true)
         guard !cards.isEmpty else { return nil }
 
-        return DraftSet(title: title, document: document, cards: cards, sourceType: sourceType)
-    }
+        // A PDF's file name is usually meaningful; the generic "Pasted Notes" and
+        // "Scanned Document" titles never are.
+        let suggestedTitle = sourceType == .pdf ? title : (SetTitleSuggester.title(from: allLines) ?? title)
 
-    @MainActor
-    func makePastedDraft(_ text: String) async -> DraftSet? {
-        await makeDraft(
-            from: ExtractedDocument(pages: [.init(text: text, candidates: [])]),
-            title: "Pasted Notes",
-            sourceType: .paste
+        return DraftSet(
+            title: suggestedTitle,
+            document: document,
+            cards: cards,
+            sourceType: sourceType,
+            wasTruncated: lastGenerationWasTruncated,
+            provenance: lastGenerationProvenance
         )
     }
 
@@ -228,28 +236,82 @@ class StudyViewModel {
         isGenerating = true
         defer { isGenerating = false }
         generationErrorMessage = nil
+        generationErrorCode = nil
 
         let text = document.lines.joined(separator: "\n")
-#if canImport(FoundationModels)
+        lastGenerationWasTruncated = false
+        lastGenerationProvenance = nil
+
         do {
-            let cards = try await CardGenerator.generateAI(from: text, document: document, settings: aiSettings)
-            if countsAgainstAllowance { GenerationAllowance.recordGeneration() }
-            return cards
-        } catch CardGenerationError.deviceNotEligible {
-            // Permanent for this hardware, and the only remaining silent fallback.
-            // Onboarding should route these users to an API key before they ever scan;
-            // until it does, poor cards beat an app that cannot import anything at all.
-            logger.error("On-device AI unavailable on this hardware, using heuristic cards")
-            return generateFallbackCards(from: text)
+            var engine = try AIController.makeGenerator(settings: aiSettings, store: store, progress: generationProgress)
+            // The server refuses oversized input outright, so sending it would only
+            // spend a round trip to learn that.
+            if engine is HostedCardGenerationEngine,
+               text.utf16.count > HostedCardGenerationEngine.maxInputLength,
+               AIController.isOnDeviceModelAvailable {
+                engine = try AIController.makeOnDeviceGenerator(progress: generationProgress)
+            }
+            do {
+                return try await draft(text: text, document: document, engine: engine, countsAgainstAllowance: countsAgainstAllowance)
+            } catch let error where engine is HostedCardGenerationEngine {
+                if !store.isPro && AIController.spendsFreeHostedGeneration(error) {
+                    store.markFreeHostedGenerationUsed()
+                }
+                guard !Task.isCancelled,
+                      AIController.fallsBackOnDevice(after: error, isPro: store.isPro),
+                      AIController.isOnDeviceModelAvailable else { throw error }
+                logger.notice("Hosted generation failed; drafting on device instead.")
+                let fallback = try AIController.makeOnDeviceGenerator(progress: generationProgress)
+                return try await draft(text: text, document: document, engine: fallback, countsAgainstAllowance: countsAgainstAllowance)
+            }
         } catch {
-            logger.error("AI generation failed: \(error.localizedDescription)")
+            logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
+            generationErrorCode = Self.code(for: error)
             return []
         }
-#else
-        generationErrorMessage = "Apple Intelligence framework not available in this build."
-        return generateFallbackCards(from: text)
-#endif
+    }
+
+    @MainActor
+    private func draft(
+        text: String,
+        document: StudyDocument,
+        engine: any CardGenerating,
+        countsAgainstAllowance: Bool
+    ) async throws -> [StudyCard] {
+        let startedAt = Date()
+        generationProgress.begin(
+            expectedSeconds: engine.expectedSeconds,
+            readsWholeDocument: engine.sourceChunkLimit == nil
+        )
+        defer { generationProgress.end() }
+        let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
+        try Task.checkCancellation()
+        lastGenerationWasTruncated = engine.skippedSourceSections > 0
+        lastGenerationProvenance = engine.provenance
+        if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
+        analytics.record(.firstGenerationCompleted(durationBucket: Self.durationBucket(since: startedAt)))
+        return cards
+    }
+
+    /// 0: under 5s, 1: under 10s, 2: under 20s, 3: under 45s, 4: slower.
+    private static func durationBucket(since start: Date, now: Date = Date()) -> Int {
+        switch now.timeIntervalSince(start) {
+        case ..<5: return 0
+        case ..<10: return 1
+        case ..<20: return 2
+        case ..<45: return 3
+        default: return 4
+        }
+    }
+
+    /// An unrecognised error type used to render as QS-503, indistinguishable from a real
+    /// generation failure. The suffix names the type so a report points at the cause.
+    private static func code(for error: Error) -> String {
+        if let known = error as? CardGenerationError { return known.code }
+        let bridged = error as NSError
+        let domain = bridged.domain.split(separator: ".").last.map(String.init) ?? bridged.domain
+        return CardGenerationError.unexpected("\(domain)-\(bridged.code)").code
     }
 
     /// A raw URLError description is not user-facing copy.
@@ -265,84 +327,35 @@ class StudyViewModel {
         isGenerating = true
         defer { isGenerating = false }
         generationErrorMessage = nil
+        generationErrorCode = nil
 
         let sourceText = savedSets[index].document.lines.joined(separator: "\n")
 
         do {
+            let engine = try AIController.makeOnDeviceGenerator()
             let cards = try await CardGenerator.generateTopicCards(
                 from: sourceText,
                 document: savedSets[index].document,
                 topic: topic,
                 count: count,
-                settings: aiSettings
+                engine: engine
             )
             guard !cards.isEmpty else {
                 generationErrorMessage = "Couldn't find enough about \(topic) in this set to make new cards."
+                generationErrorCode = "QS-506"
                 return
             }
             savedSets[index].cards.append(contentsOf: cards)
             savedSets[index].updatedAt = Date()
-            GenerationAllowance.recordGeneration()
+            if engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
             saveSavedSets()
         } catch {
             generationErrorMessage = Self.message(for: error)
+            generationErrorCode = Self.code(for: error)
         }
-    }
-
-    private func generateFallbackCards(from text: String) -> [StudyCard] {
-        let rawLines = text.components(separatedBy: .newlines)
-        return generateCards(from: rawLines, limit: 12)
-    }
-
-    private func generateCards(from lines: [String], limit: Int) -> [StudyCard] {
-        var cleanedLines: [String] = []
-        cleanedLines.reserveCapacity(lines.count)
-        for line in lines {
-            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmed.isEmpty {
-                cleanedLines.append(trimmed)
-            }
-        }
-
-        var cards: [StudyCard] = []
-        cards.reserveCapacity(min(cleanedLines.count, limit))
-
-        for line in cleanedLines.prefix(limit) {
-            let question: String
-            let answer: String
-
-            if let separatorRange = line.range(of: ":") {
-                let left = line[..<separatorRange.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
-                let right = line[separatorRange.upperBound...].trimmingCharacters(in: .whitespacesAndNewlines)
-                question = left.isEmpty ? "Explain this concept" : String(left)
-                answer = right.isEmpty ? line : String(right)
-            } else if let range = line.range(of: " is ") {
-                let subject = line[..<range.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
-                question = subject.isEmpty ? "What is this?" : "What is \(subject)?"
-                answer = line
-            } else if let range = line.range(of: " are ") {
-                let subject = line[..<range.lowerBound].trimmingCharacters(in: .whitespacesAndNewlines)
-                question = subject.isEmpty ? "What are these?" : "What are \(subject)?"
-                answer = line
-            } else {
-                let prefixWords = line.split(whereSeparator: { $0.isWhitespace }).prefix(6)
-                let prefix = prefixWords.joined(separator: " ")
-                question = prefix.isEmpty ? "Explain this concept" : "Explain: \(prefix)"
-                answer = line
-            }
-
-            let card = StudyCard(question: question, answer: answer)
-            cards.append(card)
-        }
-
-        return cards
     }
 
     // MARK: - Quiz helpers
-    private func normalizedAnswer(_ answer: String) -> String {
-        let trimmed = answer.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.lowercased()
-    }
 
     @MainActor
     private func contextCorrect(_ text: String, candidateLines: [[String]]?) async -> String? {
@@ -594,8 +607,6 @@ class StudyViewModel {
         document = set.document
         flashcards = set.cards
         activeSetID = set.id
-        currentSourceType = set.sourceType
-        isTodaySession = false
     }
 
     private func isDemoSet(_ set: StudySet) -> Bool {
@@ -609,7 +620,6 @@ class StudyViewModel {
                 document = higSet.document
                 flashcards = higSet.cards
                 activeSetID = higSet.id
-                currentSourceType = .demo
             }
         } else {
             let demoIDs = Set(savedSets.filter { isDemoSet($0) }.map { $0.id })
@@ -617,11 +627,9 @@ class StudyViewModel {
                 self.activeSetID = nil
                 self.document = nil
                 self.flashcards = []
-                self.currentSourceType = .scan
             } else if let document, ["Human Interface Guidelines", "SwiftUI", "SpriteKit"].contains(document.title) {
                 self.document = nil
                 self.flashcards = []
-                self.currentSourceType = .scan
             }
 
             savedSets.removeAll { isDemoSet($0) }

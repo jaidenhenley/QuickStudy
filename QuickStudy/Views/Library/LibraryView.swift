@@ -11,6 +11,8 @@ struct LibraryView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(AppState.self) private var appState
     @Environment(DraftStore.self) private var draftStore
+    @Environment(AISettings.self) private var aiSettings
+    @Environment(StoreController.self) private var store
 
     @State private var coordinator = ImportCoordinator()
     @State private var libraryViewModel = LibraryViewModel()
@@ -19,6 +21,9 @@ struct LibraryView: View {
     @State private var showRenameAlert = false
     @State private var deletingSet: StudySet? = nil
     @State private var showDeleteAlert = false
+    @State private var showTypeCards = false
+    @State private var showPaywall = false
+    @Namespace private var tileTransition
 
     var body: some View {
         @Bindable var libraryViewModel = libraryViewModel
@@ -34,53 +39,93 @@ struct LibraryView: View {
                         isEnabled: !studyViewModel.savedSets.isEmpty
                     )
 
-                    if studyViewModel.savedSets.isEmpty {
+                    if let draft = draftStore.pending,
+                       !coordinator.navigateToReview,
+                       !coordinator.showGenerating {
+                        PendingDraftRow(
+                            draft: draft,
+                            onResume: {
+                                coordinator.previewConfirmed = false
+                                coordinator.navigateToReview = true
+                            },
+                            onDiscard: { draftStore.set(nil) }
+                        )
+                    }
+
+                    // The empty state's three source buttons all require generation, so
+                    // devices that can't generate right now get the ADD CARDS section instead.
+                    if studyViewModel.savedSets.isEmpty && !libraryViewModel.showsAddCardsSection {
                         LibraryEmptyView(coordinator: coordinator)
                             .padding(.top, 32)
                     } else {
-                        LibraryFilterChips(selection: $libraryViewModel.filter)
+                        if !studyViewModel.savedSets.isEmpty {
+                            LibraryFilterChips(selection: $libraryViewModel.filter)
 
-                        let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
-                        if visible.isEmpty {
-                            Text("No sets match this filter.")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity)
-                                .padding(.top, 48)
-                        } else {
-                            GlassEffectContainer {
-                                LazyVGrid(
-                                    columns: [
-                                        GridItem(.flexible(), spacing: Spacing.md),
-                                        GridItem(.flexible(), spacing: Spacing.md)
-                                    ],
-                                    spacing: Spacing.md
-                                ) {
-                                    ForEach(visible) { set in
-                                        NavigationLink {
-                                            StudySetDetailView(set: set)
-                                        } label: {
-                                            SetTile(set: set)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .contextMenu {
-                                            Button {
-                                                renameText = set.title
-                                                renamingSet = set
-                                                showRenameAlert = true
-                                            } label: {
-                                                Label("Rename", systemImage: "pencil")
+                            let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
+                            Group {
+                                if visible.isEmpty {
+                                    Text("No sets match this filter.")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.top, 48)
+                                        .appTransition(.opacity)
+                                } else {
+                                    GlassEffectContainer {
+                                        LazyVGrid(
+                                            columns: [
+                                                GridItem(.flexible(), spacing: Spacing.md),
+                                                GridItem(.flexible(), spacing: Spacing.md)
+                                            ],
+                                            spacing: Spacing.md
+                                        ) {
+                                            ForEach(visible) { set in
+                                                NavigationLink {
+                                                    StudySetDetailView(set: set)
+                                                        .navigationTransition(.zoom(sourceID: set.id, in: tileTransition))
+                                                } label: {
+                                                    SetTile(set: set)
+                                                }
+                                                .buttonStyle(.plain)
+                                                // Without this the lift uses the link's full rectangle,
+                                                // which shows as a grey platter around the rounded glass.
+                                                .contentShape(.contextMenuPreview, .rect(cornerRadius: AppRadius.lg))
+                                                .matchedTransitionSource(id: set.id, in: tileTransition) {
+                                                    $0.clipShape(.rect(cornerRadius: AppRadius.lg))
+                                                }
+                                                .contextMenu {
+                                                    Button {
+                                                        renameText = set.title
+                                                        renamingSet = set
+                                                        showRenameAlert = true
+                                                    } label: {
+                                                        Label("Rename", systemImage: "pencil")
+                                                    }
+                                                    Button(role: .destructive) {
+                                                        deletingSet = set
+                                                        showDeleteAlert = true
+                                                    } label: {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
+                                                }
+                                                .appTransition(.opacity.combined(with: .scale(scale: 0.95)))
                                             }
-                                            Button(role: .destructive) {
-                                                deletingSet = set
-                                                showDeleteAlert = true
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
-                                            }
                                         }
+                                        .appAnimation(Motion.standard, value: libraryViewModel.filter)
+                                        .appAnimation(Motion.standard, value: libraryViewModel.searchText)
                                     }
                                 }
                             }
+                            .appAnimation(Motion.standard, value: visible.isEmpty)
+                        }
+
+                        if let reason = libraryViewModel.addCardsReason {
+                            AddCardsSection(
+                                reason: reason,
+                                onTypeCards: { showTypeCards = true },
+                                onUpgrade: { showPaywall = true }
+                            )
+                            .padding(.top, studyViewModel.savedSets.isEmpty ? 32 : Spacing.lg)
                         }
                     }
                 }
@@ -89,13 +134,32 @@ struct LibraryView: View {
             }
 
             FloatingCreateButton {
-                coordinator.showSourcePicker = true
+                if libraryViewModel.isManualOnly {
+                    showTypeCards = true
+                } else if !coordinator.canStartGeneration {
+                    coordinator.presentPaywall()
+                } else {
+                    coordinator.showSourcePicker = true
+                }
             }
             .padding(.trailing, 16)
             .padding(.bottom, 16)
         }
         .navigationTitle("Library")
         .navigationBarTitleDisplayMode(.large)
+        .onAppear {
+            refreshEntitlement()
+            consumePendingSource()
+        }
+        .onChange(of: appState.pendingImportSource) { _, _ in consumePendingSource() }
+        .onChange(of: aiSettings.mode) { _, _ in refreshEntitlement() }
+        .onChange(of: store.isPro) { _, _ in refreshEntitlement() }
+        .onChange(of: store.freeHostedGenerationUsed) { _, _ in refreshEntitlement() }
+        .sheet(isPresented: $showTypeCards) {
+            TypeCardsView()
+                .environment(studyViewModel)
+        }
+        .sheet(isPresented: $showPaywall) { PaywallView(surface: libraryViewModel.upgradeSurface) }
         .alert("Rename Set", isPresented: $showRenameAlert) {
             TextField("Title", text: $renameText)
             Button("Save") {
@@ -127,5 +191,22 @@ struct LibraryView: View {
                 )
             )
         )
+    }
+
+    private func consumePendingSource() {
+        guard let source = appState.pendingImportSource else { return }
+        appState.pendingImportSource = nil
+        // The onboarding handoff can land before ImportModifiers' onAppear has injected
+        // these, and without them the consent and replace-draft checks are silently skipped.
+        coordinator.draftStore = draftStore
+        coordinator.aiSettings = aiSettings
+        coordinator.storeController = store
+        coordinator.pendingSource = source
+        coordinator.presentPendingSource()
+    }
+
+    private func refreshEntitlement() {
+        coordinator.hasUnlimitedGenerations = store.isPro
+        libraryViewModel.refreshCapability(settings: aiSettings, store: store)
     }
 }

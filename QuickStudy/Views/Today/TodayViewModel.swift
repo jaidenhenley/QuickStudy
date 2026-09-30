@@ -11,6 +11,7 @@ import Foundation
 @Observable
 class TodayViewModel {
     struct WeakestCardInfo {
+        let id: UUID
         let question: String
         let missCount: Int
         let setID: UUID
@@ -34,9 +35,12 @@ class TodayViewModel {
         let setID: UUID
         let topic: String
         let sourceTitle: String
-        let engineLabel: String
         let cardCount: Int
     }
+
+    /// A normal session's worth of cards, so "Practice anyway" never hands the whole
+    /// library to the quiz unbounded.
+    static let practiceSessionSize = 20
 
     var streakCount: Int = 0
     var todayCardCount: Int = 0
@@ -46,8 +50,26 @@ class TodayViewModel {
     var sessionBreakdown: [SessionSetCount] = []
     var suggestion: GenerationSuggestion? = nil
     var hasReviewableCards: Bool = false
+    var hasAnySets: Bool = false
+    var isManualOnly: Bool = false
     var generationsRemaining: Int = GenerationAllowance.remaining
+    var canGenerate: Bool = !GenerationAllowance.isExhausted
+    var showsGenerationsPill: Bool = GenerationAllowance.used > 0
+    var generationsResetLabel: String = TodayViewModel.resetLabel()
+    var isPro: Bool = false
+    var hostedRemaining: Int? = nil
     let generationsLimit: Int = GenerationAllowance.monthlyLimit
+    let hostedLimit: Int = ProProduct.hostedMonthlyLimit
+
+    /// 0: none used, 1: 1-3, 2: 4-9, 3: the whole allowance.
+    var generationsUsedBucket: Int {
+        switch generationsLimit - generationsRemaining {
+        case 0: return 0
+        case 1...3: return 1
+        case 4...9: return 2
+        default: return 3
+        }
+    }
 
     // MARK: Streak
 
@@ -56,12 +78,21 @@ class TodayViewModel {
     func updateFromStudy(
         _ studyViewModel: StudyViewModel,
         sessions: SessionStore,
+        store: StoreController,
         now: Date = Date(),
         calendar: Calendar = .current
     ) {
         let sets = studyViewModel.savedSets
+        hasAnySets = !sets.isEmpty
         hasReviewableCards = sets.contains { !$0.cards.isEmpty }
-        generationsRemaining = GenerationAllowance.remaining
+        isPro = store.isPro
+        hostedRemaining = store.hostedRemaining
+        let noOnDeviceModel = AICapability.state(for: studyViewModel.aiSettings) == .unsupportedDevice
+        isManualOnly = noOnDeviceModel && !isPro && (store.freeHostedGenerationUsed || HostedConsent.decision == .declined)
+        generationsRemaining = GenerationAllowance.remaining(now: now)
+        canGenerate = isPro || !GenerationAllowance.isExhausted
+        showsGenerationsPill = isPro || hasReviewableCards || GenerationAllowance.used(now: now) > 0 || isManualOnly
+        generationsResetLabel = Self.resetLabel(now: now, calendar: calendar)
         let studied = sessions.studiedDays(calendar: calendar)
         let frozen = StreakCalculator.applyingFreezes(
             studiedDays: studied,
@@ -80,10 +111,15 @@ class TodayViewModel {
         computeTodaySession(from: sets, now: now, calendar: calendar)
         computeWeakestCard(from: sets)
         computeUpNext(from: sets, now: now, calendar: calendar)
-        computeSuggestion(from: sets, mode: studyViewModel.aiSettings.mode)
+        computeSuggestion(from: sets)
     }
 
-    private func computeSuggestion(from sets: [StudySet], mode: CardGenerationMode) {
+    private static func resetLabel(now: Date = Date(), calendar: Calendar = .current) -> String {
+        GenerationAllowance.resetDate(now: now, calendar: calendar)
+            .formatted(.dateTime.month(.wide).day())
+    }
+
+    private func computeSuggestion(from sets: [StudySet]) {
         guard let weakest = weakestCard,
               let set = sets.first(where: { $0.id == weakest.setID }) else {
             suggestion = nil
@@ -93,8 +129,19 @@ class TodayViewModel {
             setID: set.id,
             topic: Self.topic(from: weakest.question),
             sourceTitle: set.title,
-            engineLabel: mode == .onDevice ? "on-device" : "API",
             cardCount: 3
+        )
+    }
+
+    /// Weakest cards first, then soonest-due, capped to a normal session size.
+    func practiceAnywayCards(from sets: [StudySet]) -> [StudyCard] {
+        Array(
+            sets.flatMap(\.cards)
+                .sorted {
+                    if $0.missCount != $1.missCount { return $0.missCount > $1.missCount }
+                    return ($0.dueDate ?? .distantPast) < ($1.dueDate ?? .distantPast)
+                }
+                .prefix(Self.practiceSessionSize)
         )
     }
 
@@ -145,6 +192,7 @@ class TodayViewModel {
             return
         }
         weakestCard = WeakestCardInfo(
+            id: worst.card.id,
             question: worst.card.question,
             missCount: worst.card.missCount,
             setID: worst.setID

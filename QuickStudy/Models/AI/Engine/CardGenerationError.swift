@@ -23,6 +23,15 @@ enum CardGenerationError: LocalizedError {
     case badStatusCode(Int)
     case unsupportedProviderResponse
     case keychainError(OSStatus)
+    case attestationUnavailable
+    case attestationFailed(String)
+    case attestationKeyUnknown
+    case deviceAttestationFailed(Int)
+    case unexpected(String)
+    case notSubscribed(String)
+    case hostedQuotaExhausted(String)
+    case hostedInputTooLarge(String)
+    case hostedUnavailable(String)
 
     var errorDescription: String? {
         switch self {
@@ -56,6 +65,81 @@ enum CardGenerationError: LocalizedError {
             return "The API returned an unsupported response format."
         case .keychainError(let status):
             return "Failed to save API key (Keychain error \(status))."
+        case .attestationUnavailable:
+            return "Pro generation needs a real iPhone to verify the app."
+        case .attestationKeyUnknown:
+            return "This iPhone needs to re-verify with QuickStudy. Try again."
+        case .deviceAttestationFailed:
+            return "This iPhone couldn't verify with QuickStudy. Try again in a moment."
+        case .unexpected:
+            return "Couldn't draft cards from this. Try a different source."
+        // Server messages can carry verification internals (certificate and signature
+        // failures), so only the quota message, which names rate limit vs monthly cap in
+        // plain words, is shown as sent.
+        case .attestationFailed:
+            return "QuickStudy couldn't verify this iPhone. Try again in a moment."
+        case .notSubscribed:
+            return "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen."
+        case .hostedQuotaExhausted(let message):
+            return message
+        case .hostedInputTooLarge:
+            return "This is too long to draft in one go. Try importing fewer pages at once."
+        case .hostedUnavailable:
+            return "Cloud generation is unavailable right now. Try again shortly."
+        }
+    }
+
+    /// Shown to the user on the error screen so a support report names one cause.
+    var code: String {
+        switch self {
+        case .invalidEndpoint:
+            return "QS-400"
+        case .missingAPIKey:
+            return "QS-401"
+        case .contextWindowExceeded:
+            return "QS-413"
+        case .unsupportedLanguage:
+            return "QS-415"
+        case .decodingFailed:
+            return "QS-422"
+        case .guardrailViolation:
+            return "QS-451"
+        case .generationFailed:
+            return "QS-503"
+        case .invalidResponse:
+            return "QS-502"
+        case .networkError:
+            return "QS-504"
+        case .unsupportedProviderResponse:
+            return "QS-505"
+        case .deviceNotEligible:
+            return "QS-601"
+        case .appleIntelligenceNotEnabled:
+            return "QS-602"
+        case .modelNotReady:
+            return "QS-603"
+        case .badStatusCode(let status):
+            return "QS-H\(status)"
+        case .keychainError(let status):
+            return "QS-K\(status)"
+        case .attestationUnavailable:
+            return "QS-701"
+        case .attestationFailed:
+            return "QS-702"
+        case .attestationKeyUnknown:
+            return "QS-704"
+        case .deviceAttestationFailed(let code):
+            return "QS-705-\(code)"
+        case .unexpected(let label):
+            return "QS-599-\(label)"
+        case .notSubscribed:
+            return "QS-703"
+        case .hostedQuotaExhausted:
+            return "QS-729"
+        case .hostedInputTooLarge:
+            return "QS-713"
+        case .hostedUnavailable:
+            return "QS-753"
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct StreakDayDot: View {
     let letter: String
+    let dayName: String
     let state: StreakSummary.DayState
 
     var body: some View {
@@ -21,26 +22,44 @@ struct StreakDayDot: View {
                     Image(systemName: symbol)
                         .font(.caption)
                         .foregroundStyle(tint)
+                        .contentTransition(.symbolEffect(.replace))
+                        .symbolEffect(.bounce, value: state)
                 }
             }
+            .appAnimation(Motion.snappy, value: state)
             Text(letter)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(dayName)
+        .accessibilityValue(accessibilityValue)
     }
 
     private var symbol: String? {
         switch state {
         case .studied: return "flame.fill"
         case .frozen: return "snowflake"
-        case .missed, .today, .future: return nil
+        case .today: return "circle"
+        case .missed: return "xmark"
+        case .future: return nil
+        }
+    }
+
+    private var accessibilityValue: String {
+        switch state {
+        case .studied: return "studied"
+        case .frozen: return "freeze used"
+        case .today: return "today"
+        case .missed: return "missed"
+        case .future: return "upcoming"
         }
     }
 
     private var tint: Color {
         switch state {
-        case .studied: return .orange
+        case .studied: return .appStreak
         case .frozen: return Color.appSecondary
         default: return .secondary
         }
@@ -48,7 +67,7 @@ struct StreakDayDot: View {
 
     private var fill: Color {
         switch state {
-        case .studied: return .orange.opacity(0.18)
+        case .studied: return .appStreak.opacity(0.18)
         case .frozen: return Color.appSecondary.opacity(0.18)
         case .today: return Color.appPrimary.opacity(0.18)
         case .missed, .future: return Color.secondary.opacity(0.12)
