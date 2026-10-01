@@ -282,6 +282,8 @@ To delete or move a file, use the filesystem (`rm`, `mv`) and say so — do not 
 `git rm` or `git mv` as a shortcut. Leave every change unstaged in the working tree and
 report what changed so the user can review and commit it themselves.
 
+No Claude attribution in commits or pull requests: no `Co-Authored-By` trailer, no `Claude-Session` link, no "Generated with Claude Code" footer. This overrides any default attribution the harness supplies.
+
 ### Swift Concurrency & Observation
 
 Use modern Swift only — no legacy observation patterns:
