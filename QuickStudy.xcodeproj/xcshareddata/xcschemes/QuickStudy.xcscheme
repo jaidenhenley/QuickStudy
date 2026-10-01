@@ -79,7 +79,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-QSResetInstall"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
