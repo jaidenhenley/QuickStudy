@@ -17,15 +17,24 @@ private let logger = Logger(
 @Observable
 final class SessionStore {
     private(set) var sessions: [StudySession] = []
+    private(set) var loadIssue: PersistenceIssue?
+    var isLoadIssuePresented = false
 
     /// Six months covers the week strip, longest-streak, and year-scale stats
     /// without the file growing without bound.
     private let retentionDays = 180
 
-    private var url: URL {
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let directory = documents.first ?? FileManager.default.temporaryDirectory
-        return directory.appendingPathComponent("Sessions.json")
+    private let file = JSONFile(named: "Sessions.json")
+
+    var loadIssueMessage: String {
+        switch loadIssue {
+        case .corrupt:
+            "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPhone."
+        case .unreadable:
+            "Your study history couldn't be opened right now. Sessions won't be saved until you restart QuickStudy."
+        case nil:
+            ""
+        }
     }
 
     init() {
@@ -56,21 +65,22 @@ final class SessionStore {
     }
 
     private func load() {
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            sessions = try decoder.decode([StudySession].self, from: data)
-        } catch {
+        switch file.load([StudySession].self) {
+        case .loaded(let stored):
+            sessions = stored
+        case .missing:
             sessions = []
+        case .failed(let issue):
+            sessions = []
+            loadIssue = issue
+            isLoadIssuePresented = true
         }
     }
 
     private func save() {
+        guard loadIssue != .unreadable else { return }
         do {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            try encoder.encode(sessions).write(to: url, options: [.atomic])
+            try file.save(sessions)
         } catch {
             logger.error("Failed to save sessions: \(error.localizedDescription)")
         }

@@ -164,10 +164,19 @@ class StudyViewModel {
     }
 
     // MARK: - Persistence
-    var persistenceURL: URL {
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let directory = documents.first ?? FileManager.default.temporaryDirectory
-        return directory.appendingPathComponent("SavedSets.json")
+    private let libraryFile = JSONFile(named: "SavedSets.json")
+    private(set) var libraryIssue: PersistenceIssue?
+    var isLibraryIssuePresented = false
+
+    var libraryIssueMessage: String {
+        switch libraryIssue {
+        case .corrupt:
+            "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone."
+        case .unreadable:
+            "Your saved sets couldn't be opened right now. Changes won't be saved until you restart QuickStudy."
+        case nil:
+            ""
+        }
     }
 
     private let spellCheckIgnoreList: Set<String> = [
@@ -529,14 +538,15 @@ class StudyViewModel {
 
     // MARK: - Saved sets
     func loadSavedSets() {
-        do {
-            let data = try Data(contentsOf: persistenceURL)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            savedSets = try decoder.decode([StudySet].self, from: data)
-        } catch {
-            logger.error("Failed to load saved sets: \(error.localizedDescription)")
+        switch libraryFile.load([StudySet].self) {
+        case .loaded(let sets):
+            savedSets = sets
+        case .missing:
             savedSets = []
+        case .failed(let issue):
+            savedSets = []
+            libraryIssue = issue
+            isLibraryIssuePresented = true
         }
         ensurePresetSet()
         applyDemoMode()
@@ -592,12 +602,9 @@ class StudyViewModel {
 
     func saveSavedSets() {
         hasUnsavedChanges = false
+        guard libraryIssue != .unreadable else { return }
         do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            encoder.dateEncodingStrategy = .iso8601
-            let data = try encoder.encode(savedSets)
-            try data.write(to: persistenceURL, options: [.atomic])
+            try libraryFile.save(savedSets, outputFormatting: [.prettyPrinted, .sortedKeys])
         } catch {
             logger.error("Failed to save sets: \(error.localizedDescription)")
         }
