@@ -32,7 +32,10 @@ enum CardGenerationError: LocalizedError {
     case hostedQuotaExhausted(String)
     case hostedInputTooLarge(String)
     case hostedUnavailable(String)
-
+    case privateCloudQuotaReached(resetsAt: Date?)
+    case privateCloudUnavailable
+    case privateCloudNetworkFailure
+    
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
@@ -73,9 +76,9 @@ enum CardGenerationError: LocalizedError {
             return "This iPhone couldn't verify with QuickStudy. Try again in a moment."
         case .unexpected:
             return "Couldn't draft cards from this. Try a different source."
-        // Server messages can carry verification internals (certificate and signature
-        // failures), so only the quota message, which names rate limit vs monthly cap in
-        // plain words, is shown as sent.
+            // Server messages can carry verification internals (certificate and signature
+            // failures), so only the quota message, which names rate limit vs monthly cap in
+            // plain words, is shown as sent.
         case .attestationFailed:
             return "QuickStudy couldn't verify this iPhone. Try again in a moment."
         case .notSubscribed:
@@ -86,9 +89,18 @@ enum CardGenerationError: LocalizedError {
             return "This is too long to draft in one go. Try importing fewer pages at once."
         case .hostedUnavailable:
             return "Cloud generation is unavailable right now. Try again shortly."
+        case .privateCloudQuotaReached(let resetsAt):
+            guard let resetsAt else {
+                return "You've reached today's limit for Private Cloud Compute. Try again tomorrow."
+            }
+            return "You've reached today's limit for Private Cloud Compute. It resets \(resetsAt.formatted(.relative(presentation: .named)))."
+        case .privateCloudUnavailable:
+            return "Private Cloud Compute is unavailable right now. Try again shortly."
+        case .privateCloudNetworkFailure:
+            return "Couldn't reach Private Cloud Compute. Check your connection and try again."
         }
     }
-
+    
     /// Shown to the user on the error screen so a support report names one cause.
     var code: String {
         switch self {
@@ -140,6 +152,12 @@ enum CardGenerationError: LocalizedError {
             return "QS-713"
         case .hostedUnavailable:
             return "QS-753"
+        case .privateCloudNetworkFailure:
+            return "QS-804"
+        case .privateCloudQuotaReached:
+            return "QS-829"
+        case .privateCloudUnavailable:
+            return "QS-853"
         }
     }
 }

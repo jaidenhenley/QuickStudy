@@ -12,6 +12,7 @@ nonisolated struct GenerationProvenance: Codable, Hashable {
         case onDevice
         case cloud
         case externalAPI
+        case privateCloud
     }
 
     let engine: Engine
