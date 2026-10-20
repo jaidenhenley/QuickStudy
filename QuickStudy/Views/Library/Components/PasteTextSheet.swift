@@ -70,7 +70,7 @@ struct PasteTextSheet: View {
                         .foregroundStyle(.secondary)
 
                     HStack(spacing: Spacing.sm) {
-                        Text("~\(analysis.estimatedCards) cards")
+                        Text(analysis.estimatedCardsLabel)
                         if let language = analysis.language {
                             Text(language)
                         }
