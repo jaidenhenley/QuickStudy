@@ -7,6 +7,7 @@ import Foundation
 import Testing
 @testable import QuickStudy
 
+@MainActor
 struct StudyModelCodingTests {
     private func makeEncoder() -> JSONEncoder {
         let encoder = JSONEncoder()

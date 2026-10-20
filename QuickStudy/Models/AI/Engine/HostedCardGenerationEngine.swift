@@ -68,7 +68,7 @@ struct HostedCardGenerationEngine: CardGenerating {
             ? try await AppAttestClient.shared.sign(body, using: api)
             : nil
         let response = try await api.generate(signedBody: body, signature: signature)
-        await onRemaining(response.remaining)
+        onRemaining(response.remaining)
 
         return response.cards.map {
             AIFlashcard(

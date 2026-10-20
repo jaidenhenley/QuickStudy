@@ -60,7 +60,7 @@ struct CardDraftingCore {
         guard !sentences.isEmpty else { return [] }
 
         let chunks = SentenceIndexer.chunks(of: sentences, maxLength: chunkLength)
-        await progress?.setTotalUnits(chunks.count)
+        progress?.setTotalUnits(chunks.count)
 
         var allCards: [AIFlashcard] = []
         var firstFailure: Error?
@@ -73,7 +73,7 @@ struct CardDraftingCore {
                 if firstFailure == nil { firstFailure = error }
                 skipped.count += 1
             }
-            await progress?.advance()
+            progress?.advance()
         }
         if allCards.isEmpty, let firstFailure { throw firstFailure }
         return allCards
