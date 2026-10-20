@@ -12,9 +12,10 @@ enum HostedConsent {
         case granted, declined
     }
 
-    /// Version 1 asked about QuickStudy's server only. A grant from then did not cover
-    /// Private Cloud Compute, so it is asked again; a decline still stands.
-    static let currentVersion = 2
+    /// Version 1 asked about QuickStudy's server only, and version 2 promised the text
+    /// wasn't stored after drafting. The server now drafts with Anthropic, which keeps it
+    /// for up to 30 days, so earlier grants are asked again; a decline still stands.
+    static let currentVersion = 3
 
     private static let key = "qs_hostedConsent"
     private static let versionKey = "qs_hostedConsentVersion"

@@ -59,11 +59,11 @@ struct HostedConsentSheet: View {
     private var message: String {
         switch setup {
         case .privateCloud:
-            return "Your document's text is drafted by Apple's Private Cloud Compute or QuickStudy's server. It isn't stored after drafting. Choose Not now to keep every draft on this iPhone."
+            return "Your document's text is drafted by Apple's Private Cloud Compute, or on QuickStudy's server with Anthropic's Claude. Apple and QuickStudy don't keep it, and Anthropic deletes it within 30 days. Choose Not now to keep every draft on this iPhone."
         case .onDevice:
-            return "Your document's text is drafted on QuickStudy's server. It isn't stored after drafting. Choose Not now to keep every draft on this iPhone."
+            return "Your document's text is drafted on QuickStudy's server with Anthropic's Claude. QuickStudy doesn't keep it, and Anthropic deletes it within 30 days. Choose Not now to keep every draft on this iPhone."
         case .cloudOnly:
-            return "This iPhone doesn't run Apple Intelligence, so your document's text is drafted on QuickStudy's server. It isn't stored after drafting. Choose Not now to type your cards yourself."
+            return "This iPhone doesn't run Apple Intelligence, so your document's text is drafted on QuickStudy's server with Anthropic's Claude. QuickStudy doesn't keep it, and Anthropic deletes it within 30 days. Choose Not now to type your cards yourself."
         }
     }
 }

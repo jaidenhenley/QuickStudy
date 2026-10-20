@@ -13,6 +13,7 @@ struct HostedCardGenerationEngine: CardGenerating {
         let renewalInfo: String?
         let topic: String?
         let count: Int?
+        let consentVersion: Int
     }
 
     /// The server's `MAX_INPUT_CHARS`, measured as it measures: UTF-16 code units.
@@ -60,7 +61,8 @@ struct HostedCardGenerationEngine: CardGenerating {
                 transaction: transaction,
                 renewalInfo: renewalInfo,
                 topic: topic,
-                count: count
+                count: count,
+                consentVersion: HostedConsent.currentVersion
             )
         )
         // The exact bytes that are signed are the bytes that are sent; the server hashes them the same way.

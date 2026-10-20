@@ -111,7 +111,7 @@ struct OnboardingAIIntroPage: View {
         case .privateCloud:
             return "You'll be asked before anything leaves this iPhone."
         case .onDevice, .cloudOnly:
-            return "Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Your text isn't stored."
+            return "Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Anthropic, which drafts it, deletes your text within 30 days."
         }
     }
 }

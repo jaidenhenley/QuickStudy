@@ -47,7 +47,7 @@ struct PaywallHeaderView: View {
             }
             .padding(.top, Spacing.xs)
 
-            Text("Pro sends your scanned text to QuickStudy's server to generate cards. It isn't stored.")
+            Text("Pro sends your scanned text to QuickStudy's server, where Anthropic's Claude generates cards and deletes the text within 30 days.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

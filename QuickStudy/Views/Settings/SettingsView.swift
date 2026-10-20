@@ -139,7 +139,7 @@ struct SettingsView: View {
                     Text("Pro")
                 } footer: {
                     Text(store.isPro
-                         ? "Cards are generated on QuickStudy's server. Your text isn't stored."
+                         ? "Cards are generated on QuickStudy's server with Anthropic's Claude, which deletes your text within 30 days."
                          : "Better cards on any iPhone, generated in the cloud.")
                 }
 

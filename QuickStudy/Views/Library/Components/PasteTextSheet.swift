@@ -144,7 +144,7 @@ struct PasteTextSheet: View {
     private var footerText: String {
         switch firstEngine {
         case .privateCloud: return "Apple Private Cloud Compute · not stored"
-        case .cloud: return "Sent to QuickStudy's server · not stored"
+        case .cloud: return "Sent to Claude via QuickStudy's server · deleted within 30 days"
         default: return "On this iPhone · no upload · works offline"
         }
     }
