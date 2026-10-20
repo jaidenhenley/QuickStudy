@@ -22,6 +22,15 @@ struct HostedGenerationTests {
         }
     }
 
+    @MainActor
+    @Test func aSpentFreeGenerationIsItsOwnCaseForFreeUsers() {
+        let spent = CardGenerationError.freeHostedGenerationUsed
+        #expect(spent.code == "QS-708")
+        #expect(spent.errorDescription?.contains("Pro subscription") == false)
+        #expect(AIController.spendsFreeHostedGeneration(spent))
+        #expect(AIController.fallsBackOnDevice(after: spent, isPro: false))
+    }
+
     @Test func verificationFailuresNeverShowServerText() {
         let internals = "x5c certificate chain does not verify"
         for code in ["unauthorized", "not_subscribed", "model_unavailable", "input_too_large"] {
@@ -62,6 +71,32 @@ struct HostedGenerationTests {
     }
 
     @MainActor
+    @Test func privateCloudFailuresAlwaysMoveOnUnlessCancelled() {
+        for isPro in [false, true] {
+            #expect(AIController.movesOn(after: CardGenerationError.privateCloudQuotaReached(resetsAt: nil), from: .privateCloud, isPro: isPro))
+            #expect(AIController.movesOn(after: CardGenerationError.guardrailViolation, from: .privateCloud, isPro: isPro))
+            #expect(!AIController.movesOn(after: CancellationError(), from: .privateCloud, isPro: isPro))
+        }
+    }
+
+    @MainActor
+    @Test func serverHandsOffByTheFallbackRules() {
+        #expect(AIController.movesOn(after: CardGenerationError.hostedQuotaExhausted("m"), from: .cloud, isPro: true))
+        #expect(!AIController.movesOn(after: CardGenerationError.hostedUnavailable("m"), from: .cloud, isPro: true))
+        #expect(!AIController.movesOn(after: CardGenerationError.networkError("m"), from: .onDevice, isPro: false))
+        #expect(!AIController.movesOn(after: CardGenerationError.networkError("m"), from: .externalAPI, isPro: false))
+    }
+
+    @Test func proSendsOnlyMidLengthDocumentsToTheServerFirst() {
+        let serverLimit = HostedCardGenerationEngine.maxInputLength
+        #expect(AIController.privateCloudTakes(sourceLength: serverLimit, isPro: false))
+        #expect(AIController.privateCloudTakes(sourceLength: AIController.proPrivateCloudLimit, isPro: true))
+        #expect(!AIController.privateCloudTakes(sourceLength: AIController.proPrivateCloudLimit + 1, isPro: true))
+        #expect(!AIController.privateCloudTakes(sourceLength: serverLimit, isPro: true))
+        #expect(AIController.privateCloudTakes(sourceLength: serverLimit + 1, isPro: true))
+    }
+
+    @MainActor
     @Test func consentRoundTripsAndResets() {
         let suiteName = "HostedGenerationTests.consent.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
@@ -72,6 +107,20 @@ struct HostedGenerationTests {
         #expect(HostedConsent.storedDecision(defaults: defaults) == .declined)
         HostedConsent.reset(defaults: defaults)
         #expect(HostedConsent.storedDecision(defaults: defaults) == nil)
+    }
+
+    @MainActor
+    @Test func grantsGivenBeforePrivateCloudAreAskedAgain() {
+        let suiteName = "HostedGenerationTests.legacyConsent.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        defaults.set("granted", forKey: "qs_hostedConsent")
+        #expect(HostedConsent.storedDecision(defaults: defaults) == nil)
+        defaults.set("declined", forKey: "qs_hostedConsent")
+        #expect(HostedConsent.storedDecision(defaults: defaults) == .declined)
+        HostedConsent.record(.granted, defaults: defaults)
+        #expect(HostedConsent.storedDecision(defaults: defaults) == .granted)
     }
 
     @Test func productIdentifiersMatchTheServerContract() {

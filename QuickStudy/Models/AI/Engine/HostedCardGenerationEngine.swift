@@ -38,10 +38,16 @@ struct HostedCardGenerationEngine: CardGenerating {
 
     private func request(text: String, topic: String?, count: Int?) async throws -> [AIFlashcard] {
         do {
-            return try await attempt(text: text, topic: topic, count: count)
-        } catch CardGenerationError.attestationKeyUnknown {
-            try await AppAttestClient.shared.resetRegistration()
-            return try await attempt(text: text, topic: topic, count: count)
+            do {
+                return try await attempt(text: text, topic: topic, count: count)
+            } catch CardGenerationError.attestationKeyUnknown {
+                try await AppAttestClient.shared.resetRegistration()
+                return try await attempt(text: text, topic: topic, count: count)
+            }
+        } catch CardGenerationError.notSubscribed where transaction == nil {
+            // Without a transaction this request was the free generation, so the server's
+            // "not subscribed" means that free generation is already spent.
+            throw CardGenerationError.freeHostedGenerationUsed
         }
     }
 

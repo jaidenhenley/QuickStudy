@@ -42,6 +42,9 @@ struct AICardsLeftView: View {
         if todayViewModel.isManualOnly {
             return "AI generation isn't available on this iPhone"
         }
+        if todayViewModel.hasOnlyFreeCloudSet {
+            return "1 free cloud set on this iPhone"
+        }
         if todayViewModel.isPro {
             let left = todayViewModel.hostedRemaining ?? todayViewModel.hostedLimit
             return "QuickStudy Pro · \(left) of \(todayViewModel.hostedLimit) generations left this month"

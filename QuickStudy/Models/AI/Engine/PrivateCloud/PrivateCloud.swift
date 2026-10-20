@@ -15,7 +15,7 @@ import FoundationModels
 enum PrivateCloud {
     static var status: PrivateCloudStatus {
         #if canImport(FoundationModels)
-        guard #available(iOS 27, *) else { return .unavailable }
+        guard #available(iOS 27, *), !SimulatedDevice.lacksAppleIntelligence else { return .unavailable }
         let model = PrivateCloudComputeLanguageModel()
         guard model.isAvailable else { return .unavailable }
         let quota = model.quotaUsage
@@ -29,6 +29,27 @@ enum PrivateCloud {
         }
         #else
         return .unavailable
+        #endif
+    }
+
+    /// Nil whenever the status isn't `.ready`, so a caller moves on to its next engine
+    /// without spending a request that would fail.
+    static func makeEngine(progress: GenerationProgress?) -> (any CardGenerating)? {
+        #if canImport(FoundationModels)
+        guard #available(iOS 27, *), case .ready = status else { return nil }
+        return PrivateCloudCardGenerationEngine(progress: progress)
+        #else
+        return nil
+        #endif
+    }
+
+    static func prewarm() {
+        #if canImport(FoundationModels)
+        guard #available(iOS 27, *), case .ready = status else { return }
+        LanguageModelSession(
+            model: PrivateCloudComputeLanguageModel(),
+            instructions: CardDraftingCore.cardInstructions
+        ).prewarm()
         #endif
     }
 }

@@ -29,6 +29,7 @@ enum CardGenerationError: LocalizedError {
     case deviceAttestationFailed(Int)
     case unexpected(String)
     case notSubscribed(String)
+    case freeHostedGenerationUsed
     case hostedQuotaExhausted(String)
     case hostedInputTooLarge(String)
     case hostedUnavailable(String)
@@ -83,6 +84,8 @@ enum CardGenerationError: LocalizedError {
             return "QuickStudy couldn't verify this iPhone. Try again in a moment."
         case .notSubscribed:
             return "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen."
+        case .freeHostedGenerationUsed:
+            return "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI."
         case .hostedQuotaExhausted(let message):
             return message
         case .hostedInputTooLarge:
@@ -146,6 +149,8 @@ enum CardGenerationError: LocalizedError {
             return "QS-599-\(label)"
         case .notSubscribed:
             return "QS-703"
+        case .freeHostedGenerationUsed:
+            return "QS-708"
         case .hostedQuotaExhausted:
             return "QS-729"
         case .hostedInputTooLarge:

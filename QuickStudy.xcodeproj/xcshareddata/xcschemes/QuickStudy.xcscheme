@@ -72,21 +72,25 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "630DF3FC2F57BAD200BD7CF2"
             BuildableName = "QuickStudy.app"
-            BlueprintName = "QuickStudy"
             ReferencedContainer = "container:QuickStudy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-QSResetInstall"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "QS_API_URL"
-            value = "https://quickstudy-api.jaidenhenley.workers.dev"
+            value = "https://api-dev.quick-study.app"
             isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "QS_SIMULATE_NO_APPLE_INTELLIGENCE"
+            value = "1"
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>

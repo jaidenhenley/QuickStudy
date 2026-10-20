@@ -16,15 +16,15 @@ final class GenerationProgress {
     private(set) var startedAt: Date?
     private(set) var unitStartedAt: Date?
     private(set) var expectedSeconds: Double = 6
-    private(set) var readsWholeDocument = false
+    private(set) var engine: GenerationProvenance.Engine = .onDevice
 
     var isChunked: Bool { totalUnits > 1 }
 
-    func begin(expectedSeconds: Double, readsWholeDocument: Bool) {
+    func begin(expectedSeconds: Double, engine: GenerationProvenance.Engine) {
         completedUnits = 0
         totalUnits = 0
         self.expectedSeconds = expectedSeconds
-        self.readsWholeDocument = readsWholeDocument
+        self.engine = engine
         startedAt = Date()
         unitStartedAt = startedAt
     }
@@ -57,12 +57,15 @@ final class GenerationProgress {
     /// Never reaches 1 on its own — the screen is dismissed by completion, so a full bar
     /// that keeps waiting reads as a hang.
     func fraction(now: Date = Date()) -> Double {
-        if isChunked {
-            let done = Double(completedUnits) / Double(totalUnits)
-            let withinUnit = min(elapsedInUnit(now: now) / max(expectedSeconds, 1), 1) / Double(totalUnits)
-            return min(done + withinUnit, 0.97)
-        }
-        return min(elapsedInUnit(now: now) / max(expectedSeconds, 1), 0.97)
+        let withinUnit = Self.eased(elapsed: elapsedInUnit(now: now), expected: expectedSeconds)
+        guard isChunked else { return withinUnit }
+        return min((Double(completedUnits) + withinUnit) / Double(totalUnits), 0.97)
+    }
+
+    /// Halfway at the expected time and still creeping long after it. A linear ramp hit
+    /// its cap at `expectedSeconds` and then sat still for however long the model took.
+    private static func eased(elapsed: Double, expected: Double) -> Double {
+        min(elapsed / (elapsed + max(expected, 1)), 0.97)
     }
 
     func isOverrunning(now: Date = Date()) -> Bool {

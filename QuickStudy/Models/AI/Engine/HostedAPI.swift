@@ -46,7 +46,7 @@ struct HostedAPI {
         let error: Body
     }
 
-    static let production = URL(string: "https://quickstudy-api-production.jaidenhenley.workers.dev")!
+    static let production = URL(string: "https://api.quick-study.app")!
 
     let baseURL: URL
 

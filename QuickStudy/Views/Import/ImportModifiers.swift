@@ -83,6 +83,7 @@ struct ImportModifiers: ViewModifier {
                 onDismiss: { coordinator.resumeAfterConsent() }
             ) {
                 HostedConsentSheet(
+                    setup: DraftingSetup.current(settings: studyViewModel.aiSettings),
                     onAllow: { coordinator.recordConsentChoice(.granted) },
                     onNotNow: { coordinator.recordConsentChoice(.declined) }
                 )

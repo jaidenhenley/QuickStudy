@@ -6,6 +6,7 @@
 import SwiftUI
 
 struct HostedConsentSheet: View {
+    let setup: DraftingSetup
     let onAllow: () -> Void
     let onNotNow: () -> Void
 
@@ -17,7 +18,7 @@ struct HostedConsentSheet: View {
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Your document's text is sent to QuickStudy's server and drafted by AI running on Cloudflare. Your text isn't stored after drafting. Later free sets are drafted on this iPhone.")
+            Text(message)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -53,5 +54,16 @@ struct HostedConsentSheet: View {
         .background(BackgroundView())
         .presentationDetents([.height(360)])
         .presentationDragIndicator(.visible)
+    }
+
+    private var message: String {
+        switch setup {
+        case .privateCloud:
+            return "Your document's text is drafted by Apple's Private Cloud Compute or QuickStudy's server. It isn't stored after drafting. Choose Not now to keep every draft on this iPhone."
+        case .onDevice:
+            return "Your document's text is drafted on QuickStudy's server. It isn't stored after drafting. Choose Not now to keep every draft on this iPhone."
+        case .cloudOnly:
+            return "This iPhone doesn't run Apple Intelligence, so your document's text is drafted on QuickStudy's server. It isn't stored after drafting. Choose Not now to type your cards yourself."
+        }
     }
 }

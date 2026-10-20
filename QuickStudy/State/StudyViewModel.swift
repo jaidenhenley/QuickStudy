@@ -252,32 +252,39 @@ class StudyViewModel {
         lastGenerationProvenance = nil
 
         do {
-            var engine = try AIController.makeGenerator(settings: aiSettings, store: store, progress: generationProgress)
-            // The server refuses oversized input outright, so sending it would only
-            // spend a round trip to learn that.
-            if engine is HostedCardGenerationEngine,
-               text.utf16.count > HostedCardGenerationEngine.maxInputLength,
-               AIController.isOnDeviceModelAvailable {
-                engine = try AIController.makeOnDeviceGenerator(progress: generationProgress)
-            }
-            do {
-                return try await draft(text: text, document: document, engine: engine, countsAgainstAllowance: countsAgainstAllowance)
-            } catch let error where engine is HostedCardGenerationEngine {
-                if !store.isPro && AIController.spendsFreeHostedGeneration(error) {
-                    store.markFreeHostedGenerationUsed()
-                }
-                guard !Task.isCancelled,
-                      AIController.fallsBackOnDevice(after: error, isPro: store.isPro),
-                      AIController.isOnDeviceModelAvailable else { throw error }
-                logger.notice("Hosted generation failed; drafting on device instead.")
-                let fallback = try AIController.makeOnDeviceGenerator(progress: generationProgress)
-                return try await draft(text: text, document: document, engine: fallback, countsAgainstAllowance: countsAgainstAllowance)
-            }
+            let engines = try AIController.makeGenerators(
+                settings: aiSettings,
+                store: store,
+                sourceLength: text.utf16.count,
+                progress: generationProgress
+            )
+            return try await draft(text: text, document: document, trying: engines[...], countsAgainstAllowance: countsAgainstAllowance)
         } catch {
             logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
             generationErrorCode = Self.code(for: error)
             return []
+        }
+    }
+
+    @MainActor
+    private func draft(
+        text: String,
+        document: StudyDocument,
+        trying engines: ArraySlice<any CardGenerating>,
+        countsAgainstAllowance: Bool
+    ) async throws -> [StudyCard] {
+        guard let engine = engines.first else { throw CardGenerationError.deviceNotEligible }
+        do {
+            return try await draft(text: text, document: document, engine: engine, countsAgainstAllowance: countsAgainstAllowance)
+        } catch {
+            if engine.provenance.engine == .cloud, !store.isPro, AIController.spendsFreeHostedGeneration(error) {
+                store.markFreeHostedGenerationUsed()
+            }
+            guard engines.count > 1, !Task.isCancelled,
+                  AIController.movesOn(after: error, from: engine.provenance.engine, isPro: store.isPro) else { throw error }
+            logger.notice("Generation failed on \(engine.provenance.engine.rawValue, privacy: .public); trying the next engine.")
+            return try await draft(text: text, document: document, trying: engines.dropFirst(), countsAgainstAllowance: countsAgainstAllowance)
         }
     }
 
@@ -291,14 +298,14 @@ class StudyViewModel {
         let startedAt = Date()
         generationProgress.begin(
             expectedSeconds: engine.expectedSeconds,
-            readsWholeDocument: engine.sourceChunkLimit == nil
+            engine: engine.provenance.engine
         )
         defer { generationProgress.end() }
         let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
         try Task.checkCancellation()
         lastGenerationWasTruncated = engine.skippedSourceSections > 0
         lastGenerationProvenance = engine.provenance
-        if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
+        if countsAgainstAllowance && engine.countsAgainstAllowance && !store.isPro { GenerationAllowance.recordGeneration() }
         analytics.record(.firstGenerationCompleted(durationBucket: Self.durationBucket(since: startedAt)))
         return cards
     }
