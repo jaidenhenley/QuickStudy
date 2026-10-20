@@ -144,11 +144,11 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Toggle("Show Sample Sets", isOn: $studyViewModel.demoModeEnabled)
+                    Toggle("Show Sample Set", isOn: $studyViewModel.demoModeEnabled)
                 } header: {
                     Text("Sample Content")
                 } footer: {
-                    Text("Adds four example sets you can study right away. Turning this off removes them; turning it back on restores them.")
+                    Text("Adds a sample biology set you can study right away. Turning this off removes it; turning it back on starts it fresh.")
                 }
 
                 Section {

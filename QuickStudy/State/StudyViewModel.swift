@@ -570,33 +570,43 @@ class StudyViewModel {
     }
 
     private func seedDemoSetsIfNeeded() {
-        // Always remove and regenerate demo sets to ensure they have the latest configuration
+        // Seeded once and then left alone so studying the sample keeps its progress. The
+        // document is compared rather than the set title because the user can rename the
+        // set; a changed sample (or the four pre-2.0 ones) is replaced.
+        let existing = savedSets.filter { isDemoSet($0) }
+        if existing.count == 1,
+           existing[0].document.title == DemoData.set.title,
+           existing[0].document.lines == DemoData.set.lines {
+            return
+        }
         savedSets.removeAll { isDemoSet($0) }
 
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
+        let spec = DemoData.set
 
-        let demoSets = DemoData.sets.map { spec in
-            let cards = spec.cards.map { card in
-                StudyCard(
-                    question: card.question,
-                    answer: card.answer,
-                    missCount: card.missCount,
-                    box: card.box,
-                    dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },
-                    lastReviewedAt: card.box > 0 ? today : nil
-                )
-            }
-            return StudySet(
-                title: spec.title,
-                document: StudyDocument(title: spec.title, lines: spec.lines),
-                cards: cards,
-                sourceType: .demo,
-                isDemo: true
+        let cards = spec.cards.map { card in
+            StudyCard(
+                question: card.question,
+                answer: card.answer,
+                missCount: card.missCount,
+                box: card.box,
+                dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },
+                lastReviewedAt: card.box > 0 ? today : nil,
+                source: spec.source(for: card),
+                explanation: card.explanation,
+                distractors: card.distractors
             )
         }
+        let demoSet = StudySet(
+            title: spec.title,
+            document: StudyDocument(title: spec.title, lines: spec.lines, pageBreaks: spec.pageBreaks),
+            cards: cards,
+            sourceType: .demo,
+            isDemo: true
+        )
 
-        savedSets = demoSets + savedSets
+        savedSets = [demoSet] + savedSets
         saveSavedSets()
     }
 
@@ -623,18 +633,20 @@ class StudyViewModel {
     func applyDemoMode() {
         if demoModeEnabled {
             seedDemoSetsIfNeeded()
-            if let higSet = savedSets.first(where: { isDemoSet($0) && $0.title == "Human Interface Guidelines" }) {
-                document = higSet.document
-                flashcards = higSet.cards
-                activeSetID = higSet.id
+            if let demoSet = savedSets.first(where: { isDemoSet($0) }) {
+                document = demoSet.document
+                flashcards = demoSet.cards
+                activeSetID = demoSet.id
             }
         } else {
-            let demoIDs = Set(savedSets.filter { isDemoSet($0) }.map { $0.id })
+            let demoSets = savedSets.filter { isDemoSet($0) }
+            let demoIDs = Set(demoSets.map(\.id))
+            let demoTitles = Set(demoSets.map(\.document.title))
             if let activeSetID, demoIDs.contains(activeSetID) {
                 self.activeSetID = nil
                 self.document = nil
                 self.flashcards = []
-            } else if let document, ["Human Interface Guidelines", "SwiftUI", "SpriteKit"].contains(document.title) {
+            } else if let document, demoTitles.contains(document.title) {
                 self.document = nil
                 self.flashcards = []
             }
