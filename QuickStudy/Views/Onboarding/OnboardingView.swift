@@ -23,7 +23,7 @@ struct OnboardingView: View {
                         case .howItWorks:
                             OnboardingHowItWorksPage { onboarding.advance() }
                         case .aiIntro:
-                            OnboardingAIIntroPage(hasOnDeviceModel: onboarding.hasOnDeviceModel) { onboarding.advance() }
+                            OnboardingAIIntroPage(setup: onboarding.draftingSetup) { onboarding.advance() }
                         case .camera:
                             OnboardingCameraPage(
                                 onAllow: { Task { await onboarding.requestCameraAccess() } },

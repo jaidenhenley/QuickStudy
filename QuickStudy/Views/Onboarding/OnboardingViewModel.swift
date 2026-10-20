@@ -36,14 +36,14 @@ final class OnboardingViewModel {
     }
 
     let pages: [Page]
-    let hasOnDeviceModel: Bool
+    let draftingSetup: DraftingSetup
     var current: Page = .welcome
     private(set) var choice: Choice?
 
     var currentIndex: Int { pages.firstIndex(of: current) ?? 0 }
 
     init(settings: AISettings) {
-        hasOnDeviceModel = AICapability.state(for: settings) != .unsupportedDevice
+        draftingSetup = DraftingSetup.current(settings: settings)
         // A pre-permission card only earns its place before the system has asked.
         let cameraUndecided = AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined
         pages = [.welcome, .howItWorks, .aiIntro] + (cameraUndecided ? [.camera] : []) + [.firstSource]

@@ -164,10 +164,19 @@ class StudyViewModel {
     }
 
     // MARK: - Persistence
-    var persistenceURL: URL {
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let directory = documents.first ?? FileManager.default.temporaryDirectory
-        return directory.appendingPathComponent("SavedSets.json")
+    private let libraryFile = JSONFile(named: "SavedSets.json")
+    private(set) var libraryIssue: PersistenceIssue?
+    var isLibraryIssuePresented = false
+
+    var libraryIssueMessage: String {
+        switch libraryIssue {
+        case .corrupt:
+            "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone."
+        case .unreadable:
+            "Your saved sets couldn't be opened right now. Changes won't be saved until you restart QuickStudy."
+        case nil:
+            ""
+        }
     }
 
     private let spellCheckIgnoreList: Set<String> = [
@@ -243,32 +252,39 @@ class StudyViewModel {
         lastGenerationProvenance = nil
 
         do {
-            var engine = try AIController.makeGenerator(settings: aiSettings, store: store, progress: generationProgress)
-            // The server refuses oversized input outright, so sending it would only
-            // spend a round trip to learn that.
-            if engine is HostedCardGenerationEngine,
-               text.utf16.count > HostedCardGenerationEngine.maxInputLength,
-               AIController.isOnDeviceModelAvailable {
-                engine = try AIController.makeOnDeviceGenerator(progress: generationProgress)
-            }
-            do {
-                return try await draft(text: text, document: document, engine: engine, countsAgainstAllowance: countsAgainstAllowance)
-            } catch let error where engine is HostedCardGenerationEngine {
-                if !store.isPro && AIController.spendsFreeHostedGeneration(error) {
-                    store.markFreeHostedGenerationUsed()
-                }
-                guard !Task.isCancelled,
-                      AIController.fallsBackOnDevice(after: error, isPro: store.isPro),
-                      AIController.isOnDeviceModelAvailable else { throw error }
-                logger.notice("Hosted generation failed; drafting on device instead.")
-                let fallback = try AIController.makeOnDeviceGenerator(progress: generationProgress)
-                return try await draft(text: text, document: document, engine: fallback, countsAgainstAllowance: countsAgainstAllowance)
-            }
+            let engines = try AIController.makeGenerators(
+                settings: aiSettings,
+                store: store,
+                sourceLength: text.utf16.count,
+                progress: generationProgress
+            )
+            return try await draft(text: text, document: document, trying: engines[...], countsAgainstAllowance: countsAgainstAllowance)
         } catch {
             logger.error("AI generation failed: \(String(describing: type(of: error))) — \(error.localizedDescription)")
             generationErrorMessage = Self.message(for: error)
             generationErrorCode = Self.code(for: error)
             return []
+        }
+    }
+
+    @MainActor
+    private func draft(
+        text: String,
+        document: StudyDocument,
+        trying engines: ArraySlice<any CardGenerating>,
+        countsAgainstAllowance: Bool
+    ) async throws -> [StudyCard] {
+        guard let engine = engines.first else { throw CardGenerationError.deviceNotEligible }
+        do {
+            return try await draft(text: text, document: document, engine: engine, countsAgainstAllowance: countsAgainstAllowance)
+        } catch {
+            if engine.provenance.engine == .cloud, !store.isPro, AIController.spendsFreeHostedGeneration(error) {
+                store.markFreeHostedGenerationUsed()
+            }
+            guard engines.count > 1, !Task.isCancelled,
+                  AIController.movesOn(after: error, from: engine.provenance.engine, isPro: store.isPro) else { throw error }
+            logger.notice("Generation failed on \(engine.provenance.engine.rawValue, privacy: .public); trying the next engine.")
+            return try await draft(text: text, document: document, trying: engines.dropFirst(), countsAgainstAllowance: countsAgainstAllowance)
         }
     }
 
@@ -282,14 +298,14 @@ class StudyViewModel {
         let startedAt = Date()
         generationProgress.begin(
             expectedSeconds: engine.expectedSeconds,
-            readsWholeDocument: engine.sourceChunkLimit == nil
+            engine: engine.provenance.engine
         )
         defer { generationProgress.end() }
         let cards = try await CardGenerator.generateAI(from: text, document: document, engine: engine)
         try Task.checkCancellation()
         lastGenerationWasTruncated = engine.skippedSourceSections > 0
         lastGenerationProvenance = engine.provenance
-        if countsAgainstAllowance && engine.countsAgainstAllowance { GenerationAllowance.recordGeneration() }
+        if countsAgainstAllowance && engine.countsAgainstAllowance && !store.isPro { GenerationAllowance.recordGeneration() }
         analytics.record(.firstGenerationCompleted(durationBucket: Self.durationBucket(since: startedAt)))
         return cards
     }
@@ -529,14 +545,15 @@ class StudyViewModel {
 
     // MARK: - Saved sets
     func loadSavedSets() {
-        do {
-            let data = try Data(contentsOf: persistenceURL)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            savedSets = try decoder.decode([StudySet].self, from: data)
-        } catch {
-            logger.error("Failed to load saved sets: \(error.localizedDescription)")
+        switch libraryFile.load([StudySet].self) {
+        case .loaded(let sets):
+            savedSets = sets
+        case .missing:
             savedSets = []
+        case .failed(let issue):
+            savedSets = []
+            libraryIssue = issue
+            isLibraryIssuePresented = true
         }
         ensurePresetSet()
         applyDemoMode()
@@ -560,44 +577,51 @@ class StudyViewModel {
     }
 
     private func seedDemoSetsIfNeeded() {
-        // Always remove and regenerate demo sets to ensure they have the latest configuration
+        // Seeded once and then left alone so studying the sample keeps its progress. The
+        // document is compared rather than the set title because the user can rename the
+        // set; a changed sample (or the four pre-2.0 ones) is replaced.
+        let existing = savedSets.filter { isDemoSet($0) }
+        if existing.count == 1,
+           existing[0].document.title == DemoData.set.title,
+           existing[0].document.lines == DemoData.set.lines {
+            return
+        }
         savedSets.removeAll { isDemoSet($0) }
 
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
+        let spec = DemoData.set
 
-        let demoSets = DemoData.sets.map { spec in
-            let cards = spec.cards.map { card in
-                StudyCard(
-                    question: card.question,
-                    answer: card.answer,
-                    missCount: card.missCount,
-                    box: card.box,
-                    dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },
-                    lastReviewedAt: card.box > 0 ? today : nil
-                )
-            }
-            return StudySet(
-                title: spec.title,
-                document: StudyDocument(title: spec.title, lines: spec.lines),
-                cards: cards,
-                sourceType: .demo,
-                isDemo: true
+        let cards = spec.cards.map { card in
+            StudyCard(
+                question: card.question,
+                answer: card.answer,
+                missCount: card.missCount,
+                box: card.box,
+                dueDate: card.dueInDays.flatMap { calendar.date(byAdding: .day, value: $0, to: today) },
+                lastReviewedAt: card.box > 0 ? today : nil,
+                source: spec.source(for: card),
+                explanation: card.explanation,
+                distractors: card.distractors
             )
         }
+        let demoSet = StudySet(
+            title: spec.title,
+            document: StudyDocument(title: spec.title, lines: spec.lines, pageBreaks: spec.pageBreaks),
+            cards: cards,
+            sourceType: .demo,
+            isDemo: true
+        )
 
-        savedSets = demoSets + savedSets
+        savedSets = [demoSet] + savedSets
         saveSavedSets()
     }
 
     func saveSavedSets() {
         hasUnsavedChanges = false
+        guard libraryIssue != .unreadable else { return }
         do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            encoder.dateEncodingStrategy = .iso8601
-            let data = try encoder.encode(savedSets)
-            try data.write(to: persistenceURL, options: [.atomic])
+            try libraryFile.save(savedSets, outputFormatting: [.prettyPrinted, .sortedKeys])
         } catch {
             logger.error("Failed to save sets: \(error.localizedDescription)")
         }
@@ -616,18 +640,20 @@ class StudyViewModel {
     func applyDemoMode() {
         if demoModeEnabled {
             seedDemoSetsIfNeeded()
-            if let higSet = savedSets.first(where: { isDemoSet($0) && $0.title == "Human Interface Guidelines" }) {
-                document = higSet.document
-                flashcards = higSet.cards
-                activeSetID = higSet.id
+            if let demoSet = savedSets.first(where: { isDemoSet($0) }) {
+                document = demoSet.document
+                flashcards = demoSet.cards
+                activeSetID = demoSet.id
             }
         } else {
-            let demoIDs = Set(savedSets.filter { isDemoSet($0) }.map { $0.id })
+            let demoSets = savedSets.filter { isDemoSet($0) }
+            let demoIDs = Set(demoSets.map(\.id))
+            let demoTitles = Set(demoSets.map(\.document.title))
             if let activeSetID, demoIDs.contains(activeSetID) {
                 self.activeSetID = nil
                 self.document = nil
                 self.flashcards = []
-            } else if let document, ["Human Interface Guidelines", "SwiftUI", "SpriteKit"].contains(document.title) {
+            } else if let document, demoTitles.contains(document.title) {
                 self.document = nil
                 self.flashcards = []
             }

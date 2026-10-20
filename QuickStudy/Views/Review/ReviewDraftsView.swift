@@ -22,13 +22,15 @@ struct ReviewDraftsView: View {
     @State private var showRegenerateError = false
     @State private var showRegenerateConfirm = false
     @State private var showPaywall = false
-    @State private var showNamePrompt = false
-    @State private var nameEntry = ""
+    @State private var lastRemoval: (card: StudyCard, index: Int)?
     @AccessibilityFocusState private var isDraftHeaderFocused: Bool
+
+    private let suggestedTitle: String
 
     init(draft: DraftSet) {
         _draft = State(initialValue: draft)
         _lastGeneratedCards = State(initialValue: draft.cards)
+        suggestedTitle = draft.title
     }
 
     var body: some View {
@@ -68,6 +70,13 @@ struct ReviewDraftsView: View {
                 .appGlassCard(cornerRadius: AppRadius.lg)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
+
+                // A row, not the section footer: a plain list pins its footer on an opaque band.
+                Text("Tap to edit. Swipe left to remove a card.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             } header: {
                 Group {
                     if dynamicTypeSize.isAccessibilitySize {
@@ -91,10 +100,8 @@ struct ReviewDraftsView: View {
                 }
                 .font(.caption)
                 .fontWeight(.semibold)
-            } footer: {
-                Text("Tap to edit. Swipe left to remove a card.")
-                    .font(.caption)
             }
+            .listSectionSeparator(.hidden)
 
             if draft.wasTruncated && !storeController.isPro {
                 TruncationNoticeRow { showPaywall = true }
@@ -123,12 +130,30 @@ struct ReviewDraftsView: View {
         .background(BackgroundView())
         .navigationTitle("Draft cards")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
+        .safeAreaInset(edge: .bottom) {
+            if lastRemoval != nil {
+                Button(action: undoRemoval) {
+                    Label("Undo", systemImage: "arrow.uturn.backward")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                }
+                .appProminentButtonStyle(tint: Theme.primary)
+                .padding(.bottom, Spacing.sm)
+                .appTransition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .task(id: lastRemoval?.card.id) {
+            guard lastRemoval != nil else { return }
+            // Cancellation means a newer removal or an undo already replaced this one.
+            do { try await Task.sleep(for: .seconds(5)) } catch { return }
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                lastRemoval = nil
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    nameEntry = ""
-                    showNamePrompt = true
-                } label: {
+                Button(action: save) {
                     Text(saveLabel)
                         .contentTransition(.numericText(value: Double(validCards.count)))
                 }
@@ -156,15 +181,6 @@ struct ReviewDraftsView: View {
             Text(regenerateErrorMessage)
         }
         .sheet(isPresented: $showPaywall) { PaywallView(surface: .truncation) }
-        // The field starts empty with the suggestion as its placeholder, so "Keep
-        // suggestion" skips naming and "Save" with nothing typed falls back to it too.
-        .alert("Name this set", isPresented: $showNamePrompt) {
-            TextField(draft.title, text: $nameEntry)
-            Button("Keep suggestion") { save(named: draft.title) }
-            Button("Save") { save(named: nameEntry) }
-        } message: {
-            Text("You can rename it later from your Library.")
-        }
     }
 
     private var validCards: [StudyCard] {
@@ -200,15 +216,27 @@ struct ReviewDraftsView: View {
     }
 
     private func removeCard(_ id: UUID) {
+        guard let index = draft.cards.firstIndex(where: { $0.id == id }) else { return }
         withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+            lastRemoval = (draft.cards[index], index)
             draft.remove(id)
         }
         isDraftHeaderFocused = true
     }
 
-    private func save(named name: String) {
-        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !trimmed.isEmpty { draft.title = trimmed }
+    private func undoRemoval() {
+        guard let removal = lastRemoval else { return }
+        withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+            draft.cards.insert(removal.card, at: min(removal.index, draft.cards.count))
+            lastRemoval = nil
+        }
+    }
+
+    /// The title is edited in place at the top of the list; clearing it falls back to the
+    /// title generation suggested rather than saving a set with no name.
+    private func save() {
+        let trimmed = draft.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        draft.title = trimmed.isEmpty ? suggestedTitle : trimmed
         draft.cards = validCards
         studyViewModel.savedSets.insert(draft.committed(), at: 0)
         studyViewModel.saveSavedSets()
@@ -225,6 +253,7 @@ struct ReviewDraftsView: View {
             showRegenerateError = true
             return
         }
+        lastRemoval = nil
         draft.cards = cards
         draft.provenance = studyViewModel.lastGenerationProvenance
         lastGeneratedCards = cards

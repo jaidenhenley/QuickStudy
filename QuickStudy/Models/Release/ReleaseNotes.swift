@@ -40,7 +40,7 @@ enum ReleaseNotes {
         proFeature: .init(
             symbol: "sparkles",
             title: "QuickStudy Pro",
-            detail: "\(ProProduct.hostedMonthlyLimit) cloud generations a month for better cards on any iPhone."
+            detail: "\(ProProduct.hostedMonthlyLimit) cloud generations a month on any iPhone."
         ),
         cloudNotice: "Your next set can be drafted in the cloud, with your permission."
     )

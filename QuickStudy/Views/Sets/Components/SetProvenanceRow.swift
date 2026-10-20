@@ -43,6 +43,7 @@ struct SetProvenanceRow: View {
             case .cloud: return "icloud"
             case .externalAPI: return "key"
             case .onDevice: return "iphone"
+            case .privateCloud: return "lock.icloud"
             case nil: return "sparkles"
             }
         }
@@ -57,6 +58,7 @@ struct SetProvenanceRow: View {
             case .cloud: return "Drafted in the cloud"
             case .externalAPI: return "Drafted with your API key"
             case .onDevice: return "Drafted on this iPhone"
+            case .privateCloud: return "Drafted with Private Cloud Compute"
             case nil: return "Drafted by AI"
             }
         }
@@ -75,7 +77,7 @@ struct SetProvenanceRow: View {
         guard let provenance else { return "\(origin) · saved before engines were recorded" }
         switch provenance.engine {
         case .cloud: return "\(origin) · QuickStudy server"
-        case .externalAPI, .onDevice: return "\(origin) · \(provenance.model ?? "unknown model")"
+        case .externalAPI, .onDevice, .privateCloud: return "\(origin) · \(provenance.model ?? "unknown model")"
         }
     }
 }

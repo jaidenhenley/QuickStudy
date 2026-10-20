@@ -36,11 +36,7 @@ struct PasteTextSheet: View {
                     HStack(spacing: Spacing.xs) {
                         Image(systemName: "sparkles")
                             .symbolEffect(.bounce, value: appeared)
-                        Text(
-                            todayViewModel.isPro
-                                ? "QuickStudy Pro"
-                                : "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free left"
-                        )
+                        Text(allowanceLabel)
                     }
                     .font(.caption)
                     .fontWeight(.medium)
@@ -74,7 +70,7 @@ struct PasteTextSheet: View {
                         .foregroundStyle(.secondary)
 
                     HStack(spacing: Spacing.sm) {
-                        Text("~\(analysis.estimatedCards) cards")
+                        Text(analysis.estimatedCardsLabel)
                         if let language = analysis.language {
                             Text(language)
                         }
@@ -101,16 +97,12 @@ struct PasteTextSheet: View {
                 .appProminentButtonStyle(tint: Theme.primary)
                 .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
 
-                // The promise has to match the engine that will actually run: an external
-                // API or a hosted generation both mean the notes leave the phone.
+                // The promise has to match the engine that will actually run first: Private
+                // Cloud Compute or a hosted generation both mean the notes leave the phone.
                 if aiSettings.mode == .onDevice {
                     HStack(spacing: Spacing.xs) {
-                        Image(systemName: store.willUseHostedGeneration ? "network" : "checkmark.shield")
-                        Text(
-                            store.willUseHostedGeneration
-                                ? "Sent to QuickStudy's server · not stored"
-                                : "On this iPhone · no upload · works offline"
-                        )
+                        Image(systemName: footerSymbol)
+                        Text(footerText)
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -128,6 +120,32 @@ struct PasteTextSheet: View {
         }
         .onAppear {
             appeared = true
+        }
+    }
+
+    private var allowanceLabel: String {
+        if todayViewModel.isPro { return "QuickStudy Pro" }
+        if todayViewModel.hasOnlyFreeCloudSet { return "1 free cloud set" }
+        return "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free left"
+    }
+
+    private var firstEngine: GenerationProvenance.Engine? {
+        AIController.plan(settings: aiSettings, store: store, sourceLength: text.utf16.count).first
+    }
+
+    private var footerSymbol: String {
+        switch firstEngine {
+        case .privateCloud: return "lock.icloud"
+        case .cloud: return "network"
+        default: return "checkmark.shield"
+        }
+    }
+
+    private var footerText: String {
+        switch firstEngine {
+        case .privateCloud: return "Apple Private Cloud Compute · not stored"
+        case .cloud: return "Sent to Claude via QuickStudy's server · deleted within 30 days"
+        default: return "On this iPhone · no upload · works offline"
         }
     }
 }

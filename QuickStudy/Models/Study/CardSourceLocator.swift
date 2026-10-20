@@ -41,15 +41,16 @@ enum CardSourceLocator {
             .joined(separator: " ")
     }
 
+    /// The smallest run of lines containing the excerpt. Windows grow backwards from each
+    /// end line, so the first match starts at the excerpt's own line rather than at an
+    /// earlier, shorter line that merely fits inside the length budget.
     nonisolated private static func matchRange(needle: String, lines: [String]) -> ClosedRange<Int>? {
         let normalizedLines = lines.map(normalized)
 
-        for start in normalizedLines.indices {
+        for end in normalizedLines.indices {
             var joined = ""
-            for end in start..<normalizedLines.count {
-                if !joined.isEmpty { joined += " " }
-                joined += normalizedLines[end]
-
+            for start in stride(from: end, through: 0, by: -1) where !normalizedLines[start].isEmpty {
+                joined = joined.isEmpty ? normalizedLines[start] : normalizedLines[start] + " " + joined
                 if joined.contains(needle) { return start...end }
                 if joined.count > needle.count * 2 { break }
             }

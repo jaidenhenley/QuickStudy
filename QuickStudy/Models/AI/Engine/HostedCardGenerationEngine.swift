@@ -13,6 +13,7 @@ struct HostedCardGenerationEngine: CardGenerating {
         let renewalInfo: String?
         let topic: String?
         let count: Int?
+        let consentVersion: Int
     }
 
     /// The server's `MAX_INPUT_CHARS`, measured as it measures: UTF-16 code units.
@@ -38,10 +39,16 @@ struct HostedCardGenerationEngine: CardGenerating {
 
     private func request(text: String, topic: String?, count: Int?) async throws -> [AIFlashcard] {
         do {
-            return try await attempt(text: text, topic: topic, count: count)
-        } catch CardGenerationError.attestationKeyUnknown {
-            try await AppAttestClient.shared.resetRegistration()
-            return try await attempt(text: text, topic: topic, count: count)
+            do {
+                return try await attempt(text: text, topic: topic, count: count)
+            } catch CardGenerationError.attestationKeyUnknown {
+                try await AppAttestClient.shared.resetRegistration()
+                return try await attempt(text: text, topic: topic, count: count)
+            }
+        } catch CardGenerationError.notSubscribed where transaction == nil {
+            // Without a transaction this request was the free generation, so the server's
+            // "not subscribed" means that free generation is already spent.
+            throw CardGenerationError.freeHostedGenerationUsed
         }
     }
 
@@ -54,7 +61,8 @@ struct HostedCardGenerationEngine: CardGenerating {
                 transaction: transaction,
                 renewalInfo: renewalInfo,
                 topic: topic,
-                count: count
+                count: count,
+                consentVersion: HostedConsent.currentVersion
             )
         )
         // The exact bytes that are signed are the bytes that are sent; the server hashes them the same way.
@@ -62,7 +70,7 @@ struct HostedCardGenerationEngine: CardGenerating {
             ? try await AppAttestClient.shared.sign(body, using: api)
             : nil
         let response = try await api.generate(signedBody: body, signature: signature)
-        await onRemaining(response.remaining)
+        onRemaining(response.remaining)
 
         return response.cards.map {
             AIFlashcard(

@@ -52,6 +52,9 @@ class TodayViewModel {
     var hasReviewableCards: Bool = false
     var hasAnySets: Bool = false
     var isManualOnly: Bool = false
+    /// The monthly allowance only covers drafting on the device or on PCC, so an iPhone with
+    /// neither has just the one free cloud set until it is used.
+    var hasOnlyFreeCloudSet: Bool = false
     var generationsRemaining: Int = GenerationAllowance.remaining
     var canGenerate: Bool = !GenerationAllowance.isExhausted
     var showsGenerationsPill: Bool = GenerationAllowance.used > 0
@@ -89,6 +92,7 @@ class TodayViewModel {
         hostedRemaining = store.hostedRemaining
         let noOnDeviceModel = AICapability.state(for: studyViewModel.aiSettings) == .unsupportedDevice
         isManualOnly = noOnDeviceModel && !isPro && (store.freeHostedGenerationUsed || HostedConsent.decision == .declined)
+        hasOnlyFreeCloudSet = noOnDeviceModel && !isPro && !isManualOnly
         generationsRemaining = GenerationAllowance.remaining(now: now)
         canGenerate = isPro || !GenerationAllowance.isExhausted
         showsGenerationsPill = isPro || hasReviewableCards || GenerationAllowance.used(now: now) > 0 || isManualOnly

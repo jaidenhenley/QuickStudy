@@ -133,6 +133,9 @@ final class ImportCoordinator {
 #if canImport(FoundationModels)
         OnDeviceCardGenerationEngine.prewarm()
 #endif
+        if let aiSettings, AIController.mayUsePrivateCloud(settings: aiSettings) {
+            PrivateCloud.prewarm()
+        }
         switch source {
         case .scan:
             guard checkOnDeviceReadiness() else { return }

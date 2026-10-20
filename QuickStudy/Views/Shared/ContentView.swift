@@ -109,6 +109,21 @@ struct ContentView: View {
                 .environment(store)
                 .environment(analytics)
         }
+        .alert("Couldn't open your library", isPresented: $viewModel.isLibraryIssuePresented) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.libraryIssueMessage)
+        }
+        .alert("Couldn't open your study history", isPresented: $sessionStore.isLoadIssuePresented) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(sessionStore.loadIssueMessage)
+        }
+        .alert("Couldn't open your draft", isPresented: $draftStore.isLoadIssuePresented) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(draftStore.loadIssueMessage)
+        }
         .sheet(item: $whatsNew, onDismiss: { releaseTracker.markSeen() }) { presented in
             WhatsNewView()
                 .environment(presented)

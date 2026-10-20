@@ -16,8 +16,9 @@ struct ScanPreviewView: View {
 
     @State private var cardIndex = 0
     @State private var showDiscardAlert = false
+    @State private var scrolledLine: Int?
     @ScaledMetric(relativeTo: .body) private var tabHeight: CGFloat = 228
-    @Namespace private var highlightNamespace
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.base) {
@@ -37,19 +38,27 @@ struct ScanPreviewView: View {
                 SourcePageView(
                     lines: Array(draft.document.lines[pageRange]),
                     highlighted: currentCard?.source?.lineRange,
-                    lineOffset: pageRange.lowerBound,
-                    namespace: highlightNamespace
+                    lineOffset: pageRange.lowerBound
                 )
-                .id(pageIndex)
+                // Lines are identified by their Int index; a bare Int page id collided
+                // with line 0 and scrolled the whole page instead of the line.
+                .id("page-\(pageIndex)")
                 // The outgoing page leaves at once: crossfading two pages of text
                 // stacks both legibly on top of each other.
                 .appTransition(.asymmetric(insertion: .opacity, removal: .identity))
                 .padding(Spacing.base)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .scrollPosition(id: $scrolledLine, anchor: .center)
             .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
             .appGlassCard(cornerRadius: AppRadius.lg)
             .appAnimation(Motion.standard, value: cardIndex)
+            .onAppear { scrolledLine = highlightAnchorLine }
+            .onChange(of: cardIndex) {
+                withAnimation(reduceMotion ? Motion.crossfade : Motion.standard) {
+                    scrolledLine = highlightAnchorLine
+                }
+            }
 
             TabView(selection: $cardIndex) {
                 ForEach(Array(draft.cards.enumerated()), id: \.element.id) { index, card in
@@ -80,6 +89,7 @@ struct ScanPreviewView: View {
         .padding(Spacing.lg)
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
+        .toolbar(.hidden, for: .tabBar)
         .alert("Discard draft?", isPresented: $showDiscardAlert) {
             Button("Discard", role: .destructive, action: onCancel)
             Button("Keep editing", role: .cancel) {}
@@ -116,6 +126,14 @@ struct ScanPreviewView: View {
               case let line = range.lowerBound,
               let index = breaks.lastIndex(where: { $0 <= line }) else { return 0 }
         return index
+    }
+
+    /// The middle of the card's lines, kept on the visible page, so a long source range is
+    /// centred rather than pinned by its first line.
+    private var highlightAnchorLine: Int {
+        guard let range = currentCard?.source?.lineRange else { return pageRange.lowerBound }
+        let middle = (range.lowerBound + range.upperBound) / 2
+        return min(max(middle, pageRange.lowerBound), pageRange.upperBound)
     }
 
     private var pageRange: ClosedRange<Int> {

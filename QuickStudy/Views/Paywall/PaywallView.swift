@@ -69,7 +69,7 @@ struct PaywallView: View {
         .alert("You're on QuickStudy Pro", isPresented: $showWelcome) {
             Button("Continue") { dismiss() }
         } message: {
-            Text("You now have \(ProProduct.hostedMonthlyLimit) cloud generations a month.")
+            Text("You now have \(ProProduct.hostedMonthlyLimit) cloud generations a month. Long documents count as one generation per \(ProProduct.generationUnitCharacters.formatted()) characters.")
         }
     }
 

@@ -8,11 +8,13 @@ import FoundationModels
 
 enum OnDeviceModelAvailability {
     static var isAvailable: Bool {
+        guard !SimulatedDevice.lacksAppleIntelligence else { return false }
         if case .available = SystemLanguageModel.default.availability { return true }
         return false
     }
 
     static func check() throws {
+        if SimulatedDevice.lacksAppleIntelligence { throw CardGenerationError.deviceNotEligible }
         switch SystemLanguageModel.default.availability {
         case .available:
             return

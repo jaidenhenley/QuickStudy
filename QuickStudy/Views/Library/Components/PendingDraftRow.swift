@@ -76,7 +76,7 @@ struct PendingDraftRow: View {
     private var discardWarning: String {
         let base = "The \(draft.cards.count) drafted \(noun) will be deleted."
         switch draft.provenance?.engine {
-        case .onDevice:
+        case .onDevice, .privateCloud:
             return base + " This used one of your free generations."
         case .cloud, .externalAPI, .none:
             return base

@@ -28,10 +28,13 @@ final class AnalyticsRecorder {
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let api: HostedAPI
 
-    init(defaults: UserDefaults = .standard, api: HostedAPI = .configured()) {
+    /// A nil `api` means the configured server. Resolving it inside the initializer keeps it
+    /// on the main actor; a default argument would be evaluated outside it.
+    init(defaults: UserDefaults = .standard, api: HostedAPI? = nil) {
         self.defaults = defaults
-        self.api = api
-        isEnabled = defaults.object(forKey: Self.enabledKey) as? Bool ?? true
+        self.api = api ?? .configured()
+        // Opt-in: nothing is counted or sent until the user turns sharing on in Settings.
+        isEnabled = defaults.object(forKey: Self.enabledKey) as? Bool ?? false
 
         // Corrupt or pre-migration data just starts a fresh snapshot rather than crashing.
         let loaded = defaults.data(forKey: Self.snapshotKey)
@@ -44,7 +47,7 @@ final class AnalyticsRecorder {
         }
     }
 
-    /// Opt-out toggle backing the Settings row. Turning it off drops whatever hasn't
+    /// Opt-in toggle backing the Settings row. Turning it off drops whatever hasn't
     /// been sent yet — nothing about the current session should linger once declined.
     func setEnabled(_ enabled: Bool) {
         isEnabled = enabled

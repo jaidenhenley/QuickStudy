@@ -8,7 +8,9 @@
 import Foundation
 import Security
 
-enum KeychainManager {
+/// Keychain calls are thread-safe, and AppAttestClient is an actor that reads and writes
+/// its key ID here, so this isn't tied to the main actor.
+nonisolated enum KeychainManager {
     enum Account: String {
         case externalAPIKey = "external-api-key"
         case appAttestKeyID = "app-attest-key-id"
