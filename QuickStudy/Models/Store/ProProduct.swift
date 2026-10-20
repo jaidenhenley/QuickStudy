@@ -11,4 +11,7 @@ enum ProProduct: String, CaseIterable {
 
     static let identifiers = allCases.map(\.rawValue)
     static let hostedMonthlyLimit = 150
+    /// Must match the server's GENERATION_UNIT_CHARS: longer documents count as one
+    /// generation per this many characters.
+    static let generationUnitCharacters = 12_000
 }
