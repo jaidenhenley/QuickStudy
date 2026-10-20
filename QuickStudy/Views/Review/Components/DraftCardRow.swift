@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct DraftCardRow: View {
+    enum Field {
+        case question
+        case answer
+    }
+
     @Binding var card: StudyCard
     var onRemove: () -> Void
 
     @State private var isEditing = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @AccessibilityFocusState private var questionFieldFocused: Bool
+    @FocusState private var focusedField: Field?
     @AccessibilityFocusState private var summaryFocused: Bool
 
     var body: some View {
@@ -23,11 +28,25 @@ struct DraftCardRow: View {
                     TextField("Question", text: $card.question, axis: .vertical)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .accessibilityFocused($questionFieldFocused)
+                        .focused($focusedField, equals: .question)
+                        .padding(Spacing.sm)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: AppRadius.sm)
+                                .strokeBorder(Color.appPrimary.opacity(focusedField == .question ? 0.6 : 0.25))
+                        }
                     TextField("Answer", text: $card.answer, axis: .vertical)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .focused($focusedField, equals: .answer)
+                        .padding(Spacing.sm)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: AppRadius.sm)
+                                .strokeBorder(Color.appPrimary.opacity(focusedField == .answer ? 0.6 : 0.25))
+                        }
                 }
+                // The fields only exist once editing starts, so focus is requested on
+                // appearance; setting it in the tap handler targets a field not yet built.
+                .onAppear { focusedField = .question }
                 .appTransition(.opacity)
             } else {
                 Button {
@@ -71,6 +90,7 @@ struct DraftCardRow: View {
                 Spacer()
                 if isEditing {
                     Button("Done") {
+                        focusedField = nil
                         withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
                             isEditing = false
                         }
@@ -94,10 +114,14 @@ struct DraftCardRow: View {
         }
         .accessibilityAction(named: "Remove", onRemove)
         .onChange(of: isEditing) { _, editing in
-            if editing {
-                questionFieldFocused = true
-            } else {
-                summaryFocused = true
+            if !editing { summaryFocused = true }
+        }
+        // Tapping another card moves focus there; this one closes rather than staying
+        // half-open with no caret.
+        .onChange(of: focusedField) { _, field in
+            guard field == nil, isEditing else { return }
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+                isEditing = false
             }
         }
     }
