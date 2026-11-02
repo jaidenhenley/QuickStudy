@@ -1,0 +1,110 @@
+import AppKit
+import CoreGraphics
+import CoreText
+import Foundation
+
+let outputDirectory = URL(fileURLWithPath: CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "Fixtures/Inputs")
+let pageSize = CGSize(width: 612, height: 792)
+
+let smallPages: [(String, String)] = [
+    ("Plate Tectonics: Layers of the Earth", """
+    Earth is built in layers. The crust is the thin, rocky outer shell, about 5 to 70 kilometers thick. Beneath it lies the mantle, a thick layer of hot, slowly flowing rock that makes up most of the planet's volume. At the center is the core: a liquid outer core of iron and nickel surrounding a solid inner core.
+
+    The lithosphere combines the crust and the uppermost, rigid part of the mantle. It is broken into large pieces called tectonic plates. The plates float on the asthenosphere, a softer layer of the mantle that can flow over millions of years.
+    """),
+    ("Plate Boundaries", """
+    Plates meet at three kinds of boundaries. At a divergent boundary, plates move apart and new crust forms, as at the Mid-Atlantic Ridge. At a convergent boundary, plates collide; one may sink beneath the other in a process called subduction, which builds volcanic arcs and deep ocean trenches. At a transform boundary, plates slide past each other horizontally, as along the San Andreas Fault.
+
+    Most earthquakes and volcanoes occur near plate boundaries. The Ring of Fire around the Pacific Ocean contains about three quarters of the world's active volcanoes.
+    """),
+    ("Evidence for Plate Movement", """
+    Alfred Wegener proposed continental drift in 1912. He pointed to matching coastlines, identical fossils on separate continents, and similar rock formations across oceans. His idea was rejected until the 1960s, when seafloor spreading and magnetic stripes on the ocean floor explained how continents could move.
+
+    Today, GPS measurements show plates moving a few centimeters each year, about as fast as fingernails grow.
+    """)
+]
+
+func attributed(_ text: String, size: CGFloat, bold: Bool) -> NSAttributedString {
+    let font = CTFontCreateWithName((bold ? "Helvetica-Bold" : "Times-Roman") as CFString, size, nil)
+    return NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: NSColor.black])
+}
+
+func draw(_ text: NSAttributedString, in rect: CGRect, context: CGContext) {
+    let framesetter = CTFramesetterCreateWithAttributedString(text)
+    let path = CGPath(rect: rect, transform: nil)
+    let frame = CTFramesetterCreateFrame(framesetter, CFRange(location: 0, length: 0), path, nil)
+    CTFrameDraw(frame, context)
+}
+
+func writePDF(named name: String, pages: [(String, String)]) {
+    let url = outputDirectory.appendingPathComponent(name)
+    var box = CGRect(origin: .zero, size: pageSize)
+    guard let context = CGContext(url as CFURL, mediaBox: &box, nil) else { fatalError("Cannot create \(url.path)") }
+    for (index, page) in pages.enumerated() {
+        context.beginPDFPage(nil)
+        draw(attributed(page.0, size: 20, bold: true), in: CGRect(x: 54, y: 700, width: 504, height: 40), context: context)
+        draw(attributed(page.1, size: 13, bold: false), in: CGRect(x: 54, y: 72, width: 504, height: 610), context: context)
+        draw(attributed("Page \(index + 1)", size: 10, bold: false), in: CGRect(x: 270, y: 30, width: 100, height: 20), context: context)
+        context.endPDFPage()
+    }
+    context.closePDF()
+}
+
+let topics = [
+    "Cells", "Genetics", "Ecosystems", "Energy", "Forces", "Waves", "Atoms", "Reactions", "Climate", "Evolution"
+]
+let largePages: [(String, String)] = (1...320).map { number in
+    let topic = topics[number % topics.count]
+    let body = (1...4).map { paragraph in
+        "Section \(number).\(paragraph) on \(topic.lowercased()). This paragraph is filler study text used to exercise import of long documents. It restates that \(topic.lowercased()) is a core idea and that the reader should be able to define it, give one example, and explain how it relates to the previous section."
+    }.joined(separator: "\n\n")
+    return ("\(topic): Chapter \(number)", body)
+}
+
+func writeScannedPNG(named name: String) {
+    let width = 1700, height = 2200
+    let space = CGColorSpaceCreateDeviceRGB()
+    guard let context = CGContext(
+        data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+        space: space, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+    ) else { fatalError("Cannot create bitmap") }
+    context.setFillColor(CGColor(red: 0.97, green: 0.96, blue: 0.93, alpha: 1))
+    context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+    var generator = SystemRandomNumberGenerator()
+    for _ in 0..<6000 {
+        let shade = CGFloat.random(in: 0.82...0.95, using: &generator)
+        context.setFillColor(CGColor(red: shade, green: shade, blue: shade, alpha: 1))
+        context.fill(CGRect(x: Int.random(in: 0..<width, using: &generator), y: Int.random(in: 0..<height, using: &generator), width: 2, height: 2))
+    }
+    context.saveGState()
+    context.translateBy(x: 120, y: 160)
+    context.rotate(by: -0.012)
+    let text = """
+    The Phases of the Moon
+
+    The Moon does not make its own light. We see it because it reflects sunlight. As the Moon orbits Earth, which takes about 27.3 days, the amount of its sunlit side that faces us changes. These changes are called phases.
+
+    A new moon occurs when the Moon sits between Earth and the Sun, so the lit side faces away from us. About a week later comes the first quarter, when half of the face we see is lit. At full moon, Earth is between the Moon and the Sun and the whole face is lit.
+
+    The cycle from one new moon to the next takes about 29.5 days, called a synodic month. It is longer than the orbit because Earth also moves around the Sun during that time.
+
+    Waxing means the lit part is growing. Waning means it is shrinking. Tides are strongest near new and full moons.
+    """
+    draw(attributed(text, size: 44, bold: false), in: CGRect(x: 0, y: 0, width: 1420, height: 1880), context: context)
+    context.restoreGState()
+    guard let image = context.makeImage() else { fatalError("Cannot render image") }
+    let rep = NSBitmapImageRep(cgImage: image)
+    guard let data = rep.representation(using: .png, properties: [:]) else { fatalError("Cannot encode PNG") }
+    try! data.write(to: outputDirectory.appendingPathComponent(name))
+}
+
+try! FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
+writePDF(named: "small.pdf", pages: smallPages)
+writePDF(named: "large.pdf", pages: largePages)
+writeScannedPNG(named: "scanned-page.png")
+
+let corrupt = outputDirectory.appendingPathComponent("corrupt.pdf")
+let valid = try! Data(contentsOf: outputDirectory.appendingPathComponent("small.pdf"))
+var broken = valid.prefix(valid.count / 3)
+broken.append(contentsOf: Array("\u{0}\u{1}garbage-not-a-pdf".utf8))
+try! broken.write(to: corrupt)
