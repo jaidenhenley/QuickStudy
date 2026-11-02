@@ -66,6 +66,7 @@ final class ImportCoordinator {
     var activeSource: ImportSource? = nil
 
     private var pendingFailure: ImportFailure? = nil
+    private var isGeneratingCoverUp = false
     private var postErrorAction: PostErrorAction = .none
     private var retrySource: RetrySource? = nil
     private var retainedText = ""
@@ -108,7 +109,10 @@ final class ImportCoordinator {
         proceedWithPendingSource()
     }
 
+    /// Recorded on tap rather than on dismiss so the Library's entitlement refresh, which
+    /// runs as the sheet closes, already sees the choice.
     func recordConsentChoice(_ decision: HostedConsent.Decision) {
+        HostedConsent.record(decision)
         pendingConsentDecision = decision
     }
 
@@ -121,7 +125,14 @@ final class ImportCoordinator {
             retrySource = nil
             return
         }
-        HostedConsent.record(decision)
+        // Without an on-device model a decline leaves nothing that can draft, and the
+        // consent copy promises Type cards instead.
+        if decision == .declined, let aiSettings, AICapability.state(for: aiSettings) == .unsupportedDevice {
+            pendingSource = nil
+            retrySource = nil
+            showTypeCards = true
+            return
+        }
         proceedWithPendingSource()
     }
 
@@ -267,13 +278,23 @@ final class ImportCoordinator {
 
     // MARK: - Failure presentation
 
+    private func beginGenerating(at stage: Stage) {
+        pendingFailure = nil
+        self.stage = stage
+        showGenerating = true
+    }
+
     /// The generating cover has to be fully down before the error screen goes up —
-    /// same dropped-presentation problem as the source picker.
+    /// same dropped-presentation problem as the source picker. A failure in the same
+    /// main-actor turn that raised the cover means it never presented, so it has no
+    /// `onDismiss` to hand the failure to.
     private func fail(_ failure: ImportFailure) {
-        if showGenerating {
+        if showGenerating && isGeneratingCoverUp {
             pendingFailure = failure
             showGenerating = false
         } else {
+            pendingFailure = nil
+            showGenerating = false
             self.failure = failure
         }
     }
@@ -285,7 +306,12 @@ final class ImportCoordinator {
         fail(failure)
     }
 
-    func presentPendingFailure() {
+    func generatingCoverDidAppear() {
+        isGeneratingCoverUp = true
+    }
+
+    func generatingCoverDidDismiss() {
+        isGeneratingCoverUp = false
         guard let pending = pendingFailure else { return }
         pendingFailure = nil
         failure = pending
@@ -332,8 +358,7 @@ final class ImportCoordinator {
         switch retrySource {
         case let .document(extracted, title, sourceType):
             activeSource = Self.importSource(for: sourceType)
-            stage = .drafting
-            showGenerating = true
+            beginGenerating(at: .drafting)
             defer { stage = .idle; showGenerating = false; activeSource = nil }
             await draftOrFail(from: extracted, title: title, sourceType: sourceType, study: study)
         case let .capture(source):
@@ -384,6 +409,13 @@ final class ImportCoordinator {
         navigateToReview = true
     }
 
+    /// A Cancel followed by a new import must not let the old run's page count overwrite
+    /// the new one, and nothing may pull the screen back from drafting.
+    private func advanceReading(page: Int, of total: Int) {
+        guard !Task.isCancelled, case .reading = stage else { return }
+        stage = .reading(page: page, of: total)
+    }
+
     func processPastedText(_ text: String, study: StudyViewModel) async {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
@@ -391,8 +423,7 @@ final class ImportCoordinator {
             return
         }
         activeSource = .paste
-        stage = .drafting
-        showGenerating = true
+        beginGenerating(at: .drafting)
         defer { stage = .idle; showGenerating = false; activeSource = nil }
 
         await draftOrFail(
@@ -405,13 +436,12 @@ final class ImportCoordinator {
 
     func processOCR(images: [UIImage], using helper: DocumentImportHelper, study: StudyViewModel) async {
         activeSource = .scan
-        stage = .reading(page: 0, of: images.count)
-        showGenerating = true
+        beginGenerating(at: .reading(page: 0, of: images.count))
         defer { stage = .idle; showGenerating = false; activeSource = nil }
 
         do {
             let extracted = try await helper.extractText(from: images) { page, total in
-                Task { @MainActor in self.stage = .reading(page: page, of: total) }
+                advanceReading(page: page, of: total)
             }
             guard !Task.isCancelled else { return }
             guard !extracted.isEmpty else {
@@ -432,13 +462,12 @@ final class ImportCoordinator {
 
     func processPDF(url: URL, using helper: DocumentImportHelper, study: StudyViewModel) async {
         activeSource = .pdf
-        stage = .reading(page: 0, of: 1)
-        showGenerating = true
+        beginGenerating(at: .reading(page: 0, of: 1))
         defer { stage = .idle; showGenerating = false; activeSource = nil }
 
         do {
             let extracted = try await helper.extractText(from: url) { page, total in
-                Task { @MainActor in self.stage = .reading(page: page, of: total) }
+                advanceReading(page: page, of: total)
             }
             guard !Task.isCancelled else { return }
             guard !extracted.isEmpty else {
@@ -456,6 +485,9 @@ final class ImportCoordinator {
                 sourceType: .pdf,
                 study: study
             )
+        } catch DocumentImportError.unreadablePDF {
+            retrySource = .capture(.pdf)
+            failIfNotCancelled(.unreadablePDF())
         } catch {
             retrySource = .capture(.pdf)
             failIfNotCancelled(.processing(message: "Failed to import the PDF. Please check the file and try again.", code: "QS-120"))
@@ -475,8 +507,7 @@ final class ImportCoordinator {
                 return
             }
             guard !Task.isCancelled else { return }
-            stage = .reading(page: 0, of: 1)
-            showGenerating = true
+            beginGenerating(at: .reading(page: 0, of: 1))
             defer { stage = .idle; showGenerating = false }
 
             let extracted = try await helper.extractText(from: [image])

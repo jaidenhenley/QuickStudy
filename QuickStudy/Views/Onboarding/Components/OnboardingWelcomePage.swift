@@ -52,7 +52,6 @@ struct OnboardingWelcomePage: View {
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
                         }
-                        .appStagedReveal(1, shown: appeared)
                     }
                     .frame(maxWidth: .infinity, minHeight: proxy.size.height)
                 }
@@ -65,7 +64,6 @@ struct OnboardingWelcomePage: View {
             }
             .appProminentButtonStyle(tint: Theme.primaryFill)
             .controlSize(.large)
-            .appStagedReveal(2, shown: appeared)
         }
         .padding(.horizontal, Spacing.lg)
         .padding(.top, Spacing.xl)

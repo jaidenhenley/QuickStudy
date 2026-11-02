@@ -9,16 +9,15 @@ import SwiftUI
 
 struct SuggestionRow: View {
     let suggestion: TodayViewModel.GenerationSuggestion
+    let onGenerated: (UUID) -> Void
 
     @Environment(StudyViewModel.self) private var studyViewModel
-    @Environment(AppState.self) private var appState
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @ScaledMetric(relativeTo: .subheadline) private var tileSize = 44.0
 
     @State private var isGenerating = false
     @State private var showError = false
-    @State private var navigateToSet = false
 
     var body: some View {
         let layout = dynamicTypeSize.isAccessibilitySize
@@ -86,11 +85,6 @@ struct SuggestionRow: View {
                 AccessibilityNotification.Announcement("Generating cards").post()
             }
         }
-        .navigationDestination(isPresented: $navigateToSet) {
-            if let set = studyViewModel.savedSets.first(where: { $0.id == suggestion.setID }) {
-                StudySetDetailView(set: set)
-            }
-        }
     }
 
     private func generate() async {
@@ -103,7 +97,7 @@ struct SuggestionRow: View {
         isGenerating = false
 
         if studyViewModel.generationErrorMessage == nil {
-            navigateToSet = true
+            onGenerated(suggestion.setID)
         } else {
             showError = true
         }

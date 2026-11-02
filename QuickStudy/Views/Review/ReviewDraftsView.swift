@@ -24,6 +24,9 @@ struct ReviewDraftsView: View {
     @State private var showRegenerateConfirm = false
     @State private var showPaywall = false
     @State private var lastRemoval: (card: StudyCard, index: Int)?
+    @State private var isFinished = false
+    @State private var didSave = false
+    @State private var showDiscardAlert = false
     @AccessibilityFocusState private var isDraftHeaderFocused: Bool
     @AccessibilityFocusState private var accessibilityFocusedCardID: UUID?
 
@@ -114,6 +117,32 @@ struct ReviewDraftsView: View {
                     .appTransition(.opacity.combined(with: .move(edge: .top)))
             }
 
+            if draft.cards.isEmpty {
+                VStack(spacing: Spacing.md) {
+                    Text("No cards left")
+                        .font(.headline)
+                    Text("Undo the last removal, or discard this draft.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                    if lastRemoval != nil {
+                        Button(action: undoRemoval) {
+                            Label("Undo", systemImage: "arrow.uturn.backward")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                        }
+                        .appProminentButtonStyle(tint: Theme.primaryFill)
+                        .accessibilityHint("Restores the removed card")
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(Spacing.base)
+                .appGlassCard(cornerRadius: AppRadius.lg)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+                .accessibilityElement(children: .contain)
+            }
+
             ForEach($draft.cards) { $card in
                 DraftCardRow(card: $card, accessibilityFocusedCardID: $accessibilityFocusedCardID, onRemove: { removeCard(card.id) })
                     .listRowSeparator(.hidden)
@@ -135,7 +164,7 @@ struct ReviewDraftsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
         .safeAreaInset(edge: .bottom) {
-            if lastRemoval != nil {
+            if lastRemoval != nil && !draft.cards.isEmpty {
                 Button(action: undoRemoval) {
                     Label("Undo", systemImage: "arrow.uturn.backward")
                         .font(.subheadline)
@@ -158,18 +187,28 @@ struct ReviewDraftsView: View {
         }
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button(action: save) {
-                    Text(saveLabel)
-                        .appNumericTransition(value: Double(validCards.count))
+                if draft.cards.isEmpty {
+                    Button("Discard", role: .destructive) { showDiscardAlert = true }
+                } else {
+                    Button(action: save) {
+                        Text(saveLabel)
+                            .appNumericTransition(value: Double(validCards.count))
+                    }
+                    .appAnimation(Motion.snappy, value: validCards.count)
+                    .disabled(!canSave)
                 }
-                .appAnimation(Motion.snappy, value: validCards.count)
-                .disabled(!canSave)
             }
         }
         .sensoryFeedback(.impact(weight: .medium), trigger: draft.cards.count) { old, new in new < old }
-        .sensoryFeedback(.success, trigger: draftStore.pending?.id) { old, new in old != nil && new == nil }
-        .onChange(of: draft.cards) { _, _ in draftStore.set(draft) }
-        .onChange(of: draft.title) { _, _ in draftStore.set(draft) }
+        .sensoryFeedback(.success, trigger: didSave) { _, saved in saved }
+        .alert("Discard draft?", isPresented: $showDiscardAlert) {
+            Button("Discard", role: .destructive, action: discard)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text(draft.discardWarning)
+        }
+        .onChange(of: draft.cards) { _, _ in persistDraft() }
+        .onChange(of: draft.title) { _, _ in persistDraft() }
         .confirmationDialog(
             "Replace \(draft.cards.count) \(draft.cards.count == 1 ? "card" : "cards")?",
             isPresented: $showRegenerateConfirm,
@@ -263,20 +302,40 @@ struct ReviewDraftsView: View {
     /// The title is edited in place at the top of the list; clearing it falls back to the
     /// title generation suggested rather than saving a set with no name.
     private func save() {
-        let trimmed = draft.title.trimmingCharacters(in: .whitespacesAndNewlines)
-        draft.title = trimmed.isEmpty ? suggestedTitle : trimmed
-        draft.cards = validCards
-        studyViewModel.savedSets.insert(draft.committed(), at: 0)
+        var committed = draft
+        let trimmed = committed.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        committed.title = trimmed.isEmpty ? suggestedTitle : trimmed
+        committed.cards = validCards
+        isFinished = true
+        didSave = true
+        studyViewModel.savedSets.insert(committed.committed(), at: 0)
         studyViewModel.saveSavedSets()
         analytics.record(.setCreated)
-        draftStore.set(nil)
+        finish()
+    }
+
+    private func discard() {
+        isFinished = true
+        finish()
+    }
+
+    // Pop before clearing: clearing first empties the pushed destination while it is still on screen.
+    private func finish() {
         dismiss()
+        draftStore.set(nil)
+    }
+
+    // Once saved or discarded, a late edit or regeneration must not write the draft back.
+    private func persistDraft() {
+        guard !isFinished else { return }
+        draftStore.set(draft)
     }
 
     private func regenerate() async {
         isRegenerating = true
         defer { isRegenerating = false }
         let cards = await studyViewModel.generateCards(for: draft.document, countsAgainstAllowance: false)
+        guard !isFinished else { return }
         guard !cards.isEmpty else {
             showRegenerateError = true
             return
@@ -285,6 +344,6 @@ struct ReviewDraftsView: View {
         draft.cards = cards
         draft.provenance = studyViewModel.lastGenerationProvenance
         lastGeneratedCards = cards
-        draftStore.set(draft)
+        persistDraft()
     }
 }

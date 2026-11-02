@@ -33,6 +33,7 @@ struct WhySourceCard: View {
                     Image(systemName: "link")
                         .accessibilityHidden(true)
                     Text(source.longLabel)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .font(.caption)
                 .foregroundStyle(Color.appPrimary)

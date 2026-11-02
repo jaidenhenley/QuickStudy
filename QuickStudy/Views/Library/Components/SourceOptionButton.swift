@@ -30,6 +30,7 @@ struct SourceOptionButton: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity)
             .padding(.vertical, Spacing.base)
             .appGlassCard(cornerRadius: AppRadius.lg)

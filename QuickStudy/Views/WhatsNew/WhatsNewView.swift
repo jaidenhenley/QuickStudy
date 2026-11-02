@@ -32,7 +32,6 @@ struct WhatsNewView: View {
                             .font(.body)
                             .foregroundStyle(.secondary)
                     }
-                    .appStagedReveal(0, shown: appeared)
 
                     VStack(alignment: .leading, spacing: Spacing.base) {
                         ForEach(Array(whatsNew.note.features.enumerated()), id: \.element.id) { index, feature in

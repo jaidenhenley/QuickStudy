@@ -28,6 +28,7 @@ struct DraftCardRow: View {
                     TextField("Question", text: $card.question, axis: .vertical)
                         .font(.subheadline)
                         .fontWeight(.semibold)
+                        .accessibilityLabel("Question")
                         .focused($focusedField, equals: .question)
                         .padding(Spacing.sm)
                         .overlay {
@@ -38,6 +39,7 @@ struct DraftCardRow: View {
                     TextField("Answer", text: $card.answer, axis: .vertical)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .accessibilityLabel("Answer")
                         .focused($focusedField, equals: .answer)
                         .padding(Spacing.sm)
                         .overlay {

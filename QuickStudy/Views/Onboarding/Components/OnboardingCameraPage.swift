@@ -41,7 +41,6 @@ struct OnboardingCameraPage: View {
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
                         }
-                        .appStagedReveal(1, shown: appeared)
 
                         Spacer(minLength: 0)
                     }
@@ -63,7 +62,6 @@ struct OnboardingCameraPage: View {
                     .foregroundStyle(.secondary)
                     .frame(minHeight: 44)
             }
-            .appStagedReveal(2, shown: appeared)
         }
         .padding(.horizontal, Spacing.lg)
         .padding(.top, Spacing.xl)

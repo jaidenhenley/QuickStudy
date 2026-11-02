@@ -29,9 +29,23 @@
 		811E81428772BE32284307FE /* QuickStudyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickStudyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A1C0FFEE5EED0000000000A1 /* Exceptions for "QuickStudy" folder in "QuickStudy" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				QuickStudy.storekit,
+			);
+			target = 630DF3FC2F57BAD200BD7CF2 /* QuickStudy */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		630DF4452F57C68B00BD7CF2 /* QuickStudy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A1C0FFEE5EED0000000000A1 /* Exceptions for "QuickStudy" folder in "QuickStudy" target */,
+			);
 			path = QuickStudy;
 			sourceTree = "<group>";
 		};
@@ -426,7 +440,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "QuickStudy reads text from photos you pick to make flashcards.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_FILE = QuickStudy/Info.plist;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -463,7 +477,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "QuickStudy reads text from photos you pick to make flashcards.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_FILE = QuickStudy/Info.plist;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (

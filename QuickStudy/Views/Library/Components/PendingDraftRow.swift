@@ -21,9 +21,14 @@ struct PendingDraftRow: View {
     }()
 
     var body: some View {
+        let stacksVertically = dynamicTypeSize.isAccessibilitySize
+        let headerLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+
         VStack(alignment: .leading, spacing: Spacing.md) {
-            HStack(spacing: Spacing.md) {
-                Image(systemName: "doc.text.badge.plus")
+            headerLayout {
+                Image(systemName: "doc.badge.plus")
                     .font(.subheadline)
                     .foregroundStyle(Theme.primary)
                     .frame(width: tileSize, height: tileSize)
@@ -34,17 +39,17 @@ struct PendingDraftRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(draft.title)
                         .font(.headline)
-                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+                        .lineLimit(stacksVertically ? nil : 1)
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 .accessibilityElement(children: .combine)
 
-                Spacer(minLength: 0)
+                if !stacksVertically { Spacer(minLength: 0) }
             }
 
-            let actionLayout = dynamicTypeSize.isAccessibilitySize
+            let actionLayout = stacksVertically
                 ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
                 : AnyLayout(HStackLayout(spacing: Spacing.md))
 
@@ -60,7 +65,7 @@ struct PendingDraftRow: View {
                 .accessibilityLabel("Discard draft")
                 .accessibilityInputLabels(["Discard", "Discard draft"])
 
-                if !dynamicTypeSize.isAccessibilitySize {
+                if !stacksVertically {
                     Spacer(minLength: 0)
                 }
 
@@ -82,22 +87,12 @@ struct PendingDraftRow: View {
             Button("Discard", role: .destructive, action: onDiscard)
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text(discardWarning)
+            Text(draft.discardWarning)
         }
     }
 
     private var noun: String {
         draft.cards.count == 1 ? "card" : "cards"
-    }
-
-    private var discardWarning: String {
-        let base = "The \(draft.cards.count) drafted \(noun) will be deleted."
-        switch draft.provenance?.engine {
-        case .onDevice, .privateCloud:
-            return base + " This used one of your free generations."
-        case .cloud, .externalAPI, .none:
-            return base
-        }
     }
 
     private var subtitle: String {

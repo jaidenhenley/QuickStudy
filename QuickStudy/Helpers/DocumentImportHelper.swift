@@ -11,8 +11,15 @@ import PDFKit
 import UIKit
 import Vision
 
+nonisolated enum DocumentImportError: Error {
+    case unreadablePDF
+}
+
 // MARK: - Document import helper
 
+/// Progress callbacks run on the main actor between pages, so a page count can never
+/// land after the caller has moved on to drafting. Vision, PDFKit and page rendering
+/// run off the main actor.
 struct DocumentImportHelper {
     let isHandwritingMode: Bool
     let isUltraHandwritingMode: Bool
@@ -21,10 +28,11 @@ struct DocumentImportHelper {
 
     func extractText(
         from images: [UIImage],
-        onPageComplete: @Sendable (Int, Int) -> Void = { _, _ in }
+        onPageComplete: (Int, Int) -> Void = { _, _ in }
     ) async throws -> ExtractedDocument {
         var pages: [ExtractedDocument.Page] = []
         for index in images.indices {
+            try Task.checkCancellation()
             let candidates = await ocrLines(for: images[index])
             let lines = candidates.map { $0.first ?? "" }
             pages.append(
@@ -40,131 +48,122 @@ struct DocumentImportHelper {
 
     func extractText(
         from pdfURL: URL,
-        onPageComplete: @Sendable (Int, Int) -> Void = { _, _ in }
+        onPageComplete: (Int, Int) -> Void = { _, _ in }
     ) async throws -> ExtractedDocument {
-        let accessGranted = pdfURL.startAccessingSecurityScopedResource()
-        defer {
-            if accessGranted {
-                pdfURL.stopAccessingSecurityScopedResource()
-            }
+        let content = try await Self.readPDF(
+            at: pdfURL,
+            prefersEmbeddedText: !isHandwritingMode,
+            renderScale: isUltraHandwritingMode ? 3.0 : 2.5,
+            maxDimension: isUltraHandwritingMode ? 2200 : nil
+        )
+        switch content {
+        case let .embeddedText(pageTexts):
+            onPageComplete(pageTexts.count, pageTexts.count)
+            return ExtractedDocument(pages: pageTexts.map { ExtractedDocument.Page(text: $0, candidates: []) })
+        case let .renderedPages(images):
+            return try await extractText(from: images, onPageComplete: onPageComplete)
         }
-
-        guard let document = PDFDocument(url: pdfURL) else { return ExtractedDocument(pages: []) }
-
-        if !isHandwritingMode {
-            let embedded = ExtractedDocument(
-                pages: (0..<document.pageCount).map { index in
-                    ExtractedDocument.Page(
-                        text: document.page(at: index)?.string?
-                            .trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
-                        candidates: []
-                    )
-                }
-            )
-            if embedded.joinedText.count >= 40 {
-                onPageComplete(document.pageCount, document.pageCount)
-                return embedded
-            }
-        }
-
-        let images = renderPDFPages(document, scale: isUltraHandwritingMode ? 3.0 : 2.5)
-        let scaled = isUltraHandwritingMode ? scaleImages(images, maxDimension: 2200) : images
-        return try await extractText(from: scaled, onPageComplete: onPageComplete)
     }
 
     // MARK: OCR
 
-    func ocrLines(for image: UIImage) async -> [[String]] {
-        // Simplified OCR: one normal pass, or a single handwriting-boosted pass.
-        if isHandwritingMode {
-            if let lines = try? await performVisionOCRCandidates(
-                on: image,
-                mode: .handwritingBoost,
-                handwritingMode: true,
+    private func ocrLines(for image: UIImage) async -> [[String]] {
+        do {
+            return try await Self.recognizeLines(
+                in: image,
+                mode: isHandwritingMode ? .handwritingBoost : .none,
+                handwritingMode: isHandwritingMode,
                 candidateCount: 5,
-                ultraMode: isUltraHandwritingMode
-            ) {
-                return lines
-            }
-        } else {
-            if let lines = try? await performVisionOCRCandidates(
-                on: image,
-                mode: .none,
-                handwritingMode: false,
-                candidateCount: 5,
-                ultraMode: false
-            ) {
-                return lines
-            }
+                ultraMode: isHandwritingMode && isUltraHandwritingMode
+            )
+        } catch {
+            // A page Vision can't read counts as blank so the rest of the document still
+            // imports. A document with no readable page surfaces as "No text was detected".
+            return []
         }
-
-        return []
     }
 
-    private func performVisionOCRCandidates(
-        on image: UIImage,
+    @concurrent
+    nonisolated private static func recognizeLines(
+        in image: UIImage,
         mode: PreprocessMode,
         handwritingMode: Bool,
         candidateCount: Int,
         ultraMode: Bool
     ) async throws -> [[String]] {
-        try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                let sourceImage = Self.preprocessImage(image, mode: mode)
-                guard let cgImage = sourceImage ?? image.cgImage else {
-                    continuation.resume(returning: [])
-                    return
-                }
-                let orientation = CGImagePropertyOrientation(image.imageOrientation)
-                let request = VNRecognizeTextRequest { request, _ in
-                    let observations = request.results as? [VNRecognizedTextObservation] ?? []
-                    let sorted = observations.sorted { lhs, rhs in
-                        let lhsY = lhs.boundingBox.midY
-                        let rhsY = rhs.boundingBox.midY
-                        if abs(lhsY - rhsY) > 0.01 {
-                            return lhsY > rhsY
-                        }
-                        return lhs.boundingBox.minX < rhs.boundingBox.minX
-                    }
-                    let candidates = sorted.map { observation in
-                        observation.topCandidates(candidateCount).map { $0.string }
-                    }
-                    continuation.resume(returning: candidates)
-                }
-                request.revision = VNRecognizeTextRequestRevision3
-                request.recognitionLevel = .accurate
-                request.usesLanguageCorrection = true
-                request.recognitionLanguages = ["en_US"]
-                request.automaticallyDetectsLanguage = false
-                request.minimumTextHeight = handwritingMode
-                    ? (ultraMode ? 0.015 : 0.02)
-                    : 0.012
+        guard let cgImage = preprocessImage(image, mode: mode) ?? image.cgImage else { return [] }
 
-                let handler = VNImageRequestHandler(cgImage: cgImage, orientation: orientation, options: [:])
-                do {
-                    try handler.perform([request])
-                } catch {
-                    continuation.resume(throwing: error)
-                }
+        let request = VNRecognizeTextRequest()
+        request.revision = VNRecognizeTextRequestRevision3
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = true
+        request.recognitionLanguages = ["en_US"]
+        request.automaticallyDetectsLanguage = false
+        request.minimumTextHeight = handwritingMode
+            ? (ultraMode ? 0.015 : 0.02)
+            : 0.012
+
+        let handler = VNImageRequestHandler(
+            cgImage: cgImage,
+            orientation: CGImagePropertyOrientation(image.imageOrientation),
+            options: [:]
+        )
+        try handler.perform([request])
+
+        let sorted = (request.results ?? []).sorted { lhs, rhs in
+            let lhsY = lhs.boundingBox.midY
+            let rhsY = rhs.boundingBox.midY
+            if abs(lhsY - rhsY) > 0.01 {
+                return lhsY > rhsY
             }
+            return lhs.boundingBox.minX < rhs.boundingBox.minX
+        }
+        return sorted.map { observation in
+            observation.topCandidates(candidateCount).map { $0.string }
         }
     }
 
     // MARK: PDF helpers
 
-    func extractText(from document: PDFDocument) -> String {
-        var parts: [String] = []
-        for pageIndex in 0..<document.pageCount {
-            if let page = document.page(at: pageIndex),
-               let pageText = page.string?.trimmingCharacters(in: .whitespacesAndNewlines),
-               !pageText.isEmpty {
-                parts.append(pageText)
-            }
-        }
-        return parts.joined(separator: "\n")
+    private nonisolated enum PDFContent {
+        case embeddedText([String])
+        case renderedPages([UIImage])
     }
 
-    func renderPDFPages(_ document: PDFDocument, scale: CGFloat) -> [UIImage] {
+    @concurrent
+    nonisolated private static func readPDF(
+        at url: URL,
+        prefersEmbeddedText: Bool,
+        renderScale: CGFloat,
+        maxDimension: CGFloat?
+    ) async throws -> PDFContent {
+        let accessGranted = url.startAccessingSecurityScopedResource()
+        defer {
+            if accessGranted {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        guard let document = PDFDocument(url: url), !document.isLocked else {
+            throw DocumentImportError.unreadablePDF
+        }
+
+        if prefersEmbeddedText {
+            let pageTexts = (0..<document.pageCount).map { index in
+                document.page(at: index)?.string?
+                    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            }
+            if pageTexts.joined(separator: "\n").count >= 40 {
+                return .embeddedText(pageTexts)
+            }
+        }
+
+        let images = renderPages(of: document, scale: renderScale)
+        guard let maxDimension else { return .renderedPages(images) }
+        return .renderedPages(scaleImages(images, maxDimension: maxDimension))
+    }
+
+    nonisolated private static func renderPages(of document: PDFDocument, scale: CGFloat) -> [UIImage] {
         var images: [UIImage] = []
         for pageIndex in 0..<document.pageCount {
             guard let page = document.page(at: pageIndex) else { continue }
@@ -188,7 +187,7 @@ struct DocumentImportHelper {
         return images
     }
 
-    func scaleImages(_ images: [UIImage], maxDimension: CGFloat) -> [UIImage] {
+    nonisolated private static func scaleImages(_ images: [UIImage], maxDimension: CGFloat) -> [UIImage] {
         images.map { image in
             let size = image.size
             let maxSide = max(size.width, size.height)
@@ -205,12 +204,12 @@ struct DocumentImportHelper {
 
     // MARK: Image preprocessing
 
-    enum PreprocessMode {
+    nonisolated enum PreprocessMode {
         case none
         case handwritingBoost
     }
 
-    static func preprocessImage(_ image: UIImage, mode: PreprocessMode) -> CGImage? {
+    nonisolated static func preprocessImage(_ image: UIImage, mode: PreprocessMode) -> CGImage? {
         switch mode {
         case .none:
             return image.cgImage
@@ -219,7 +218,7 @@ struct DocumentImportHelper {
         }
     }
 
-    static func preprocessForHandwritingBoost(_ image: UIImage) -> CGImage? {
+    nonisolated static func preprocessForHandwritingBoost(_ image: UIImage) -> CGImage? {
         guard let cgImage = image.cgImage else { return nil }
         let ciImage = CIImage(cgImage: cgImage)
 
@@ -253,7 +252,7 @@ struct DocumentImportHelper {
 
 }
 private extension CGImagePropertyOrientation {
-    init(_ orientation: UIImage.Orientation) {
+    nonisolated init(_ orientation: UIImage.Orientation) {
         switch orientation {
         case .up: self = .up
         case .down: self = .down
@@ -267,4 +266,3 @@ private extension CGImagePropertyOrientation {
         }
     }
 }
-

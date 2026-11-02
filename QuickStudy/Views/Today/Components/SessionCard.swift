@@ -9,11 +9,10 @@ import SwiftUI
 
 struct SessionCard: View {
     @Environment(TodayViewModel.self) var todayViewModel
-    @Environment(StudyViewModel.self) var studyViewModel
-    @Environment(AppState.self) var appState
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    @State private var navigateToSession = false
+    let onStart: () -> Void
+
     @State private var showBreakdown = false
 
     var body: some View {
@@ -40,10 +39,7 @@ struct SessionCard: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(todayViewModel.todayCardCount) cards, \(todayViewModel.estimatedMin) minutes")
 
-            Button {
-                studyViewModel.loadTodaySession()
-                navigateToSession = true
-            } label: {
+            Button(action: onStart) {
                 Text("Start Session")
                     .font(.headline)
                     .foregroundStyle(Theme.onLightAction)
@@ -99,9 +95,5 @@ struct SessionCard: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl))
         .appAnimation(Motion.snappy, value: showBreakdown)
-        .navigationDestination(isPresented: $navigateToSession) {
-            QuizSessionView(cards: studyViewModel.flashcards)
-                .environment(studyViewModel)
-        }
     }
 }

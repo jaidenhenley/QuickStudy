@@ -14,6 +14,9 @@ struct SettingsView: View {
     @Environment(AppState.self) var appState
     @Environment(StoreController.self) var store
     @Environment(AnalyticsRecorder.self) var analytics
+    @Environment(DraftStore.self) var draftStore
+    @Environment(SessionStore.self) var sessionStore
+    @State private var viewModel = SettingsViewModel()
     @State private var showClearDataAlert = false
     @State private var showPaywall = false
     @State private var showManageSubscription = false
@@ -57,6 +60,13 @@ struct SettingsView: View {
         Binding(
             get: { analytics.isEnabled },
             set: { analytics.setEnabled($0) }
+        )
+    }
+
+    private var cloudDraftingBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.isCloudDraftingOn },
+            set: { viewModel.setCloudDrafting($0) }
         )
     }
 
@@ -122,6 +132,15 @@ struct SettingsView: View {
                         Text("Your notes will be sent to your chosen provider using your key, under that provider's privacy policy.")
                     }
                 }
+                .listRowBackground(Theme.chipFill)
+
+                Section {
+                    Toggle("Draft in the cloud", isOn: cloudDraftingBinding)
+                    Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
+                } footer: {
+                    Text("Drafts may run on Apple's Private Cloud Compute or on QuickStudy's server. The server sends your text to Anthropic's Claude, which deletes it within 30 days. Turn this off to keep every draft on this iPhone.")
+                }
+                .listRowBackground(Theme.chipFill)
 
                 Section {
                     if store.isPro {
@@ -137,6 +156,7 @@ struct SettingsView: View {
                          ? "Cards are generated on QuickStudy's server with Anthropic's Claude, which deletes your text within 30 days."
                          : "Better cards on any iPhone, generated in the cloud.")
                 }
+                .listRowBackground(Theme.chipFill)
 
                 Section {
                     Toggle("Show Sample Set", isOn: $studyViewModel.demoModeEnabled)
@@ -145,6 +165,7 @@ struct SettingsView: View {
                 } footer: {
                     Text("Adds a sample biology set you can study right away. Turning this off removes it; turning it back on starts it fresh.")
                 }
+                .listRowBackground(Theme.chipFill)
 
                 Section {
                     Toggle("Share anonymous usage", isOn: analyticsBinding)
@@ -153,6 +174,7 @@ struct SettingsView: View {
                 } footer: {
                     Text("Sends anonymous counts, like whether onboarding finished or a paywall was shown, to help improve QuickStudy. It never sends card text or document text.")
                 }
+                .listRowBackground(Theme.chipFill)
 
                 Section {
                     Button("Delete All Study Sets", role: .destructive) {
@@ -161,8 +183,9 @@ struct SettingsView: View {
                 } header: {
                     Text("Data")
                 } footer: {
-                    Text("This will permanently delete all saved study sets and cards.")
+                    Text("This will permanently delete all study sets, cards, drafts and study history.")
                 }
+                .listRowBackground(Theme.chipFill)
 
                 Section("About") {
                     LabeledContent("Version", value: appVersion)
@@ -171,8 +194,12 @@ struct SettingsView: View {
                     }
                     Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
                 }
+                .listRowBackground(Theme.chipFill)
             }
+            .scrollContentBackground(.hidden)
+            .background(BackgroundView())
             .navigationTitle("Settings")
+            .onAppear { viewModel.refreshCloudDrafting() }
             .sheet(isPresented: $showPaywall) { PaywallView(surface: .settings) }
             .sheet(item: $whatsNew) { presented in
                 WhatsNewView()
@@ -219,15 +246,11 @@ struct SettingsView: View {
         }
         .alert("Delete All Data", isPresented: $showClearDataAlert) {
             Button("Delete Everything", role: .destructive) {
-                studyViewModel.savedSets.removeAll()
-                studyViewModel.document = nil
-                studyViewModel.flashcards = []
-                studyViewModel.activeSetID = nil
-                studyViewModel.saveSavedSets()
+                studyViewModel.deleteAllStudyData(drafts: draftStore, sessions: sessionStore)
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("This will permanently delete all of your study sets and cards. This action cannot be undone.")
+            Text("This will permanently delete all of your study sets, cards, drafts and study history. This action cannot be undone.")
         }
     }
 }

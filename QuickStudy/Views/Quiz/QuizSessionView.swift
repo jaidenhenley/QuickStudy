@@ -19,59 +19,79 @@ struct QuizSessionView: View {
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(SessionStore.self) private var sessionStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     @State private var quizSessionViewModel = QuizSessionViewModel()
     @AccessibilityFocusState private var focusTarget: AccessibilityFocusTarget?
 
     private let letters = ["A", "B", "C", "D", "E"]
 
+    private var headerScrolls: Bool {
+        verticalSizeClass == .compact || dynamicTypeSize.isAccessibilitySize
+    }
+
+    // Pinned above the CTA it stays visible at rest; where space is tight it scrolls with the answer instead.
+    private var pinsUndoRow: Bool { !headerScrolls }
+
     var body: some View {
         Group {
             if let summary = quizSessionViewModel.summary {
                 SessionCompleteView(
                     summary: summary,
-                    onAgain: start,
+                    onAgain: {
+                        quizSessionViewModel.startNextSession(study: studyViewModel)
+                        focusTarget = .question
+                    },
                     onDone: { dismiss() }
                 )
             } else if let question = quizSessionViewModel.current {
                 VStack(alignment: .leading, spacing: Spacing.base) {
-                    ViewThatFits(in: .horizontal) {
-                        HStack {
-                            Text(quizSessionViewModel.positionLabel)
-                                .font(.headline)
-                                .accessibilityLabel(quizSessionViewModel.positionAccessibilityLabel)
-                                .accessibilityAddTraits(.isHeader)
-                            Spacer()
-                            ElapsedTimerText(label: quizSessionViewModel.elapsedLabel(now:))
-                        }
-                        VStack(alignment: .leading, spacing: Spacing.xs) {
-                            Text(quizSessionViewModel.positionLabel)
-                                .font(.headline)
-                                .accessibilityLabel(quizSessionViewModel.positionAccessibilityLabel)
-                                .accessibilityAddTraits(.isHeader)
-                            ElapsedTimerText(label: quizSessionViewModel.elapsedLabel(now:))
-                        }
+                    if !headerScrolls {
+                        QuizSessionHeader(
+                            positionLabel: quizSessionViewModel.positionLabel,
+                            positionAccessibilityLabel: quizSessionViewModel.positionAccessibilityLabel,
+                            elapsedLabel: quizSessionViewModel.elapsedLabel(now:),
+                            states: quizSessionViewModel.states,
+                            currentIndex: quizSessionViewModel.index
+                        )
                     }
 
-                    SessionProgressBar(states: quizSessionViewModel.states)
-
-                    // The counter, timer, progress bar and CTA stay pinned; only the
-                    // question body scrolls, so a long prompt or four long choices no
-                    // longer clip and Submit is always reachable.
+                    // The header and CTA stay pinned; only the question body scrolls, so a long
+                    // prompt or four long choices no longer clip and Submit is always reachable.
+                    // In landscape and at accessibility sizes the header scrolls too, since pinned
+                    // it would leave almost no room for the question.
                     ScrollView {
+                        if headerScrolls {
+                            QuizSessionHeader(
+                                positionLabel: quizSessionViewModel.positionLabel,
+                                positionAccessibilityLabel: quizSessionViewModel.positionAccessibilityLabel,
+                                elapsedLabel: quizSessionViewModel.elapsedLabel(now:),
+                                states: quizSessionViewModel.states,
+                                currentIndex: quizSessionViewModel.index
+                            )
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
                         // A ZStack overlaps the outgoing and incoming questions during the slide;
                         // the scroll view's implicit vertical stack would stack them instead.
                         ZStack(alignment: .topLeading) {
                             VStack(alignment: .leading, spacing: Spacing.base) {
                                 VStack(alignment: .leading, spacing: Spacing.base) {
-                                    HStack {
+                                    let categoryLayout = dynamicTypeSize.isAccessibilitySize
+                                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+                                        : AnyLayout(HStackLayout())
+
+                                    categoryLayout {
                                         Text(question.setTitle)
                                             .textCase(.uppercase)
                                             .font(.caption)
                                             .fontWeight(.semibold)
                                             .tracking(1)
                                             .foregroundStyle(.secondary)
-                                        Spacer()
+                                        if !dynamicTypeSize.isAccessibilitySize {
+                                            Spacer()
+                                        }
                                         if let source = question.source {
                                             Button {
                                                 quizSessionViewModel.showsHint.toggle()
@@ -89,10 +109,15 @@ struct QuizSessionView: View {
                                             .accessibilityLabel("Why this answer, source \(source.longLabel)")
                                             .accessibilityValue(quizSessionViewModel.showsHint ? "Shown" : "Hidden")
                                             .accessibilityHint("Shows the source excerpt")
+                                            // Hidden rather than removed until the answer is submitted, so revealing
+                                            // it never moves the question or the options.
+                                            .opacity(quizSessionViewModel.isWhyAvailable ? 1 : 0)
+                                            .allowsHitTesting(quizSessionViewModel.isWhyAvailable)
+                                            .accessibilityHidden(!quizSessionViewModel.isWhyAvailable)
                                         }
                                     }
 
-                                    if quizSessionViewModel.showsHint, let excerpt = question.source?.excerpt {
+                                    if quizSessionViewModel.isWhyAvailable, quizSessionViewModel.showsHint, let excerpt = question.source?.excerpt {
                                         Text(excerpt)
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
@@ -144,22 +169,9 @@ struct QuizSessionView: View {
 
                                         WhySourceCard(explanation: question.explanation, source: question.source)
 
-                                        if !correct {
-                                            HStack {
-                                                Text("We'll surface this one again tomorrow.")
-                                                    .font(.caption)
-                                                    .foregroundStyle(.secondary)
-                                                Spacer()
-                                                Button {
-                                                    quizSessionViewModel.undo(study: studyViewModel)
-                                                } label: {
-                                                    Text("Undo")
-                                                        .frame(minWidth: 44, minHeight: 44)
-                                                        .contentShape(Rectangle())
-                                                }
-                                                .font(.caption)
-                                                .fontWeight(.semibold)
-                                                    .accessibilityHint("Returns to the question so you can answer again")
+                                        if !correct && !pinsUndoRow {
+                                            QuizUndoRow {
+                                                quizSessionViewModel.undo(study: studyViewModel)
                                             }
                                         }
                                     }
@@ -191,33 +203,43 @@ struct QuizSessionView: View {
                     }
                     .scrollBounceBehavior(.basedOnSize)
 
-                    if case .revealed = quizSessionViewModel.phase {
-                        Button {
-                            quizSessionViewModel.advance(study: studyViewModel, sessions: sessionStore)
-                            focusTarget = .question
-                        } label: {
-                            HStack(spacing: Spacing.sm) {
-                                Text("Next question")
-                                Image(systemName: "chevron.right")
-                                    .accessibilityHidden(true)
+                    VStack(spacing: Spacing.sm) {
+                        if case .revealed(let correct) = quizSessionViewModel.phase, !correct, pinsUndoRow {
+                            QuizUndoRow {
+                                quizSessionViewModel.undo(study: studyViewModel)
                             }
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
                         }
-                        .appProminentButtonStyle(tint: Theme.primaryFill)
-                    } else {
-                        Button {
-                            quizSessionViewModel.submit(study: studyViewModel)
-                        } label: {
-                            Text("Submit")
+
+                        if case .revealed = quizSessionViewModel.phase {
+                            Button {
+                                quizSessionViewModel.advance(study: studyViewModel, sessions: sessionStore)
+                                focusTarget = .question
+                            } label: {
+                                HStack(spacing: Spacing.sm) {
+                                    Text("Next question")
+                                    Image(systemName: "chevron.right")
+                                        .accessibilityHidden(true)
+                                }
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
+                            }
+                            .appProminentButtonStyle(tint: Theme.primaryFill)
+                        } else {
+                            Button {
+                                quizSessionViewModel.submit(study: studyViewModel)
+                            } label: {
+                                Text("Submit")
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .appProminentButtonStyle(tint: Theme.primaryFill)
+                            .disabled(quizSessionViewModel.selectedChoice == nil)
                         }
-                        .appProminentButtonStyle(tint: Theme.primaryFill)
-                        .disabled(quizSessionViewModel.selectedChoice == nil)
                     }
                 }
-                .padding(Spacing.lg)
+                .padding(.horizontal, Spacing.lg)
+                .padding(.top, Spacing.sm)
+                .padding(.bottom, Spacing.base)
                 .sensoryFeedback(.selection, trigger: quizSessionViewModel.selectedChoice)
                 .sensoryFeedback(trigger: quizSessionViewModel.phase) { _, newPhase in
                     switch newPhase {
@@ -232,6 +254,7 @@ struct QuizSessionView: View {
             }
         }
         .background(BackgroundView())
+        .toolbar(.hidden, for: .tabBar)
         .navigationBarTitleDisplayMode(.inline)
         .appAnimation(Motion.emphasized, value: quizSessionViewModel.phase)
         .onChange(of: quizSessionViewModel.phase) { _, newPhase in

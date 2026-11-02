@@ -63,9 +63,10 @@ struct LibraryView: View {
                             LibraryFilterChips(selection: $libraryViewModel.filter)
 
                             let visible = libraryViewModel.sets(from: studyViewModel.savedSets)
+                            let query = libraryViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
                             Group {
                                 if visible.isEmpty {
-                                    Text("No sets match this filter.")
+                                    Text(query.isEmpty ? "No sets match this filter." : "No sets match \u{201C}\(query)\u{201D}.")
                                         .multilineTextAlignment(.center)
                                         .font(.subheadline)
                                         .foregroundStyle(.secondary)
@@ -153,6 +154,10 @@ struct LibraryView: View {
         .onChange(of: aiSettings.mode) { _, _ in refreshEntitlement() }
         .onChange(of: store.isPro) { _, _ in refreshEntitlement() }
         .onChange(of: store.freeHostedGenerationUsed) { _, _ in refreshEntitlement() }
+        .onChange(of: coordinator.showHostedConsent) { _, isShowing in
+            guard !isShowing else { return }
+            refreshEntitlement()
+        }
         .sheet(isPresented: $showTypeCards) {
             TypeCardsView()
                 .environment(studyViewModel)

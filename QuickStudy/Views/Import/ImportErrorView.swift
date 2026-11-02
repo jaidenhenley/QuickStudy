@@ -126,7 +126,6 @@ struct ImportErrorView: View {
                                     .appProminentButtonStyle(tint: Theme.primaryFill)
                                 }
                             }
-                            .appStagedReveal(2, shown: appeared)
                         }
                     }
                     .padding(Spacing.lg)

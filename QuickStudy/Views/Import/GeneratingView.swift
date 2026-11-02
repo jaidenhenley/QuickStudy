@@ -110,11 +110,8 @@ struct GeneratingView: View {
     }
 
     private var headerTitle: String {
-        switch source {
-        case .scan: return "Scanning…"
-        case .photo, .pdf: return "Importing…"
-        case .paste, .none: return "Drafting…"
-        }
+        if case .reading = stage { return "Reading" }
+        return "Drafting"
     }
 
     /// Reading pages is fast next to drafting, so it gets a small slice of the bar and
@@ -146,14 +143,29 @@ struct GeneratingView: View {
         guard case .reading = stage else {
             if progress.isOverrunning(now: now) { return "Still working…" }
             // Names where the text is right now; the title already counts sections.
-            switch progress.engine {
-            case .onDevice: return "Drafting on this iPhone."
-            case .privateCloud: return "Drafting with Private Cloud Compute."
-            case .cloud: return "Drafting in the cloud."
-            case .externalAPI: return "Drafting with your API key."
+            let location = switch progress.engine {
+            case .onDevice: "Drafting on this iPhone"
+            case .privateCloud: "Drafting with Private Cloud Compute"
+            case .cloud: "Drafting in the cloud"
+            case .externalAPI: "Drafting with your API key"
             }
+            return "\(location) · \(durationEstimate(for: progress))"
         }
         return "Reading your pages before drafting."
+    }
+
+    /// The engine's expected time is per section, so a chunked draft scales it by the
+    /// section count. The lower bound mirrors the design's "4–6 seconds" for one section.
+    private func durationEstimate(for progress: GenerationProgress) -> String {
+        let expected = progress.expectedSeconds * Double(max(progress.totalUnits, 1))
+        guard expected < 60 else {
+            let minutes = Int((expected / 60).rounded(.up))
+            return "usually takes about \(minutes) \(minutes == 1 ? "minute" : "minutes")"
+        }
+        let upper = max(1, Int(expected.rounded()))
+        let lower = max(1, Int((expected * 0.7).rounded()))
+        guard lower < upper else { return "usually takes about \(upper) \(upper == 1 ? "second" : "seconds")" }
+        return "usually takes \(lower)–\(upper) seconds"
     }
 
     private func elapsedLabel(at now: Date) -> String {

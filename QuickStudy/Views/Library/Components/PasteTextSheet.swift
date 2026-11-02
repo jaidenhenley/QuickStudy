@@ -18,6 +18,7 @@ struct PasteTextSheet: View {
 
     @State private var text: String
     @State private var appeared = false
+    @ScaledMetric(relativeTo: .body) private var editorMaxHeight: CGFloat = 240
     @AccessibilityFocusState private var editorFocused: Bool
 
     init(initialText: String = "", onSubmit: @escaping (String) -> Void) {
@@ -68,7 +69,7 @@ struct PasteTextSheet: View {
                                 .padding(Spacing.sm)
                                 .background(Theme.surface)
                                 .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
-                                .frame(minHeight: 160)
+                                .frame(minHeight: 120, maxHeight: editorMaxHeight)
                                 .accessibilityLabel("Paste your notes here")
                                 .accessibilityFocused($editorFocused)
 
@@ -104,43 +105,50 @@ struct PasteTextSheet: View {
                             .accessibilityLabel(analysisSummary(analysis))
                             .accessibilityAddTraits(.updatesFrequently)
                         }
-
-                        Button {
-                            let pasted = text
-                            dismiss()
-                            onSubmit(pasted)
-                        } label: {
-                            HStack(spacing: Spacing.sm) {
-                                Image(systemName: "sparkles")
-                                    .accessibilityHidden(true)
-                                Text("Generate cards")
-                            }
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                        }
-                        .appProminentButtonStyle(tint: Theme.primaryFill)
-                        .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-
-                        // The promise has to match the engine that will actually run first: Private
-                        // Cloud Compute or a hosted generation both mean the notes leave the phone.
-                        if aiSettings.mode == .onDevice {
-                            HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
-                                Image(systemName: footerSymbol)
-                                    .accessibilityHidden(true)
-                                Text(footerText)
-                                    .multilineTextAlignment(.center)
-                            }
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity)
-                            .accessibilityElement(children: .combine)
-                        }
                     }
                     .padding(Spacing.lg)
                     .frame(minHeight: proxy.size.height)
                 }
                 .scrollBounceBehavior(.basedOnSize)
                 .scrollDismissesKeyboard(.interactively)
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                VStack(spacing: Spacing.sm) {
+                    Button {
+                        let pasted = text
+                        dismiss()
+                        onSubmit(pasted)
+                    } label: {
+                        HStack(spacing: Spacing.sm) {
+                            Image(systemName: "sparkles")
+                                .accessibilityHidden(true)
+                            Text("Generate cards")
+                        }
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .appProminentButtonStyle(tint: Theme.primaryFill)
+                    .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+
+                    // The promise has to match the engine that will actually run first: Private
+                    // Cloud Compute or a hosted generation both mean the notes leave the phone.
+                    if aiSettings.mode == .onDevice {
+                        HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
+                            Image(systemName: footerSymbol)
+                                .accessibilityHidden(true)
+                            Text(footerText)
+                                .multilineTextAlignment(.center)
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+                .padding(.horizontal, Spacing.lg)
+                .padding(.vertical, Spacing.md)
+                .frame(maxWidth: .infinity)
+                .background(.bar)
             }
             .background(BackgroundView())
             .navigationBarTitleDisplayMode(.inline)

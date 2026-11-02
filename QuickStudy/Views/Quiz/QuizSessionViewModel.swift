@@ -40,6 +40,9 @@ final class QuizSessionViewModel {
         let cardsVsYesterday: Int?
         let reinforcement: [Reinforcement]
         let headline: String
+        let subtitle: String
+        let subtitleSpoken: String
+        let hasMoreDue: Bool
     }
 
     private(set) var questions: [QuizQuestion] = []
@@ -47,12 +50,19 @@ final class QuizSessionViewModel {
     private(set) var session = StudySession()
     private(set) var phase: Phase = .answering
     private(set) var summary: Summary?
+    @ObservationIgnored private var answeredCardSnapshot: StudyCard?
 
     var selectedChoice: Int?
     var showsHint = false
 
     var current: QuizQuestion? {
         questions.indices.contains(index) ? questions[index] : nil
+    }
+
+    /// The source quotes the answer, so it stays hidden until the question is submitted.
+    var isWhyAvailable: Bool {
+        if case .revealed = phase { return true }
+        return false
     }
 
     var positionLabel: String { "Session · \(index + 1) of \(questions.count)" }
@@ -79,13 +89,19 @@ final class QuizSessionViewModel {
         session = StudySession()
         summary = nil
         phase = questions.isEmpty ? .finished : .answering
+        answeredCardSnapshot = nil
         reset()
+    }
+
+    func startNextSession(study: StudyViewModel) {
+        start(with: study.sessionQuestions(for: study.dueCards()))
     }
 
     func submit(study: StudyViewModel) {
         guard let question = current, let selected = selectedChoice else { return }
         let correct = selected == question.correctIndex
 
+        answeredCardSnapshot = study.card(for: question.cardID)
         study.recordAnswer(for: question.cardID, correct: correct)
         session.results.append(
             StudySession.Result(
@@ -102,6 +118,7 @@ final class QuizSessionViewModel {
     }
 
     func advance(study: StudyViewModel, sessions: SessionStore) {
+        answeredCardSnapshot = nil
         if index + 1 < questions.count {
             index += 1
             reset()
@@ -110,7 +127,7 @@ final class QuizSessionViewModel {
             session.endedAt = Date()
             sessions.record(session)
             study.flushPendingChanges()
-            summary = makeSummary(sessions: sessions)
+            summary = makeSummary(study: study, sessions: sessions)
             phase = .finished
         }
     }
@@ -126,14 +143,16 @@ final class QuizSessionViewModel {
     /// A misread question shouldn't cost the user their scheduling progress.
     func undo(study: StudyViewModel) {
         guard let question = current,
+              let snapshot = answeredCardSnapshot, snapshot.id == question.cardID,
               let position = session.results.lastIndex(where: { $0.cardID == question.cardID }) else { return }
-        let result = session.results.remove(at: position)
-        study.restoreBox(result.boxBefore, missCountDelta: result.correct ? 0 : -1, for: result.cardID)
+        session.results.remove(at: position)
+        study.restoreScheduling(from: snapshot)
+        answeredCardSnapshot = nil
         reset()
         phase = .answering
     }
 
-    private func makeSummary(sessions: SessionStore, calendar: Calendar = .current) -> Summary {
+    private func makeSummary(study: StudyViewModel, sessions: SessionStore, calendar: Calendar = .current) -> Summary {
         let streak = StreakCalculator.summary(
             studiedDays: sessions.studiedDays(calendar: calendar),
             frozenDays: StreakStore.frozenDays
@@ -158,17 +177,24 @@ final class QuizSessionViewModel {
             }
             .sorted { $0.missed > $1.missed }
 
+        let elapsedSpoken = Duration.seconds(Int(session.elapsed))
+            .formatted(.units(allowed: [.minutes, .seconds], width: .wide))
+        let isStrong = session.accuracy >= 0.5
+
+        // Below 50% the headline already says "Session complete", so the subtitle drops it.
         return Summary(
             cardCount: session.cardCount,
             correctCount: session.correctCount,
             accuracy: session.accuracy,
             elapsedLabel: session.elapsedLabel,
-            elapsedSpoken: Duration.seconds(Int(session.elapsed))
-                .formatted(.units(allowed: [.minutes, .seconds], width: .wide)),
+            elapsedSpoken: elapsedSpoken,
             streak: streak,
             cardsVsYesterday: yesterdayCards > 0 ? session.cardCount - yesterdayCards : nil,
             reinforcement: reinforcement,
-            headline: session.accuracy >= 0.5 ? "Nicely done" : "Session complete"
+            headline: isStrong ? "Nicely done" : "Session complete",
+            subtitle: isStrong ? "Session complete · \(session.elapsedLabel)" : session.elapsedLabel,
+            subtitleSpoken: isStrong ? "Session complete, \(elapsedSpoken)" : elapsedSpoken,
+            hasMoreDue: !study.dueCards(calendar: calendar).isEmpty
         )
     }
 

@@ -25,15 +25,15 @@ struct HostedConsentSheet: View {
                     Text(message)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-
-                    Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
-                        .font(.subheadline)
-                        .foregroundStyle(Theme.primary)
-                        .frame(minHeight: 44)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .scrollBounceBehavior(.basedOnSize)
+
+            Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
+                .font(.subheadline)
+                .foregroundStyle(Theme.primary)
+                .frame(minHeight: 44)
 
             Button {
                 onAllow()
@@ -59,7 +59,7 @@ struct HostedConsentSheet: View {
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
-        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.height(360)])
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.height(500), .large])
         .presentationDragIndicator(.visible)
     }
 

@@ -77,6 +77,7 @@ private struct GlassCardModifier: ViewModifier {
 }
 
 private struct ProminentButtonModifier: ViewModifier {
+    @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.colorSchemeContrast) private var contrast
     let tint: Color
@@ -85,16 +86,18 @@ private struct ProminentButtonModifier: ViewModifier {
         if reduceTransparency || contrast == .increased {
             content
                 .buttonStyle(.plain)
-                .foregroundStyle(Theme.onPrimary)
+                // The system dims a disabled plain button's label, so a neutral fill with full-strength
+                // text stays legible and cannot be mistaken for the enabled indigo.
+                .foregroundStyle(isEnabled ? Theme.onPrimary : Theme.textPrimary)
                 .padding(.horizontal, Spacing.base)
                 .padding(.vertical, Spacing.sm)
                 .background {
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .fill(tint)
+                        .fill(isEnabled ? tint : Theme.chipFill)
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .strokeBorder(Theme.onPrimary.opacity(0.15), lineWidth: 1)
+                        .strokeBorder(isEnabled ? Theme.onPrimary.opacity(0.15) : Theme.hairline, lineWidth: 1)
                 }
         } else {
             content

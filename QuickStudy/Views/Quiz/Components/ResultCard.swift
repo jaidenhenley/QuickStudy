@@ -37,8 +37,9 @@ struct ResultCard: View {
                 Text(text)
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg, tint: tint.opacity(0.18))

@@ -18,86 +18,96 @@ struct ScanPreviewView: View {
     @State private var showDiscardAlert = false
     @State private var scrolledLine: Int?
     @ScaledMetric(relativeTo: .body) private var tabHeight: CGFloat = 228
+    @ScaledMetric(relativeTo: .body) private var sourceMinHeight: CGFloat = 140
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.base) {
-            let headerLayout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
-                : AnyLayout(HStackLayout())
-
-            headerLayout {
-                Button("Cancel") { showDiscardAlert = true }
-                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                Text(pageLabel)
-                    .font(.headline)
-                    .multilineTextAlignment(.center)
-                    .accessibilityAddTraits(.isHeader)
-                Button(reviewLabel, action: onContinue)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: .infinity, minHeight: 44, alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing)
-            }
-
-            // Glass belongs on the scroll view, not its content: inside, the scroll view
-            // clips the card's rounded corners flat as soon as the text overflows.
+        GeometryReader { proxy in
             ScrollView {
-                SourcePageView(
-                    lines: Array(draft.document.lines[pageRange]),
-                    highlighted: currentCard?.source?.lineRange,
-                    lineOffset: pageRange.lowerBound
-                )
-                // Lines are identified by their Int index; a bare Int page id collided
-                // with line 0 and scrolled the whole page instead of the line.
-                .id("page-\(pageIndex)")
-                // The outgoing page leaves at once: crossfading two pages of text
-                // stacks both legibly on top of each other.
-                .appTransition(.asymmetric(insertion: .opacity, removal: .identity))
-                .padding(Spacing.base)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .scrollPosition(id: $scrolledLine, anchor: .center)
-            .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
-            .appGlassCard(cornerRadius: AppRadius.lg)
-            .appAnimation(Motion.standard, value: cardIndex)
-            .onAppear { scrolledLine = highlightAnchorLine }
-            .onChange(of: cardIndex) {
-                withAnimation(reduceMotion ? Motion.crossfade : Motion.standard) {
-                    scrolledLine = highlightAnchorLine
-                }
-            }
+                VStack(alignment: .leading, spacing: Spacing.base) {
+                    let headerLayout = dynamicTypeSize.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+                        : AnyLayout(HStackLayout())
 
-            TabView(selection: $cardIndex) {
-                ForEach(Array(draft.cards.enumerated()), id: \.element.id) { index, card in
-                    DraftedCardPreview(
-                        card: card,
-                        position: index + 1,
-                        cardCount: draft.cards.count,
-                        pageIndex: index,
-                        pageCount: pageTotal,
-                        onAdjust: page
-                    )
-                    .padding(.bottom, Spacing.xs)
-                    .tag(index)
-                }
+                    headerLayout {
+                        Button("Cancel") { showDiscardAlert = true }
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        Text(pageLabel)
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader)
+                        Button(reviewLabel, action: onContinue)
+                            .fontWeight(.semibold)
+                            .multilineTextAlignment(.trailing)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing)
+                    }
 
-                DraftedDeckSummary(
-                    cardCount: draft.cards.count,
-                    pageIndex: draft.cards.count,
-                    pageCount: pageTotal,
-                    onReview: onContinue,
-                    onAdjust: page
-                )
-                .padding(.bottom, Spacing.xs)
-                .tag(draft.cards.count)
+                    // Glass belongs on the scroll view, not its content: inside, the scroll view
+                    // clips the card's rounded corners flat as soon as the text overflows.
+                    ScrollView {
+                        SourcePageView(
+                            lines: Array(draft.document.lines[pageRange]),
+                            highlighted: currentCard?.source?.lineRange,
+                            lineOffset: pageRange.lowerBound
+                        )
+                        // Lines are identified by their Int index; a bare Int page id collided
+                        // with line 0 and scrolled the whole page instead of the line.
+                        .id("page-\(pageIndex)")
+                        // The outgoing page leaves at once: crossfading two pages of text
+                        // stacks both legibly on top of each other.
+                        .appTransition(.asymmetric(insertion: .opacity, removal: .identity))
+                        .padding(Spacing.base)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(minHeight: sourceMinHeight)
+                    .scrollPosition(id: $scrolledLine, anchor: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: AppRadius.lg))
+                    .appGlassCard(cornerRadius: AppRadius.lg)
+                    .appAnimation(Motion.standard, value: cardIndex)
+                    .onAppear { scrolledLine = highlightAnchorLine }
+                    .onChange(of: cardIndex) {
+                        withAnimation(reduceMotion ? Motion.crossfade : Motion.standard) {
+                            scrolledLine = highlightAnchorLine
+                        }
+                    }
+
+                    TabView(selection: $cardIndex) {
+                        ForEach(Array(draft.cards.enumerated()), id: \.element.id) { index, card in
+                            DraftedCardPreview(
+                                card: card,
+                                position: index + 1,
+                                cardCount: draft.cards.count,
+                                pageIndex: index,
+                                pageCount: pageTotal,
+                                onAdjust: page
+                            )
+                            .padding(.bottom, Spacing.xs)
+                            .tag(index)
+                        }
+
+                        DraftedDeckSummary(
+                            cardCount: draft.cards.count,
+                            pageIndex: draft.cards.count,
+                            pageCount: pageTotal,
+                            onReview: onContinue,
+                            onAdjust: page
+                        )
+                        .padding(.bottom, Spacing.xs)
+                        .tag(draft.cards.count)
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .sensoryFeedback(.impact(weight: .light), trigger: cardIndex)
+                    .frame(height: pagerHeight)
+                }
+                .padding(Spacing.lg)
+                .frame(minHeight: proxy.size.height)
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .sensoryFeedback(.impact(weight: .light), trigger: cardIndex)
-            .frame(height: pagerHeight)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .padding(Spacing.lg)
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .tabBar)
@@ -105,7 +115,7 @@ struct ScanPreviewView: View {
             Button("Discard", role: .destructive, action: onCancel)
             Button("Keep editing", role: .cancel) {}
         } message: {
-            Text("The \(draft.cards.count) drafted \(cardNoun) will be deleted. This used one of your free generations.")
+            Text(draft.discardWarning)
         }
     }
 
@@ -129,10 +139,6 @@ struct ScanPreviewView: View {
             return "Card \(cardIndex + 1) of \(draft.cards.count)"
         }
         return draft.cards.count == 1 ? "That's the only card" : "That's all \(draft.cards.count) cards"
-    }
-
-    private var cardNoun: String {
-        draft.cards.count == 1 ? "card" : "cards"
     }
 
     private var pageTotal: Int { draft.cards.count + 1 }

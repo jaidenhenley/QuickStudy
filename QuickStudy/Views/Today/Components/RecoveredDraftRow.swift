@@ -10,11 +10,17 @@ struct RecoveredDraftRow: View {
     let onResume: () -> Void
 
     @ScaledMetric(relativeTo: .subheadline) private var tileSize = 36.0
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
+        let stacksVertically = dynamicTypeSize.isAccessibilitySize
+        let rowLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+
         Button(action: onResume) {
-            HStack(spacing: Spacing.md) {
-                Image(systemName: "doc.text.badge.plus")
+            rowLayout {
+                Image(systemName: "doc.badge.plus")
                     .font(.subheadline)
                     .foregroundStyle(Theme.primary)
                     .frame(width: tileSize, height: tileSize)
@@ -26,19 +32,22 @@ struct RecoveredDraftRow: View {
                     Text("Resume \(draft.title)")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .lineLimit(2)
+                        .lineLimit(stacksVertically ? nil : 2)
                     Text("\(draft.cards.count) \(draft.cards.count == 1 ? "card" : "cards") drafted · not yet saved")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
 
-                Spacer(minLength: 0)
+                if !stacksVertically {
+                    Spacer(minLength: 0)
 
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .accessibilityHidden(true)
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(Spacing.base)
         }
         .buttonStyle(.plain)

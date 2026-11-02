@@ -16,18 +16,25 @@ struct NewSetSheet: View {
     @ScaledMetric(relativeTo: .title3) private var iconTileSize: CGFloat = 44
 
     var body: some View {
-        let optionLayout = dynamicTypeSize.isAccessibilitySize
+        let stacksVertically = dynamicTypeSize.isAccessibilitySize
+        let optionLayout = stacksVertically
             ? AnyLayout(VStackLayout(spacing: Spacing.md))
             : AnyLayout(HStackLayout(spacing: Spacing.md))
+        let scanLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+        let headerLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+            : AnyLayout(HStackLayout())
 
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.base) {
-                HStack {
+                headerLayout {
                     Text("New set")
                         .font(.title2)
                         .fontWeight(.bold)
                         .accessibilityAddTraits(.isHeader)
-                    Spacer()
+                    if !stacksVertically { Spacer() }
                     Button("Cancel") { dismiss() }
                         .frame(minHeight: 44)
                 }
@@ -40,7 +47,7 @@ struct NewSetSheet: View {
                     coordinator.pendingSource = .scan
                     dismiss()
                 } label: {
-                    HStack(spacing: Spacing.md) {
+                    scanLayout {
                         Image(systemName: "camera")
                             .font(.title3)
                             .frame(width: iconTileSize, height: iconTileSize)
@@ -54,13 +61,17 @@ struct NewSetSheet: View {
                             Text("Fastest · recommended")
                                 .font(.caption)
                         }
+                        .fixedSize(horizontal: false, vertical: true)
 
-                        Spacer()
+                        if !stacksVertically {
+                            Spacer()
 
-                        Image(systemName: "chevron.right")
-                            .font(.footnote)
-                            .accessibilityHidden(true)
+                            Image(systemName: "chevron.right")
+                                .font(.footnote)
+                                .accessibilityHidden(true)
+                        }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundStyle(Theme.onPrimary)
                     .padding(Spacing.base)
                     .background {
@@ -92,7 +103,7 @@ struct NewSetSheet: View {
             .padding(Spacing.lg)
         }
         .scrollBounceBehavior(.basedOnSize)
-        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.height(320)])
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.fraction(0.9), .large] : [.height(320)])
         .presentationDragIndicator(.visible)
     }
 }

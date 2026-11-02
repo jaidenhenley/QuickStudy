@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SessionProgressBar: View {
     let states: [QuizSessionViewModel.QuestionState]
+    let currentIndex: Int
 
     @ScaledMetric(relativeTo: .caption) private var segmentHeight = 6
 
@@ -49,10 +50,9 @@ struct SessionProgressBar: View {
     }
 
     private var accessibilityValue: String {
-        let position = (states.firstIndex(of: .current) ?? states.count - 1) + 1
         let correct = states.filter { $0 == .correct }.count
         let wrong = states.filter { $0 == .wrong }.count
-        return "Question \(max(position, 1)) of \(states.count), \(correct) correct, \(wrong) missed"
+        return "Question \(currentIndex + 1) of \(states.count), \(correct) correct, \(wrong) missed"
     }
 
     private func color(for state: QuizSessionViewModel.QuestionState) -> Color {
