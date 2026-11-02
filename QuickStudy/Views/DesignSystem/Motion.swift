@@ -48,7 +48,87 @@ private struct StagedRevealModifier: ViewModifier {
     }
 }
 
+private struct SymbolBounceModifier<Value: Equatable>: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let value: Value
+
+    func body(content: Content) -> some View {
+        content.symbolEffect(.bounce, value: reduceMotion ? nil : value)
+    }
+}
+
+private struct SymbolPulseModifier<Value: Equatable>: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let options: SymbolEffectOptions
+    let value: Value
+
+    func body(content: Content) -> some View {
+        content.symbolEffect(.pulse, options: options, value: reduceMotion ? nil : value)
+    }
+}
+
+private struct NumericTransitionModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let value: Double?
+
+    func body(content: Content) -> some View {
+        if reduceMotion {
+            content.contentTransition(.opacity)
+        } else if let value {
+            content.contentTransition(.numericText(value: value))
+        } else {
+            content.contentTransition(.numericText())
+        }
+    }
+}
+
+private struct SymbolReplaceTransitionModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func body(content: Content) -> some View {
+        if reduceMotion {
+            content.contentTransition(.opacity)
+        } else {
+            content.contentTransition(.symbolEffect(.replace))
+        }
+    }
+}
+
+private struct ZoomNavigationTransitionModifier<ID: Hashable>: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let sourceID: ID
+    let namespace: Namespace.ID
+
+    func body(content: Content) -> some View {
+        if reduceMotion {
+            content.navigationTransition(.automatic)
+        } else {
+            content.navigationTransition(.zoom(sourceID: sourceID, in: namespace))
+        }
+    }
+}
+
 extension View {
+    func appSymbolBounce<Value: Equatable>(value: Value) -> some View {
+        modifier(SymbolBounceModifier(value: value))
+    }
+
+    func appSymbolPulse<Value: Equatable>(options: SymbolEffectOptions = .default, value: Value) -> some View {
+        modifier(SymbolPulseModifier(options: options, value: value))
+    }
+
+    func appNumericTransition(value: Double? = nil) -> some View {
+        modifier(NumericTransitionModifier(value: value))
+    }
+
+    func appSymbolReplaceTransition() -> some View {
+        modifier(SymbolReplaceTransitionModifier())
+    }
+
+    func appZoomNavigationTransition<ID: Hashable>(sourceID: ID, in namespace: Namespace.ID) -> some View {
+        modifier(ZoomNavigationTransitionModifier(sourceID: sourceID, namespace: namespace))
+    }
+
     func appStagedReveal(_ index: Int, shown: Bool) -> some View {
         modifier(StagedRevealModifier(index: index, shown: shown))
     }

@@ -14,6 +14,8 @@ struct GeneratingView: View {
 
     @Environment(StudyViewModel.self) private var studyViewModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var shownAt = Date()
 
     var body: some View {
@@ -21,34 +23,38 @@ struct GeneratingView: View {
             VStack(spacing: Spacing.lg) {
                 Spacer()
 
-                RoundedRectangle(cornerRadius: AppRadius.md)
-                    .fill(Theme.surface)
-                    .frame(width: 200, height: 260)
-                    .overlay {
-                        PhaseAnimator(reduceMotion ? [1] : [0.35, 0.7]) { phase in
-                            VStack(alignment: .leading, spacing: Spacing.sm) {
-                                ForEach(0..<9, id: \.self) { row in
-                                    Capsule()
-                                        .fill(Color.secondary.opacity(0.25))
-                                        .frame(height: 8)
-                                        .padding(.trailing, row % 3 == 2 ? 48 : 0)
+                if !dynamicTypeSize.isAccessibilitySize && verticalSizeClass != .compact {
+                    RoundedRectangle(cornerRadius: AppRadius.md)
+                        .fill(Theme.surface)
+                        .frame(width: 200, height: 260)
+                        .overlay {
+                            PhaseAnimator(reduceMotion ? [1] : [0.35, 0.7]) { phase in
+                                VStack(alignment: .leading, spacing: Spacing.sm) {
+                                    ForEach(0..<9, id: \.self) { row in
+                                        Capsule()
+                                            .fill(Theme.hairline)
+                                            .frame(height: 8)
+                                            .padding(.trailing, row % 3 == 2 ? 48 : 0)
+                                    }
                                 }
-                            }
-                            .padding(Spacing.lg)
-                            .opacity(phase)
-                        } animation: { _ in Motion.shimmer }
-                    }
-                    .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
+                                .padding(Spacing.lg)
+                                .opacity(phase)
+                            } animation: { _ in Motion.shimmer }
+                        }
+                        .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
+                        .accessibilityHidden(true)
+                }
 
                 // Redraws on a timer so elapsed time and the bar stay live for the whole run.
                 TimelineView(.periodic(from: .now, by: 0.25)) { context in
-                    let currentHeadline = headline(at: context.date)
                     let currentFraction = fraction(at: context.date)
                     let isReadingPhase: Bool = if case .reading = stage { true } else { false }
+                    let currentDetail = detail(at: context.date)
 
                     VStack(spacing: Spacing.sm) {
                         HStack(spacing: Spacing.xs) {
                             Image(systemName: "sparkles")
+                                .accessibilityHidden(true)
                             Text("DRAFTING CARDS")
                                 .tracking(1)
                         }
@@ -56,13 +62,14 @@ struct GeneratingView: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(Color.appPrimary)
 
-                        Text(currentHeadline)
+                        Text(headline)
                             .font(.title2)
                             .fontWeight(.bold)
-                            .contentTransition(.numericText())
-                            .appAnimation(Motion.snappy, value: currentHeadline)
+                            .multilineTextAlignment(.center)
+                            .appNumericTransition()
+                            .appAnimation(Motion.snappy, value: headline)
 
-                        Text(detail(at: context.date))
+                        Text(currentDetail)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -78,6 +85,10 @@ struct GeneratingView: View {
                             .foregroundStyle(.secondary)
                             .accessibilityHidden(true)
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(headline)
+                    .accessibilityValue("\(currentDetail) \((currentFraction * 10).rounded() / 10, format: .percent)")
+                    .accessibilityAddTraits(.updatesFrequently)
                     .sensoryFeedback(.levelChange, trigger: isReadingPhase)
                 }
 
@@ -86,6 +97,8 @@ struct GeneratingView: View {
             .padding(Spacing.lg)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(BackgroundView())
+            .onAppear { announce(headline) }
+            .onChange(of: headline) { _, newHeadline in announce(newHeadline) }
             .navigationTitle(headerTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -113,7 +126,11 @@ struct GeneratingView: View {
         }
     }
 
-    private func headline(at now: Date) -> String {
+    private func announce(_ text: String) {
+        AccessibilityNotification.Announcement(text).post()
+    }
+
+    private var headline: String {
         let progress = studyViewModel.generationProgress
         switch stage {
         case let .reading(page, total):

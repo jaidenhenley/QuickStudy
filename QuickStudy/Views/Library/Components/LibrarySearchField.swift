@@ -15,6 +15,7 @@ struct LibrarySearchField: View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
             TextField("Search sets", text: $text)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -22,6 +23,7 @@ struct LibrarySearchField: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 11)
+        .frame(minHeight: 44)
         .appGlassCard(cornerRadius: AppRadius.md)
         .opacity(isEnabled ? 1 : 0.6)
     }

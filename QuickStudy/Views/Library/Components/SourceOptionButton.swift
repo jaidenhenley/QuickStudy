@@ -19,6 +19,7 @@ struct SourceOptionButton: View {
                 Image(systemName: systemImage)
                     .font(.title3)
                     .foregroundStyle(Color.appPrimary)
+                    .accessibilityHidden(true)
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)

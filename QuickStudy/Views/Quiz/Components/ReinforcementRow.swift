@@ -11,8 +11,6 @@ struct ReinforcementRow: View {
     let item: QuizSessionViewModel.Reinforcement
     let index: Int
     let appeared: Bool
-
-
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
@@ -28,6 +26,9 @@ struct ReinforcementRow: View {
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(item.question)
+        .accessibilityValue("Missed \(item.missed), review tomorrow")
         .appStagedReveal(index, shown: appeared)
     }
 }

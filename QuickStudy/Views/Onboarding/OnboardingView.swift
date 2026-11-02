@@ -9,34 +9,50 @@ struct OnboardingView: View {
     @Environment(OnboardingViewModel.self) private var onboarding
     @Environment(AnalyticsRecorder.self) private var analytics
     @Environment(\.dismiss) private var dismiss
+    @AccessibilityFocusState private var focusedPage: OnboardingViewModel.Page?
 
     var body: some View {
         @Bindable var onboarding = onboarding
 
         VStack(spacing: Spacing.base) {
+            Button {
+                onboarding.goBack()
+            } label: {
+                Label("Back", systemImage: "chevron.left")
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, Spacing.base)
+            .opacity(onboarding.canGoBack ? 1 : 0)
+            .disabled(!onboarding.canGoBack)
+            .accessibilityHidden(!onboarding.canGoBack)
+
             TabView(selection: $onboarding.current) {
                 ForEach(onboarding.pages, id: \.self) { page in
                     Group {
                         switch page {
                         case .welcome:
-                            OnboardingWelcomePage { onboarding.advance() }
+                            OnboardingWelcomePage(focus: $focusedPage) { onboarding.advance() }
                         case .howItWorks:
-                            OnboardingHowItWorksPage { onboarding.advance() }
+                            OnboardingHowItWorksPage(focus: $focusedPage) { onboarding.advance() }
                         case .aiIntro:
-                            OnboardingAIIntroPage(setup: onboarding.draftingSetup) { onboarding.advance() }
+                            OnboardingAIIntroPage(setup: onboarding.draftingSetup, focus: $focusedPage) { onboarding.advance() }
                         case .camera:
                             OnboardingCameraPage(
+                                focus: $focusedPage,
                                 onAllow: { Task { await onboarding.requestCameraAccess() } },
                                 onLater: { onboarding.advance() }
                             )
                         case .firstSource:
-                            OnboardingFirstSourcePage { choice in
+                            OnboardingFirstSourcePage(focus: $focusedPage) { choice in
                                 analytics.record(.onboardingCompleted)
                                 onboarding.choose(choice)
                                 dismiss()
                             }
                         }
                     }
+                    .accessibilityHidden(page != onboarding.current)
                     .tag(page)
                 }
             }
@@ -48,5 +64,8 @@ struct OnboardingView: View {
         }
         .background(BackgroundView())
         .onAppear { analytics.record(.onboardingStarted) }
+        .onChange(of: onboarding.current) { _, page in
+            focusedPage = page
+        }
     }
 }

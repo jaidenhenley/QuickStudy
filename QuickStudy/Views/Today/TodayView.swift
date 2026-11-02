@@ -28,6 +28,7 @@ struct TodayView: View {
             VStack(alignment: .leading, spacing: Spacing.md) {
                 Text("Today")
                     .font(.system(size: 40, weight: .bold))
+                    .accessibilityAddTraits(.isHeader)
 
                 if !networkMonitor.isOnline && (aiSettings.mode == .externalAPI || store.willUseHostedGeneration) {
                     OfflineBanner(
@@ -55,6 +56,7 @@ struct TodayView: View {
                     Text(formattedDate)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .accessibilityLabel(spokenDate)
                     if !dynamicTypeSize.isAccessibilitySize {
                         Spacer()
                     }
@@ -70,6 +72,8 @@ struct TodayView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.appStreak)
+                            .frame(minHeight: 44, alignment: .trailing)
+                            .contentShape(.rect)
                         }
                     }
                 }
@@ -86,6 +90,7 @@ struct TodayView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                                 .tracking(1)
+                                .accessibilityAddTraits(.isHeader)
                                 .padding(.top, Spacing.sm)
 
                             if let weakestSet = studyViewModel.savedSets.first(where: { $0.id == weakest.setID }) {
@@ -115,6 +120,7 @@ struct TodayView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                                 .tracking(1)
+                                .accessibilityAddTraits(.isHeader)
                                 .padding(.top, Spacing.sm)
                             SuggestionRow(suggestion: suggestion)
                         }
@@ -148,6 +154,7 @@ struct TodayView: View {
                         .font(.title3)
                         .foregroundStyle(.secondary)
                 }
+                .accessibilityLabel("Settings")
             }
         }
     }
@@ -156,6 +163,10 @@ struct TodayView: View {
         todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore, store: store)
         analytics.record(.generationsUsed(bucket: todayViewModel.generationsUsedBucket))
         if !todayViewModel.canGenerate { analytics.record(.allowanceExhausted) }
+    }
+
+    private var spokenDate: String {
+        Date().formatted(.dateTime.weekday(.wide).month(.wide).day())
     }
 
     private var formattedDate: String {

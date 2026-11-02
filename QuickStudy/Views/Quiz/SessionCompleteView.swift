@@ -14,13 +14,18 @@ struct SessionCompleteView: View {
 
     @AccessibilityFocusState private var headlineFocused: Bool
     @State private var appeared = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
             VStack(spacing: Spacing.base) {
                 HStack {
                     Spacer()
-                    Button("Done", action: onDone)
+                    Button(action: onDone) {
+                        Text("Done")
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(Rectangle())
+                    }
                 }
 
                 Image(systemName: "trophy")
@@ -28,20 +33,23 @@ struct SessionCompleteView: View {
                     .foregroundStyle(Color.appPrimary)
                     .padding(.top, Spacing.lg)
                     .accessibilityHidden(true)
-                    .symbolEffect(.bounce, value: appeared)
+                    .appSymbolBounce(value: appeared)
 
                 Text(summary.headline)
                     .font(.title)
                     .fontWeight(.bold)
+                    .accessibilityAddTraits(.isHeader)
                     .accessibilityFocused($headlineFocused)
 
                 Text("Session complete · \(summary.elapsedLabel)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                    .accessibilityLabel("Session complete, \(summary.elapsedSpoken)")
 
                 HStack {
                     Image(systemName: "flame.fill")
                         .foregroundStyle(.appStreak)
+                        .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(summary.streak) day streak")
                             .font(.subheadline)
@@ -56,9 +64,14 @@ struct SessionCompleteView: View {
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
+                .accessibilityElement(children: .combine)
                 .appStagedReveal(0, shown: appeared)
 
-                HStack(spacing: 0) {
+                let statsLayout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(spacing: Spacing.base))
+                    : AnyLayout(HStackLayout(spacing: 0))
+
+                statsLayout {
                     SessionStatCell(target: summary.cardCount, label: "CARDS")
                     SessionStatCell(target: summary.correctCount, label: "CORRECT")
                     SessionStatCell(target: Int((summary.accuracy * 100).rounded()), suffix: "%", label: "ACCURACY")
@@ -75,6 +88,7 @@ struct SessionCompleteView: View {
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top, Spacing.sm)
+                        .accessibilityAddTraits(.isHeader)
                         .appStagedReveal(2, shown: appeared)
 
                     ForEach(Array(summary.reinforcement.enumerated()), id: \.element.id) { index, item in
@@ -87,7 +101,7 @@ struct SessionCompleteView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                 }
-                .appProminentButtonStyle(tint: Theme.primary)
+                .appProminentButtonStyle(tint: Theme.primaryFill)
                 .padding(.top, Spacing.base)
                 .appStagedReveal(3 + summary.reinforcement.count, shown: appeared)
             }
@@ -96,9 +110,10 @@ struct SessionCompleteView: View {
         .background(BackgroundView())
         .navigationBarBackButtonHidden()
         .sensoryFeedback(.success, trigger: appeared) { _, new in new }
-        .onAppear {
+        .task {
+            await Task.yield()
             headlineFocused = true
-            appeared = true
         }
+        .onAppear { appeared = true }
     }
 }

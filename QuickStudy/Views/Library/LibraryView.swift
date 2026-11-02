@@ -13,6 +13,7 @@ struct LibraryView: View {
     @Environment(DraftStore.self) private var draftStore
     @Environment(AISettings.self) private var aiSettings
     @Environment(StoreController.self) private var store
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var coordinator = ImportCoordinator()
     @State private var libraryViewModel = LibraryViewModel()
@@ -65,6 +66,7 @@ struct LibraryView: View {
                             Group {
                                 if visible.isEmpty {
                                     Text("No sets match this filter.")
+                                        .multilineTextAlignment(.center)
                                         .font(.subheadline)
                                         .foregroundStyle(.secondary)
                                         .frame(maxWidth: .infinity)
@@ -73,16 +75,16 @@ struct LibraryView: View {
                                 } else {
                                     GlassEffectContainer {
                                         LazyVGrid(
-                                            columns: [
-                                                GridItem(.flexible(), spacing: Spacing.md),
-                                                GridItem(.flexible(), spacing: Spacing.md)
-                                            ],
+                                            columns: Array(
+                                                repeating: GridItem(.flexible(), spacing: Spacing.md),
+                                                count: dynamicTypeSize.isAccessibilitySize ? 1 : 2
+                                            ),
                                             spacing: Spacing.md
                                         ) {
                                             ForEach(visible) { set in
                                                 NavigationLink {
                                                     StudySetDetailView(set: set)
-                                                        .navigationTransition(.zoom(sourceID: set.id, in: tileTransition))
+                                                        .appZoomNavigationTransition(sourceID: set.id, in: tileTransition)
                                                 } label: {
                                                     SetTile(set: set)
                                                 }
@@ -94,20 +96,15 @@ struct LibraryView: View {
                                                     $0.clipShape(.rect(cornerRadius: AppRadius.lg))
                                                 }
                                                 .contextMenu {
-                                                    Button {
-                                                        renameText = set.title
-                                                        renamingSet = set
-                                                        showRenameAlert = true
-                                                    } label: {
+                                                    Button { beginRename(set) } label: {
                                                         Label("Rename", systemImage: "pencil")
                                                     }
-                                                    Button(role: .destructive) {
-                                                        deletingSet = set
-                                                        showDeleteAlert = true
-                                                    } label: {
+                                                    Button(role: .destructive) { beginDelete(set) } label: {
                                                         Label("Delete", systemImage: "trash")
                                                     }
                                                 }
+                                                .accessibilityAction(named: "Rename") { beginRename(set) }
+                                                .accessibilityAction(named: "Delete") { beginDelete(set) }
                                                 .appTransition(.opacity.combined(with: .scale(scale: 0.95)))
                                             }
                                         }
@@ -151,6 +148,7 @@ struct LibraryView: View {
             refreshEntitlement()
             consumePendingSource()
         }
+        .onChange(of: libraryViewModel.filter) { _, _ in announceResultCount() }
         .onChange(of: appState.pendingImportSource) { _, _ in consumePendingSource() }
         .onChange(of: aiSettings.mode) { _, _ in refreshEntitlement() }
         .onChange(of: store.isPro) { _, _ in refreshEntitlement() }
@@ -191,6 +189,23 @@ struct LibraryView: View {
                 )
             )
         )
+    }
+
+    private func beginRename(_ set: StudySet) {
+        renameText = set.title
+        renamingSet = set
+        showRenameAlert = true
+    }
+
+    private func beginDelete(_ set: StudySet) {
+        deletingSet = set
+        showDeleteAlert = true
+    }
+
+    private func announceResultCount() {
+        let count = libraryViewModel.sets(from: studyViewModel.savedSets).count
+        let message = count == 0 ? "No sets" : "\(count) \(count == 1 ? "set" : "sets")"
+        AccessibilityNotification.Announcement(message).post()
     }
 
     private func consumePendingSource() {

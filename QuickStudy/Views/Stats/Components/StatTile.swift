@@ -18,7 +18,7 @@ struct StatTile: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundStyle(tint)
-                .contentTransition(.numericText())
+                .appNumericTransition(value: Double(value))
             Text(label)
                 .font(.caption)
                 .foregroundStyle(.secondary)

@@ -125,12 +125,7 @@ struct SettingsView: View {
 
                 Section {
                     if store.isPro {
-                        HStack {
-                            Text("QuickStudy Pro")
-                            Spacer()
-                            Text("Active")
-                                .foregroundStyle(.secondary)
-                        }
+                        LabeledContent("QuickStudy Pro", value: "Active")
                         Button("Manage Subscription") { showManageSubscription = true }
                     } else {
                         Button("Upgrade to QuickStudy Pro") { showPaywall = true }
@@ -170,12 +165,7 @@ struct SettingsView: View {
                 }
 
                 Section("About") {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text(appVersion)
-                            .foregroundStyle(.secondary)
-                    }
+                    LabeledContent("Version", value: appVersion)
                     Button("What's New") {
                         whatsNew = WhatsNewViewModel(note: ReleaseNotes.current)
                     }

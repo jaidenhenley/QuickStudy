@@ -11,22 +11,29 @@ struct HostedConsentSheet: View {
     let onNotNow: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.base) {
-            Text("Draft this set in the cloud?")
-                .font(.title2)
-                .fontWeight(.bold)
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.base) {
+                    Text("Draft this set in the cloud?")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .accessibilityAddTraits(.isHeader)
 
-            Text(message)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                    Text(message)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
 
-            Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
-                .font(.subheadline)
-                .foregroundStyle(.blue)
-
-            Spacer(minLength: 0)
+                    Link("Privacy Policy", destination: LegalLinks.privacyPolicyURL)
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.primary)
+                        .frame(minHeight: 44)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .scrollBounceBehavior(.basedOnSize)
 
             Button {
                 onAllow()
@@ -34,9 +41,9 @@ struct HostedConsentSheet: View {
             } label: {
                 Text("Allow")
                     .font(.headline)
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, minHeight: 44)
             }
-            .appProminentButtonStyle(tint: Theme.primary)
+            .appProminentButtonStyle(tint: Theme.primaryFill)
 
             Button {
                 onNotNow()
@@ -52,7 +59,7 @@ struct HostedConsentSheet: View {
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
-        .presentationDetents([.height(360)])
+        .presentationDetents(dynamicTypeSize.isAccessibilitySize ? [.large] : [.height(360)])
         .presentationDragIndicator(.visible)
     }
 

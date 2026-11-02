@@ -15,6 +15,7 @@ struct ReviewDraftsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
 
     @State private var draft: DraftSet
     @State private var lastGeneratedCards: [StudyCard]
@@ -24,6 +25,7 @@ struct ReviewDraftsView: View {
     @State private var showPaywall = false
     @State private var lastRemoval: (card: StudyCard, index: Int)?
     @AccessibilityFocusState private var isDraftHeaderFocused: Bool
+    @AccessibilityFocusState private var accessibilityFocusedCardID: UUID?
 
     private let suggestedTitle: String
 
@@ -36,29 +38,37 @@ struct ReviewDraftsView: View {
     var body: some View {
         List {
             Section {
-                HStack(spacing: Spacing.md) {
-                    Image(systemName: "doc.text")
-                        .font(.title3)
-                        .foregroundStyle(Color.appPrimary)
-                    VStack(alignment: .leading, spacing: 2) {
-                        TextField("Set title", text: $draft.title)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
-                        Text("\(draft.pageCount) \(draft.pageCount == 1 ? "page" : "pages") · \(relativeAge)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                titleLayout {
+                    HStack(spacing: Spacing.md) {
+                        Image(systemName: "doc.text")
+                            .font(.title3)
+                            .foregroundStyle(Color.appPrimary)
+                            .accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: 2) {
+                            TextField("Set title", text: $draft.title)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                            Text("\(draft.pageCount) \(draft.pageCount == 1 ? "page" : "pages") · \(relativeAge)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    Spacer()
                     if isRegenerating {
                         ProgressView()
+                            .accessibilityLabel("Regenerating")
                     } else {
-                        Button("Regenerate") {
+                        Button {
                             if hasUnsavedEdits {
                                 showRegenerateConfirm = true
                             } else {
                                 Task { await regenerate() }
                             }
+                        } label: {
+                            Text("Regenerate")
+                                .frame(minHeight: 44)
+                                .contentShape(Rectangle())
                         }
                         .font(.subheadline)
                         .fontWeight(.semibold)
@@ -78,28 +88,21 @@ struct ReviewDraftsView: View {
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
             } header: {
-                Group {
-                    if dynamicTypeSize.isAccessibilitySize {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("DRAFT · \(draft.cards.count) CARDS")
-                                .foregroundStyle(Color.appPrimary)
-                                .accessibilityFocused($isDraftHeaderFocused)
-                            Text("From \(draft.title)")
-                                .lineLimit(2)
-                        }
-                    } else {
-                        HStack {
-                            Text("DRAFT · \(draft.cards.count) CARDS")
-                                .foregroundStyle(Color.appPrimary)
-                                .accessibilityFocused($isDraftHeaderFocused)
-                            Spacer()
-                            Text("From \(draft.title)")
-                                .lineLimit(1)
-                        }
+                titleLayout {
+                    Text("DRAFT · \(draft.cards.count) CARDS")
+                        .foregroundStyle(Color.appPrimary)
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
                     }
+                    Text("From \(draft.title)")
+                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                 }
                 .font(.caption)
                 .fontWeight(.semibold)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Draft, \(draft.cards.count) \(draft.cards.count == 1 ? "card" : "cards"). From \(draft.title)")
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityFocused($isDraftHeaderFocused)
             }
             .listSectionSeparator(.hidden)
 
@@ -112,7 +115,7 @@ struct ReviewDraftsView: View {
             }
 
             ForEach($draft.cards) { $card in
-                DraftCardRow(card: $card, onRemove: { removeCard(card.id) })
+                DraftCardRow(card: $card, accessibilityFocusedCardID: $accessibilityFocusedCardID, onRemove: { removeCard(card.id) })
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
                     .appTransition(.asymmetric(insertion: .opacity, removal: .move(edge: .trailing).combined(with: .opacity)))
@@ -138,13 +141,15 @@ struct ReviewDraftsView: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                 }
-                .appProminentButtonStyle(tint: Theme.primary)
+                .appProminentButtonStyle(tint: Theme.primaryFill)
+                .accessibilityHint("Restores the removed card")
                 .padding(.bottom, Spacing.sm)
                 .appTransition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .task(id: lastRemoval?.card.id) {
-            guard lastRemoval != nil else { return }
+            guard lastRemoval != nil, !voiceOverEnabled else { return }
+            // Left up under VoiceOver: a 5 second window is too short to find and activate Undo.
             // Cancellation means a newer removal or an undo already replaced this one.
             do { try await Task.sleep(for: .seconds(5)) } catch { return }
             withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
@@ -155,7 +160,7 @@ struct ReviewDraftsView: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: save) {
                     Text(saveLabel)
-                        .contentTransition(.numericText(value: Double(validCards.count)))
+                        .appNumericTransition(value: Double(validCards.count))
                 }
                 .appAnimation(Motion.snappy, value: validCards.count)
                 .disabled(!canSave)
@@ -215,13 +220,34 @@ struct ReviewDraftsView: View {
         return formatter.localizedString(for: draft.createdAt, relativeTo: Date())
     }
 
+    private var titleLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+    }
+
+    private func announce(_ message: String) {
+        var text = AttributedString(message)
+        text.accessibilitySpeechAnnouncementPriority = .high
+        AccessibilityNotification.Announcement(text).post()
+    }
+
     private func removeCard(_ id: UUID) {
         guard let index = draft.cards.firstIndex(where: { $0.id == id }) else { return }
+        let neighborID = draft.cards.indices.contains(index + 1)
+            ? draft.cards[index + 1].id
+            : (index > 0 ? draft.cards[index - 1].id : nil)
         withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
             lastRemoval = (draft.cards[index], index)
             draft.remove(id)
         }
-        isDraftHeaderFocused = true
+        let remaining = draft.cards.count
+        announce("Card removed. \(remaining) \(remaining == 1 ? "card" : "cards") left")
+        if let neighborID {
+            accessibilityFocusedCardID = neighborID
+        } else {
+            isDraftHeaderFocused = true
+        }
     }
 
     private func undoRemoval() {
@@ -230,6 +256,8 @@ struct ReviewDraftsView: View {
             draft.cards.insert(removal.card, at: min(removal.index, draft.cards.count))
             lastRemoval = nil
         }
+        accessibilityFocusedCardID = removal.card.id
+        announce("Card restored")
     }
 
     /// The title is edited in place at the top of the list; clearing it falls back to the

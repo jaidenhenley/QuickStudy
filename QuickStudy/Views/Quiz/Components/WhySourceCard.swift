@@ -20,11 +20,13 @@ struct WhySourceCard: View {
                 Text("Why")
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .accessibilityAddTraits(.isHeader)
             }
 
             Text(explanation)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
 
             if let source {
                 HStack(spacing: Spacing.xs) {
@@ -41,5 +43,6 @@ struct WhySourceCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
     }
 }

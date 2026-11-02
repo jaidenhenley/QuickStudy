@@ -22,19 +22,25 @@ struct LibraryFilterChips: View {
                             Text(filter.label)
                                 .font(.subheadline)
                                 .fontWeight(.medium)
-                                .foregroundStyle(selection == filter ? Color.white : Theme.textPrimary)
+                                .foregroundStyle(selection == filter ? Theme.onPrimary : Theme.textPrimary)
                                 .padding(.horizontal, 14)
                                 .padding(.vertical, 8)
                                 .glassEffect(
-                                    selection == filter ? .regular.tint(Color.appPrimary) : .regular,
+                                    selection == filter ? .regular.tint(Theme.primaryFill) : .regular,
                                     in: .capsule
                                 )
                                 .glassEffectID(filter, in: chipTransition)
+                                .padding(.vertical, Spacing.xs)
+                                .frame(minHeight: 44)
+                                .contentShape(.rect)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityAddTraits(selection == filter ? .isSelected : [])
                     }
                 }
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Filter sets")
         }
         .scrollClipDisabled()
         .sensoryFeedback(.selection, trigger: selection)

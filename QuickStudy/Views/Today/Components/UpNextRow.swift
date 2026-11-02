@@ -27,8 +27,11 @@ struct UpNextRow: View {
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(entry.title), \(entry.dayLabel), \(entry.cardCount) \(entry.cardCount == 1 ? "card" : "cards")")
     }
 }

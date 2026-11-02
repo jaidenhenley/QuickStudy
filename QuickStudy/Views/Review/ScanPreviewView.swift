@@ -19,17 +19,26 @@ struct ScanPreviewView: View {
     @State private var scrolledLine: Int?
     @ScaledMetric(relativeTo: .body) private var tabHeight: CGFloat = 228
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.base) {
-            HStack {
+            let headerLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+                : AnyLayout(HStackLayout())
+
+            headerLayout {
                 Button("Cancel") { showDiscardAlert = true }
-                Spacer()
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                 Text(pageLabel)
                     .font(.headline)
-                Spacer()
+                    .multilineTextAlignment(.center)
+                    .accessibilityAddTraits(.isHeader)
                 Button(reviewLabel, action: onContinue)
                     .fontWeight(.semibold)
+                    .multilineTextAlignment(.trailing)
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: dynamicTypeSize.isAccessibilitySize ? .leading : .trailing)
             }
 
             // Glass belongs on the scroll view, not its content: inside, the scroll view
@@ -67,7 +76,8 @@ struct ScanPreviewView: View {
                         position: index + 1,
                         cardCount: draft.cards.count,
                         pageIndex: index,
-                        pageCount: pageTotal
+                        pageCount: pageTotal,
+                        onAdjust: page
                     )
                     .padding(.bottom, Spacing.xs)
                     .tag(index)
@@ -77,14 +87,15 @@ struct ScanPreviewView: View {
                     cardCount: draft.cards.count,
                     pageIndex: draft.cards.count,
                     pageCount: pageTotal,
-                    onReview: onContinue
+                    onReview: onContinue,
+                    onAdjust: page
                 )
                 .padding(.bottom, Spacing.xs)
                 .tag(draft.cards.count)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .sensoryFeedback(.impact(weight: .light), trigger: cardIndex)
-            .frame(height: tabHeight)
+            .frame(height: pagerHeight)
         }
         .padding(Spacing.lg)
         .background(BackgroundView())
@@ -96,6 +107,28 @@ struct ScanPreviewView: View {
         } message: {
             Text("The \(draft.cards.count) drafted \(cardNoun) will be deleted. This used one of your free generations.")
         }
+    }
+
+    private var pagerHeight: CGFloat {
+        verticalSizeClass == .compact ? 150 : min(tabHeight, 360)
+    }
+
+    private func page(_ direction: AccessibilityAdjustmentDirection) {
+        let target: Int
+        switch direction {
+        case .increment: target = min(cardIndex + 1, draft.cards.count)
+        case .decrement: target = max(cardIndex - 1, 0)
+        @unknown default: return
+        }
+        withAnimation(reduceMotion ? Motion.crossfade : Motion.standard) { cardIndex = target }
+        AccessibilityNotification.Announcement(pagerAnnouncement).post()
+    }
+
+    private var pagerAnnouncement: String {
+        if cardIndex < draft.cards.count {
+            return "Card \(cardIndex + 1) of \(draft.cards.count)"
+        }
+        return draft.cards.count == 1 ? "That's the only card" : "That's all \(draft.cards.count) cards"
     }
 
     private var cardNoun: String {

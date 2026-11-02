@@ -11,19 +11,21 @@ struct WeakestCardRow: View {
     let weakest: TodayViewModel.WeakestCardInfo
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var badgeSize = 36.0
 
     var body: some View {
         HStack {
             ZStack {
                 RoundedRectangle(cornerRadius: AppRadius.sm)
                     .fill(Theme.danger.opacity(0.15))
-                    .frame(width: 36, height: 36)
+                    .frame(width: badgeSize, height: badgeSize)
                 Text("\(weakest.missCount)×")
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(Theme.dangerText)
-                    .contentTransition(.numericText())
+                    .appNumericTransition()
             }
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(weakest.question)
@@ -40,6 +42,7 @@ struct WeakestCardRow: View {
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)

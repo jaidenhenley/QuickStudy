@@ -17,6 +17,7 @@ struct ResultCard: View {
     let text: String
     let tint: Color
     let symbol: String
+    let spokenLabel: String
     let emphasis: Emphasis?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -59,7 +60,9 @@ struct ResultCard: View {
                 CubicKeyframe(0, duration: 0.05)
             }
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(spokenLabel)
+        .accessibilityValue(text)
         // The card is inserted in the same update that reveals the answer, so no model value
         // changes after it exists; appearing is the only event left to key the entrance on.
         .onAppear { playsEntrance = !reduceMotion }

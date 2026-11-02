@@ -13,11 +13,14 @@ struct PageDots: View {
         HStack(spacing: Spacing.xs) {
             ForEach(0..<count, id: \.self) { index in
                 Capsule()
-                    .fill(index == current ? Color.appPrimary : Color.secondary.opacity(0.3))
+                    .fill(index == current ? Color.appPrimary : Theme.track)
                     .frame(width: index == current ? 18 : 6, height: 6)
             }
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Page")
+        .accessibilityValue("\(current + 1) of \(count)")
         .appAnimation(Motion.snappy, value: current)
     }
 }

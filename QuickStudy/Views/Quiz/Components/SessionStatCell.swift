@@ -20,12 +20,15 @@ struct SessionStatCell: View {
             Text("\(shown)\(suffix)")
                 .font(.title2)
                 .fontWeight(.bold)
-                .contentTransition(.numericText(value: Double(shown)))
+                .appNumericTransition(value: Double(shown))
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label.capitalized)
+        .accessibilityValue(suffix == "%" ? "\(target) percent" : "\(target)")
         .onAppear {
             withAnimation(reduceMotion ? Motion.crossfade : Motion.countUp) {
                 shown = target

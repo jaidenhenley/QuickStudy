@@ -14,12 +14,12 @@ struct DraftCardRow: View {
     }
 
     @Binding var card: StudyCard
+    @AccessibilityFocusState.Binding var accessibilityFocusedCardID: UUID?
     var onRemove: () -> Void
 
     @State private var isEditing = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var focusedField: Field?
-    @AccessibilityFocusState private var summaryFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
@@ -32,7 +32,8 @@ struct DraftCardRow: View {
                         .padding(Spacing.sm)
                         .overlay {
                             RoundedRectangle(cornerRadius: AppRadius.sm)
-                                .strokeBorder(Color.appPrimary.opacity(focusedField == .question ? 0.6 : 0.25))
+                                .strokeBorder(focusedField == .question ? Color.appPrimary : Theme.hairline,
+                                              lineWidth: focusedField == .question ? 2 : 1)
                         }
                     TextField("Answer", text: $card.answer, axis: .vertical)
                         .font(.subheadline)
@@ -41,80 +42,75 @@ struct DraftCardRow: View {
                         .padding(Spacing.sm)
                         .overlay {
                             RoundedRectangle(cornerRadius: AppRadius.sm)
-                                .strokeBorder(Color.appPrimary.opacity(focusedField == .answer ? 0.6 : 0.25))
+                                .strokeBorder(focusedField == .answer ? Color.appPrimary : Theme.hairline,
+                                              lineWidth: focusedField == .answer ? 2 : 1)
                         }
                 }
                 // The fields only exist once editing starts, so focus is requested on
                 // appearance; setting it in the tap handler targets a field not yet built.
                 .onAppear { focusedField = .question }
                 .appTransition(.opacity)
-            } else {
-                Button {
-                    withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
-                        isEditing = true
-                    }
-                } label: {
-                    VStack(alignment: .leading, spacing: Spacing.sm) {
-                        Text(card.question)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                        Text(card.answer)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityFocused($summaryFocused)
-                .accessibilityLabel("\(card.question). \(card.answer)")
-                .accessibilityHint("Double tap to edit")
-                .appTransition(.opacity)
-            }
 
-            HStack {
-                if let source = card.source {
-                    HStack(spacing: Spacing.xs) {
-                        Image(systemName: "link")
-                        Text(source.shortLabel)
+                HStack {
+                    if let source = card.source {
+                        DraftSourcePill(source: source)
                     }
-                    .font(.caption2)
-                    .foregroundStyle(Color.appPrimary)
-                    .padding(.horizontal, Spacing.sm)
-                    .padding(.vertical, 3)
-                    .background(Color.appPrimary.opacity(0.12))
-                    .clipShape(Capsule())
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(sourceAccessibilityLabel(source))
-                }
-                Spacer()
-                if isEditing {
-                    Button("Done") {
+                    Spacer()
+                    Button {
                         focusedField = nil
                         withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
                             isEditing = false
                         }
+                    } label: {
+                        Text("Done")
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(Rectangle())
                     }
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(Color.appPrimary)
-                } else {
-                    Image(systemName: "pencil")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .accessibilityHidden(true)
                 }
+            } else {
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    Button(action: startEditing) {
+                        VStack(alignment: .leading, spacing: Spacing.sm) {
+                            Text(card.question)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            Text(card.answer)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    HStack {
+                        if let source = card.source {
+                            DraftSourcePill(source: source)
+                        }
+                        Spacer()
+                        Image(systemName: "pencil")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(spokenSummary)
+                .accessibilityValue(spokenSource)
+                .accessibilityHint("Double tap to edit")
+                .accessibilityAddTraits(.isButton)
+                .accessibilityAction(.default, startEditing)
+                .accessibilityAction(named: "Edit", startEditing)
+                .accessibilityAction(named: "Remove", onRemove)
+                .accessibilityFocused($accessibilityFocusedCardID, equals: card.id)
+                .appTransition(.opacity)
             }
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
-        .accessibilityAction(named: "Edit") {
-            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
-                isEditing = true
-            }
-        }
-        .accessibilityAction(named: "Remove", onRemove)
         .onChange(of: isEditing) { _, editing in
-            if !editing { summaryFocused = true }
+            if !editing { accessibilityFocusedCardID = card.id }
         }
         // Tapping another card moves focus there; this one closes rather than staying
         // half-open with no caret.
@@ -126,11 +122,18 @@ struct DraftCardRow: View {
         }
     }
 
-    private func sourceAccessibilityLabel(_ source: CardSource) -> String {
-        var parts: [String] = []
-        if let page = source.page { parts.append("page \(page)") }
-        if let paragraph = source.paragraph { parts.append("paragraph \(paragraph)") }
-        guard !parts.isEmpty else { return "Source: \(source.documentTitle)" }
-        return "Source: " + parts.joined(separator: ", ")
+    private var spokenSummary: String {
+        "\(card.question). \(card.answer)"
+    }
+
+    private var spokenSource: String {
+        guard let source = card.source else { return "" }
+        return DraftSourcePill.spokenLabel(for: source)
+    }
+
+    private func startEditing() {
+        withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
+            isEditing = true
+        }
     }
 }

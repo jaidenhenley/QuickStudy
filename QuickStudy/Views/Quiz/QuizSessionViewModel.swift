@@ -35,6 +35,7 @@ final class QuizSessionViewModel {
         let correctCount: Int
         let accuracy: Double
         let elapsedLabel: String
+        let elapsedSpoken: String
         let streak: Int
         let cardsVsYesterday: Int?
         let reinforcement: [Reinforcement]
@@ -55,6 +56,8 @@ final class QuizSessionViewModel {
     }
 
     var positionLabel: String { "Session · \(index + 1) of \(questions.count)" }
+
+    var positionAccessibilityLabel: String { "Session, question \(index + 1) of \(questions.count)" }
 
     func elapsedLabel(now: Date = Date()) -> String {
         let total = Int(now.timeIntervalSince(session.startedAt))
@@ -160,6 +163,8 @@ final class QuizSessionViewModel {
             correctCount: session.correctCount,
             accuracy: session.accuracy,
             elapsedLabel: session.elapsedLabel,
+            elapsedSpoken: Duration.seconds(Int(session.elapsed))
+                .formatted(.units(allowed: [.minutes, .seconds], width: .wide)),
             streak: streak,
             cardsVsYesterday: yesterdayCards > 0 ? session.cardCount - yesterdayCards : nil,
             reinforcement: reinforcement,

@@ -34,14 +34,18 @@ struct StudySetDetailView: View {
                     if let source = card.source {
                         HStack(spacing: Spacing.xs) {
                             Image(systemName: "link")
+                                .accessibilityHidden(true)
                             Text(source.shortLabel)
                         }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Source, \(source.shortLabel)")
                         .font(.caption2)
                         .foregroundStyle(Color.appPrimary)
                     }
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
+                .accessibilityElement(children: .combine)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
             }

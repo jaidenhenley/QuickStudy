@@ -7,6 +7,7 @@ import SwiftUI
 
 struct OnboardingAIIntroPage: View {
     let setup: DraftingSetup
+    let focus: AccessibilityFocusState<OnboardingViewModel.Page?>.Binding
     let onContinue: () -> Void
 
     @State private var appeared = false
@@ -22,7 +23,8 @@ struct OnboardingAIIntroPage: View {
                         .foregroundStyle(.appPrimary)
                         .frame(width: 64, height: 64)
                         .background(Color.appPrimary.opacity(0.12), in: Circle())
-                        .symbolEffect(.bounce, value: appeared)
+                        .appSymbolBounce(value: appeared)
+                        .accessibilityHidden(true)
                         .appStagedReveal(0, shown: appeared)
 
                     VStack(spacing: Spacing.sm) {
@@ -30,6 +32,8 @@ struct OnboardingAIIntroPage: View {
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .multilineTextAlignment(.center)
+                            .accessibilityAddTraits(.isHeader)
+                            .accessibilityFocused(focus, equals: .aiIntro)
                         Text(subtitle)
                             .font(.body)
                             .foregroundStyle(.secondary)
@@ -62,7 +66,7 @@ struct OnboardingAIIntroPage: View {
                 Text("Continue")
                     .frame(maxWidth: .infinity)
             }
-            .appProminentButtonStyle(tint: Theme.primary)
+            .appProminentButtonStyle(tint: Theme.primaryFill)
             .controlSize(.large)
             .appStagedReveal(2 + features.count, shown: appeared)
         }

@@ -14,110 +14,126 @@ struct ImportErrorView: View {
 
     @ScaledMetric(relativeTo: .largeTitle) private var iconDiameter: CGFloat = 92
     @State private var appeared = false
+    @AccessibilityFocusState private var titleFocused: Bool
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
+        let recoveryLayout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: Spacing.md))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+
         NavigationStack {
-            VStack(spacing: Spacing.lg) {
-                Spacer()
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(spacing: Spacing.lg) {
+                        Spacer()
 
-                Circle()
-                    .fill(tint.opacity(0.15))
-                    .frame(width: iconDiameter, height: iconDiameter)
-                    .overlay {
-                        Image(systemName: symbol)
-                            .font(.largeTitle)
-                            .foregroundStyle(tint)
-                            .symbolEffect(.bounce, value: appeared)
+                        Circle()
+                            .fill(tint.opacity(0.15))
+                            .frame(width: iconDiameter, height: iconDiameter)
+                            .overlay {
+                                Image(systemName: symbol)
+                                    .font(.largeTitle)
+                                    .foregroundStyle(tint)
+                                    .appSymbolBounce(value: appeared)
+                            }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(stateLabel)
+                            .appStagedReveal(0, shown: appeared)
+
+                        VStack(spacing: Spacing.md) {
+                            Text(failure.title)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .accessibilityAddTraits(.isHeader)
+                                .accessibilityFocused($titleFocused)
+
+                            Text(failure.message)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+
+                            if let recoveryNote = failure.recoveryNote {
+                                Text(recoveryNote)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                            }
+
+                            if let code = failure.code {
+                                Text("Error · \(code)")
+                                    .font(.caption)
+                                    .monospaced()
+                                    .foregroundStyle(.secondary)
+                                    .accessibilityLabel("Error code \(code)")
+                            }
+                        }
+                        .padding(.horizontal, Spacing.lg)
+
+                        if !failure.tips.isEmpty {
+                            VStack(spacing: 0) {
+                                ForEach(Array(failure.tips.enumerated()), id: \.offset) { index, tip in
+                                    if index > 0 {
+                                        Divider()
+                                            .padding(.leading, Spacing.lg)
+                                    }
+                                    ErrorRecoveryTipRow(text: tip)
+                                }
+                            }
+                            .appGlassCard(cornerRadius: AppRadius.lg)
+                            .appStagedReveal(1, shown: appeared)
+                        }
+
+                        Spacer()
+
+                        if !failure.recoveries.isEmpty {
+                            recoveryLayout {
+                                if failure.recoveries.contains(.pasteText) {
+                                    Button {
+                                        onPasteText()
+                                    } label: {
+                                        Text(failure.pasteRecoveryLabel)
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, Spacing.md)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .appGlassCard(cornerRadius: AppRadius.md)
+                                }
+
+                                if failure.recoveries.contains(.tryAgain) {
+                                    Button {
+                                        onTryAgain()
+                                    } label: {
+                                        Text("Try again")
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, minHeight: 44)
+                                            .padding(.vertical, Spacing.xs)
+                                    }
+                                    .appProminentButtonStyle(tint: Theme.primaryFill)
+                                }
+
+                                if failure.recoveries.contains(.typeCards) {
+                                    Button {
+                                        onTypeCards()
+                                    } label: {
+                                        Text("Type cards by hand")
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, minHeight: 44)
+                                            .padding(.vertical, Spacing.xs)
+                                    }
+                                    .appProminentButtonStyle(tint: Theme.primaryFill)
+                                }
+                            }
+                            .appStagedReveal(2, shown: appeared)
+                        }
                     }
-                    .appStagedReveal(0, shown: appeared)
-
-                VStack(spacing: Spacing.md) {
-                    Text(failure.title)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
-
-                    Text(failure.message)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    if let recoveryNote = failure.recoveryNote {
-                        Text(recoveryNote)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-
-                    if let code = failure.code {
-                        Text("Error · \(code)")
-                            .font(.caption)
-                            .monospaced()
-                            .foregroundStyle(.tertiary)
-                    }
+                    .padding(Spacing.lg)
+                    .frame(maxWidth: .infinity, minHeight: proxy.size.height)
                 }
-                .padding(.horizontal, Spacing.lg)
-
-                if !failure.tips.isEmpty {
-                    VStack(spacing: 0) {
-                        ForEach(Array(failure.tips.enumerated()), id: \.offset) { index, tip in
-                            if index > 0 {
-                                Divider()
-                                    .padding(.leading, Spacing.lg)
-                            }
-                            ErrorRecoveryTipRow(text: tip)
-                        }
-                    }
-                    .appGlassCard(cornerRadius: AppRadius.lg)
-                    .appStagedReveal(1, shown: appeared)
-                }
-
-                Spacer()
-
-                if !failure.recoveries.isEmpty {
-                    HStack(spacing: Spacing.md) {
-                        if failure.recoveries.contains(.pasteText) {
-                            Button {
-                                onPasteText()
-                            } label: {
-                                Text(failure.pasteRecoveryLabel)
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, Spacing.md)
-                            }
-                            .buttonStyle(.plain)
-                            .appGlassCard(cornerRadius: AppRadius.md)
-                        }
-
-                        if failure.recoveries.contains(.tryAgain) {
-                            Button {
-                                onTryAgain()
-                            } label: {
-                                Text("Try again")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, Spacing.xs)
-                            }
-                            .appProminentButtonStyle(tint: Theme.primary)
-                        }
-
-                        if failure.recoveries.contains(.typeCards) {
-                            Button {
-                                onTypeCards()
-                            } label: {
-                                Text("Type cards by hand")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, Spacing.xs)
-                            }
-                            .appProminentButtonStyle(tint: Theme.primary)
-                        }
-                    }
-                    .appStagedReveal(2, shown: appeared)
-                }
+                .scrollBounceBehavior(.basedOnSize)
             }
-            .padding(Spacing.lg)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(BackgroundView())
             .navigationTitle(failure.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -126,7 +142,19 @@ struct ImportErrorView: View {
                     Button(failure.dismissLabel, action: onDismiss)
                 }
             }
-            .onAppear { appeared = true }
+            .onAppear {
+                appeared = true
+                titleFocused = true
+            }
+        }
+    }
+
+    private var stateLabel: String {
+        switch failure.severity {
+        case .error:
+            return "Error"
+        case .warning:
+            return "Warning"
         }
     }
 

@@ -10,12 +10,15 @@ struct OnboardingFeatureRow: View {
     let title: String
     let detail: String
 
+    @ScaledMetric(relativeTo: .headline) private var iconWidth = 28
+
     var body: some View {
         HStack(alignment: .top, spacing: Spacing.base) {
             Image(systemName: symbol)
                 .font(.headline)
                 .foregroundStyle(.appPrimary)
-                .frame(width: 28)
+                .frame(width: iconWidth)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: Spacing.xs) {
                 Text(title)
@@ -26,5 +29,6 @@ struct OnboardingFeatureRow: View {
             }
             Spacer(minLength: 0)
         }
+        .accessibilityElement(children: .combine)
     }
 }

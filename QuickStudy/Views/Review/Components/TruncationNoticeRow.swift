@@ -12,35 +12,40 @@ struct TruncationNoticeRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack(spacing: Spacing.sm) {
-                Text("PRO")
-                    .font(.caption2)
-                    .fontWeight(.bold)
-                    .tracking(1)
-                    .foregroundStyle(Theme.aiAccentText)
-                    .padding(.horizontal, Spacing.sm)
-                    .padding(.vertical, 2)
-                    .background(Color.appAIAccent.opacity(0.15), in: Capsule())
-                Text("Some sections weren't drafted")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Theme.textPrimary)
-            }
+            VStack(alignment: .leading, spacing: Spacing.sm) {
+                HStack(spacing: Spacing.sm) {
+                    Text("PRO")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .tracking(1)
+                        .foregroundStyle(Theme.aiAccentText)
+                        .padding(.horizontal, Spacing.sm)
+                        .padding(.vertical, 2)
+                        .background(Color.appAIAccent.opacity(0.15), in: Capsule())
+                        .fixedSize()
+                    Text("Some sections weren't drafted")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Theme.textPrimary)
+                }
 
-            // Names the cause — without it the missing cards read as a bug, not a limit.
-            Text("Apple Intelligence couldn't process part of this document, so those sections have no cards. Pro drafts with QuickStudy's cloud model instead.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+                // Names the cause: without it the missing cards read as a bug, not a limit.
+                Text("Apple Intelligence couldn't process part of this document, so those sections have no cards. Pro drafts with QuickStudy's cloud model instead.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .accessibilityElement(children: .combine)
 
             Button(action: action) {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: "sparkles")
+                        .accessibilityHidden(true)
                     Text("Upgrade to Pro")
                 }
                 .frame(maxWidth: .infinity)
             }
-            .appProminentButtonStyle(tint: Theme.primary)
+            .appProminentButtonStyle(tint: Theme.primaryFill)
             .padding(.top, Spacing.xs)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

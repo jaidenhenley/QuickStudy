@@ -11,14 +11,17 @@ struct OnboardingSourceRow: View {
     let detail: String
     let action: () -> Void
 
+    @ScaledMetric(relativeTo: .headline) private var tileSize = 40
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: Spacing.md) {
                 Image(systemName: symbol)
                     .font(.headline)
                     .foregroundStyle(.appPrimary)
-                    .frame(width: 40, height: 40)
+                    .frame(width: tileSize, height: tileSize)
                     .background(Color.appPrimary.opacity(0.12), in: RoundedRectangle(cornerRadius: AppRadius.sm))
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
@@ -33,6 +36,7 @@ struct OnboardingSourceRow: View {
                     .font(.footnote)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
             }
             .padding(Spacing.md)
             .frame(maxWidth: .infinity, alignment: .leading)

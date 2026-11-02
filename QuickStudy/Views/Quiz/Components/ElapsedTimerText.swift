@@ -19,8 +19,20 @@ struct ElapsedTimerText: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .monospacedDigit()
-            .contentTransition(.numericText())
+            .appNumericTransition()
             .appAnimation(Motion.snappy, value: now)
             .onReceive(ticker) { now = $0 }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Elapsed time")
+            .accessibilityValue(spokenValue)
+            .accessibilityAddTraits(.updatesFrequently)
+    }
+
+    // The label is "m:ss"; spoken as a duration so VoiceOver does not read the colon.
+    private var spokenValue: String {
+        let parts = label(now).split(separator: ":").compactMap { Int($0) }
+        guard parts.count == 2 else { return label(now) }
+        return Duration.seconds(parts[0] * 60 + parts[1])
+            .formatted(.units(allowed: [.minutes, .seconds], width: .wide))
     }
 }

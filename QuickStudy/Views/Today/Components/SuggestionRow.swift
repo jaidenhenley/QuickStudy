@@ -14,19 +14,26 @@ struct SuggestionRow: View {
     @Environment(AppState.self) private var appState
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    @ScaledMetric(relativeTo: .subheadline) private var tileSize = 44.0
+
     @State private var isGenerating = false
     @State private var showError = false
     @State private var navigateToSet = false
 
     var body: some View {
-        HStack(spacing: Spacing.md) {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.md))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+
+        layout {
             ZStack {
                 RoundedRectangle(cornerRadius: AppRadius.sm)
                     .fill(Color.appPrimary)
-                    .frame(width: 44, height: 44)
+                    .frame(width: tileSize, height: tileSize)
                 Image(systemName: "sparkles")
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.onPrimary)
             }
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Generate \(suggestion.cardCount) cards on \(suggestion.topic)")
@@ -38,20 +45,30 @@ struct SuggestionRow: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
             }
+            .accessibilityElement(children: .combine)
 
-            Spacer()
+            if !dynamicTypeSize.isAccessibilitySize {
+                Spacer()
+            }
 
             Group {
                 if isGenerating {
                     ProgressView()
+                        .accessibilityLabel("Generating cards")
                         .appTransition(.scale.combined(with: .opacity))
                 } else {
-                    Button("Yes") {
+                    Button {
                         Task { await generate() }
+                    } label: {
+                        Text("Yes")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.appPrimary)
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(.rect)
                     }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.appPrimary)
+                    .accessibilityLabel("Yes, generate cards")
+                    .accessibilityInputLabels(["Yes", "Generate cards"])
                     .appTransition(.scale.combined(with: .opacity))
                 }
             }
@@ -63,6 +80,11 @@ struct SuggestionRow: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(studyViewModel.generationErrorMessage ?? "Please try again.")
+        }
+        .onChange(of: isGenerating) { _, generating in
+            if generating {
+                AccessibilityNotification.Announcement("Generating cards").post()
+            }
         }
         .navigationDestination(isPresented: $navigateToSet) {
             if let set = studyViewModel.savedSets.first(where: { $0.id == suggestion.setID }) {

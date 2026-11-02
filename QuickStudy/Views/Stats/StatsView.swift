@@ -22,9 +22,11 @@ struct StatsView: View {
                         Image(systemName: "chart.bar")
                             .font(.largeTitle)
                             .foregroundStyle(Color.appPrimary)
+                            .accessibilityHidden(true)
                         Text("No stats yet")
                             .font(.title2)
                             .fontWeight(.bold)
+                            .accessibilityAddTraits(.isHeader)
                         Text("Save a set to start tracking your progress.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
@@ -54,12 +56,13 @@ struct StatsView: View {
                         .foregroundStyle(.secondary)
                         .tracking(1)
                         .padding(.top, Spacing.sm)
+                        .accessibilityAddTraits(.isHeader)
 
                     VStack(alignment: .leading, spacing: Spacing.sm) {
                         Text("\(Int((statsViewModel.overallProgress * 100).rounded()))%")
                             .font(.title2)
                             .fontWeight(.bold)
-                            .contentTransition(.numericText())
+                            .appNumericTransition(value: statsViewModel.overallProgress * 100)
                         ProgressView(value: statsViewModel.overallProgress)
                             .tint(Color.appPrimary)
                             .appAnimation(Motion.standard, value: statsViewModel.overallProgress)
@@ -69,6 +72,9 @@ struct StatsView: View {
                     }
                     .padding(Spacing.base)
                     .appGlassCard(cornerRadius: AppRadius.lg)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Overall progress")
+                    .accessibilityValue("\(Int((statsViewModel.overallProgress * 100).rounded())) percent, across \(statsViewModel.setCount) \(statsViewModel.setCount == 1 ? "set" : "sets")")
 
                     if !statsViewModel.toughest.isEmpty {
                         Text("TOUGHEST CARDS")
@@ -77,32 +83,11 @@ struct StatsView: View {
                             .foregroundStyle(.secondary)
                             .tracking(1)
                             .padding(.top, Spacing.sm)
+                            .accessibilityAddTraits(.isHeader)
 
                         ForEach(statsViewModel.toughest) { card in
-                            HStack {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: AppRadius.sm)
-                                        .fill(Theme.danger.opacity(0.15))
-                                        .frame(width: 36, height: 36)
-                                    Text("\(card.missCount)×")
-                                        .font(.caption)
-                                        .fontWeight(.bold)
-                                        .foregroundStyle(Theme.dangerText)
-                                }
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(card.question)
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                        .lineLimit(1)
-                                    Text(card.setTitle)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                Spacer()
-                            }
-                            .padding(Spacing.base)
-                            .appGlassCard(cornerRadius: AppRadius.lg)
-                            .appTransition(.opacity.combined(with: .move(edge: .top)))
+                            StatToughCardRow(card: card)
+                                .appTransition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
 
@@ -112,6 +97,7 @@ struct StatsView: View {
                         .foregroundStyle(.secondary)
                         .tracking(1)
                         .padding(.top, Spacing.sm)
+                        .accessibilityAddTraits(.isHeader)
 
                     ForEach(statsViewModel.setProgress) { entry in
                         StatSetRow(entry: entry)

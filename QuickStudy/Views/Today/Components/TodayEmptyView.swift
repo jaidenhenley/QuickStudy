@@ -28,7 +28,7 @@ struct TodayEmptyView: View {
                     Image(systemName: todayViewModel.hasAnySets ? "checkmark" : "sparkles")
                         .font(.title)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Theme.onPrimary)
 
                     Circle()
                         .fill(Theme.success)
@@ -49,6 +49,7 @@ struct TodayEmptyView: View {
                     Text("All caught up")
                         .font(.title2)
                         .fontWeight(.bold)
+                        .accessibilityAddTraits(.isHeader)
 
                     Text("No cards due today. New ones unlock as your review cycle picks back up.")
                         .font(.subheadline)
@@ -64,12 +65,13 @@ struct TodayEmptyView: View {
                                 .font(.headline)
                                 .padding(.horizontal, Spacing.sm)
                         }
-                        .appProminentButtonStyle(tint: Theme.primary)
+                        .appProminentButtonStyle(tint: Theme.primaryFill)
                     }
                 } else {
                     Text("Build your first set")
                         .font(.title2)
                         .fontWeight(.bold)
+                        .accessibilityAddTraits(.isHeader)
 
                     Text("Scan a page, drop in a PDF, or paste your notes. Your first cards start here.")
                         .font(.subheadline)
@@ -84,7 +86,7 @@ struct TodayEmptyView: View {
                             .font(.headline)
                             .padding(.horizontal, Spacing.sm)
                     }
-                    .appProminentButtonStyle(tint: Theme.primary)
+                    .appProminentButtonStyle(tint: Theme.primaryFill)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -98,6 +100,7 @@ struct TodayEmptyView: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
                         .tracking(1)
+                        .accessibilityAddTraits(.isHeader)
 
                     ForEach(todayViewModel.upNext) { entry in
                         if let set = studyViewModel.savedSets.first(where: { $0.id == entry.id }) {

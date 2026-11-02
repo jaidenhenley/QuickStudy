@@ -10,6 +10,9 @@ import SwiftUI
 struct SetTile: View {
     let set: StudySet
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .headline) private var minTileHeight = 152.0
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             let dueCount = set.dueCount()
@@ -27,7 +30,7 @@ struct SetTile: View {
 
             Text(set.title)
                 .font(.headline)
-                .lineLimit(3)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 3)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -53,7 +56,7 @@ struct SetTile: View {
             }
         }
         .padding(Spacing.base)
-        .frame(maxWidth: .infinity, minHeight: 152, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: minTileHeight, alignment: .leading)
         .appGlassCard(cornerRadius: AppRadius.lg)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
@@ -61,7 +64,7 @@ struct SetTile: View {
 
     private var accessibilityLabel: String {
         let dueCount = set.dueCount()
-        var parts = ["\(set.title), \(set.cards.count) cards"]
+        var parts = ["\(set.title), \(set.cards.count) \(set.cards.count == 1 ? "card" : "cards")"]
         if dueCount > 0 { parts.append("\(dueCount) due") }
         parts.append(
             set.masteryState == .mastered

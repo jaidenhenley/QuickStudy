@@ -11,31 +11,40 @@ struct DraftedCardPreview: View {
     let cardCount: Int
     let pageIndex: Int
     let pageCount: Int
+    let onAdjust: (AccessibilityAdjustmentDirection) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.xs) {
                 Image(systemName: "sparkles")
+                    .accessibilityHidden(true)
                 Text("CARD \(position) OF \(cardCount) · DRAFTED")
                     .tracking(0.5)
+                    .accessibilityHidden(true)
                 Spacer()
             }
             .font(.caption)
             .fontWeight(.semibold)
             .foregroundStyle(Color.appPrimary)
 
-            Text(card.question)
-                .font(.subheadline)
-                .fontWeight(.bold)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(card.answer)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer(minLength: Spacing.sm)
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.sm) {
+                    Text(card.question)
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                    Text(card.answer)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityElement(children: .combine)
+                .accessibilityValue("Card \(position) of \(cardCount)")
+                .accessibilityAdjustableAction(onAdjust)
+            }
+            .scrollBounceBehavior(.basedOnSize)
 
             PageDots(count: pageCount, current: pageIndex)
+                .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)

@@ -13,6 +13,7 @@ struct QuizSessionView: View {
     private enum AccessibilityFocusTarget: Hashable {
         case question
         case result
+        case correctAnswer
     }
 
     @Environment(StudyViewModel.self) private var studyViewModel
@@ -38,12 +39,16 @@ struct QuizSessionView: View {
                         HStack {
                             Text(quizSessionViewModel.positionLabel)
                                 .font(.headline)
+                                .accessibilityLabel(quizSessionViewModel.positionAccessibilityLabel)
+                                .accessibilityAddTraits(.isHeader)
                             Spacer()
                             ElapsedTimerText(label: quizSessionViewModel.elapsedLabel(now:))
                         }
                         VStack(alignment: .leading, spacing: Spacing.xs) {
                             Text(quizSessionViewModel.positionLabel)
                                 .font(.headline)
+                                .accessibilityLabel(quizSessionViewModel.positionAccessibilityLabel)
+                                .accessibilityAddTraits(.isHeader)
                             ElapsedTimerText(label: quizSessionViewModel.elapsedLabel(now:))
                         }
                     }
@@ -60,7 +65,8 @@ struct QuizSessionView: View {
                             VStack(alignment: .leading, spacing: Spacing.base) {
                                 VStack(alignment: .leading, spacing: Spacing.base) {
                                     HStack {
-                                        Text(question.setTitle.uppercased())
+                                        Text(question.setTitle)
+                                            .textCase(.uppercase)
                                             .font(.caption)
                                             .fontWeight(.semibold)
                                             .tracking(1)
@@ -77,8 +83,12 @@ struct QuizSessionView: View {
                                                 }
                                                 .font(.caption)
                                                 .fontWeight(.semibold)
+                                                .frame(minWidth: 44, minHeight: 44)
+                                                .contentShape(Rectangle())
                                             }
                                             .accessibilityLabel("Why this answer, source \(source.longLabel)")
+                                            .accessibilityValue(quizSessionViewModel.showsHint ? "Shown" : "Hidden")
+                                            .accessibilityHint("Shows the source excerpt")
                                         }
                                     }
 
@@ -98,6 +108,7 @@ struct QuizSessionView: View {
                                     .fontWeight(.semibold)
                                     .tracking(1)
                                     .foregroundStyle(.secondary)
+                                    .accessibilityAddTraits(.isHeader)
 
                                 Text(question.prompt)
                                     .font(.title3)
@@ -115,8 +126,10 @@ struct QuizSessionView: View {
                                                 text: question.choices[selected],
                                                 tint: Theme.danger,
                                                 symbol: "x.circle.fill",
+                                                spokenLabel: "Your answer, incorrect",
                                                 emphasis: .shake
                                             )
+                                            .accessibilityFocused($focusTarget, equals: .result)
                                         }
 
                                         ResultCard(
@@ -124,8 +137,10 @@ struct QuizSessionView: View {
                                             text: question.choices[question.correctIndex],
                                             tint: Theme.success,
                                             symbol: "checkmark.circle.fill",
+                                            spokenLabel: correct ? "Correct" : "Correct answer",
                                             emphasis: correct ? .pop : nil
                                         )
+                                        .accessibilityFocused($focusTarget, equals: correct ? .result : .correctAnswer)
 
                                         WhySourceCard(explanation: question.explanation, source: question.source)
 
@@ -135,14 +150,20 @@ struct QuizSessionView: View {
                                                     .font(.caption)
                                                     .foregroundStyle(.secondary)
                                                 Spacer()
-                                                Button("Undo") { quizSessionViewModel.undo(study: studyViewModel) }
-                                                    .font(.caption)
-                                                    .fontWeight(.semibold)
+                                                Button {
+                                                    quizSessionViewModel.undo(study: studyViewModel)
+                                                } label: {
+                                                    Text("Undo")
+                                                        .frame(minWidth: 44, minHeight: 44)
+                                                        .contentShape(Rectangle())
+                                                }
+                                                .font(.caption)
+                                                .fontWeight(.semibold)
+                                                    .accessibilityHint("Returns to the question so you can answer again")
                                             }
                                         }
                                     }
                                     .accessibilityElement(children: .contain)
-                                    .accessibilityFocused($focusTarget, equals: .result)
                                     .appTransition(.opacity.combined(with: .scale(scale: 0.97, anchor: .top)))
                                 } else {
                                     ForEach(question.choices.indices, id: \.self) { index in
@@ -178,21 +199,21 @@ struct QuizSessionView: View {
                             HStack(spacing: Spacing.sm) {
                                 Text("Next question")
                                 Image(systemName: "chevron.right")
+                                    .accessibilityHidden(true)
                             }
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                         }
-                        .appProminentButtonStyle(tint: Theme.primary)
+                        .appProminentButtonStyle(tint: Theme.primaryFill)
                     } else {
                         Button {
                             quizSessionViewModel.submit(study: studyViewModel)
-                            focusTarget = .result
                         } label: {
                             Text("Submit")
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
                         }
-                        .appProminentButtonStyle(tint: Theme.primary)
+                        .appProminentButtonStyle(tint: Theme.primaryFill)
                         .disabled(quizSessionViewModel.selectedChoice == nil)
                     }
                 }
@@ -213,6 +234,20 @@ struct QuizSessionView: View {
         .background(BackgroundView())
         .navigationBarTitleDisplayMode(.inline)
         .appAnimation(Motion.emphasized, value: quizSessionViewModel.phase)
+        .onChange(of: quizSessionViewModel.phase) { _, newPhase in
+            switch newPhase {
+            case .revealed(let correct):
+                AccessibilityNotification.Announcement(correct ? "Correct" : "Incorrect").post()
+                Task {
+                    await Task.yield()
+                    focusTarget = .result
+                }
+            case .answering:
+                focusTarget = .question
+            case .finished:
+                break
+            }
+        }
         .onAppear {
             if quizSessionViewModel.questions.isEmpty { start() }
             focusTarget = .question

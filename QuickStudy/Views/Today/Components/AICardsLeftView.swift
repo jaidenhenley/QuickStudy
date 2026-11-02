@@ -16,26 +16,33 @@ struct AICardsLeftView: View {
             HStack(spacing: Spacing.xs) {
                 Image(systemName: "sparkles")
                     .font(.caption)
+                    .accessibilityHidden(true)
                 Text(label)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .contentTransition(.numericText())
+                    .appNumericTransition()
+                    .multilineTextAlignment(.leading)
                 Spacer()
                 if !todayViewModel.isPro {
                     Text("Pro ›")
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .accessibilityHidden(true)
                 }
             }
-            .frame(maxWidth: .infinity)
+            .padding(.vertical, Spacing.sm)
+            .frame(maxWidth: .infinity, minHeight: 44)
             .foregroundStyle(todayViewModel.isPro ? Theme.aiAccentText : Color.appSecondary)
             .padding(.horizontal, Spacing.md)
-            .padding(.vertical, Spacing.sm)
             .background((todayViewModel.isPro ? Color.appAIAccent : Color.appSecondary).opacity(0.1))
             .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+            .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .disabled(todayViewModel.isPro)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityHint(todayViewModel.isPro ? "" : "Opens QuickStudy Pro")
     }
 
     private var label: String {

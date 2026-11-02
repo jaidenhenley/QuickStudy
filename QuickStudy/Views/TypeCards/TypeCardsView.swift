@@ -29,7 +29,10 @@ struct TypeCardsView: View {
                             index: index + 1,
                             entry: $entry,
                             canRemove: viewModel.entries.count > 1,
-                            onRemove: { withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { viewModel.removeEntry(id: entry.id) } }
+                            onRemove: {
+                                withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { viewModel.removeEntry(id: entry.id) }
+                                AccessibilityNotification.Announcement("Card removed").post()
+                            }
                         )
                         .appTransition(.opacity.combined(with: .move(edge: .top)))
                     }
@@ -38,14 +41,16 @@ struct TypeCardsView: View {
                         withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) {
                             viewModel.addEntry()
                         }
+                        AccessibilityNotification.Announcement("Card \(viewModel.entries.count) added").post()
                     } label: {
                         HStack(spacing: Spacing.sm) {
                             Image(systemName: "plus")
+                                .accessibilityHidden(true)
                             Text("Add another card")
                         }
                         .font(.subheadline)
                         .fontWeight(.medium)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: 44)
                         .padding(.vertical, Spacing.md)
                     }
                     .buttonStyle(.plain)
@@ -74,6 +79,7 @@ struct TypeCardsView: View {
                         dismiss()
                     }
                     .disabled(!viewModel.canSave)
+                    .accessibilityHint(viewModel.saveHint)
                 }
             }
         }

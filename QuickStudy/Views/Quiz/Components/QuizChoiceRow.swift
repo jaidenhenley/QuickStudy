@@ -13,15 +13,17 @@ struct QuizChoiceRow: View {
     let isSelected: Bool
     let action: () -> Void
 
+    @ScaledMetric(relativeTo: .caption) private var chipSize = 26
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: Spacing.md) {
                 Text(letter)
                     .font(.caption)
                     .fontWeight(.bold)
-                    .foregroundStyle(isSelected ? Color.white : .secondary)
-                    .frame(width: 26, height: 26)
-                    .background(isSelected ? Color.appPrimary : Color.secondary.opacity(0.15))
+                    .foregroundStyle(isSelected ? Theme.onPrimary : .secondary)
+                    .frame(width: chipSize, height: chipSize)
+                    .background(isSelected ? Theme.primaryFill : Theme.chipFill)
                     .clipShape(Circle())
                     .accessibilityHidden(true)
 
@@ -34,7 +36,7 @@ struct QuizChoiceRow: View {
                         Text(text)
                             .font(.subheadline)
                             .fontWeight(isSelected ? .semibold : .regular)
-                            .foregroundStyle(isSelected ? Color.appPrimary : Theme.textPrimary)
+                            .foregroundStyle(Theme.textPrimary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -44,7 +46,7 @@ struct QuizChoiceRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Option \(letter): \(text)")
+        .accessibilityLabel("Option \(letter), \(text)")
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }

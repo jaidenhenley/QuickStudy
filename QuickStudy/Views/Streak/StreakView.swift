@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StreakView: View {
     @Environment(SessionStore.self) private var sessionStore
+    @ScaledMetric(relativeTo: .largeTitle) private var flameBadgeSize = 76
+    @ScaledMetric(relativeTo: .subheadline) private var freezeIconSize = 32
 
     private let weekdayLetters = ["M", "T", "W", "T", "F", "S", "S"]
     private let weekdayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -24,23 +26,29 @@ struct StreakView: View {
                 ZStack {
                     Circle()
                         .fill(Color.appStreak.opacity(0.18))
-                        .frame(width: 76, height: 76)
+                        .frame(width: flameBadgeSize, height: flameBadgeSize)
                     Image(systemName: "flame.fill")
                         .font(.title)
                         .foregroundStyle(.appStreak)
-                        .symbolEffect(.pulse, options: .nonRepeating, value: summary.current)
+                        .appSymbolPulse(options: .nonRepeating, value: summary.current)
                 }
+                .accessibilityHidden(true)
                 .padding(.top, Spacing.lg)
 
-                Text("\(summary.current) \(summary.current == 1 ? "day" : "days")")
-                    .font(.system(.largeTitle, design: .rounded))
-                    .fontWeight(.bold)
-                    .contentTransition(.numericText())
-                    .appAnimation(Motion.snappy, value: summary.current)
+                VStack(spacing: Spacing.base) {
+                    Text("\(summary.current) \(summary.current == 1 ? "day" : "days")")
+                        .font(.system(.largeTitle, design: .rounded))
+                        .fontWeight(.bold)
+                        .appNumericTransition(value: Double(summary.current))
+                        .appAnimation(Motion.snappy, value: summary.current)
+                        .accessibilityAddTraits(.isHeader)
 
-                Text(subtitle(for: summary))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    Text(subtitle(for: summary))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(spokenSubtitle(for: summary))
+                }
+                .accessibilityElement(children: .combine)
 
                 HStack(spacing: 0) {
                     ForEach(summary.week.indices, id: \.self) { index in
@@ -53,19 +61,22 @@ struct StreakView: View {
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("This week")
 
                 HStack(alignment: .top, spacing: Spacing.md) {
                     Image(systemName: "snowflake")
                         .foregroundStyle(Color.appSecondary)
-                        .frame(width: 32, height: 32)
+                        .frame(width: freezeIconSize, height: freezeIconSize)
                         .background(Color.appSecondary.opacity(0.15))
                         .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+                        .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(freezeTitle(for: summary))
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                            .contentTransition(.numericText())
+                            .appNumericTransition(value: Double(summary.freezesAvailable))
                         Text("Auto-applies if you miss a day. Earn one per full study week.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -74,6 +85,7 @@ struct StreakView: View {
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
+                .accessibilityElement(children: .combine)
             }
             .padding(Spacing.lg)
         }
@@ -90,6 +102,13 @@ struct StreakView: View {
             return "Longest yet"
         }
         return "Longest was \(summary.longest)"
+    }
+
+    private func spokenSubtitle(for summary: StreakSummary) -> String {
+        if summary.current == 0 || summary.current >= summary.longest {
+            return subtitle(for: summary)
+        }
+        return "Longest streak was \(summary.longest) \(summary.longest == 1 ? "day" : "days")"
     }
 
     private func freezeTitle(for summary: StreakSummary) -> String {
