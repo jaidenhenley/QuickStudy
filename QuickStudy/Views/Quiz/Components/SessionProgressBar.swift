@@ -9,24 +9,33 @@ import SwiftUI
 
 struct SessionProgressBar: View {
     let states: [QuizSessionViewModel.QuestionState]
+    let currentIndex: Int
+
+    @ScaledMetric(relativeTo: .caption) private var segmentHeight = 6
 
     var body: some View {
         HStack(spacing: 3) {
             ForEach(states.indices, id: \.self) { index in
                 Capsule()
                     .fill(color(for: states[index]))
-                    .frame(height: 4)
+                    .frame(height: segmentHeight)
                     .overlay {
                         switch states[index] {
                         case .correct:
                             Image(systemName: "checkmark")
-                                .font(.system(size: 5, weight: .bold))
-                                .foregroundStyle(.white)
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.vertical, segmentHeight * 0.2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Theme.onPrimary)
                                 .appTransition(.scale.combined(with: .opacity))
                         case .wrong:
                             Image(systemName: "xmark")
-                                .font(.system(size: 5, weight: .bold))
-                                .foregroundStyle(.white)
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.vertical, segmentHeight * 0.2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Theme.onPrimary)
                                 .appTransition(.scale.combined(with: .opacity))
                         case .current, .upcoming:
                             EmptyView()
@@ -41,10 +50,9 @@ struct SessionProgressBar: View {
     }
 
     private var accessibilityValue: String {
-        let position = (states.firstIndex(of: .current) ?? states.count - 1) + 1
         let correct = states.filter { $0 == .correct }.count
         let wrong = states.filter { $0 == .wrong }.count
-        return "Question \(max(position, 1)) of \(states.count), \(correct) correct, \(wrong) missed"
+        return "Question \(currentIndex + 1) of \(states.count), \(correct) correct, \(wrong) missed"
     }
 
     private func color(for state: QuizSessionViewModel.QuestionState) -> Color {
@@ -52,7 +60,7 @@ struct SessionProgressBar: View {
         case .correct: return Theme.success
         case .wrong: return Theme.danger
         case .current: return Color.appPrimary
-        case .upcoming: return Color.secondary.opacity(0.25)
+        case .upcoming: return Theme.track
         }
     }
 }

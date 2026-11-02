@@ -20,17 +20,20 @@ struct WhySourceCard: View {
                 Text("Why")
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .accessibilityAddTraits(.isHeader)
             }
 
             Text(explanation)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
 
             if let source {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: "link")
                         .accessibilityHidden(true)
                     Text(source.longLabel)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .font(.caption)
                 .foregroundStyle(Color.appPrimary)
@@ -41,5 +44,6 @@ struct WhySourceCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
     }
 }

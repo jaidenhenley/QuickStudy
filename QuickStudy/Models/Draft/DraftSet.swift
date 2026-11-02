@@ -60,4 +60,18 @@ struct DraftSet: Identifiable, Codable {
     func committed() -> StudySet {
         StudySet(title: title, document: document, cards: cards, sourceType: sourceType, provenance: provenance)
     }
+
+    /// Only on-device and Private Cloud drafts spend a free generation; hosted Pro and
+    /// the user's own API key don't, so the warning mustn't claim they did.
+    var discardWarning: String {
+        let deleted = cards.isEmpty
+            ? "This draft will be deleted."
+            : "The \(cards.count) drafted \(cards.count == 1 ? "card" : "cards") will be deleted."
+        switch provenance?.engine {
+        case .onDevice, .privateCloud:
+            return deleted + " This used one of your free generations."
+        case .cloud, .externalAPI, .none:
+            return deleted
+        }
+    }
 }

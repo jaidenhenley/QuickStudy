@@ -13,14 +13,17 @@ struct PaywallHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             Image(systemName: "sparkles")
-                .font(.system(size: 32, weight: .semibold))
+                .font(.largeTitle)
+                .fontWeight(.semibold)
                 .foregroundStyle(.appAIAccent)
-                .symbolEffect(.bounce, value: appeared)
+                .appSymbolBounce(value: appeared)
+                .accessibilityHidden(true)
                 .appStagedReveal(0, shown: appeared)
 
             Text("QuickStudy Pro")
                 .font(.title)
                 .fontWeight(.bold)
+                .accessibilityAddTraits(.isHeader)
                 .appStagedReveal(1, shown: appeared)
 
             if surface == .exhausted {

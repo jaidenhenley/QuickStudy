@@ -23,6 +23,8 @@ struct SourcePageView: View {
                     .font(.callout)
                     .foregroundStyle(isHighlighted ? Theme.textPrimary : .secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(isHighlighted ? .isSelected : [])
+                    .accessibilityValue(absolute == highlighted?.lowerBound ? "Source of this card" : "")
                     .id(absolute)
                     .anchorPreference(key: HighlightedLineBounds.self, value: .bounds) { anchor in
                         isHighlighted ? [anchor] : []
@@ -39,10 +41,15 @@ struct SourcePageView: View {
                     let bounds = rects.dropFirst().reduce(first) { $0.union($1) }
                     RoundedRectangle(cornerRadius: AppRadius.sm)
                         .fill(Color.appPrimary.opacity(0.15))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: AppRadius.sm)
+                                .strokeBorder(Color.appPrimary, lineWidth: 1.5)
+                        }
                         .frame(width: bounds.width + Spacing.sm * 2, height: bounds.height + Spacing.xs * 2)
                         .offset(x: bounds.minX - Spacing.sm, y: bounds.minY - Spacing.xs)
                 }
             }
+            .accessibilityHidden(true)
         }
     }
 }

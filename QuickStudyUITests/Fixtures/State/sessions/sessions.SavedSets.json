@@ -1,0 +1,281 @@
+[
+  {
+    "cards" : [
+      {
+        "answer" : "In the chloroplasts.",
+        "box" : 2,
+        "distractors" : [
+          "In the mitochondria.",
+          "In the nucleus.",
+          "In the ribosomes."
+        ],
+        "dueDate" : "2026-10-23T04:00:00Z",
+        "explanation" : "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.",
+        "id" : "9C9CEDC4-060B-47F5-9562-34CA5A4C5B40",
+        "lastReviewedAt" : "2026-10-20T20:08:40Z",
+        "missCount" : 0,
+        "question" : "Where in the cell does photosynthesis take place?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.",
+          "lineRange" : [
+            1,
+            1
+          ],
+          "page" : 1,
+          "paragraph" : 2
+        }
+      },
+      {
+        "answer" : "The green pigment that absorbs red and blue light to power photosynthesis.",
+        "box" : 0,
+        "distractors" : [
+          "The sugar a plant stores for energy.",
+          "A pigment that absorbs green light and reflects red light.",
+          "The tissue that carries water up from the roots."
+        ],
+        "dueDate" : "2026-10-21T04:00:00Z",
+        "explanation" : "Chlorophyll captures light energy. The green light it reflects is why leaves look green.",
+        "id" : "88D3D86B-98D1-427C-884B-82DC52738B59",
+        "lastReviewedAt" : "2026-10-20T20:08:48Z",
+        "missCount" : 3,
+        "question" : "What is chlorophyll?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.",
+          "lineRange" : [
+            2,
+            2
+          ],
+          "page" : 1,
+          "paragraph" : 3
+        }
+      },
+      {
+        "answer" : "Glucose and oxygen.",
+        "box" : 0,
+        "distractors" : [
+          "Carbon dioxide only.",
+          "Glucose and water.",
+          "Water and oxygen."
+        ],
+        "dueDate" : "2026-10-21T04:00:00Z",
+        "explanation" : "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.",
+        "id" : "D530CAEC-9ED5-433C-AD59-9BBD34EC739C",
+        "lastReviewedAt" : "2026-10-20T20:09:01Z",
+        "missCount" : 2,
+        "question" : "What are the products of photosynthesis?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+          "lineRange" : [
+            3,
+            3
+          ],
+          "page" : 1,
+          "paragraph" : 4
+        }
+      },
+      {
+        "answer" : "Through small pores called stomata.",
+        "box" : 0,
+        "distractors" : [
+          "Through the roots, with water.",
+          "Through the bark of the stem.",
+          "Through the chloroplast membrane."
+        ],
+        "dueDate" : "2026-10-21T04:00:00Z",
+        "explanation" : "Stomata open on the leaf surface so gases can move in and out.",
+        "id" : "F0B969B7-47C2-4EDA-A744-25C6540A7DB7",
+        "lastReviewedAt" : "2026-10-20T20:09:13Z",
+        "missCount" : 1,
+        "question" : "How does carbon dioxide get into a leaf?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.",
+          "lineRange" : [
+            4,
+            4
+          ],
+          "page" : 1,
+          "paragraph" : 5
+        }
+      },
+      {
+        "answer" : "The light-dependent reactions and the Calvin cycle.",
+        "box" : 0,
+        "distractors" : [
+          "Glycolysis and the Krebs cycle.",
+          "Interphase and the stages of mitosis.",
+          "Transcription and then translation of DNA."
+        ],
+        "dueDate" : "2026-10-21T04:00:00Z",
+        "explanation" : "The light reactions capture energy, and the Calvin cycle spends it building sugar.",
+        "id" : "50FA781A-6A15-493A-8CC9-C91B8AB7D516",
+        "lastReviewedAt" : "2026-10-20T20:09:23Z",
+        "missCount" : 1,
+        "question" : "What are the two stages of photosynthesis?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.",
+          "lineRange" : [
+            5,
+            5
+          ],
+          "page" : 2,
+          "paragraph" : 1
+        }
+      },
+      {
+        "answer" : "In the thylakoids.",
+        "box" : 2,
+        "distractors" : [
+          "In the stroma.",
+          "In the cytoplasm.",
+          "In the stomata."
+        ],
+        "dueDate" : "2026-10-21T04:00:00Z",
+        "explanation" : "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.",
+        "id" : "030F2F38-9A6D-4362-936E-51AFF70C05F2",
+        "lastReviewedAt" : "2026-10-20T04:00:00Z",
+        "missCount" : 0,
+        "question" : "Where do the light-dependent reactions happen?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.",
+          "lineRange" : [
+            6,
+            6
+          ],
+          "page" : 2,
+          "paragraph" : 2
+        }
+      },
+      {
+        "answer" : "From water molecules that are split.",
+        "box" : 3,
+        "distractors" : [
+          "From carbon dioxide taken in by the leaf.",
+          "From glucose broken down in the cell.",
+          "From the air inside the stomata."
+        ],
+        "dueDate" : "2026-10-21T04:00:00Z",
+        "explanation" : "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.",
+        "id" : "0625EE02-E2C3-42CD-A2FD-91928C5FF704",
+        "lastReviewedAt" : "2026-10-20T04:00:00Z",
+        "missCount" : 0,
+        "question" : "Where does the oxygen released by photosynthesis come from?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.",
+          "lineRange" : [
+            7,
+            7
+          ],
+          "page" : 2,
+          "paragraph" : 3
+        }
+      },
+      {
+        "answer" : "Sugar, built from carbon dioxide.",
+        "box" : 3,
+        "distractors" : [
+          "Oxygen, released from water.",
+          "ATP and NADPH for the light reactions.",
+          "Chlorophyll for capturing more light."
+        ],
+        "dueDate" : "2026-10-23T04:00:00Z",
+        "explanation" : "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.",
+        "id" : "97DE5206-193E-4897-8F52-98C68C293099",
+        "lastReviewedAt" : "2026-10-20T04:00:00Z",
+        "missCount" : 0,
+        "question" : "What does the Calvin cycle produce?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.",
+          "lineRange" : [
+            8,
+            8
+          ],
+          "page" : 2,
+          "paragraph" : 4
+        }
+      },
+      {
+        "answer" : "Light intensity, carbon dioxide concentration, and temperature.",
+        "box" : 3,
+        "distractors" : [
+          "Soil type, leaf color, and plant height.",
+          "Oxygen level, glucose level, and leaf size.",
+          "Day length, root depth, and humidity."
+        ],
+        "dueDate" : "2026-10-25T04:00:00Z",
+        "explanation" : "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.",
+        "id" : "151988E7-A3CF-4C9A-9190-3BC3E64078AF",
+        "lastReviewedAt" : "2026-10-20T04:00:00Z",
+        "missCount" : 0,
+        "question" : "Which three factors affect the rate of photosynthesis?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.",
+          "lineRange" : [
+            9,
+            9
+          ],
+          "page" : 2,
+          "paragraph" : 5
+        }
+      },
+      {
+        "answer" : "Turning light energy into chemical energy stored in glucose.",
+        "box" : 5,
+        "distractors" : [
+          "Breaking down glucose to release energy.",
+          "Absorbing water through the roots.",
+          "Releasing carbon dioxide into the air."
+        ],
+        "dueDate" : "2026-11-19T05:00:00Z",
+        "explanation" : "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.",
+        "id" : "4017FF48-48C6-4C27-88F0-E81162DE1BA4",
+        "lastReviewedAt" : "2026-10-20T04:00:00Z",
+        "missCount" : 0,
+        "question" : "What is photosynthesis?",
+        "source" : {
+          "documentTitle" : "Photosynthesis",
+          "excerpt" : "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.",
+          "lineRange" : [
+            0,
+            0
+          ],
+          "page" : 1,
+          "paragraph" : 1
+        }
+      }
+    ],
+    "createdAt" : "2026-10-20T20:08:23Z",
+    "document" : {
+      "lines" : [
+        "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.",
+        "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.",
+        "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.",
+        "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+        "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.",
+        "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.",
+        "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.",
+        "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.",
+        "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.",
+        "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature."
+      ],
+      "pageBreaks" : [
+        0,
+        5
+      ],
+      "title" : "Photosynthesis"
+    },
+    "id" : "E101C621-A1F9-4C4A-B723-ABC027A8F589",
+    "isDemo" : true,
+    "sourceType" : "demo",
+    "title" : "Photosynthesis",
+    "updatedAt" : "2026-10-20T20:09:23Z"
+  }
+]

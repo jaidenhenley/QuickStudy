@@ -9,16 +9,19 @@ struct SetProvenanceRow: View {
     let sourceType: StudySourceType
     let provenance: GenerationProvenance?
 
+    @ScaledMetric(relativeTo: .headline) private var tileSize = 40
+
     var body: some View {
         HStack(spacing: Spacing.md) {
             Image(systemName: symbol)
                 .font(.headline)
                 .foregroundStyle(provenance?.engine == .cloud ? Color.appAIAccent : Color.appPrimary)
-                .frame(width: 40, height: 40)
+                .frame(width: tileSize, height: tileSize)
                 .background(
                     (provenance?.engine == .cloud ? Color.appAIAccent : Color.appPrimary).opacity(0.12),
                     in: RoundedRectangle(cornerRadius: AppRadius.sm)
                 )
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
@@ -32,6 +35,7 @@ struct SetProvenanceRow: View {
         }
         .padding(Spacing.md)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
     }
 
     private var symbol: String {

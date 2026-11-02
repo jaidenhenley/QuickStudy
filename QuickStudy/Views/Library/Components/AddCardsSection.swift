@@ -10,6 +10,8 @@ struct AddCardsSection: View {
     let onTypeCards: () -> Void
     let onUpgrade: () -> Void
 
+    @ScaledMetric(relativeTo: .subheadline) private var tileSize = 36.0
+
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             Text("ADD CARDS")
@@ -17,15 +19,17 @@ struct AddCardsSection: View {
                 .fontWeight(.semibold)
                 .tracking(1)
                 .foregroundStyle(.secondary)
+                .accessibilityAddTraits(.isHeader)
 
             Button(action: onTypeCards) {
                 HStack(spacing: Spacing.md) {
                     Image(systemName: "text.alignleft")
                         .font(.subheadline)
                         .foregroundStyle(Theme.primary)
-                        .frame(width: 36, height: 36)
+                        .frame(width: tileSize, height: tileSize)
                         .background(Theme.primary.opacity(0.12))
                         .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+                        .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Type cards")
@@ -40,20 +44,23 @@ struct AddCardsSection: View {
                     Image(systemName: "chevron.right")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
                 }
                 .padding(Spacing.md)
             }
             .buttonStyle(.plain)
             .appGlassCard(cornerRadius: AppRadius.lg)
+            .accessibilityElement(children: .combine)
 
             Button(action: onUpgrade) {
                 HStack(spacing: Spacing.md) {
                     Image(systemName: "sparkles")
                         .font(.subheadline)
                         .foregroundStyle(Theme.aiAccentText)
-                        .frame(width: 36, height: 36)
+                        .frame(width: tileSize, height: tileSize)
                         .background(Color.appAIAccent.opacity(0.12))
                         .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+                        .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Go Pro for AI generation")
@@ -68,16 +75,19 @@ struct AddCardsSection: View {
                     Image(systemName: "chevron.right")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
                 }
                 .padding(Spacing.md)
             }
             .buttonStyle(.plain)
             .appGlassCard(cornerRadius: AppRadius.lg)
+            .accessibilityElement(children: .combine)
 
             HStack(alignment: .top, spacing: Spacing.md) {
                 Image(systemName: "info.circle")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
                 Text(infoText)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -85,6 +95,7 @@ struct AddCardsSection: View {
             }
             .padding(Spacing.md)
             .appGlassCard(cornerRadius: AppRadius.md)
+            .accessibilityElement(children: .combine)
         }
     }
 

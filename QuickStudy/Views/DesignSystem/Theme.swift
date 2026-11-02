@@ -4,6 +4,8 @@ struct Theme {
     static let background = Color("AppBackground")
     static let surface = Color("AppSurface")
     static let primary = Color("AppPrimary")
+    /// `primary` behind white text. Dark mode is deeper so white clears 4.5:1; `primary` stays lighter for indigo text on dark.
+    static let primaryFill = Color("AppPrimaryFill")
     static let secondary = Color("AppSecondary")
     static let aiAccent = Color("AppAIAccent")
     static let textPrimary = Color("AppTextPrimary")
@@ -11,6 +13,13 @@ struct Theme {
     static let danger = Color("AppDanger")
     static let warning = Color("AppWarning")
     static let streak = Color("AppStreak")
+    static let onPrimary = Color("AppOnPrimary")
+    static let onLightAction = Color("AppOnLightAction")
+
+    /// Unfilled portion of progress bars, rings, and dots. Holds 3:1 against `background`.
+    static let track = Color("AppTrack")
+    static let hairline = Color("AppHairline")
+    static let chipFill = Color("AppChipFill")
 
     /// Text-safe variants of `aiAccent`/`danger`/`success` for use as foreground color
     /// on `Theme.background`. The base colors read as fills, badges, and icons; their
@@ -23,6 +32,7 @@ struct Theme {
 
 private struct GlassCardModifier: ViewModifier {
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var contrast
     let cornerRadius: CGFloat
     let tint: Color?
 
@@ -41,41 +51,59 @@ private struct GlassCardModifier: ViewModifier {
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .strokeBorder(Color.primary.opacity(0.12), lineWidth: 1)
+                        .strokeBorder(Theme.hairline, lineWidth: 1)
                 }
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         } else if let tint {
-            content.glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
+            content
+                .glassEffect(.regular.tint(tint), in: .rect(cornerRadius: cornerRadius))
+                .overlay {
+                    if contrast == .increased {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .strokeBorder(Theme.hairline, lineWidth: 1)
+                    }
+                }
         } else {
-            content.glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+            content
+                .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+                .overlay {
+                    if contrast == .increased {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .strokeBorder(Theme.hairline, lineWidth: 1)
+                    }
+                }
         }
     }
 }
 
 private struct ProminentButtonModifier: ViewModifier {
+    @Environment(\.isEnabled) private var isEnabled
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var contrast
     let tint: Color
 
     func body(content: Content) -> some View {
-        if reduceTransparency {
+        if reduceTransparency || contrast == .increased {
             content
                 .buttonStyle(.plain)
-                .foregroundStyle(.white)
+                // The system dims a disabled plain button's label, so a neutral fill with full-strength
+                // text stays legible and cannot be mistaken for the enabled indigo.
+                .foregroundStyle(isEnabled ? Theme.onPrimary : Theme.textPrimary)
                 .padding(.horizontal, Spacing.base)
                 .padding(.vertical, Spacing.sm)
                 .background {
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .fill(tint)
+                        .fill(isEnabled ? tint : Theme.chipFill)
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                        .strokeBorder(isEnabled ? Theme.onPrimary.opacity(0.15) : Theme.hairline, lineWidth: 1)
                 }
         } else {
             content
                 .buttonStyle(.glassProminent)
                 .tint(tint)
-                .foregroundStyle(.white)
+                .foregroundStyle(Theme.onPrimary)
         }
     }
 }

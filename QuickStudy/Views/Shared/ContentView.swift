@@ -18,8 +18,7 @@ struct ContentView: View {
     @State private var store: StoreController
     @State private var analytics: AnalyticsRecorder
     @State private var onboarding: OnboardingViewModel?
-    @State private var showOnboarding = false
-    @State private var showOnboardingPaywall = false
+    @State private var presentations = RootPresentationQueue()
     @State private var whatsNew: WhatsNewViewModel?
     @Environment(\.scenePhase) private var scenePhase
 
@@ -90,7 +89,10 @@ struct ContentView: View {
         .onAppear {
             presentLaunchSheetIfNeeded()
         }
-        .fullScreenCover(isPresented: $showOnboarding, onDismiss: finishOnboarding) {
+        .fullScreenCover(
+            isPresented: presentations.isPresenting(.onboarding, settle: RootPresentationQueue.sheetSettle),
+            onDismiss: finishOnboarding
+        ) {
             if let onboarding {
                 OnboardingView()
                     .environment(onboarding)
@@ -98,38 +100,70 @@ struct ContentView: View {
             }
         }
         // Onboarding's paywall waits for the first set the user made themselves, so the
-        // ask follows real value rather than landing before it.
+        // ask follows real value rather than landing before it. The delay lets the sheet
+        // that saved the set finish dismissing first.
         .onChange(of: viewModel.userSetCount) { old, new in
             guard new > old, OnboardingViewModel.isPaywallPending, !store.isPro else { return }
-            OnboardingViewModel.setPaywallPending(false)
-            showOnboardingPaywall = true
+            presentations.enqueue(.onboardingPaywall, after: RootPresentationQueue.sheetSettle)
         }
-        .sheet(isPresented: $showOnboardingPaywall) {
+        .sheet(isPresented: presentations.isPresenting(.onboardingPaywall, settle: RootPresentationQueue.sheetSettle)) {
             PaywallView(surface: .onboarding)
                 .environment(store)
                 .environment(analytics)
+                .onAppear { OnboardingViewModel.setPaywallPending(false) }
         }
-        .alert("Couldn't open your library", isPresented: $viewModel.isLibraryIssuePresented) {
+        .onChange(of: viewModel.isLibraryIssuePresented, initial: true) { _, isPresented in
+            if isPresented { presentations.enqueue(.libraryIssue) }
+        }
+        .onChange(of: sessionStore.isLoadIssuePresented, initial: true) { _, isPresented in
+            if isPresented { presentations.enqueue(.historyIssue) }
+        }
+        .onChange(of: draftStore.isLoadIssuePresented, initial: true) { _, isPresented in
+            if isPresented { presentations.enqueue(.draftIssue) }
+        }
+        .alert(
+            "Couldn't open your library",
+            isPresented: presentations.isPresenting(.libraryIssue, settle: RootPresentationQueue.alertSettle) {
+                viewModel.isLibraryIssuePresented = false
+            }
+        ) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(viewModel.libraryIssueMessage)
         }
-        .alert("Couldn't open your study history", isPresented: $sessionStore.isLoadIssuePresented) {
+        .alert(
+            "Couldn't open your study history",
+            isPresented: presentations.isPresenting(.historyIssue, settle: RootPresentationQueue.alertSettle) {
+                sessionStore.isLoadIssuePresented = false
+            }
+        ) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(sessionStore.loadIssueMessage)
         }
-        .alert("Couldn't open your draft", isPresented: $draftStore.isLoadIssuePresented) {
+        .alert(
+            "Couldn't open your draft",
+            isPresented: presentations.isPresenting(.draftIssue, settle: RootPresentationQueue.alertSettle) {
+                draftStore.isLoadIssuePresented = false
+            }
+        ) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(draftStore.loadIssueMessage)
         }
-        .sheet(item: $whatsNew, onDismiss: { releaseTracker.markSeen() }) { presented in
-            WhatsNewView()
-                .environment(presented)
-                .environment(store)
-                .environment(aiSettings)
-                .environment(analytics)
+        .sheet(
+            isPresented: presentations.isPresenting(.whatsNew, settle: RootPresentationQueue.sheetSettle) {
+                releaseTracker.markSeen()
+            },
+            onDismiss: { whatsNew = nil }
+        ) {
+            if let presented = whatsNew {
+                WhatsNewView()
+                    .environment(presented)
+                    .environment(store)
+                    .environment(aiSettings)
+                    .environment(analytics)
+            }
         }
     }
 
@@ -144,11 +178,12 @@ struct ContentView: View {
             // can't make this install look like an upgrader.
             releaseTracker.markSeen()
             onboarding = OnboardingViewModel(settings: aiSettings)
-            showOnboarding = true
+            presentations.enqueue(.onboarding)
         case .whatsNew(let note):
             // Upgraders have been using the app; they get release notes, not onboarding.
             OnboardingViewModel.markCompleted()
             whatsNew = WhatsNewViewModel(note: note)
+            presentations.enqueue(.whatsNew)
         case nil:
             break
         }

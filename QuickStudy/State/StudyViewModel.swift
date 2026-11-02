@@ -8,7 +8,6 @@
 import Foundation
 import OSLog
 import UIKit
-import SwiftUI
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier ?? "com.henley.jaiden.QuickStudy",
@@ -18,10 +17,19 @@ private let logger = Logger(
 @Observable
 class StudyViewModel {
     // MARK: - Settings
-    @ObservationIgnored
-    @AppStorage("demoModeEnabled") var demoModeEnabled: Bool = false {
+    private static let demoModeKey = "demoModeEnabled"
+    private static let spellCheckKey = "qs_spellCheckEnabled"
+
+    var demoModeEnabled: Bool = UserDefaults.standard.bool(forKey: StudyViewModel.demoModeKey) {
         didSet {
+            UserDefaults.standard.set(demoModeEnabled, forKey: Self.demoModeKey)
             applyDemoMode()
+        }
+    }
+
+    var isSpellCheckEnabled: Bool = UserDefaults.standard.object(forKey: StudyViewModel.spellCheckKey) as? Bool ?? true {
+        didSet {
+            UserDefaults.standard.set(isSpellCheckEnabled, forKey: Self.spellCheckKey)
         }
     }
     
@@ -40,7 +48,6 @@ class StudyViewModel {
    var document: StudyDocument? = nil
    var flashcards: [StudyCard] = []
    var isGenerating: Bool = false
-   var isSpellCheckEnabled: Bool = true
    var isHandwritingMode: Bool = false
    var isUltraHandwritingMode: Bool = true
    private(set) var lastGenerationWasTruncated = false
@@ -59,22 +66,38 @@ class StudyViewModel {
         loadSavedSets()
     }
 
-    func loadTodaySession(asOf date: Date = Date(), calendar: Calendar = .current) {
-        flashcards = savedSets
+    func dueCards(asOf date: Date = Date(), calendar: Calendar = .current) -> [StudyCard] {
+        savedSets
             .flatMap(\.cards)
             .filter { $0.isDue(asOf: date, calendar: calendar) }
     }
 
-    func box(for cardID: UUID) -> Int? {
-        savedSets.lazy.compactMap { $0.cards.first { $0.id == cardID }?.box }.first
+    func loadTodaySession(asOf date: Date = Date(), calendar: Calendar = .current) {
+        flashcards = dueCards(asOf: date, calendar: calendar)
     }
 
-    func restoreBox(_ box: Int, missCountDelta: Int, for cardID: UUID) {
-        guard let setIndex = savedSets.firstIndex(where: { $0.cards.contains { $0.id == cardID } }),
-              let cardIndex = savedSets[setIndex].cards.firstIndex(where: { $0.id == cardID }) else { return }
-        savedSets[setIndex].cards[cardIndex].box = box
-        savedSets[setIndex].cards[cardIndex].missCount = max(0, savedSets[setIndex].cards[cardIndex].missCount + missCountDelta)
-        savedSets[setIndex].cards[cardIndex].dueDate = ReviewSchedule.newDueDate(forBox: box)
+    func card(for cardID: UUID) -> StudyCard? {
+        savedSets.lazy.compactMap { $0.cards.first { $0.id == cardID } }.first
+    }
+
+    func box(for cardID: UUID) -> Int? {
+        card(for: cardID)?.box
+    }
+
+    /// Undo puts back the card exactly as it was before the answer. Recomputing the due
+    /// date from the box would push it to a later day than the one it was due on.
+    func restoreScheduling(from snapshot: StudyCard) {
+        guard let setIndex = savedSets.firstIndex(where: { $0.cards.contains { $0.id == snapshot.id } }),
+              let cardIndex = savedSets[setIndex].cards.firstIndex(where: { $0.id == snapshot.id }) else { return }
+        savedSets[setIndex].cards[cardIndex].box = snapshot.box
+        savedSets[setIndex].cards[cardIndex].missCount = snapshot.missCount
+        savedSets[setIndex].cards[cardIndex].dueDate = snapshot.dueDate
+        savedSets[setIndex].cards[cardIndex].lastReviewedAt = snapshot.lastReviewedAt
+
+        if let workingIndex = flashcards.firstIndex(where: { $0.id == snapshot.id }) {
+            flashcards[workingIndex] = savedSets[setIndex].cards[cardIndex]
+        }
+
         hasUnsavedChanges = true
     }
 
@@ -206,7 +229,7 @@ class StudyViewModel {
 
         for page in extracted.pages {
             pageBreaks.append(allLines.count)
-            var working = isSpellCheckEnabled ? spellCorrect(page.text) : page.text
+            var working = isSpellCheckEnabled ? spellCorrect(page) : page.text
             if isHandwritingMode,
                let repaired = await contextCorrect(
                    working,
@@ -220,7 +243,7 @@ class StudyViewModel {
         let document = StudyDocument(
             title: title,
             lines: allLines,
-            pageBreaks: extracted.pages.count > 1 ? pageBreaks : nil
+            pageBreaks: sourceType == .paste ? nil : pageBreaks
         )
         let cards = await generateCards(for: document, countsAgainstAllowance: true)
         guard !cards.isEmpty else { return nil }
@@ -444,28 +467,51 @@ class StudyViewModel {
     }
 
     // MARK: - Spell check
+
+    /// Only OCR output is corrected, and only towards a word Vision itself considered for
+    /// that line. Typed and PDF text is already what the author wrote; the checker's first
+    /// guess for a technical term ("cristae" to "Crest") is usually wrong.
     @MainActor
-    func spellCorrect(_ text: String) -> String {
+    func spellCorrect(_ page: ExtractedDocument.Page) -> String {
+        guard !page.candidates.isEmpty else { return page.text }
+
         let checker = UITextChecker()
         let currentLocale = Locale.current.identifier
         let language = UITextChecker.availableLanguages.contains(currentLocale)
             ? currentLocale
             : "en_US"
 
-        let rawLines = text.components(separatedBy: .newlines)
-        var correctedLines: [String] = []
-        correctedLines.reserveCapacity(rawLines.count)
-
-        for line in rawLines {
-            let corrected = spellCorrectLine(line, checker: checker, language: language)
-            correctedLines.append(corrected)
+        // Keyed by the recognised text rather than by index: trimming the page text can
+        // drop leading empty lines and shift the indices.
+        var alternatives: [String: Set<String>] = [:]
+        for lineCandidates in page.candidates {
+            guard let recognised = lineCandidates.first else { continue }
+            let key = recognised.trimmingCharacters(in: .whitespacesAndNewlines)
+            alternatives[key, default: []].formUnion(lineCandidates.flatMap { Self.words(in: $0) })
         }
 
-        return correctedLines.joined(separator: "\n")
+        return page.text
+            .components(separatedBy: .newlines)
+            .map { line in
+                let allowed = alternatives[line.trimmingCharacters(in: .whitespacesAndNewlines)] ?? []
+                return spellCorrectLine(line, allowedGuesses: allowed, checker: checker, language: language)
+            }
+            .joined(separator: "\n")
+    }
+
+    private static func words(in text: String) -> [String] {
+        text.lowercased()
+            .components(separatedBy: CharacterSet.letters.inverted)
+            .filter { !$0.isEmpty }
     }
 
     @MainActor
-    func spellCorrectLine(_ line: String, checker: UITextChecker, language: String) -> String {
+    func spellCorrectLine(
+        _ line: String,
+        allowedGuesses: Set<String>,
+        checker: UITextChecker,
+        language: String
+    ) -> String {
         var corrected = line
         var offset = 0
 
@@ -490,7 +536,7 @@ class StudyViewModel {
             }
 
             if let guesses = checker.guesses(forWordRange: misspelledRange, in: corrected, language: language),
-               let bestGuess = guesses.first {
+               let bestGuess = guesses.first(where: { allowedGuesses.contains($0.lowercased()) }) {
                 corrected = (corrected as NSString).replacingCharacters(in: misspelledRange, with: bestGuess)
                 offset = misspelledRange.location + bestGuess.utf16.count
             } else {
@@ -668,6 +714,22 @@ class StudyViewModel {
         if activeSetID == set.id {
             activeSetID = nil
         }
+        saveSavedSets()
+        // Left on, the next launch would seed the sample the user just deleted.
+        if isDemoSet(set) && demoModeEnabled {
+            demoModeEnabled = false
+        }
+    }
+
+    func deleteAllStudyData(drafts: DraftStore, sessions: SessionStore) {
+        demoModeEnabled = false
+        savedSets = []
+        document = nil
+        flashcards = []
+        activeSetID = nil
+        drafts.set(nil)
+        sessions.removeAll()
+        StreakStore.setFrozenDays([])
         saveSavedSets()
     }
 

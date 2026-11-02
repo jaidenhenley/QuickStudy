@@ -19,6 +19,7 @@ struct SourceOptionButton: View {
                 Image(systemName: systemImage)
                     .font(.title3)
                     .foregroundStyle(Color.appPrimary)
+                    .accessibilityHidden(true)
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -29,6 +30,7 @@ struct SourceOptionButton: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity)
             .padding(.vertical, Spacing.base)
             .appGlassCard(cornerRadius: AppRadius.lg)

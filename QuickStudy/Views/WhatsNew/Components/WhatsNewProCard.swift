@@ -9,13 +9,15 @@ struct WhatsNewProCard: View {
     let feature: ReleaseNote.Feature
     let onSeePro: () -> Void
 
+    @ScaledMetric(relativeTo: .headline) private var iconWidth = 28.0
+
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             HStack(alignment: .top, spacing: Spacing.base) {
                 Image(systemName: feature.symbol)
                     .font(.headline)
                     .foregroundStyle(.appAIAccent)
-                    .frame(width: 28)
+                    .frame(width: iconWidth)
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -28,6 +30,7 @@ struct WhatsNewProCard: View {
 
                 Spacer(minLength: 0)
             }
+            .accessibilityElement(children: .combine)
 
             Button(action: onSeePro) {
                 Text("See QuickStudy Pro")

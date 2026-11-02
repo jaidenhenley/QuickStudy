@@ -54,6 +54,10 @@ struct ImportModifiers: ViewModifier {
                             .environment(studyViewModel)
                             .environment(draftStore)
                     }
+                } else {
+                    // Save and Discard clear the draft a frame before the pop lands.
+                    BackgroundView()
+                        .ignoresSafeArea()
                 }
             }
             .onAppear {
@@ -126,11 +130,12 @@ struct ImportModifiers: ViewModifier {
             )
             .fullScreenCover(
                 isPresented: $coordinator.showGenerating,
-                onDismiss: { coordinator.presentPendingFailure() }
+                onDismiss: { coordinator.generatingCoverDidDismiss() }
             ) {
                 GeneratingView(stage: coordinator.stage, source: coordinator.activeSource) {
                     coordinator.cancelGeneration()
                 }
+                .onAppear { coordinator.generatingCoverDidAppear() }
             }
             .fullScreenCover(
                 item: $coordinator.failure,

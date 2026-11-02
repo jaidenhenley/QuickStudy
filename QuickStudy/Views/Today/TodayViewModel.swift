@@ -38,6 +38,14 @@ class TodayViewModel {
         let cardCount: Int
     }
 
+    struct QuizRoute: Hashable {
+        let id = UUID()
+        let cards: [StudyCard]
+
+        static func == (lhs: QuizRoute, rhs: QuizRoute) -> Bool { lhs.id == rhs.id }
+        func hash(into hasher: inout Hasher) { hasher.combine(id) }
+    }
+
     /// A normal session's worth of cards, so "Practice anyway" never hands the whole
     /// library to the quiz unbounded.
     static let practiceSessionSize = 20
@@ -74,7 +82,18 @@ class TodayViewModel {
         }
     }
 
-    // MARK: Streak
+    // MARK: - Routes
+
+    func sessionRoute(study: StudyViewModel) -> QuizRoute {
+        study.loadTodaySession()
+        return QuizRoute(cards: study.flashcards)
+    }
+
+    func weakestRoute(study: StudyViewModel) -> QuizRoute? {
+        guard let weakest = weakestCard,
+              let set = study.savedSets.first(where: { $0.id == weakest.setID }) else { return nil }
+        return QuizRoute(cards: set.cards)
+    }
 
     // MARK: - Derived
 

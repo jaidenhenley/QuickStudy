@@ -21,6 +21,7 @@ struct OfflineBanner: View {
                 Image(systemName: "wifi.slash")
                     .font(.subheadline)
                     .foregroundStyle(Theme.warning)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("You're offline. Card generation needs a connection.")
@@ -38,11 +39,14 @@ struct OfflineBanner: View {
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
             }
             .padding(Spacing.md)
         }
         .buttonStyle(.plain)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("Opens Settings")
     }
 
     private var subtitle: String {

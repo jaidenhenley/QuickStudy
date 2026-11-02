@@ -17,7 +17,7 @@ struct ContentAnalysis {
         let words = text.split { $0.isWhitespace || $0.isNewline }.count
         return ContentAnalysis(
             wordCount: words,
-            estimatedCards: max(1, sentenceCount(text)),
+            estimatedCards: estimatedCards(forWords: words),
             language: detectLanguage(text)
         )
     }
@@ -26,12 +26,15 @@ struct ContentAnalysis {
         estimatedCards == 1 ? "~1 card" : "~\(estimatedCards) cards"
     }
 
-    /// Every engine drafts about one card per sentence of source, so sentences track the
-    /// result far better than words did.
-    private static func sentenceCount(_ text: String) -> Int {
-        let tokenizer = NLTokenizer(unit: .sentence)
-        tokenizer.string = text
-        return tokenizer.tokens(for: text.startIndex..<text.endIndex).count
+    /// Measured against real drafts: 402 words gave 16 cards, 140 gave 6, 37 gave 2. Sentence
+    /// counts overshot by more than double, so the estimate follows word count instead.
+    private static let wordsPerCard = 25
+    private static let maximumEstimate = 60
+
+    private static func estimatedCards(forWords words: Int) -> Int {
+        guard words >= wordsPerCard else { return 1 }
+        let estimate = Int((Double(words) / Double(wordsPerCard)).rounded())
+        return min(max(2, estimate), maximumEstimate)
     }
 
     private static func detectLanguage(_ text: String) -> String? {

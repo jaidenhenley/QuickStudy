@@ -11,31 +11,51 @@ struct AICardsLeftView: View {
     @Environment(TodayViewModel.self) var todayViewModel
     let onUpgrade: () -> Void
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     var body: some View {
+        let stacksVertically = dynamicTypeSize.isAccessibilitySize
+        let layout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: Spacing.xs))
+        let accent = todayViewModel.isPro ? Theme.aiAccentText : Color.appSecondary
+
         Button(action: onUpgrade) {
-            HStack(spacing: Spacing.xs) {
-                Image(systemName: "sparkles")
-                    .font(.caption)
-                Text(label)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .contentTransition(.numericText())
-                Spacer()
+            layout {
+                HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
+                    Image(systemName: "sparkles")
+                        .font(.caption)
+                        .foregroundStyle(accent)
+                        .accessibilityHidden(true)
+                    Text(label)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(todayViewModel.isPro ? Theme.textPrimary : Color.appSecondary)
+                        .appNumericTransition()
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if !stacksVertically { Spacer(minLength: 0) }
                 if !todayViewModel.isPro {
                     Text("Pro ›")
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .foregroundStyle(accent)
+                        .accessibilityHidden(true)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .foregroundStyle(todayViewModel.isPro ? Theme.aiAccentText : Color.appSecondary)
-            .padding(.horizontal, Spacing.md)
             .padding(.vertical, Spacing.sm)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .padding(.horizontal, Spacing.md)
             .background((todayViewModel.isPro ? Color.appAIAccent : Color.appSecondary).opacity(0.1))
             .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+            .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .disabled(todayViewModel.isPro)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityHint(todayViewModel.isPro ? "" : "Opens QuickStudy Pro")
     }
 
     private var label: String {

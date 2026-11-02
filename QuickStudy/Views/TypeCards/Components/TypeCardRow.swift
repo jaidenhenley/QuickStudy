@@ -19,12 +19,14 @@ struct TypeCardRow: View {
                     .fontWeight(.semibold)
                     .tracking(1)
                     .foregroundStyle(.secondary)
+                    .accessibilityLabel("Card \(index)")
+                    .accessibilityAddTraits(.isHeader)
                 Spacer()
                 if canRemove {
                     Button(role: .destructive, action: onRemove) {
                         Image(systemName: "minus.circle")
                             .font(.footnote)
-                            .frame(width: 44, height: 44)
+                            .frame(minWidth: 44, minHeight: 44)
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
@@ -35,12 +37,14 @@ struct TypeCardRow: View {
 
             TextField("Term", text: $entry.term)
                 .font(.headline)
+                .accessibilityLabel("Card \(index) term")
 
             Divider()
 
             TextField("Definition", text: $entry.definition, axis: .vertical)
                 .font(.subheadline)
                 .lineLimit(1...4)
+                .accessibilityLabel("Card \(index) definition")
         }
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)

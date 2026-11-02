@@ -35,6 +35,10 @@ final class TypeCardsViewModel {
         return count == 1 ? "Save 1 card" : "Save \(count) cards"
     }
 
+    var saveHint: String {
+        canSave ? "" : "Add a set title and one complete card"
+    }
+
     /// The quiz builds wrong answers from a set's other answers, so a set of three or
     /// fewer has to borrow them from elsewhere in the library and reads as weaker.
     var wantsMoreCards: Bool {

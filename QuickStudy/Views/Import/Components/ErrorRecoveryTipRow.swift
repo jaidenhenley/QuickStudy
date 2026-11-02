@@ -13,11 +13,13 @@ struct ErrorRecoveryTipRow: View {
             Circle()
                 .fill(Theme.primary)
                 .frame(width: 5, height: 5)
+                .accessibilityHidden(true)
             Text(text)
                 .font(.subheadline)
             Spacer(minLength: 0)
         }
         .padding(.vertical, Spacing.md)
         .padding(.horizontal, Spacing.base)
+        .accessibilityElement(children: .combine)
     }
 }

@@ -84,6 +84,24 @@ extension ImportFailure {
         )
     }
 
+    static func unreadablePDF() -> ImportFailure {
+        ImportFailure(
+            severity: .warning,
+            navigationTitle: "Import failed",
+            dismissLabel: "Back",
+            title: "We couldn't open this PDF",
+            message: "It may be damaged or password protected.",
+            recoveryNote: nil,
+            code: "QS-122",
+            tips: [
+                "Remove the password, then share it again",
+                "Download or export the PDF again",
+                "Copy the text and paste it instead"
+            ],
+            recoveries: [.pasteText, .tryAgain]
+        )
+    }
+
     static func quotaExhausted(resetDate: Date) -> ImportFailure {
         ImportFailure(
             severity: .warning,

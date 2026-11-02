@@ -12,18 +12,20 @@ struct StreakDayDot: View {
     let dayName: String
     let state: StreakSummary.DayState
 
+    @ScaledMetric(relativeTo: .caption) private var dotSize = 32
+
     var body: some View {
         VStack(spacing: Spacing.xs) {
             ZStack {
                 Circle()
                     .fill(fill)
-                    .frame(width: 32, height: 32)
+                    .frame(width: min(dotSize, 44), height: min(dotSize, 44))
                 if let symbol {
                     Image(systemName: symbol)
                         .font(.caption)
                         .foregroundStyle(tint)
-                        .contentTransition(.symbolEffect(.replace))
-                        .symbolEffect(.bounce, value: state)
+                        .appSymbolReplaceTransition()
+                        .appSymbolBounce(value: state)
                 }
             }
             .appAnimation(Motion.snappy, value: state)
@@ -70,7 +72,7 @@ struct StreakDayDot: View {
         case .studied: return .appStreak.opacity(0.18)
         case .frozen: return Color.appSecondary.opacity(0.18)
         case .today: return Color.appPrimary.opacity(0.18)
-        case .missed, .future: return Color.secondary.opacity(0.12)
+        case .missed, .future: return Theme.chipFill
         }
     }
 }

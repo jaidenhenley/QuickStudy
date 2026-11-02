@@ -12,6 +12,7 @@ struct PendingDraftRow: View {
 
     @State private var showDiscardAlert = false
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .subheadline) private var tileSize = 36.0
 
     private static let ageFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
@@ -20,34 +21,53 @@ struct PendingDraftRow: View {
     }()
 
     var body: some View {
+        let stacksVertically = dynamicTypeSize.isAccessibilitySize
+        let headerLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout(spacing: Spacing.md))
+
         VStack(alignment: .leading, spacing: Spacing.md) {
-            HStack(spacing: Spacing.md) {
-                Image(systemName: "doc.text.badge.plus")
+            headerLayout {
+                Image(systemName: "doc.badge.plus")
                     .font(.subheadline)
                     .foregroundStyle(Theme.primary)
-                    .frame(width: 36, height: 36)
+                    .frame(width: tileSize, height: tileSize)
                     .background(Theme.primary.opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(draft.title)
                         .font(.headline)
-                        .lineLimit(dynamicTypeSize.isAccessibilitySize ? 2 : 1)
+                        .lineLimit(stacksVertically ? nil : 1)
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                .accessibilityElement(children: .combine)
 
-                Spacer(minLength: 0)
+                if !stacksVertically { Spacer(minLength: 0) }
             }
 
-            HStack(spacing: Spacing.md) {
-                Button("Discard") { showDiscardAlert = true }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+            let actionLayout = stacksVertically
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+                : AnyLayout(HStackLayout(spacing: Spacing.md))
 
-                Spacer(minLength: 0)
+            actionLayout {
+                Button { showDiscardAlert = true } label: {
+                    Text("Discard")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                        .frame(minWidth: 44, minHeight: 44, alignment: .leading)
+                        .contentShape(.rect)
+                }
+                .accessibilityLabel("Discard draft")
+                .accessibilityInputLabels(["Discard", "Discard draft"])
+
+                if !stacksVertically {
+                    Spacer(minLength: 0)
+                }
 
                 Button(action: onResume) {
                     Text("Resume")
@@ -55,7 +75,9 @@ struct PendingDraftRow: View {
                         .fontWeight(.semibold)
                         .padding(.horizontal, Spacing.md)
                 }
-                .appProminentButtonStyle(tint: Theme.primary)
+                .appProminentButtonStyle(tint: Theme.primaryFill)
+                .accessibilityLabel("Resume draft")
+                .accessibilityInputLabels(["Resume", "Resume draft"])
             }
         }
         .padding(Spacing.md)
@@ -65,22 +87,12 @@ struct PendingDraftRow: View {
             Button("Discard", role: .destructive, action: onDiscard)
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text(discardWarning)
+            Text(draft.discardWarning)
         }
     }
 
     private var noun: String {
         draft.cards.count == 1 ? "card" : "cards"
-    }
-
-    private var discardWarning: String {
-        let base = "The \(draft.cards.count) drafted \(noun) will be deleted."
-        switch draft.provenance?.engine {
-        case .onDevice, .privateCloud:
-            return base + " This used one of your free generations."
-        case .cloud, .externalAPI, .none:
-            return base
-        }
     }
 
     private var subtitle: String {

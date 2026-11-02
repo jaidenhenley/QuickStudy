@@ -22,12 +22,15 @@ struct TodayView: View {
 
     @State private var showSettings = false
     @State private var showPaywall = false
+    @State private var quizRoute: TodayViewModel.QuizRoute?
+    @State private var suggestedSetID: UUID?
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.md) {
                 Text("Today")
                     .font(.system(size: 40, weight: .bold))
+                    .accessibilityAddTraits(.isHeader)
 
                 if !networkMonitor.isOnline && (aiSettings.mode == .externalAPI || store.willUseHostedGeneration) {
                     OfflineBanner(
@@ -55,6 +58,7 @@ struct TodayView: View {
                     Text(formattedDate)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .accessibilityLabel(spokenDate)
                     if !dynamicTypeSize.isAccessibilitySize {
                         Spacer()
                     }
@@ -70,6 +74,8 @@ struct TodayView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(.appStreak)
+                            .frame(minHeight: 44, alignment: .trailing)
+                            .contentShape(.rect)
                         }
                     }
                 }
@@ -77,7 +83,9 @@ struct TodayView: View {
                 if todayViewModel.todayCardCount == 0 {
                     TodayEmptyView()
                 } else {
-                    SessionCard()
+                    SessionCard {
+                        quizRoute = todayViewModel.sessionRoute(study: studyViewModel)
+                    }
 
                     if let weakest = todayViewModel.weakestCard {
                         Group {
@@ -86,21 +94,19 @@ struct TodayView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                                 .tracking(1)
+                                .accessibilityAddTraits(.isHeader)
                                 .padding(.top, Spacing.sm)
 
-                            if let weakestSet = studyViewModel.savedSets.first(where: { $0.id == weakest.setID }) {
-                                NavigationLink {
-                                    QuizSessionView(cards: weakestSet.cards)
-                                        .environment(studyViewModel)
+                            if let route = todayViewModel.weakestRoute(study: studyViewModel) {
+                                Button {
+                                    quizRoute = route
                                 } label: {
                                     WeakestCardRow(weakest: weakest)
                                 }
                                 .buttonStyle(.plain)
-                                .id(weakest.id)
                                 .appTransition(.opacity)
                             } else {
                                 WeakestCardRow(weakest: weakest)
-                                    .id(weakest.id)
                                     .appTransition(.opacity)
                             }
                         }
@@ -115,8 +121,13 @@ struct TodayView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                                 .tracking(1)
+                                .accessibilityAddTraits(.isHeader)
                                 .padding(.top, Spacing.sm)
-                            SuggestionRow(suggestion: suggestion)
+                            SuggestionRow(suggestion: suggestion) { setID in
+                                if studyViewModel.savedSets.contains(where: { $0.id == setID }) {
+                                    suggestedSetID = setID
+                                }
+                            }
                         }
                         .appTransition(.opacity)
                     }
@@ -129,10 +140,23 @@ struct TodayView: View {
             .appAnimation(Motion.standard, value: draftStore.pending?.id)
         }
         .background(BackgroundView())
-        .sheet(isPresented: $showSettings) { SettingsView() }
+        .navigationDestination(item: $quizRoute) { route in
+            QuizSessionView(cards: route.cards)
+                .environment(studyViewModel)
+        }
+        .navigationDestination(item: $suggestedSetID) { setID in
+            if let set = studyViewModel.savedSets.first(where: { $0.id == setID }) {
+                StudySetDetailView(set: set)
+            }
+        }
+        // Settings can change cloud consent and sample data, which Today derives from.
+        .sheet(isPresented: $showSettings, onDismiss: refreshToday) { SettingsView() }
         .sheet(isPresented: $showPaywall) { PaywallView(surface: .pill) }
         .onAppear { withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() } }
         .onChange(of: studyViewModel.savedSets) { _, _ in
+            withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
+        }
+        .onChange(of: sessionStore.sessions.count) { _, _ in
             withAnimation(reduceMotion ? Motion.crossfade : Motion.snappy) { refreshToday() }
         }
         .onChange(of: store.isPro) { _, _ in
@@ -148,6 +172,7 @@ struct TodayView: View {
                         .font(.title3)
                         .foregroundStyle(.secondary)
                 }
+                .accessibilityLabel("Settings")
             }
         }
     }
@@ -156,6 +181,10 @@ struct TodayView: View {
         todayViewModel.updateFromStudy(studyViewModel, sessions: sessionStore, store: store)
         analytics.record(.generationsUsed(bucket: todayViewModel.generationsUsedBucket))
         if !todayViewModel.canGenerate { analytics.record(.allowanceExhausted) }
+    }
+
+    private var spokenDate: String {
+        Date().formatted(.dateTime.weekday(.wide).month(.wide).day())
     }
 
     private var formattedDate: String {

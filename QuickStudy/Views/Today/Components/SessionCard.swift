@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SessionCard: View {
     @Environment(TodayViewModel.self) var todayViewModel
-    @Environment(StudyViewModel.self) var studyViewModel
-    @Environment(AppState.self) var appState
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    @State private var navigateToSession = false
+    let onStart: () -> Void
+
     @State private var showBreakdown = false
 
     var body: some View {
@@ -20,28 +20,32 @@ struct SessionCard: View {
             Text("TODAY'S SESSION")
                 .font(.caption)
                 .fontWeight(.semibold)
-                .foregroundStyle(.white.opacity(0.8))
+                .foregroundStyle(Theme.onPrimary)
                 .tracking(1)
+                .accessibilityAddTraits(.isHeader)
 
-            HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
+            let countLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+                : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: Spacing.sm))
+
+            countLayout {
                 Text("\(todayViewModel.todayCardCount)")
                     .font(.system(size: 72, weight: .bold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.onPrimary)
                 Text("cards · \(todayViewModel.estimatedMin) min")
                     .font(.title3)
-                    .foregroundStyle(.white.opacity(0.85))
+                    .foregroundStyle(Theme.onPrimary.opacity(0.9))
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(todayViewModel.todayCardCount) cards, \(todayViewModel.estimatedMin) minutes")
 
-            Button {
-                studyViewModel.loadTodaySession()
-                navigateToSession = true
-            } label: {
+            Button(action: onStart) {
                 Text("Start Session")
                     .font(.headline)
-                    .foregroundStyle(.appSecondary)
+                    .foregroundStyle(Theme.onLightAction)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(.white)
+                    .background(Theme.onPrimary)
                     .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
             }
 
@@ -52,23 +56,28 @@ struct SessionCard: View {
                     Text("What's in this?")
                     Image(systemName: showBreakdown ? "chevron.up" : "chevron.down")
                         .font(.caption2)
+                        .accessibilityHidden(true)
                 }
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.75))
-                .frame(maxWidth: .infinity)
+                .foregroundStyle(Theme.onPrimary)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .contentShape(.rect)
             }
+            .accessibilityValue(showBreakdown ? "Expanded" : "Collapsed")
 
             if showBreakdown {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     ForEach(todayViewModel.sessionBreakdown) { entry in
                         HStack {
                             Text(entry.title)
-                                .lineLimit(1)
+                                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                             Spacer()
                             Text("\(entry.cardCount)")
                         }
                         .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.8))
+                        .foregroundStyle(Theme.onPrimary)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("\(entry.title), \(entry.cardCount) \(entry.cardCount == 1 ? "card" : "cards")")
                     }
                 }
                 .appTransition(.move(edge: .top).combined(with: .opacity))
@@ -76,19 +85,15 @@ struct SessionCard: View {
         }
         .padding()
         .background(
-            Color.appPrimary
+            Theme.primaryFill
                 .overlay(alignment: .topTrailing) {
                     Circle()
-                        .fill(Color.white.opacity(0.06))
+                        .fill(Theme.onPrimary.opacity(0.06))
                         .frame(width: 230, height: 230)
                         .offset(x: 70, y: -70)
                 }
         )
         .clipShape(RoundedRectangle(cornerRadius: AppRadius.xl))
         .appAnimation(Motion.snappy, value: showBreakdown)
-        .navigationDestination(isPresented: $navigateToSession) {
-            QuizSessionView(cards: studyViewModel.flashcards)
-                .environment(studyViewModel)
-        }
     }
 }

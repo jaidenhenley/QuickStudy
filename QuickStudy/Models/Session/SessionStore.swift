@@ -47,6 +47,11 @@ final class SessionStore {
         save()
     }
 
+    func removeAll() {
+        sessions = []
+        save()
+    }
+
     func sessions(on day: Date, calendar: Calendar = .current) -> [StudySession] {
         sessions.filter { calendar.isDate($0.startedAt, inSameDayAs: day) }
     }

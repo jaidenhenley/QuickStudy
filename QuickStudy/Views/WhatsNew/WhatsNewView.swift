@@ -27,11 +27,11 @@ struct WhatsNewView: View {
                         Text("What's New")
                             .font(.largeTitle)
                             .fontWeight(.bold)
+                            .accessibilityAddTraits(.isHeader)
                         Text(whatsNew.note.headline)
                             .font(.body)
                             .foregroundStyle(.secondary)
                     }
-                    .appStagedReveal(0, shown: appeared)
 
                     VStack(alignment: .leading, spacing: Spacing.base) {
                         ForEach(Array(whatsNew.note.features.enumerated()), id: \.element.id) { index, feature in
@@ -70,7 +70,7 @@ struct WhatsNewView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity)
             }
-            .appProminentButtonStyle(tint: Theme.primary)
+            .appProminentButtonStyle(tint: Theme.primaryFill)
             .padding(.horizontal, Spacing.lg)
             .padding(.bottom, Spacing.lg)
         }

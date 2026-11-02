@@ -41,6 +41,7 @@ final class OnboardingViewModel {
     private(set) var choice: Choice?
 
     var currentIndex: Int { pages.firstIndex(of: current) ?? 0 }
+    var canGoBack: Bool { currentIndex > 0 }
 
     init(settings: AISettings) {
         draftingSetup = DraftingSetup.current(settings: settings)
@@ -52,6 +53,11 @@ final class OnboardingViewModel {
     func advance() {
         guard let index = pages.firstIndex(of: current), index + 1 < pages.count else { return }
         current = pages[index + 1]
+    }
+
+    func goBack() {
+        guard canGoBack else { return }
+        current = pages[currentIndex - 1]
     }
 
     func requestCameraAccess() async {

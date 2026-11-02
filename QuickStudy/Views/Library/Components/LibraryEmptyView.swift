@@ -10,19 +10,22 @@ import SwiftUI
 struct LibraryEmptyView: View {
     let coordinator: ImportCoordinator
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var tipTileSize = 28.0
+
     var body: some View {
         VStack(spacing: 18) {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
                     .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
-                    .foregroundStyle(Color.secondary.opacity(0.35))
+                    .foregroundStyle(Theme.hairline)
                     .frame(width: 116, height: 92)
                     .rotationEffect(.degrees(-7))
                     .offset(x: -26, y: -6)
 
                 RoundedRectangle(cornerRadius: 12)
                     .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
-                    .foregroundStyle(Color.secondary.opacity(0.35))
+                    .foregroundStyle(Theme.hairline)
                     .frame(width: 116, height: 92)
                     .rotationEffect(.degrees(7))
                     .offset(x: 26, y: -6)
@@ -43,13 +46,18 @@ struct LibraryEmptyView: View {
             Text("Build your first set")
                 .font(.title2)
                 .fontWeight(.bold)
+                .accessibilityAddTraits(.isHeader)
 
             Text("Snap a page, drop in a PDF, or paste your notes. We'll draft flashcards in seconds.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
-            HStack(spacing: 10) {
+            let sourceLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(spacing: 10))
+                : AnyLayout(HStackLayout(spacing: 10))
+
+            sourceLayout {
                 SourceOptionButton(title: "Scan", subtitle: "Camera", systemImage: "camera") {
                     coordinator.pendingSource = .scan
                     coordinator.presentPendingSource()
@@ -73,9 +81,10 @@ struct LibraryEmptyView: View {
                 Image(systemName: "sparkles")
                     .font(.caption)
                     .foregroundStyle(Color.appPrimary)
-                    .frame(width: 28, height: 28)
+                    .frame(width: tipTileSize, height: tipTileSize)
                     .background(Color.appPrimary.opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .accessibilityHidden(true)
                 Text("Tip: works best with **1–3 pages of notes** at a time.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -83,6 +92,7 @@ struct LibraryEmptyView: View {
             }
             .padding(Spacing.md)
             .appGlassCard(cornerRadius: AppRadius.md)
+            .accessibilityElement(children: .combine)
         }
     }
 }

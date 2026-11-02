@@ -15,7 +15,7 @@ struct FloatingCreateButton: View {
             Image(systemName: "plus")
                 .font(.title2)
                 .fontWeight(.semibold)
-                .foregroundStyle(.white)
+                .foregroundStyle(Theme.onPrimary)
                 .frame(width: 56, height: 56)
                 .background(Color.appPrimary)
                 .clipShape(Circle())

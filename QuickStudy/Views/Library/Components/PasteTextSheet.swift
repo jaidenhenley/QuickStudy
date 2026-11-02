@@ -14,9 +14,12 @@ struct PasteTextSheet: View {
     @Environment(TodayViewModel.self) private var todayViewModel
     @Environment(StoreController.self) private var store
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var text: String
     @State private var appeared = false
+    @ScaledMetric(relativeTo: .body) private var editorMaxHeight: CGFloat = 240
+    @AccessibilityFocusState private var editorFocused: Bool
 
     init(initialText: String = "", onSubmit: @escaping (String) -> Void) {
         self.onSubmit = onSubmit
@@ -24,92 +27,129 @@ struct PasteTextSheet: View {
     }
 
     var body: some View {
+        let stacksVertically = dynamicTypeSize.isAccessibilitySize
+        let headerLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.sm))
+            : AnyLayout(HStackLayout())
+        let chipLayout = stacksVertically
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: Spacing.xs))
+            : AnyLayout(HStackLayout(spacing: Spacing.sm))
+        let analysis = ContentAnalysis.immediate(for: text)
+
         NavigationStack {
-            VStack(alignment: .leading, spacing: Spacing.md) {
-                let analysis = ContentAnalysis.immediate(for: text)
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: Spacing.md) {
+                        headerLayout {
+                            Text("Paste notes")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .accessibilityAddTraits(.isHeader)
+                            if !stacksVertically { Spacer() }
+                            HStack(spacing: Spacing.xs) {
+                                Image(systemName: "sparkles")
+                                    .appSymbolBounce(value: appeared)
+                                    .accessibilityHidden(true)
+                                Text(allowanceLabel)
+                            }
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.appSecondary)
+                            .accessibilityElement(children: .combine)
+                        }
 
-                HStack {
-                    Text("Paste notes")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    Spacer()
-                    HStack(spacing: Spacing.xs) {
-                        Image(systemName: "sparkles")
-                            .symbolEffect(.bounce, value: appeared)
-                        Text(allowanceLabel)
-                    }
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.appSecondary)
-                }
-
-                Text("Anything works: lecture notes, a chapter or a syllabus.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                ZStack(alignment: .topLeading) {
-                    TextEditor(text: $text)
-                        .font(.body)
-                        .scrollContentBackground(.hidden)
-                        .padding(Spacing.sm)
-                        .background(Theme.surface)
-                        .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
-
-                    if text.isEmpty {
-                        Text("Paste your notes here")
-                            .font(.body)
+                        Text("Anything works: lecture notes, a chapter or a syllabus.")
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .padding(Spacing.base)
-                            .allowsHitTesting(false)
-                    }
-                }
 
-                if analysis.wordCount > 0 {
-                    Text("\(analysis.wordCount) words")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        ZStack(alignment: .topLeading) {
+                            TextEditor(text: $text)
+                                .font(.body)
+                                .scrollContentBackground(.hidden)
+                                .padding(Spacing.sm)
+                                .background(Theme.surface)
+                                .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
+                                .frame(minHeight: 120, maxHeight: editorMaxHeight)
+                                .accessibilityLabel("Paste your notes here")
+                                .accessibilityFocused($editorFocused)
 
-                    HStack(spacing: Spacing.sm) {
-                        Text(analysis.estimatedCardsLabel)
-                        if let language = analysis.language {
-                            Text(language)
+                            if text.isEmpty {
+                                Text("Paste your notes here")
+                                    .font(.body)
+                                    .foregroundStyle(.secondary)
+                                    .padding(Spacing.base)
+                                    .allowsHitTesting(false)
+                                    .accessibilityHidden(true)
+                            }
+                        }
+
+                        if analysis.wordCount > 0 {
+                            VStack(alignment: .leading, spacing: Spacing.sm) {
+                                Text("\(analysis.wordCount) words")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+
+                                chipLayout {
+                                    Text(analysis.estimatedCardsLabel)
+                                    if let language = analysis.language {
+                                        Text(language)
+                                    }
+                                }
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, Spacing.md)
+                                .padding(.vertical, Spacing.xs)
+                                .appGlassCard(cornerRadius: AppRadius.sm)
+                            }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(analysisSummary(analysis))
+                            .accessibilityAddTraits(.updatesFrequently)
                         }
                     }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, Spacing.md)
-                    .padding(.vertical, Spacing.xs)
-                    .appGlassCard(cornerRadius: AppRadius.sm)
+                    .padding(Spacing.lg)
+                    .frame(minHeight: proxy.size.height)
                 }
-
-                Button {
-                    let pasted = text
-                    dismiss()
-                    onSubmit(pasted)
-                } label: {
-                    HStack(spacing: Spacing.sm) {
-                        Image(systemName: "sparkles")
-                        Text("Generate cards")
-                    }
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                }
-                .appProminentButtonStyle(tint: Theme.primary)
-                .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-
-                // The promise has to match the engine that will actually run first: Private
-                // Cloud Compute or a hosted generation both mean the notes leave the phone.
-                if aiSettings.mode == .onDevice {
-                    HStack(spacing: Spacing.xs) {
-                        Image(systemName: footerSymbol)
-                        Text(footerText)
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                }
+                .scrollBounceBehavior(.basedOnSize)
+                .scrollDismissesKeyboard(.interactively)
             }
-            .padding(Spacing.lg)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                VStack(spacing: Spacing.sm) {
+                    Button {
+                        let pasted = text
+                        dismiss()
+                        onSubmit(pasted)
+                    } label: {
+                        HStack(spacing: Spacing.sm) {
+                            Image(systemName: "sparkles")
+                                .accessibilityHidden(true)
+                            Text("Generate cards")
+                        }
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .appProminentButtonStyle(tint: Theme.primaryFill)
+                    .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+
+                    // The promise has to match the engine that will actually run first: Private
+                    // Cloud Compute or a hosted generation both mean the notes leave the phone.
+                    if aiSettings.mode == .onDevice {
+                        HStack(alignment: .firstTextBaseline, spacing: Spacing.xs) {
+                            Image(systemName: footerSymbol)
+                                .accessibilityHidden(true)
+                            Text(footerText)
+                                .multilineTextAlignment(.center)
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+                .padding(.horizontal, Spacing.lg)
+                .padding(.vertical, Spacing.md)
+                .frame(maxWidth: .infinity)
+                .background(.bar)
+            }
             .background(BackgroundView())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -120,7 +160,14 @@ struct PasteTextSheet: View {
         }
         .onAppear {
             appeared = true
+            editorFocused = true
         }
+    }
+
+    private func analysisSummary(_ analysis: ContentAnalysis) -> String {
+        let cards = analysis.estimatedCards == 1 ? "about 1 card" : "about \(analysis.estimatedCards) cards"
+        let parts = ["\(analysis.wordCount) words", cards] + (analysis.language.map { [$0] } ?? [])
+        return parts.joined(separator: ", ")
     }
 
     private var allowanceLabel: String {
