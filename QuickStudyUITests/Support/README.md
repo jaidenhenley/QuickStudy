@@ -153,7 +153,8 @@ Consent is asked **after** the source is picked and read, and only when the draf
 - `tapReviewCard(id)` / `openDraftReview(id)`: Review Cards sheet. `reviewCardsNavBar`, `saveCardsButton`, `deleteCard(row)` (swipe; taps `Delete` if the swipe did not complete).
 - `openSaveSheet(id, cards:)`, `saveSheetNavBar(cards:)`, `confirmSave(cards:)`, `saveDraftAsNewSet(id)` (any count), `addToExistingSegment`.
 - `openDiscardAlert(id)`: long-press the ready card, `Discard Draft`, returns the `Discard Draft?` alert.
-- `pickFile(id, named:)` taps the Files picker by position; `pickFirstPhoto(id)` taps the first PHPicker tile.
+- `filesPicker`, `pickFile(id, named:)`, `dismissFilesPicker()`. On iOS 27 the Files picker renders inside the app's accessibility tree (`Browse View (Picker)`), files are cells identified `<name>, <extension>` (`corrupt, pdf`) and the fixtures folder is `QuickStudy Fixtures, Folder`, so `pickFile` finds them by name. The picker has no Cancel button; drag it down.
+- `pickFirstPhoto(id)` taps the first PHPicker tile by position (PHPicker content is not queryable).
 
 ## Accessibility labels and gaps
 

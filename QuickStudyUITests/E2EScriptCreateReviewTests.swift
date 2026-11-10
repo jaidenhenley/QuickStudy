@@ -301,11 +301,10 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         app.lifecycleCheckpoint("B-9", in: self)
 
         app.buttons["Try Again"].tap()
-        let picker = XCUIApplication(bundleIdentifier: Self.filesPickerBundleID)
-        XCTAssertTrue(picker.buttons["Cancel"].waitForExistence(timeout: 10), "Try Again did not reopen the Files picker")
+        XCTAssertTrue(filesPicker.waitForExistence(timeout: 10), "Try Again did not reopen the Files picker")
         shot("B-9", "try-again-picker")
-        picker.buttons["Cancel"].tap()
-        Thread.sleep(forTimeInterval: 1.5)
+        dismissFilesPicker()
+        XCTAssertFalse(filesPicker.exists, "Files picker still open")
         XCTAssertFalse(dismissFailureButton.exists, "Failure card still shown after Try Again")
 
         chooseSource("B-9b", label: Source.pdf)
@@ -705,8 +704,8 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         XCTAssertEqual(name.value as? String, "The Water Cycle. The water cycle", "Name is not the suggested title")
         XCTAssertTrue(app.staticTexts["Suggested from your notes. You can rename it anytime."].exists)
         XCTAssertTrue(addToExistingSegment.exists, "No Add to Existing segment")
-        XCTAssertFalse(addToExistingSegment.isEnabled, "Add to Existing enabled with no sets of the user's own")
         XCTAssertTrue(app.staticTexts["You have no sets of your own to add these cards to yet."].exists, "No explanation for the disabled segment")
+        assertAddToExistingInert("C-7")
         app.buttons["Clear Name"].tap()
         name.tap()
         name.typeText("E2E Water Cycle")
@@ -817,7 +816,12 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         XCTAssertTrue(text(containing: "Replace 6 cards?").exists, "Confirmation title: \(app.labelSnapshot().sorted())")
         XCTAssertTrue(text(containing: "Your edits will be lost.").exists)
         shot("C-10", "confirm")
-        app.buttons["Cancel"].firstMatch.tap()
+        // On iPhone the dialog is a popover with no Cancel button; tapping outside dismisses it.
+        if app.buttons["Cancel"].exists {
+            app.buttons["Cancel"].firstMatch.tap()
+        } else {
+            app.otherElements["PopoverDismissRegion"].tap()
+        }
         Thread.sleep(forTimeInterval: 1)
         app.swipeDown()
         XCTAssertTrue(button(beginningWith: firstQuestion + " EDITED").exists, "Cancel lost the edit")

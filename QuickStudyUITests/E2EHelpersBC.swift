@@ -196,6 +196,17 @@ extension QSTestCase {
 
     var addToExistingSegment: XCUIElement { app.segmentedControls.buttons["Add to Existing"] }
 
+    /// XCUITest reports a disabled SwiftUI segment as enabled, so this checks behaviour: tapping it must leave New Set showing.
+    func assertAddToExistingInert(_ id: String) {
+        note(id, "Add to Existing isEnabled as reported: \(addToExistingSegment.isEnabled)")
+        addToExistingSegment.tap()
+        Thread.sleep(forTimeInterval: 0.8)
+        shot(id, "after-add-to-existing-tap")
+        XCTAssertTrue(app.textFields["Name"].exists, "\(id): tapping the disabled Add to Existing left New Set")
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS ' will be added to '")).firstMatch.exists,
+                       "\(id): Add to Existing opened with no set of the user's own")
+    }
+
     /// Swipes a Review Cards row. A long swipe deletes outright; a short one leaves the Delete action to tap.
     func deleteCard(_ row: XCUIElement) {
         row.swipeLeft()
@@ -204,39 +215,42 @@ extension QSTestCase {
         Thread.sleep(forTimeInterval: 1)
     }
 
-    static let filesPickerBundleID = "com.apple.DocumentManagerUICore.Service"
+    /// On iOS 27 the Files picker renders in the app's own accessibility tree, as "Browse View (Picker)" or "Recents View (Picker)".
+    var filesPicker: XCUIElement {
+        app.otherElements.matching(NSPredicate(format: "identifier ENDSWITH '(Picker)'")).firstMatch
+    }
 
-    /// The Files picker is hosted out of process and its grid items are not exposed, so files are tapped by position.
-    /// It reopens in the last folder used; this handles both that and a first open.
+    /// Picker items are cells identified "<name>, <extension>" (folders "<name>, Folder"). The picker reopens wherever it was
+    /// last left, so this walks to On My iPhone > QuickStudy Fixtures from Recents, the root or another folder.
     func pickFile(_ id: String, named name: String) {
-        let picker = XCUIApplication(bundleIdentifier: Self.filesPickerBundleID)
-        XCTAssertTrue(picker.buttons["Browse"].waitForExistence(timeout: 10) || picker.buttons["Back"].waitForExistence(timeout: 2),
-                      "\(id): Files picker did not open")
+        XCTAssertTrue(filesPicker.waitForExistence(timeout: 10), "\(id): Files picker did not open")
         Thread.sleep(forTimeInterval: 1)
-        let inFolder = picker.descendants(matching: .any).matching(NSPredicate(format: "identifier CONTAINS 'Title: QuickStudy Fixtures'")).firstMatch
-        if !inFolder.exists {
-            for _ in 0..<5 where picker.buttons["Back"].exists && picker.buttons["Back"].isEnabled {
-                picker.buttons["Back"].tap()
-                Thread.sleep(forTimeInterval: 1)
+        let file = app.cells["\((name as NSString).deletingPathExtension), \((name as NSString).pathExtension)"]
+        let folder = app.cells["QuickStudy Fixtures, Folder"]
+        let browse = app.buttons["Browse"]
+        for _ in 0..<6 where !file.exists {
+            if folder.exists {
+                folder.tap()
+            } else if browse.exists {
+                // Tapping the selected Browse tab pops back to its root.
+                browse.tap()
             }
-            if picker.buttons["Browse"].exists { picker.buttons["Browse"].tap() }
-            Thread.sleep(forTimeInterval: 1.5)
-            picker.coordinate(withNormalizedOffset: CGVector(dx: 0.30, dy: 0.353)).tap()
-            Thread.sleep(forTimeInterval: 1.5)
-            picker.coordinate(withNormalizedOffset: CGVector(dx: 0.18, dy: 0.28)).tap()
             Thread.sleep(forTimeInterval: 1.5)
         }
         shot(id, "picker-folder")
-        let positions: [String: CGVector] = [
-            "corrupt.pdf": CGVector(dx: 0.176, dy: 0.30),
-            "large.pdf": CGVector(dx: 0.823, dy: 0.30),
-            "small.pdf": CGVector(dx: 0.823, dy: 0.52)
-        ]
-        guard let position = positions[name] else {
-            XCTFail("\(id): no known position for \(name)")
+        guard file.waitForExistence(timeout: 3) else {
+            dump(id, "picker-folder")
+            XCTFail("\(id): \(name) not found in the Files picker (run Scripts/stage-media.sh)")
             return
         }
-        picker.coordinate(withNormalizedOffset: position).tap()
+        file.tap()
+    }
+
+    /// The picker has no Cancel button on iOS 27; it is dismissed by dragging the sheet down.
+    func dismissFilesPicker() {
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.1))
+            .press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.98)))
+        Thread.sleep(forTimeInterval: 1.5)
     }
 
     /// PHPicker content is not queryable; the staged text page is the first tile.
