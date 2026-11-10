@@ -15,40 +15,48 @@ extension QSTestCase {
 
     func openLibrary() {
         app.tapTab("Library")
-        XCTAssertTrue(app.buttons["New set"].waitForExistence(timeout: QSApp.uiTimeout), "No floating create button")
+        XCTAssertTrue(createButton.waitForExistence(timeout: QSApp.uiTimeout), "No floating create button")
+    }
+
+    /// The floating +. Only call from Library: the Save sheet's segmented control also has a "New Set" button.
+    var createButton: XCUIElement { app.buttons["New Set"].firstMatch }
+
+    enum Source {
+        static let photo = "Choose Photo, From your photo library"
+        static let pdf = "Choose PDF, From Files"
+        static let paste = "Paste Text, From Notes, Safari or any app"
     }
 
     func openNewSetSheet(_ id: String) {
         openLibrary()
-        app.buttons["New set"].tap()
-        XCTAssertTrue(app.staticTexts["Capture a page and cards draft automatically."].waitForExistence(timeout: QSApp.uiTimeout),
-                      "\(id): New set sheet did not open")
+        createButton.tap()
+        XCTAssertTrue(app.navigationBars["New Set"].waitForExistence(timeout: QSApp.uiTimeout),
+                      "\(id): New Set sheet did not open. Labels: \(app.labelSnapshot().sorted())")
         Thread.sleep(forTimeInterval: 0.8)
     }
 
-    /// Declines when the first-import cloud consent sheet appears. Returns whether it appeared.
+    /// Consent is asked after the source is picked and read, so it can arrive at any point before drafting starts.
+    /// Tests only ever decline: accepting would send a real draft to the hosted server.
     @discardableResult
     func declineConsentIfAsked(_ id: String, wait: TimeInterval = 3) -> Bool {
-        let notNow = app.buttons["Not now"]
+        let notNow = app.buttons["Not Now"]
         guard notNow.waitForExistence(timeout: wait) else { return false }
         shot(id, "consent-sheet")
-        note(id, "consent sheet shown, declined with Not now")
+        note(id, "consent sheet shown, declined with Not Now")
         notNow.tap()
         Thread.sleep(forTimeInterval: 1.2)
         return true
     }
 
-    func chooseSource(_ id: String, label: String, declineConsent: Bool = true) {
+    func chooseSource(_ id: String, label: String) {
         openNewSetSheet(id)
         shot(id, "new-set-sheet")
         let target = hittableButton(label)
-        XCTAssertTrue(target.waitForExistence(timeout: 4), "\(id): no '\(label)' in New set sheet")
+        XCTAssertTrue(target.waitForExistence(timeout: 4), "\(id): no '\(label)' in New Set sheet")
         target.tap()
         Thread.sleep(forTimeInterval: 1.5)
-        if declineConsent { declineConsentIfAsked(id) }
     }
 
-    /// Types text into the paste editor, dismisses the keyboard and returns the Generate button.
     func typeIntoPasteSheet(_ id: String, text: String) {
         let editor = app.textViews.firstMatch
         XCTAssertTrue(editor.waitForExistence(timeout: QSApp.uiTimeout), "\(id): no paste editor")
@@ -56,78 +64,144 @@ extension QSTestCase {
         editor.typeText(text)
     }
 
-    func dismissKeyboardOnSheet() {
-        if app.keyboards.count > 0 { app.swipeDown() }
-        Thread.sleep(forTimeInterval: 0.8)
+    /// The toolbar checkmark on the Paste Text sheet. Its accessibility label is "Draft Cards".
+    var draftCardsButton: XCUIElement { app.navigationBars["Paste Text"].buttons["Draft Cards"] }
+
+    func tapDraftCards(_ id: String) {
+        XCTAssertTrue(draftCardsButton.waitForExistence(timeout: 5), "\(id): no Draft Cards checkmark")
+        XCTAssertTrue(draftCardsButton.isEnabled, "\(id): Draft Cards disabled")
+        draftCardsButton.tap()
     }
 
     static let failureTitles = [
         "Something went wrong", "We couldn\u{2019}t read this", "We couldn't read this", "Free generations used",
-        "On-device AI isn't ready", "On-device AI isn\u{2019}t ready"
+        "On-device AI isn't ready", "We couldn't open this PDF", "We couldn\u{2019}t open this PDF"
     ]
 
     enum GenerationOutcome: Equatable {
-        case scanPreview
-        case reviewDrafts
+        case ready
         case failure(String)
         case timedOut
     }
 
-    /// Waits for Generating to finish and reports where the app landed. `elapsed` is seconds since the call.
-    func awaitGenerationOutcome(_ id: String, timeout: TimeInterval = QSApp.generationTimeout, sampleGenerating: Bool = true) -> (GenerationOutcome, TimeInterval) {
+    /// The status card's text is one combined accessibility element, "<title>, <detail>", and its type varies, so
+    /// these match any element.
+    private func statusText(beginningWith prefix: String) -> XCUIElement {
+        app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", prefix)).firstMatch
+    }
+
+    var cancelDraftingButton: XCUIElement { app.buttons["Cancel drafting"] }
+    var reviewCardButton: XCUIElement { app.buttons["Review"] }
+    var dismissFailureButton: XCUIElement { app.buttons["Dismiss"] }
+    var draftingCard: XCUIElement { statusText(beginningWith: "Drafting ") }
+    var readyCard: XCUIElement { app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS ' is ready'")).firstMatch }
+
+    var isDrafting: Bool { cancelDraftingButton.exists }
+
+    func failureCard(_ title: String) -> XCUIElement { statusText(beginningWith: title) }
+
+    private func visibleFailureTitle() -> String? {
+        guard dismissFailureButton.exists else { return nil }
+        return Self.failureTitles.first { failureCard($0).exists } ?? "unrecognised failure title"
+    }
+
+    /// Waits on the Library status card until the draft is ready or has failed, declining cloud consent if it is asked.
+    func awaitGenerationOutcome(_ id: String, timeout: TimeInterval = QSApp.generationTimeout) -> (GenerationOutcome, TimeInterval) {
         let start = Date()
         var sampled = false
-        var engineSeen = false
         while Date().timeIntervalSince(start) < timeout {
-            if button(beginningWith: "Review ").exists, app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'CARD '")).count > 0 {
-                return (.scanPreview, Date().timeIntervalSince(start))
+            if app.buttons["Not Now"].exists { declineConsentIfAsked(id, wait: 0.5) }
+            if reviewCardButton.exists, readyCard.exists {
+                return (.ready, Date().timeIntervalSince(start))
             }
-            if app.navigationBars["Draft cards"].exists || button(beginningWith: "Save ").exists {
-                return (.reviewDrafts, Date().timeIntervalSince(start))
-            }
-            for title in Self.failureTitles where app.staticTexts[title].exists {
+            if let title = visibleFailureTitle() {
                 return (.failure(title), Date().timeIntervalSince(start))
             }
-            if sampleGenerating, !sampled, generatingVisible {
+            if !sampled, isDrafting {
                 sampled = true
-                shot(id, "generating")
-                dump(id, "generating")
-                note(id, "Generating labels: \(app.labelSnapshot().sorted())")
-            }
-            if !engineSeen {
-                for engine in ["Drafting on this iPhone", "Drafting with Private Cloud Compute", "Drafting in the cloud", "Drafting with your API key"]
-                where app.element(labelContaining: engine).exists {
-                    engineSeen = true
-                    note(id, "engine line: \(engine) at \(Int(Date().timeIntervalSince(start)))s")
-                    shot(id, "drafting")
-                    break
-                }
+                shot(id, "drafting")
+                dump(id, "drafting")
+                note(id, "Drafting labels: \(app.labelSnapshot().sorted())")
             }
             Thread.sleep(forTimeInterval: 0.5)
         }
         return (.timedOut, Date().timeIntervalSince(start))
     }
 
-    /// Pages through a draft that opened on Scan Preview and lands on Review drafts.
-    func continueToReviewDrafts(_ id: String) {
-        let review = button(beginningWith: "Review ")
-        if review.waitForExistence(timeout: 3), !button(beginningWith: "Save ").exists {
-            review.tap()
-        }
-        XCTAssertTrue(button(beginningWith: "Save ").waitForExistence(timeout: QSApp.uiTimeout), "\(id): Review drafts not reached")
-    }
-
-    var generatingVisible: Bool {
-        app.element(labelContaining: "Reading page").exists || app.element(labelContaining: "Drafting cards").exists
-    }
-
-    func waitForGenerating(timeout: TimeInterval = 40) -> Bool {
+    func waitForDrafting(_ id: String, timeout: TimeInterval = 40) -> Bool {
         let end = Date().addingTimeInterval(timeout)
         while Date() < end {
-            if generatingVisible { return true }
+            if isDrafting { return true }
+            if app.buttons["Not Now"].exists { declineConsentIfAsked(id, wait: 0.5) }
             Thread.sleep(forTimeInterval: 0.3)
         }
         return false
+    }
+
+    var reviewCardsNavBar: XCUIElement { app.navigationBars["Review Cards"] }
+    var saveCardsButton: XCUIElement { app.buttons["Save Cards"] }
+
+    /// Taps Review on the status card and waits for the Review Cards sheet.
+    func tapReviewCard(_ id: String) {
+        XCTAssertTrue(reviewCardButton.waitForExistence(timeout: QSApp.uiTimeout), "\(id): no Review button on the status card")
+        reviewCardButton.tap()
+        XCTAssertTrue(reviewCardsNavBar.waitForExistence(timeout: QSApp.uiTimeout), "\(id): Review Cards not reached. Labels: \(app.labelSnapshot().sorted())")
+        Thread.sleep(forTimeInterval: 0.8)
+    }
+
+    func saveSheetNavBar(cards: Int) -> XCUIElement {
+        app.navigationBars[cards == 1 ? "Save 1 Card" : "Save \(cards) Cards"]
+    }
+
+    /// Opens the Save sheet from Review Cards. The sheet's title carries the card count.
+    func openSaveSheet(_ id: String, cards: Int) {
+        XCTAssertTrue(saveCardsButton.waitForExistence(timeout: 5), "\(id): no Save Cards checkmark")
+        saveCardsButton.tap()
+        XCTAssertTrue(saveSheetNavBar(cards: cards).waitForExistence(timeout: QSApp.uiTimeout),
+                      "\(id): Save sheet titled for \(cards) cards not shown. Labels: \(app.labelSnapshot().sorted())")
+        Thread.sleep(forTimeInterval: 0.8)
+    }
+
+    /// The Save sheet's toolbar checkmark, scoped because Review Cards stays in the tree beneath it.
+    func confirmSave(cards: Int) {
+        let confirm = saveSheetNavBar(cards: cards).buttons["Save"]
+        XCTAssertTrue(confirm.waitForExistence(timeout: 5), "No Save checkmark on the Save sheet")
+        XCTAssertTrue(confirm.isEnabled, "Save checkmark disabled")
+        confirm.tap()
+    }
+
+    /// Saves the open Review Cards draft as a new set, for flows where the drafted card count is not fixed.
+    func saveDraftAsNewSet(_ id: String) {
+        XCTAssertTrue(saveCardsButton.waitForExistence(timeout: 5), "\(id): no Save Cards checkmark")
+        saveCardsButton.tap()
+        let bar = app.navigationBars.matching(NSPredicate(format: "identifier BEGINSWITH 'Save '")).firstMatch
+        XCTAssertTrue(bar.waitForExistence(timeout: QSApp.uiTimeout), "\(id): Save sheet not shown. Labels: \(app.labelSnapshot().sorted())")
+        Thread.sleep(forTimeInterval: 0.8)
+        note(id, "save sheet: \(bar.identifier)")
+        bar.buttons["Save"].tap()
+    }
+
+    /// Long-presses the ready status card, opens Discard Draft and returns the confirmation alert.
+    func openDiscardAlert(_ id: String) -> XCUIElement {
+        XCTAssertTrue(readyCard.waitForExistence(timeout: 8), "\(id): no ready status card")
+        readyCard.press(forDuration: 1.2)
+        let discard = app.buttons["Discard Draft"]
+        XCTAssertTrue(discard.waitForExistence(timeout: 4), "\(id): no Discard Draft in the card's menu. Labels: \(app.labelSnapshot().sorted())")
+        shot(id, "card-context-menu")
+        discard.tap()
+        let alert = app.alerts["Discard Draft?"]
+        XCTAssertTrue(alert.waitForExistence(timeout: 4), "\(id): no Discard Draft? alert")
+        return alert
+    }
+
+    var addToExistingSegment: XCUIElement { app.segmentedControls.buttons["Add to Existing"] }
+
+    /// Swipes a Review Cards row. A long swipe deletes outright; a short one leaves the Delete action to tap.
+    func deleteCard(_ row: XCUIElement) {
+        row.swipeLeft()
+        let delete = app.buttons["Delete"]
+        if delete.waitForExistence(timeout: 1.5), delete.isHittable { delete.tap() }
+        Thread.sleep(forTimeInterval: 1)
     }
 
     static let filesPickerBundleID = "com.apple.DocumentManagerUICore.Service"
@@ -173,7 +247,7 @@ extension QSTestCase {
     }
 
     /// Home, 2 s, activate, then checks the app is foreground and not blank. Unlike the LC it does not compare labels,
-    /// because Generating's text changes every second.
+    /// because the status card's text changes every second.
     func softLifecycle(_ id: String, name: String) {
         XCUIDevice.shared.press(.home)
         Thread.sleep(forTimeInterval: 2)

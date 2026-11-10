@@ -529,50 +529,65 @@ final class E2EScriptQuizLibraryTests: QSTestCase {
         XCTAssertEqual(libraryTileButtons.count, 0, "deleted sample set came back on relaunch while Show Sample Set is on")
     }
 
-    /// Seed: userSet. allowanceSpent forces the ADD CARDS section.
+    /// Adding cards to a set the user already has happens in the Save sheet.
+    /// Seed: `seed.sh <udid> userSetDraft` (one saved set of 6 cards plus a ready 6-card draft).
     func test_E_5() {
-        launch(.allowanceSpent)
+        launch(.userSet)
         openLibrary()
         Thread.sleep(forTimeInterval: 1)
         shot("E-5", "1-library")
         dump("E-5", "1-library")
         let before = libraryTileButtons.count
-        XCTAssertTrue(app.staticTexts["ADD CARDS"].exists, "no ADD CARDS section")
-        XCTAssertFalse(app.buttons["Study"].exists)
-        // Is there any way to add cards to the existing set? Check the detail screen.
-        libraryTileButtons.firstMatch.tap()
-        Thread.sleep(forTimeInterval: 1.2)
-        shot("E-5", "2-detail")
-        let detailAdd = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'add' OR label CONTAINS[c] 'import'")).count
-        note("E-5", "add/import controls on set detail: \(detailAdd); toolbar buttons: \(app.navigationBars.buttons.allElementsBoundByIndex.map(\.label))")
-        app.navigationBars.buttons.firstMatch.tap()
-        app.buttons.matching(NSPredicate(format: "label CONTAINS 'Type cards'")).firstMatch.tap()
-        XCTAssertTrue(app.navigationBars["Type cards"].waitForExistence(timeout: 5), "Type cards sheet missing")
-        shot("E-5", "3-type-cards")
-        dump("E-5", "3-type-cards")
-        note("E-5", "sheet labels: \(app.labelSnapshot().sorted())")
-        let title = app.textFields["Set title"]
-        XCTAssertTrue(title.exists)
-        title.tap()
-        title.typeText("E2E typed set")
-        for (index, pair) in [("Term A", "Definition A"), ("Term B", "Definition B")].enumerated() {
-            let term = app.textFields["Card \(index + 1) term"]
-            if !term.exists { app.buttons["Add another card"].tap() }
-            term.tap()
-            term.typeText(pair.0)
-            let definition = app.textFields["Card \(index + 1) definition"].exists ? app.textFields["Card \(index + 1) definition"] : app.textViews["Card \(index + 1) definition"]
-            definition.tap()
-            definition.typeText(pair.1)
-        }
-        shot("E-5", "4-filled")
-        let save = app.navigationBars["Type cards"].buttons.matching(NSPredicate(format: "label BEGINSWITH 'Save'")).firstMatch
-        XCTAssertTrue(save.exists, "no Save in Type cards")
-        note("E-5", "save label: \(save.label)")
-        save.tap()
-        Thread.sleep(forTimeInterval: 1.5)
-        shot("E-5", "5-after-save")
-        note("E-5", "tiles before \(before) after \(libraryTileButtons.count): \(libraryTileButtons.allElementsBoundByIndex.map(\.label))")
-        XCTAssertEqual(libraryTileButtons.count, before, "ADD CARDS appends to the existing set (expected: tile count unchanged); it created \(libraryTileButtons.count - before) new set(s) instead")
+        let tilesBefore = libraryTileButtons.allElementsBoundByIndex.map(\.label)
+        note("E-5", "tiles before: \(tilesBefore)")
+        XCTAssertEqual(before, 1, "Seed userSetDraft first: expected one saved set")
+        XCTAssertFalse(app.staticTexts["ADD CARDS"].exists, "The old ADD CARDS section is back")
+        tapReviewCard("E-5")
+        openSaveSheet("E-5", cards: 6)
+        let segment = addToExistingSegment
+        XCTAssertTrue(segment.exists && segment.isEnabled, "Add to Existing unavailable with a set of the user's own")
+        XCTAssertFalse(app.staticTexts["You have no sets of your own to add these cards to yet."].exists)
+        segment.tap()
+        Thread.sleep(forTimeInterval: 0.8)
+        shot("E-5", "2-add-to-existing")
+        dump("E-5", "2-add-to-existing")
+        note("E-5", "save sheet labels: \(app.labelSnapshot().sorted())")
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS '6 cards'")).firstMatch
+        XCTAssertTrue(row.exists, "No existing-set row")
+        XCTAssertTrue(row.isSelected, "The only existing set is not preselected")
+        let footer = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH '6 cards will be added to '")).firstMatch
+        XCTAssertTrue(footer.exists, "No '6 cards will be added to <set>.' footer")
+        XCTAssertFalse(app.textFields["Name"].exists, "Name field shown for Add to Existing")
+        confirmSave(cards: 6)
+        Thread.sleep(forTimeInterval: 2)
+        shot("E-5", "3-after-save")
+        let tilesAfter = libraryTileButtons.allElementsBoundByIndex.map(\.label)
+        note("E-5", "tiles after: \(tilesAfter)")
+        XCTAssertEqual(libraryTileButtons.count, before, "Add to Existing created a new set")
+        XCTAssertTrue(libraryTileButtons.firstMatch.label.contains("12 cards"), "Set did not grow to 12 cards: \(tilesAfter)")
+        XCTAssertFalse(reviewCardButton.exists, "Ready card still present after saving")
+        app.relaunchKeepingState()
+        Thread.sleep(forTimeInterval: 3)
+        openLibrary()
+        XCTAssertTrue(libraryTileButtons.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(libraryTileButtons.firstMatch.label.contains("12 cards"), "Added cards lost on relaunch: \(libraryTileButtons.firstMatch.label)")
+    }
+
+    /// Sample sets can't take new cards, so with only the sample set Add to Existing is disabled and says why.
+    /// Seed: `seed.sh <udid> midDraft`; demo mode adds the sample set.
+    func test_E_5b() {
+        launch(.demoData)
+        openLibrary()
+        XCTAssertGreaterThan(libraryTileButtons.count, 0, "No sample set")
+        tapReviewCard("E-5b")
+        openSaveSheet("E-5b", cards: 6)
+        shot("E-5b", "save-sheet")
+        dump("E-5b", "save-sheet")
+        XCTAssertFalse(addToExistingSegment.isEnabled, "Add to Existing enabled with only the sample set")
+        XCTAssertTrue(app.staticTexts["You have no sets of your own to add these cards to yet."].exists, "No explanation for the disabled segment")
+        addToExistingSegment.tap()
+        Thread.sleep(forTimeInterval: 0.5)
+        XCTAssertTrue(app.textFields["Name"].exists, "Tapping the disabled segment left New Set")
     }
 
     func test_E_6() {

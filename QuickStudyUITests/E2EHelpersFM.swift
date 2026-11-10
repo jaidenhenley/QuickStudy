@@ -56,39 +56,26 @@ extension QSTestCase {
 
     func settle(_ seconds: TimeInterval = 1.5) { Thread.sleep(forTimeInterval: seconds) }
 
-    /// Taps the pending-draft row's button labelled "Resume draft". At accessibility sizes the row stacks "Discard draft" above it
-    /// and it can sit behind the floating tab bar at rest, so it is scrolled until hittable rather than tapped by position.
-    func tapResumeDraft(_ id: String) {
-        let resume = app.buttons.matching(NSPredicate(format: "label == %@", "Resume draft")).firstMatch
-        XCTAssertTrue(resume.waitForExistence(timeout: 8), "\(id): no pending draft row")
+    /// Taps Review on the status card, which sits above the set tiles and can scroll behind the nav bar at accessibility sizes.
+    func openDraftReview(_ id: String) {
+        openLibrary()
+        let review = reviewCardButton
+        XCTAssertTrue(review.waitForExistence(timeout: 8), "\(id): no status card with Review")
         var attempts = 0
-        while !resume.isHittable, attempts < 8 {
-            let from = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: attempts < 5 ? 0.65 : 0.35))
-            let to = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: attempts < 5 ? 0.35 : 0.65))
-            from.press(forDuration: 0.1, thenDragTo: to)
+        while !review.isHittable, attempts < 6 {
+            app.swipeDown()
             settle(0.6)
             attempts += 1
         }
-        XCTAssertTrue(resume.isHittable, "\(id): 'Resume draft' not hittable after scrolling")
-        resume.tap()
+        tapReviewCard(id)
     }
 
-    func openDraftReview(_ id: String) {
-        openLibrary()
-        tapResumeDraft(id)
-        settle()
-        continueToReviewDrafts(id)
-    }
-
-    /// Opens the paste sheet, types the short note and taps Generate; returns once Generating is on screen.
+    /// Opens the paste sheet, types the short note and starts a draft; returns once the status card shows drafting.
     func startShortGeneration(_ id: String) {
-        chooseSource(id, label: "Text, Paste")
+        chooseSource(id, label: Source.paste)
         typeIntoPasteSheet(id, text: shortPasteNote)
-        dismissKeyboardOnSheet()
-        let generate = app.buttons["Generate cards"]
-        XCTAssertTrue(generate.waitForExistence(timeout: 5) && generate.isEnabled, "\(id): Generate cards unavailable")
-        generate.tap()
-        XCTAssertTrue(waitForGenerating(timeout: 25), "\(id): Generating never appeared")
+        tapDraftCards(id)
+        XCTAssertTrue(waitForDrafting(id, timeout: 25), "\(id): drafting status never appeared")
         settle(2)
     }
 

@@ -97,23 +97,14 @@ final class E2EScriptTests: QSTestCase {
     /// Seed midDraft first.
     func test_WS_5() {
         launch(.midDraft)
-        app.tapTab("Library")
-        XCTAssertTrue(app.buttons["Resume draft"].waitForExistence(timeout: 8), "No Resume draft row")
+        openLibrary()
+        XCTAssertTrue(reviewCardButton.waitForExistence(timeout: 8), "No ready status card")
         shot("WS-5", "1-library-with-draft")
-        app.buttons["Resume draft"].tap()
-        Thread.sleep(forTimeInterval: 1.5)
-        shot("WS-5", "2-after-resume")
-        if button(beginningWith: "Review").waitForExistence(timeout: 4) {
-            note("WS-5", "Scan Preview shown")
-            shot("WS-5", "3-scan-preview")
-            button(beginningWith: "Review").tap()
-            Thread.sleep(forTimeInterval: 1.5)
-        }
-        shot("WS-5", "4-review-drafts")
-        let save = button(beginningWith: "Save")
-        XCTAssertTrue(save.waitForExistence(timeout: 5), "No Save button")
-        note("WS-5", "Save label: \(save.label)")
-        save.tap()
+        tapReviewCard("WS-5")
+        shot("WS-5", "2-review-cards")
+        openSaveSheet("WS-5", cards: 6)
+        shot("WS-5", "3-save-sheet")
+        confirmSave(cards: 6)
         let watch = watchFrames("WS-5", "after-save", seconds: 4)
         shot("WS-5", "5-after-save")
         dump("WS-5", "5-after-save")
@@ -123,28 +114,22 @@ final class E2EScriptTests: QSTestCase {
         let tile = app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS 'Water Cycle'")).firstMatch
         XCTAssertTrue(tile.waitForExistence(timeout: 5), "New set not in Library")
         note("WS-5", "tile label: \(tile.label)")
-        XCTAssertFalse(button(beginningWith: "Resume").exists, "Draft row still present after save")
+        XCTAssertFalse(reviewCardButton.exists || readyCard.exists, "Ready card still present after save")
     }
 
     func test_WS_6() {
         launch(.midDraft)
-        app.tapTab("Library")
-        XCTAssertTrue(app.buttons["Resume draft"].waitForExistence(timeout: 8))
-        app.buttons["Resume draft"].tap()
-        XCTAssertTrue(app.buttons["Cancel"].waitForExistence(timeout: 6), "No Cancel on Scan Preview")
-        shot("WS-6", "1-scan-preview")
-        app.buttons["Cancel"].tap()
-        Thread.sleep(forTimeInterval: 1)
-        shot("WS-6", "2-after-cancel")
-        dump("WS-6", "2-after-cancel")
-        let discard = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Discard'")).firstMatch
-        XCTAssertTrue(discard.waitForExistence(timeout: 4), "No Discard confirmation")
-        discard.tap()
+        openLibrary()
+        shot("WS-6", "1-library-with-draft")
+        let alert = openDiscardAlert("WS-6")
+        shot("WS-6", "2-confirmation")
+        dump("WS-6", "2-confirmation")
+        alert.buttons["Discard Draft"].tap()
         let watch = watchFrames("WS-6", "after-discard", seconds: 3)
         shot("WS-6", "3-after-discard")
         XCTAssertEqual(watch.blankFrames, 0, "All-white frame after discard")
         XCTAssertFalse(BlankScreenCheck.evaluate(app: app).isBlank)
-        XCTAssertFalse(app.buttons["Resume draft"].exists, "Draft row still there")
+        XCTAssertFalse(reviewCardButton.exists, "Ready card still there")
     }
 
     private func answerCurrentQuestion(_ id: String, index: Int) {
@@ -388,37 +373,32 @@ final class E2EScriptTests: QSTestCase {
         let row = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", option)).firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 4), "\(id): no option '\(option)'")
         row.tap()
-        Thread.sleep(forTimeInterval: 2)
-        declineHostedConsentIfAsked(id, name)
-        Thread.sleep(forTimeInterval: 1.5)
+        Thread.sleep(forTimeInterval: 3.5)
         shot(id, "\(name)-after-choice")
         dump(id, "\(name)-after-choice")
         XCTAssertFalse(BlankScreenCheck.evaluate(app: app).isBlank, "\(id) \(name): blank after choice")
-    }
-
-    /// A first-time user is asked about cloud drafting before the first import. Never accept it in tests.
-    private func declineHostedConsentIfAsked(_ id: String, _ name: String) {
-        let notNow = app.buttons["Not now"]
-        if notNow.waitForExistence(timeout: 3) {
-            shot(id, "\(name)-consent-sheet")
-            dump(id, "\(name)-consent-sheet")
-            note(id, "\(name): consent sheet shown, declined with Not now")
-            notNow.tap()
-        }
+        XCTAssertFalse(app.buttons["Not Now"].exists, "\(id) \(name): cloud consent asked before a source was read")
     }
 
     func test_A_4() {
         firstSourceRun("A-4", option: "Paste text", name: "paste")
-        XCTAssertTrue(text(containing: "Paste notes").exists || app.textViews.firstMatch.exists, "Paste: no paste sheet")
+        XCTAssertTrue(app.navigationBars["Paste Text"].exists && app.textViews.firstMatch.exists, "Paste: no Paste Text sheet")
         app.terminate()
         firstSourceRun("A-4", option: "Drop in a PDF", name: "pdf")
-        note("A-4", "pdf: picker visible=\(app.navigationBars.count > 0 || app.otherElements["DOC.documentBrowser"].exists)")
+        let picker = XCUIApplication(bundleIdentifier: Self.filesPickerBundleID)
+        let pickerOpen = picker.buttons["Cancel"].waitForExistence(timeout: 8)
+        note("A-4", "pdf: Files picker visible=\(pickerOpen)")
+        XCTAssertTrue(pickerOpen, "PDF: Files picker did not open")
         app.terminate()
         firstSourceRun("A-4", option: "Try a demo set", name: "demo")
         XCTAssertTrue(app.buttons["Start Session"].waitForExistence(timeout: 6) || text(containing: "TODAY'S SESSION").exists, "Demo: sample set not on Today")
         app.terminate()
         firstSourceRun("A-4", option: "Scan a page", name: "scan")
         note("A-4", "scan labels: \(app.labelSnapshot().sorted())")
+        let alert = app.alerts["Camera Unavailable"]
+        XCTAssertTrue(alert.waitForExistence(timeout: 5), "Scan: no Camera Unavailable alert on a simulator")
+        alert.buttons["OK"].tap()
+        XCTAssertFalse(BlankScreenCheck.evaluate(app: app).isBlank, "Scan: blank after dismissing the alert")
     }
 
     /// Paste the short note, draft it, save it, and expect the paywall afterwards.
@@ -426,23 +406,18 @@ final class E2EScriptTests: QSTestCase {
         launch(.freshInstall)
         advanceToFirstSource("A-5")
         app.buttons.matching(NSPredicate(format: "label CONTAINS 'Paste text'")).firstMatch.tap()
-        declineHostedConsentIfAsked("A-5", "paste")
         let editor = app.textViews.firstMatch
         XCTAssertTrue(editor.waitForExistence(timeout: 8), "No paste editor")
         editor.tap()
         editor.typeText("Mitochondria are organelles that produce most of a cell's ATP through cellular respiration. They have a double membrane, and the folded inner membrane, called cristae, increases surface area. Mitochondria contain their own DNA, inherited from the mother.")
         shot("A-5", "1-typed")
-        app.swipeDown()
-        let generate = app.buttons["Generate cards"]
-        XCTAssertTrue(generate.waitForExistence(timeout: 5), "No Generate cards")
-        generate.tap()
-        let review = button(beginningWith: "Review")
-        XCTAssertTrue(review.waitForExistence(timeout: QSApp.generationTimeout), "No Review button after generation")
-        shot("A-5", "2-scan-preview")
-        review.tap()
-        let save = button(beginningWith: "Save")
-        XCTAssertTrue(save.waitForExistence(timeout: 6))
-        save.tap()
+        tapDraftCards("A-5")
+        let (outcome, seconds) = awaitGenerationOutcome("A-5")
+        note("A-5", "outcome \(outcome) after \(Int(seconds)) s")
+        XCTAssertEqual(outcome, .ready, "First draft did not become ready")
+        shot("A-5", "2-ready-card")
+        tapReviewCard("A-5")
+        saveDraftAsNewSet("A-5")
         Thread.sleep(forTimeInterval: 3)
         shot("A-5", "3-after-save")
         dump("A-5", "3-after-save")
@@ -478,10 +453,9 @@ final class E2EScriptTests: QSTestCase {
         XCTAssertTrue(app.staticTexts["Build your first set"].waitForExistence(timeout: 8))
         shot("A-7", "library-empty")
         dump("A-7", "library-empty")
-        for tile in ["Scan, Camera", "Photo, Library", "PDF, Files", "Text, Paste"] {
-            XCTAssertTrue(app.buttons[tile].exists, "Missing tile \(tile)")
-        }
-        let create = app.buttons["New set"]
+        XCTAssertTrue(app.staticTexts["Tap + to scan, import or paste your first notes."].exists, "Empty state does not point at +")
+        XCTAssertTrue(app.element(labelContaining: "1 to 10 pages of notes").exists, "No page-count tip")
+        let create = createButton
         XCTAssertTrue(create.exists && create.isHittable, "Floating create button missing or not hittable")
         app.lifecycleCheckpoint("A-7", in: self)
         shot("A-7", "after-lc")

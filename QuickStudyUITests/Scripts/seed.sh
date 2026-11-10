@@ -2,7 +2,7 @@
 # Usage: seed.sh <udid> <state>
 # Terminates QuickStudy, wipes its Documents and UserDefaults, then applies <state> by copying
 # app-generated fixture files into the data container and writing defaults with simctl.
-# States: clean freshInstall onboardedEmpty demoData midDraft userSet sessions allowanceSpent
+# States: clean freshInstall onboardedEmpty demoData midDraft userSet userSetDraft sessions allowanceSpent
 #         hostedConsentDeclined freeHostedSpent proActive noAppleIntelligence
 # Unlike the launch-argument seeding in SeedState.swift, defaults written here are real values
 # the app can overwrite, but they persist until the next seed.sh run. Does not touch the Keychain.
@@ -53,6 +53,12 @@ case "$STATE" in
   userSet)
     onboarded
     copy_fixture userSet SavedSets.json
+    ;;
+  userSetDraft)
+    # The draft's cards have their own IDs: adding cards already in a set is a no-op.
+    onboarded
+    copy_fixture userSet SavedSets.json
+    copy_fixture userSetDraft PendingDraft.json
     ;;
   sessions)
     onboarded

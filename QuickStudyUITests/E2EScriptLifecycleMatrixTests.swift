@@ -47,7 +47,7 @@ final class E2EScriptLifecycleMatrixTests: QSTestCase {
         XCTAssertTrue(firedReview)
         shot("F-1", "5-review-after")
         XCTAssertEqual(app.state, .runningForeground, "app not running after warning in Review")
-        XCTAssertTrue(button(beginningWith: "Save ").exists, "Review lost after warning")
+        XCTAssertTrue(reviewCardsNavBar.exists && saveCardsButton.exists, "Review Cards lost after warning")
         XCTAssertGreaterThan(Double(reviewBefore.intersection(app.labelSnapshot()).count) / Double(max(reviewBefore.count, 1)), 0.8, "Review changed after warning")
     }
 
@@ -104,7 +104,7 @@ final class E2EScriptLifecycleMatrixTests: QSTestCase {
         shot("F-2", "review-before")
         forceQuitAndRelaunch("F-2", name: "review")
         openLibrary()
-        XCTAssertTrue(app.buttons["Resume draft"].waitForExistence(timeout: 8), "draft row missing after killing in Review")
+        XCTAssertTrue(reviewCardButton.waitForExistence(timeout: 8), "ready card missing after killing in Review")
         shot("F-2", "review-after")
     }
 
@@ -125,13 +125,15 @@ final class E2EScriptLifecycleMatrixTests: QSTestCase {
     func test_F_2_generating() {
         launch(.onboardedEmpty)
         startShortGeneration("F-2")
-        shot("F-2", "generating-before")
-        forceQuitAndRelaunch("F-2", name: "generating")
+        shot("F-2", "drafting-before")
+        forceQuitAndRelaunch("F-2", name: "drafting")
         settle(2)
-        XCTAssertFalse(generatingVisible, "Generating came back after relaunch")
         openLibrary()
-        note("F-2", "generating: after relaunch Library labels \(app.labelSnapshot().sorted())")
-        shot("F-2", "generating-after-library")
+        settle(2)
+        note("F-2", "drafting: after relaunch Library labels \(app.labelSnapshot().sorted())")
+        shot("F-2", "drafting-after-library")
+        XCTAssertFalse(isDrafting, "Drafting status came back after relaunch with nothing drafting")
+        XCTAssertFalse(readyCard.exists, "An interrupted draft turned up as ready after relaunch")
     }
 
     // MARK: F-3 appearance change while backgrounded
@@ -161,7 +163,7 @@ final class E2EScriptLifecycleMatrixTests: QSTestCase {
         app.activate()
         settle(2)
         shot("F-3", "4-library-dark")
-        app.buttons["New set"].tap()
+        createButton.tap()
         settle(1.5)
         XCUIDevice.shared.press(.home)
         settle(1.5)
@@ -210,8 +212,8 @@ final class E2EScriptLifecycleMatrixTests: QSTestCase {
 
     // MARK: M core path
 
-    /// launch -> Today -> Library -> New Set sheet -> Review drafts -> first quiz question -> wrong answer -> Session Complete -> Settings -> Paywall.
-    /// Needs `seed.sh <udid> midDraft` first (draft file); demo mode supplies the quiz data.
+    /// launch -> Today -> Library -> New Set sheet -> Review Cards -> Save sheet -> first quiz question -> wrong answer -> Session Complete
+    /// -> Settings -> Paywall. Needs `seed.sh <udid> midDraft` first (draft file); demo mode supplies the quiz data.
     func test_M_corePath() {
         let id = "M-\(configLabel)"
         launch(.demoData)
@@ -234,29 +236,28 @@ final class E2EScriptLifecycleMatrixTests: QSTestCase {
         dump(id, "03-library")
         note(id, "library problems: \(layoutProblems().prefix(8))")
 
-        app.buttons["New set"].tap()
-        XCTAssertTrue(app.staticTexts["Capture a page and cards draft automatically."].waitForExistence(timeout: QSApp.uiTimeout), "New set sheet did not open")
-        settle(1.2)
-        capture(id, "04-new-set-sheet")
-        dump(id, "04-new-set-sheet")
-        note(id, "sheet problems: \(layoutProblems().prefix(8))")
-        if app.buttons["Cancel"].exists { app.buttons["Cancel"].tap() } else { dismissSheet() }
+        XCTAssertTrue(reviewCardButton.waitForExistence(timeout: 8), "no ready status card (seed midDraft first)")
+        capture(id, "04-library-ready-card")
+        createButton.tap()
+        let replace = app.alerts["Replace your draft?"]
+        XCTAssertTrue(replace.waitForExistence(timeout: QSApp.uiTimeout), "New Set with a ready draft did not ask before replacing it")
+        capture(id, "05-replace-draft-alert")
+        replace.buttons["Cancel"].tap()
         settle(1.2)
 
-        XCTAssertTrue(app.buttons["Resume draft"].waitForExistence(timeout: 8), "no pending draft row (seed midDraft first)")
-        capture(id, "05-library-draft-row")
-        tapResumeDraft(id)
-        settle(1.5)
-        capture(id, "06-scan-preview")
-        continueToReviewDrafts(id)
+        openDraftReview(id)
         settle(1)
-        capture(id, "07-review-drafts")
-        dump(id, "07-review-drafts")
+        capture(id, "06-review-cards")
+        dump(id, "06-review-cards")
         note(id, "review problems: \(layoutProblems().prefix(8))")
         app.swipeUp()
         settle(0.8)
-        capture(id, "08-review-drafts-scrolled")
+        capture(id, "07-review-cards-scrolled")
         app.swipeDown()
+        openSaveSheet(id, cards: 6)
+        capture(id, "08-save-sheet")
+        dump(id, "08-save-sheet")
+        note(id, "save sheet problems: \(layoutProblems().prefix(8))")
         app.terminate()
         app.relaunchKeepingState()
         settle(3)

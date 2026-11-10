@@ -1,0 +1,130 @@
+{
+  "cards": [
+    {
+      "answer": "Evaporation is the change where water in liquid form becomes invisible vapor gas. This step starts the movement of water upward.",
+      "box": 0,
+      "distractors": [],
+      "explanation": "The source defines evaporation as liquid water becoming vapor, which is the exact transformation described. The other steps involve physical movement or energy input, not this specific phase change.",
+      "id": "86443F83-CE04-4C67-B044-33138398EA9E",
+      "missCount": 0,
+      "question": "What process turns liquid water into water vapor?",
+      "source": {
+        "documentTitle": "Pasted Notes",
+        "excerpt": "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers.",
+        "lineRange": [
+          0,
+          0
+        ],
+        "paragraph": 1
+      }
+    },
+    {
+      "answer": "The sun supplies the power needed to drive the transformation of water into vapor. This energy input starts the cycle's motion.",
+      "box": 0,
+      "distractors": [
+        "Dust particles generate energy for vapor formation.",
+        "Salt particles produce energy through evaporation."
+      ],
+      "explanation": "The source explicitly states the sun gives energy, which is the trigger for evaporation. Other steps rely on this energy but do not originate from it directly.",
+      "id": "FE324579-ABF9-43B9-B127-1BCC59A9A164",
+      "missCount": 0,
+      "question": "What provides the initial energy for water movement?",
+      "source": {
+        "documentTitle": "Pasted Notes",
+        "excerpt": "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers.",
+        "lineRange": [
+          0,
+          0
+        ],
+        "paragraph": 1
+      }
+    },
+    {
+      "answer": "Most evaporation takes place over oceans, which contain the largest volume of Earth’s water. This location fuels the upward movement of moisture.",
+      "box": 0,
+      "distractors": [],
+      "explanation": "The source specifies oceans hold 97% of water, making them the primary site for this phase. Other locations are not mentioned as dominant sources.",
+      "id": "8D82BAF8-6EE1-4616-9DFF-83D657CCE353",
+      "missCount": 0,
+      "question": "Where does most evaporation occur?",
+      "source": {
+        "documentTitle": "Pasted Notes",
+        "excerpt": "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers.",
+        "lineRange": [
+          0,
+          0
+        ],
+        "paragraph": 1
+      }
+    },
+    {
+      "answer": "Plants send vapor out through small openings in their leaves. This process uses leaf pores to send moisture upward into the atmosphere. This is called transpiration.",
+      "box": 0,
+      "distractors": [],
+      "explanation": "The source names transpiration as the method using leaf pores to release vapor. The other steps involve physical changes or movement, not biological release.",
+      "id": "0C855C75-5B32-4C70-A85D-9E80C92D5ECE",
+      "missCount": 0,
+      "question": "How do plants release vapor into the air?",
+      "source": {
+        "documentTitle": "Pasted Notes",
+        "excerpt": "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers.",
+        "lineRange": [
+          0,
+          0
+        ],
+        "paragraph": 1
+      }
+    },
+    {
+      "answer": "When vapor cools, it gathers into tiny droplets around dust and salt. These droplets form visible masses in the sky. This is condensation.",
+      "box": 0,
+      "distractors": [],
+      "explanation": "The source describes condensation as the cooling and clumping of droplets. Other stages involve movement or release, not this specific clustering process.",
+      "id": "2E07CE46-7BD3-4E75-8692-D5F28C41C89F",
+      "missCount": 0,
+      "question": "What happens when water vapor cools and clumps together?",
+      "source": {
+        "documentTitle": "Pasted Notes",
+        "excerpt": "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers.",
+        "lineRange": [
+          0,
+          0
+        ],
+        "paragraph": 1
+      }
+    },
+    {
+      "answer": "When droplets grow heavy, they fall from the sky as precipitation. This includes rain, snow, sleet, and hail. This final step is called precipitation.",
+      "box": 0,
+      "distractors": [],
+      "explanation": "The source clearly states that heavy droplets result in precipitation, which is the end point of the cycle. Earlier steps involve movement, not this final descent.",
+      "id": "91D45092-8EF6-4EC8-808D-6EB12440F2B4",
+      "missCount": 0,
+      "question": "What is the final outcome when droplets become heavy enough?",
+      "source": {
+        "documentTitle": "Pasted Notes",
+        "excerpt": "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers.",
+        "lineRange": [
+          0,
+          0
+        ],
+        "paragraph": 1
+      }
+    }
+  ],
+  "createdAt": "2026-10-20T20:12:48Z",
+  "document": {
+    "lines": [
+      "The Water Cycle. The water cycle describes how water moves between the oceans, the atmosphere, and the land. Evaporation is the process in which liquid water becomes water vapor. The sun provides the energy. Most evaporation happens over the oceans, which hold about 97 percent of Earth’s water. Plants also release vapor through tiny leaf pores in a process called transpiration. As water vapor rises, it cools and condenses into tiny droplets around dust and salt particles. Condensation is the step that forms clouds and fog. When droplets in a cloud grow heavy enough, they fall as precipitation: rain, snow, sleet, and hail. Runoff is water that flows over the surface into streams, rivers, and eventually the sea. Infiltration is water soaking into the soil. Water that sinks deeper collects as groundwater in layers of rock and sand called aquifers."
+    ],
+    "title": "Pasted Notes"
+  },
+  "id": "F25E5494-E26B-46A5-89F8-5E53B88AADD5",
+  "provenance": {
+    "engine": "onDevice",
+    "model": "Apple Intelligence"
+  },
+  "sourceType": "paste",
+  "title": "The Water Cycle. The water cycle",
+  "wasTruncated": false
+}
