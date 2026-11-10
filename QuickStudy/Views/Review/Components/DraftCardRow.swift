@@ -15,7 +15,9 @@ struct DraftCardRow: View {
 
     @Binding var card: StudyCard
     @AccessibilityFocusState.Binding var accessibilityFocusedCardID: UUID?
-    var onRemove: () -> Void
+    var onDelete: () -> Void
+    /// Nil when the card has no passage to show, which hides the Source button.
+    var onShowSource: (() -> Void)?
 
     @State private var isEditing = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -26,8 +28,7 @@ struct DraftCardRow: View {
             if isEditing {
                 VStack(alignment: .leading, spacing: Spacing.sm) {
                     TextField("Question", text: $card.question, axis: .vertical)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
+                        .font(.headline)
                         .accessibilityLabel("Question")
                         .focused($focusedField, equals: .question)
                         .padding(Spacing.sm)
@@ -54,8 +55,8 @@ struct DraftCardRow: View {
                 .appTransition(.opacity)
 
                 HStack {
-                    if let source = card.source {
-                        DraftSourcePill(source: source)
+                    if let source = card.source, let onShowSource {
+                        DraftSourcePill(source: source, action: onShowSource)
                     }
                     Spacer()
                     Button {
@@ -68,16 +69,16 @@ struct DraftCardRow: View {
                             .frame(minWidth: 44, minHeight: 44)
                             .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(Color.appPrimary)
                 }
             } else {
-                VStack(alignment: .leading, spacing: Spacing.sm) {
+                VStack(alignment: .leading, spacing: Spacing.xs) {
                     Button(action: startEditing) {
-                        VStack(alignment: .leading, spacing: Spacing.sm) {
+                        VStack(alignment: .leading, spacing: Spacing.xs) {
                             Text(card.question)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
+                                .font(.headline)
                             Text(card.answer)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
@@ -86,31 +87,30 @@ struct DraftCardRow: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("\(card.question). \(card.answer)")
+                    .accessibilityHint("Double tap to edit")
+                    .accessibilityAction(named: "Delete", onDelete)
+                    .accessibilityFocused($accessibilityFocusedCardID, equals: card.id)
 
-                    HStack {
-                        if let source = card.source {
-                            DraftSourcePill(source: source)
-                        }
-                        Spacer()
-                        Image(systemName: "pencil")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+                    if let source = card.source, let onShowSource {
+                        DraftSourcePill(source: source, action: onShowSource)
                     }
                 }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(spokenSummary)
-                .accessibilityValue(spokenSource)
-                .accessibilityHint("Double tap to edit")
-                .accessibilityAddTraits(.isButton)
-                .accessibilityAction(.default, startEditing)
-                .accessibilityAction(named: "Edit", startEditing)
-                .accessibilityAction(named: "Remove", onRemove)
-                .accessibilityFocused($accessibilityFocusedCardID, equals: card.id)
                 .appTransition(.opacity)
             }
         }
         .padding(Spacing.base)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .appGlassCard(cornerRadius: AppRadius.lg)
+        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: AppRadius.lg, style: .continuous))
+        // Empty while editing so a long press in a field keeps the text editing menu.
+        .contextMenu {
+            if !isEditing {
+                Button(role: .destructive, action: onDelete) {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
+        }
         .onChange(of: isEditing) { _, editing in
             if !editing { accessibilityFocusedCardID = card.id }
         }
@@ -122,15 +122,6 @@ struct DraftCardRow: View {
                 isEditing = false
             }
         }
-    }
-
-    private var spokenSummary: String {
-        "\(card.question). \(card.answer)"
-    }
-
-    private var spokenSource: String {
-        guard let source = card.source else { return "" }
-        return DraftSourcePill.spokenLabel(for: source)
     }
 
     private func startEditing() {

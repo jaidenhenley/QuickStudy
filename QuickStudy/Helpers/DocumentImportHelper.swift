@@ -50,19 +50,47 @@ struct DocumentImportHelper {
         from pdfURL: URL,
         onPageComplete: (Int, Int) -> Void = { _, _ in }
     ) async throws -> ExtractedDocument {
-        let content = try await Self.readPDF(
-            at: pdfURL,
+        let document = try await openPDF(at: pdfURL)
+        return try await extractText(from: document, onPageComplete: onPageComplete)
+    }
+
+    /// Reads the whole file up front, so the document stays usable after the
+    /// security-scoped access to a Files URL ends.
+    func openPDF(at url: URL) async throws -> PDFDocument {
+        try await Self.loadPDF(at: url)
+    }
+
+    /// `pageIndices` limits the read to those zero-based pages. Pages before the last
+    /// chosen one that weren't chosen come back empty, so each page keeps its real number
+    /// in `pageBreaks` and a card's source still names the page the user saw.
+    func extractText(
+        from document: PDFDocument,
+        pageIndices: [Int]? = nil,
+        onPageComplete: (Int, Int) -> Void = { _, _ in }
+    ) async throws -> ExtractedDocument {
+        let chosen = Set(pageIndices ?? Array(0..<document.pageCount))
+            .filter { (0..<document.pageCount).contains($0) }
+            .sorted()
+        let content = await Self.readPDF(
+            document,
+            pageIndices: chosen,
             prefersEmbeddedText: !isHandwritingMode,
             renderScale: isUltraHandwritingMode ? 3.0 : 2.5,
             maxDimension: isUltraHandwritingMode ? 2200 : nil
         )
+        let chosenPages: [ExtractedDocument.Page]
         switch content {
         case let .embeddedText(pageTexts):
             onPageComplete(pageTexts.count, pageTexts.count)
-            return ExtractedDocument(pages: pageTexts.map { ExtractedDocument.Page(text: $0, candidates: []) })
+            chosenPages = pageTexts.map { ExtractedDocument.Page(text: $0, candidates: []) }
         case let .renderedPages(images):
-            return try await extractText(from: images, onPageComplete: onPageComplete)
+            chosenPages = try await extractText(from: images, onPageComplete: onPageComplete).pages
         }
+        guard let lastIndex = chosen.last else { return ExtractedDocument(pages: []) }
+        let pagesByIndex = Dictionary(uniqueKeysWithValues: zip(chosen, chosenPages))
+        return ExtractedDocument(pages: (0...lastIndex).map { index in
+            pagesByIndex[index] ?? ExtractedDocument.Page(text: "", candidates: [])
+        })
     }
 
     // MARK: OCR
@@ -131,12 +159,7 @@ struct DocumentImportHelper {
     }
 
     @concurrent
-    nonisolated private static func readPDF(
-        at url: URL,
-        prefersEmbeddedText: Bool,
-        renderScale: CGFloat,
-        maxDimension: CGFloat?
-    ) async throws -> PDFContent {
+    nonisolated private static func loadPDF(at url: URL) async throws -> PDFDocument {
         let accessGranted = url.startAccessingSecurityScopedResource()
         defer {
             if accessGranted {
@@ -144,12 +167,23 @@ struct DocumentImportHelper {
             }
         }
 
-        guard let document = PDFDocument(url: url), !document.isLocked else {
+        let data = try Data(contentsOf: url)
+        guard let document = PDFDocument(data: data), !document.isLocked else {
             throw DocumentImportError.unreadablePDF
         }
+        return document
+    }
 
+    @concurrent
+    nonisolated private static func readPDF(
+        _ document: PDFDocument,
+        pageIndices: [Int],
+        prefersEmbeddedText: Bool,
+        renderScale: CGFloat,
+        maxDimension: CGFloat?
+    ) async -> PDFContent {
         if prefersEmbeddedText {
-            let pageTexts = (0..<document.pageCount).map { index in
+            let pageTexts = pageIndices.map { index in
                 document.page(at: index)?.string?
                     .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             }
@@ -158,20 +192,21 @@ struct DocumentImportHelper {
             }
         }
 
-        let images = renderPages(of: document, scale: renderScale)
+        let images = renderPages(pageIndices, of: document, scale: renderScale)
         guard let maxDimension else { return .renderedPages(images) }
         return .renderedPages(scaleImages(images, maxDimension: maxDimension))
     }
 
-    nonisolated private static func renderPages(of document: PDFDocument, scale: CGFloat) -> [UIImage] {
-        var images: [UIImage] = []
-        for pageIndex in 0..<document.pageCount {
-            guard let page = document.page(at: pageIndex) else { continue }
+    /// A page PDFKit can't return renders blank, so the images stay aligned with
+    /// `pageIndices`.
+    nonisolated private static func renderPages(_ pageIndices: [Int], of document: PDFDocument, scale: CGFloat) -> [UIImage] {
+        pageIndices.map { pageIndex in
+            guard let page = document.page(at: pageIndex) else { return UIImage() }
             let pageRect = page.bounds(for: .mediaBox)
             let targetSize = CGSize(width: pageRect.width * scale, height: pageRect.height * scale)
 
             let renderer = UIGraphicsImageRenderer(size: targetSize)
-            let image = renderer.image { context in
+            return renderer.image { context in
                 UIColor.white.setFill()
                 context.fill(CGRect(origin: .zero, size: targetSize))
 
@@ -182,9 +217,7 @@ struct DocumentImportHelper {
                 page.draw(with: .mediaBox, to: context.cgContext)
                 context.cgContext.restoreGState()
             }
-            images.append(image)
         }
-        return images
     }
 
     nonisolated private static func scaleImages(_ images: [UIImage], maxDimension: CGFloat) -> [UIImage] {

@@ -22,12 +22,14 @@ struct LibraryView: View {
     @State private var showRenameAlert = false
     @State private var deletingSet: StudySet? = nil
     @State private var showDeleteAlert = false
-    @State private var showTypeCards = false
-    @State private var showPaywall = false
     @Namespace private var tileTransition
 
     var body: some View {
         @Bindable var libraryViewModel = libraryViewModel
+        let importHelper = DocumentImportHelper(
+            isHandwritingMode: studyViewModel.isHandwritingMode,
+            isUltraHandwritingMode: studyViewModel.isUltraHandwritingMode
+        )
 
         ZStack(alignment: .bottomTrailing) {
             BackgroundView()
@@ -40,23 +42,35 @@ struct LibraryView: View {
                         isEnabled: !studyViewModel.savedSets.isEmpty
                     )
 
-                    if let draft = draftStore.pending,
-                       !coordinator.navigateToReview,
-                       !coordinator.showGenerating {
-                        PendingDraftRow(
-                            draft: draft,
-                            onResume: {
-                                coordinator.previewConfirmed = false
-                                coordinator.navigateToReview = true
-                            },
-                            onDiscard: { draftStore.set(nil) }
-                        )
+                    // The time left is derived from the clock, so the card has to re-render
+                    // while a draft runs; it pauses once nothing is drafting.
+                    TimelineView(.animation(minimumInterval: 1, paused: coordinator.stage == .idle)) { context in
+                        if let card = LibraryViewModel.statusCard(
+                            drafting: coordinator.draftingStatus(progress: studyViewModel.generationProgress, now: context.date),
+                            failure: coordinator.failure,
+                            draft: draftStore.pending
+                        ) {
+                            DraftStatusCard(
+                                content: card,
+                                onReview: { coordinator.showReview = true },
+                                onDiscard: { draftStore.set(nil) },
+                                onClose: {
+                                    if case .drafting = card {
+                                        coordinator.cancelGeneration()
+                                    } else {
+                                        coordinator.dismissFailure()
+                                    }
+                                },
+                                onRecover: { recovery in
+                                    coordinator.recover(recovery, using: importHelper, study: studyViewModel)
+                                }
+                            )
+                            .appTransition(.move(edge: .top).combined(with: .opacity))
+                        }
                     }
 
-                    // The empty state's three source buttons all require generation, so
-                    // devices that can't generate right now get the ADD CARDS section instead.
-                    if studyViewModel.savedSets.isEmpty && !libraryViewModel.showsAddCardsSection {
-                        LibraryEmptyView(coordinator: coordinator)
+                    if studyViewModel.savedSets.isEmpty {
+                        LibraryEmptyView()
                             .padding(.top, 32)
                     } else {
                         if !studyViewModel.savedSets.isEmpty {
@@ -116,30 +130,13 @@ struct LibraryView: View {
                             }
                             .appAnimation(Motion.standard, value: visible.isEmpty)
                         }
-
-                        if let reason = libraryViewModel.addCardsReason {
-                            AddCardsSection(
-                                reason: reason,
-                                onTypeCards: { showTypeCards = true },
-                                onUpgrade: { showPaywall = true }
-                            )
-                            .padding(.top, studyViewModel.savedSets.isEmpty ? 32 : Spacing.lg)
-                        }
                     }
                 }
                 .padding(.horizontal, Spacing.lg)
                 .padding(.bottom, 96)
             }
 
-            FloatingCreateButton {
-                if libraryViewModel.isManualOnly {
-                    showTypeCards = true
-                } else if !coordinator.canStartGeneration {
-                    coordinator.presentPaywall()
-                } else {
-                    coordinator.showSourcePicker = true
-                }
-            }
+            FloatingCreateButton { coordinator.openSourcePicker() }
             .padding(.trailing, 16)
             .padding(.bottom, 16)
         }
@@ -154,15 +151,20 @@ struct LibraryView: View {
         .onChange(of: aiSettings.mode) { _, _ in refreshEntitlement() }
         .onChange(of: store.isPro) { _, _ in refreshEntitlement() }
         .onChange(of: store.freeHostedGenerationUsed) { _, _ in refreshEntitlement() }
+        // Nothing navigates when a draft finishes, so VoiceOver would otherwise miss it.
+        .onChange(of: draftStore.pending?.id) { _, id in
+            guard id != nil, let draft = draftStore.pending else { return }
+            AccessibilityNotification.Announcement(LibraryViewModel.readyTitle(for: draft)).post()
+        }
         .onChange(of: coordinator.showHostedConsent) { _, isShowing in
             guard !isShowing else { return }
             refreshEntitlement()
         }
-        .sheet(isPresented: $showTypeCards) {
-            TypeCardsView()
-                .environment(studyViewModel)
-        }
-        .sheet(isPresented: $showPaywall) { PaywallView(surface: libraryViewModel.upgradeSurface) }
+        .appAnimation(Motion.standard, value: LibraryViewModel.statusCard(
+            drafting: coordinator.draftingStatus(progress: studyViewModel.generationProgress),
+            failure: coordinator.failure,
+            draft: draftStore.pending
+        )?.kind)
         .alert("Rename Set", isPresented: $showRenameAlert) {
             TextField("Title", text: $renameText)
             Button("Save") {
@@ -188,10 +190,7 @@ struct LibraryView: View {
                 studyViewModel: studyViewModel,
                 appState: appState,
                 draftStore: draftStore,
-                importHelper: DocumentImportHelper(
-                    isHandwritingMode: studyViewModel.isHandwritingMode,
-                    isUltraHandwritingMode: studyViewModel.isUltraHandwritingMode
-                )
+                importHelper: importHelper
             )
         )
     }
@@ -227,6 +226,5 @@ struct LibraryView: View {
 
     private func refreshEntitlement() {
         coordinator.hasUnlimitedGenerations = store.isPro
-        libraryViewModel.refreshCapability(settings: aiSettings, store: store)
     }
 }

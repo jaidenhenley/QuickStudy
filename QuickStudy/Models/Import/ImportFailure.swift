@@ -6,11 +6,6 @@
 import Foundation
 
 struct ImportFailure: Identifiable {
-    enum Severity {
-        case error
-        case warning
-    }
-
     enum Recovery: Hashable {
         case pasteText
         case tryAgain
@@ -18,133 +13,78 @@ struct ImportFailure: Identifiable {
     }
 
     let id = UUID()
-    let severity: Severity
-    let navigationTitle: String
-    let dismissLabel: String
     let title: String
     let message: String
-    let recoveryNote: String?
-    let code: String?
-    let tips: [String]
+    /// True when the coordinator still holds the text it read, so the paste recovery
+    /// opens the sheet already filled in.
+    let keepsText: Bool
+    /// The first entry is the one Library offers as a button.
     let recoveries: [Recovery]
 }
 
 extension ImportFailure {
-    /// With text kept, the recovery opens the sheet already filled in — there's nothing
-    /// to paste, only something to edit.
-    var pasteRecoveryLabel: String { recoveryNote == nil ? "Paste text" : "Edit text" }
+    var pasteRecoveryLabel: String { keepsText ? "Edit Text" : "Paste Text" }
 
-    /// `retained` names what the coordinator is still holding. It lives in memory only for
-    /// this screen's buttons, so the note must never promise it was saved anywhere.
-    static func generation(cause: String?, code: String?, retained: String?) -> ImportFailure {
+    static func generation(cause: String?) -> ImportFailure {
         ImportFailure(
-            severity: .error,
-            navigationTitle: "Error",
-            dismissLabel: "Cancel",
             title: "Something went wrong",
             message: cause ?? "We couldn't draft cards from this source.",
-            recoveryNote: retained.map {
-                "We kept \($0). Try again, or edit it first. Cancelling discards it."
-            },
-            code: code ?? "QS-503",
-            tips: [],
-            recoveries: [.pasteText, .tryAgain]
+            keepsText: true,
+            recoveries: [.tryAgain, .pasteText]
         )
     }
 
-    static func noText(navigationTitle: String, message: String) -> ImportFailure {
+    static func noText(message: String) -> ImportFailure {
         ImportFailure(
-            severity: .warning,
-            navigationTitle: navigationTitle,
-            dismissLabel: "Back",
             title: "We couldn't read this",
             message: message,
-            recoveryNote: nil,
-            code: nil,
-            tips: [
-                "Use a flat surface, no glare",
-                "Fill the frame edge-to-edge",
-                "Handwritten? Paste or type instead"
-            ],
-            recoveries: [.pasteText, .tryAgain]
+            keepsText: false,
+            recoveries: [.tryAgain, .pasteText]
         )
     }
 
-    static func processing(message: String, code: String) -> ImportFailure {
+    static func processing(message: String) -> ImportFailure {
         ImportFailure(
-            severity: .error,
-            navigationTitle: "Error",
-            dismissLabel: "Cancel",
             title: "Something went wrong",
             message: message,
-            recoveryNote: nil,
-            code: code,
-            tips: [],
-            recoveries: [.pasteText, .tryAgain]
+            keepsText: false,
+            recoveries: [.tryAgain, .pasteText]
         )
     }
 
     static func unreadablePDF() -> ImportFailure {
         ImportFailure(
-            severity: .warning,
-            navigationTitle: "Import failed",
-            dismissLabel: "Back",
             title: "We couldn't open this PDF",
             message: "It may be damaged or password protected.",
-            recoveryNote: nil,
-            code: "QS-122",
-            tips: [
-                "Remove the password, then share it again",
-                "Download or export the PDF again",
-                "Copy the text and paste it instead"
-            ],
-            recoveries: [.pasteText, .tryAgain]
+            keepsText: false,
+            recoveries: [.tryAgain, .pasteText]
         )
     }
 
     static func quotaExhausted(resetDate: Date) -> ImportFailure {
         ImportFailure(
-            severity: .warning,
-            navigationTitle: "Free generations",
-            dismissLabel: "Done",
             title: "Free generations used",
             message: "You've used all \(GenerationAllowance.monthlyLimit) free generations this month. They reset on \(resetDate.formatted(.dateTime.month(.wide).day())).",
-            recoveryNote: nil,
-            code: "QS-200",
-            tips: [
-                "Existing sets still work. Study, quiz and edit as usual.",
-                "Type cards by hand from the Library in the meantime.",
-                "QuickStudy Pro adds \(ProProduct.hostedMonthlyLimit) cloud generations a month, on any iPhone."
-            ],
+            keepsText: false,
             recoveries: []
         )
     }
 
     /// Apple Intelligence is off or still downloading. `Try again` would just repeat the
     /// same failure, so the only real recovery is typing cards by hand.
-    static func deviceNotReady(message: String, code: String) -> ImportFailure {
+    static func deviceNotReady(message: String) -> ImportFailure {
         ImportFailure(
-            severity: .warning,
-            navigationTitle: "Apple Intelligence",
-            dismissLabel: "Not now",
             title: "On-device AI isn't ready",
             message: message,
-            recoveryNote: nil,
-            code: code,
-            tips: [],
+            keepsText: false,
             recoveries: [.typeCards]
         )
     }
 
     static let emptyPaste = ImportFailure(
-        severity: .warning,
-        navigationTitle: "Error",
-        dismissLabel: "Cancel",
         title: "We couldn't read this",
         message: "Paste some notes to generate cards from.",
-        recoveryNote: nil,
-        code: nil,
-        tips: [],
+        keepsText: false,
         recoveries: [.pasteText]
     )
 }

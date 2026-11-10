@@ -10,9 +10,27 @@ import Foundation
 @MainActor
 @Observable
 final class LibraryViewModel {
-    enum AddCardsReason {
-        case noOnDeviceModel
-        case allowanceExhausted
+    enum StatusCard: Equatable {
+        case drafting(ImportCoordinator.DraftingStatus)
+        case failed(ImportFailure)
+        case ready(DraftSet)
+
+        var kind: String {
+            switch self {
+            case .drafting: "drafting"
+            case .failed: "failed"
+            case .ready: "ready"
+            }
+        }
+
+        static func == (lhs: StatusCard, rhs: StatusCard) -> Bool {
+            switch (lhs, rhs) {
+            case (.drafting(let a), .drafting(let b)): a == b
+            case (.failed(let a), .failed(let b)): a.id == b.id
+            case (.ready(let a), .ready(let b)): a.id == b.id
+            default: false
+            }
+        }
     }
 
     enum Filter: String, CaseIterable, Identifiable {
@@ -39,29 +57,34 @@ final class LibraryViewModel {
 
     var searchText = ""
     var filter: Filter = .all
-    var isManualOnly = false
-    var addCardsReason: AddCardsReason? = nil
 
-    var showsAddCardsSection: Bool { addCardsReason != nil }
+    static func statusCard(
+        drafting: ImportCoordinator.DraftingStatus?,
+        failure: ImportFailure?,
+        draft: DraftSet?
+    ) -> StatusCard? {
+        if let drafting { return .drafting(drafting) }
+        if let failure { return .failed(failure) }
+        if let draft { return .ready(draft) }
+        return nil
+    }
 
-    // Only the exhausted surface tells the user their free generations are used up.
-    var upgradeSurface: PaywallSurface { addCardsReason == .allowanceExhausted ? .exhausted : .pill }
+    static func readyTitle(for draft: DraftSet) -> String {
+        "\(draft.title) is ready"
+    }
 
-    /// `AICapability` reads the Keychain, so this is refreshed on appear and on a
-    /// mode change rather than evaluated from a view body. A device with no local model
-    /// can still generate on the server while its free hosted generation is unspent and
-    /// consent hasn't been declined.
-    func refreshCapability(settings: AISettings, store: StoreController) {
-        let noLocalModel = AICapability.state(for: settings) == .unsupportedDevice
-        isManualOnly = noLocalModel && !store.isPro
-            && (store.freeHostedGenerationUsed || HostedConsent.decision == .declined)
+    static func readyDetail(for draft: DraftSet) -> String {
+        let count = draft.cards.count
+        let cards = "\(count) \(count == 1 ? "card" : "cards") drafted"
+        guard draft.pageCount > 1 else { return cards }
+        return "\(cards) from \(draft.pageCount) pages"
+    }
 
-        if isManualOnly {
-            addCardsReason = .noOnDeviceModel
-        } else if !store.isPro && GenerationAllowance.isExhausted {
-            addCardsReason = .allowanceExhausted
-        } else {
-            addCardsReason = nil
+    static func label(for recovery: ImportFailure.Recovery, in failure: ImportFailure) -> String {
+        switch recovery {
+        case .tryAgain: "Try Again"
+        case .pasteText: failure.pasteRecoveryLabel
+        case .typeCards: "Type Cards"
         }
     }
 

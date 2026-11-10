@@ -51,7 +51,28 @@ struct DraftSet: Identifiable, Codable {
         createdAt = try container.decode(Date.self, forKey: .createdAt)
     }
 
-    var pageCount: Int { document.pageBreaks?.count ?? 1 }
+    /// Choose Pages keeps the skipped pages as empty placeholders so card sources keep the
+    /// PDF's real page numbers; only pages that hold text count as drafted.
+    var contentPages: [Int] {
+        guard let breaks = document.pageBreaks, !breaks.isEmpty else { return [1] }
+        let lines = document.lines
+        return breaks.indices.filter { index in
+            let start = breaks[index]
+            let end = breaks.indices.contains(index + 1) ? breaks[index + 1] : lines.count
+            guard start < end, end <= lines.count else { return false }
+            return lines[start..<end].contains { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+        }
+        .map { $0 + 1 }
+    }
+
+    var pageCount: Int { max(contentPages.count, 1) }
+
+    /// "page 4", "pages 4 to 9", or "6 pages" when the chosen pages aren't contiguous.
+    var pageRangeLabel: String? {
+        guard document.pageBreaks != nil, let first = contentPages.first, let last = contentPages.last else { return nil }
+        if contentPages.count == 1 { return "page \(first)" }
+        return last - first + 1 == contentPages.count ? "pages \(first) to \(last)" : "\(contentPages.count) pages"
+    }
 
     mutating func remove(_ cardID: UUID) {
         cards.removeAll { $0.id == cardID }

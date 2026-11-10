@@ -17,21 +17,11 @@ struct FloatingCreateButton: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(Theme.onPrimary)
                 .frame(width: 56, height: 56)
-                .background(Color.appPrimary)
-                .clipShape(Circle())
-                .shadow(color: .black.opacity(0.18), radius: 8, y: 4)
+                .glassEffect(.regular.tint(Theme.primary).interactive(), in: .circle)
+                .contentShape(.circle)
         }
-        .buttonStyle(PressScaleButtonStyle())
+        .buttonStyle(.plain)
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-        .accessibilityLabel("New set")
-    }
-}
-
-private struct PressScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.92 : 1)
-            .appAnimation(Motion.snappy, value: configuration.isPressed)
-            .sensoryFeedback(.impact(weight: .medium), trigger: configuration.isPressed) { _, new in new }
+        .accessibilityLabel("New Set")
     }
 }

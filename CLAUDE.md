@@ -12,6 +12,8 @@ Only four screens have been worked from so far (Today, Today · Empty, Library, 
 
 ### Design source
 
+**The import flow (New Set through Save) follows the Sketch file `QuickStudy-Redesign`, page `Import Flow`**, approved by the user on 2026-11-04 after an HIG review. For those screens it supersedes Final v2: the floating + is the only way in; New Set (Scan card plus Photo/PDF/Text rows, no chevrons); Paste Text with a toolbar checkmark; Choose Pages for PDFs over 10 pages; cloud consent asked after the source is picked and only when a draft would leave the iPhone; drafting never blocks (a Library status card shows drafting, ready and failed); Review Cards is a sheet with a Source button per card; Card Source; and Save to a new or existing set. Scan Preview, the Generating cover and the full-screen import error no longer exist.
+
 Claude Design project **`9f4b163e-3cb3-407c-9302-b0e2947d1836`**, entry file `QuickStudy Final v2.html`:
 
 https://claude.ai/design/p/9f4b163e-3cb3-407c-9302-b0e2947d1836?file=QuickStudy+Final+v2.html
@@ -190,6 +192,7 @@ These differ from the designs deliberately. Do not "correct" them back:
 - **Today's trailing toolbar item is a gear, not the mock's sun/appearance icon.** The gear is the only route to Settings in the app; swapping it would orphan API key configuration and the sample-sets toggle.
 - **The generations pill's `Pro ›` opens the paywall** and the pill turns teal (`appAIAccent`) with the hosted count when Pro is active. The mock's pill is informational only.
 - **No `Edit` button in Today's empty state.** Nothing in the flow gives it a target.
+- **The import flow follows the Sketch `Import Flow` page, not Final v2** (see Design source). Scan · Preview and Generating are replaced by the Library status card and the per-card Source sheet; the Paste sheet no longer shows the free-generations counter.
 
 ## Output Style
 

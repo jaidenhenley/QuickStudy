@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct LibraryEmptyView: View {
-    let coordinator: ImportCoordinator
-
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .caption) private var tipTileSize = 28.0
 
     var body: some View {
@@ -48,34 +45,10 @@ struct LibraryEmptyView: View {
                 .fontWeight(.bold)
                 .accessibilityAddTraits(.isHeader)
 
-            Text("Snap a page, drop in a PDF, or paste your notes. We'll draft flashcards in seconds.")
+            Text("Tap + to scan, import or paste your first notes.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-
-            let sourceLayout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(spacing: 10))
-                : AnyLayout(HStackLayout(spacing: 10))
-
-            sourceLayout {
-                SourceOptionButton(title: "Scan", subtitle: "Camera", systemImage: "camera") {
-                    coordinator.pendingSource = .scan
-                    coordinator.presentPendingSource()
-                }
-                SourceOptionButton(title: "Photo", subtitle: "Library", systemImage: "photo") {
-                    coordinator.pendingSource = .photo
-                    coordinator.presentPendingSource()
-                }
-                SourceOptionButton(title: "PDF", subtitle: "Files", systemImage: "doc.text") {
-                    coordinator.pendingSource = .pdf
-                    coordinator.presentPendingSource()
-                }
-                SourceOptionButton(title: "Text", subtitle: "Paste", systemImage: "text.alignleft") {
-                    coordinator.pendingSource = .paste
-                    coordinator.presentPendingSource()
-                }
-            }
-            .padding(.top, 4)
 
             HStack(spacing: 10) {
                 Image(systemName: "sparkles")
@@ -85,7 +58,7 @@ struct LibraryEmptyView: View {
                     .background(Color.appPrimary.opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .accessibilityHidden(true)
-                Text("Tip: works best with **1–3 pages of notes** at a time.")
+                Text("Works best with **1 to 10 pages of notes**.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer(minLength: 0)

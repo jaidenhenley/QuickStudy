@@ -23,39 +23,23 @@ struct ImportModifiers: ViewModifier {
             } message: {
                 Text("Document scanning isn't available on this device. Import a photo or PDF instead.")
             }
-            .alert(
-                "Replace your draft?",
-                isPresented: $coordinator.showReplaceDraftAlert,
-                presenting: draftStore.pending
-            ) { _ in
+            .alert("Replace your draft?", isPresented: $coordinator.showReplaceDraftAlert) {
                 Button("Replace", role: .destructive) { coordinator.replacePendingDraft() }
                 Button("Cancel", role: .cancel) { coordinator.cancelReplaceDraft() }
-            } message: { draft in
-                Text("You have a draft from \(draft.title) waiting. Starting a new set will discard it.")
+            } message: {
+                Text(coordinator.replaceDraftMessage)
             }
-            .navigationDestination(isPresented: $coordinator.navigateToReview) {
+            .sheet(isPresented: $coordinator.showReview) {
                 if let draft = draftStore.pending {
-                    if draft.cards.contains(where: { $0.source?.lineRange != nil }) {
-                        ScanPreviewView(
-                            draft: draft,
-                            onContinue: { coordinator.previewConfirmed = true },
-                            onCancel: {
-                                draftStore.set(nil)
-                                coordinator.navigateToReview = false
-                            }
-                        )
-                        .navigationDestination(isPresented: $coordinator.previewConfirmed) {
-                            ReviewDraftsView(draft: draft)
-                                .environment(studyViewModel)
-                                .environment(draftStore)
-                        }
-                    } else {
-                        ReviewDraftsView(draft: draft)
-                            .environment(studyViewModel)
-                            .environment(draftStore)
-                    }
+                    ReviewDraftsView(draft: draft)
+                        .environment(studyViewModel)
+                        .environment(draftStore)
+                        .environment(studyViewModel.store)
+                        .environment(studyViewModel.aiSettings)
+                        .environment(studyViewModel.analytics)
+                        .presentationDetents([.large])
                 } else {
-                    // Save and Discard clear the draft a frame before the pop lands.
+                    // Save and Discard clear the draft while the sheet is still animating away.
                     BackgroundView()
                         .ignoresSafeArea()
                 }
@@ -65,13 +49,9 @@ struct ImportModifiers: ViewModifier {
                 coordinator.aiSettings = studyViewModel.aiSettings
                 coordinator.storeController = studyViewModel.store
             }
-            // Saving or discarding clears the draft that the preview and drafts screens are
-            // built from. Close the whole import stack rather than popping one level back
-            // onto a screen with nothing left to show.
             .onChange(of: draftStore.pending?.id) { _, id in
                 guard id == nil else { return }
-                coordinator.previewConfirmed = false
-                coordinator.navigateToReview = false
+                coordinator.showReview = false
             }
             .sheet(isPresented: $coordinator.showPaywall) {
                 PaywallView(surface: .exhausted)
@@ -84,7 +64,7 @@ struct ImportModifiers: ViewModifier {
             }
             .sheet(
                 isPresented: $coordinator.showHostedConsent,
-                onDismiss: { coordinator.resumeAfterConsent() }
+                onDismiss: { coordinator.resumeAfterConsent(study: studyViewModel) }
             ) {
                 HostedConsentSheet(
                     setup: DraftingSetup.current(settings: studyViewModel.aiSettings),
@@ -123,32 +103,21 @@ struct ImportModifiers: ViewModifier {
             .fileImporter(isPresented: $coordinator.showFileImporter, allowedContentTypes: [.pdf]) { result in
                 coordinator.handleFileImport(result, using: importHelper, study: studyViewModel)
             }
+            .sheet(
+                isPresented: $coordinator.showPagePicker,
+                onDismiss: { coordinator.finishPageChoice(using: importHelper, study: studyViewModel) }
+            ) {
+                if let choice = coordinator.pageChoice {
+                    ChoosePagesSheet(fileName: choice.fileName, document: choice.document) { indices in
+                        coordinator.choosePages(indices)
+                    }
+                }
+            }
             .photosPicker(
                 isPresented: $coordinator.showPhotoPicker,
                 selection: $coordinator.selectedPhotoItem,
                 matching: .images
             )
-            .fullScreenCover(
-                isPresented: $coordinator.showGenerating,
-                onDismiss: { coordinator.generatingCoverDidDismiss() }
-            ) {
-                GeneratingView(stage: coordinator.stage, source: coordinator.activeSource) {
-                    coordinator.cancelGeneration()
-                }
-                .onAppear { coordinator.generatingCoverDidAppear() }
-            }
-            .fullScreenCover(
-                item: $coordinator.failure,
-                onDismiss: { coordinator.resumeAfterError(using: importHelper, study: studyViewModel) }
-            ) { failure in
-                ImportErrorView(
-                    failure: failure,
-                    onDismiss: { coordinator.dismissFailure() },
-                    onPasteText: { coordinator.requestPasteRecovery() },
-                    onTryAgain: { coordinator.requestRetry() },
-                    onTypeCards: { coordinator.requestTypeCards() }
-                )
-            }
             .onChange(of: coordinator.selectedPhotoItem) { _, _ in
                 coordinator.startPhotoProcessing(using: importHelper, study: studyViewModel)
             }

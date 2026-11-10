@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NaturalLanguage
 import OSLog
 import UIKit
 
@@ -219,6 +220,17 @@ class StudyViewModel {
     
     // MARK: - Scan + generate
     @MainActor
+    /// One line per sentence. Pasted notes arrive as a single paragraph, one line, and a
+    /// card's source would otherwise cover the whole paste instead of its own sentences.
+    static func sentenceLines(_ line: String) -> [String] {
+        let tokenizer = NLTokenizer(unit: .sentence)
+        tokenizer.string = line
+        let sentences = tokenizer.tokens(for: line.startIndex..<line.endIndex)
+            .map { line[$0].trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+        return sentences.count > 1 ? sentences : [line]
+    }
+
     func makeDraft(
         from extracted: ExtractedDocument,
         title: String,
@@ -237,7 +249,7 @@ class StudyViewModel {
                ) {
                 working = repaired
             }
-            allLines.append(contentsOf: normalizeOCRLines(working))
+            allLines.append(contentsOf: normalizeOCRLines(working).flatMap(Self.sentenceLines))
         }
 
         let document = StudyDocument(
@@ -730,6 +742,27 @@ class StudyViewModel {
         drafts.set(nil)
         sessions.removeAll()
         StreakStore.setFrozenDays([])
+        saveSavedSets()
+    }
+
+    func addCards(_ cards: [StudyCard], toSetWithID setID: UUID) {
+        guard let index = savedSets.firstIndex(where: { $0.id == setID }),
+              !isDemoSet(savedSets[index]) else { return }
+        var seen = Set(savedSets[index].cards.map(\.id))
+        // A line range indexes the draft's document, which the existing set doesn't
+        // store; kept, it would point at unrelated lines of the set's own document.
+        let added = cards.compactMap { card -> StudyCard? in
+            guard seen.insert(card.id).inserted else { return nil }
+            var card = card
+            card.source?.lineRange = nil
+            return card
+        }
+        guard !added.isEmpty else { return }
+        savedSets[index].cards.append(contentsOf: added)
+        savedSets[index].updatedAt = Date()
+        if activeSetID == setID {
+            flashcards = savedSets[index].cards
+        }
         saveSavedSets()
     }
 

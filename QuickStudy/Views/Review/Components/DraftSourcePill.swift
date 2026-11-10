@@ -9,27 +9,36 @@ import SwiftUI
 
 struct DraftSourcePill: View {
     let source: CardSource
+    let action: () -> Void
 
     var body: some View {
-        HStack(spacing: Spacing.xs) {
-            Image(systemName: "link")
-                .accessibilityHidden(true)
-            Text(source.shortLabel)
+        Button(action: action) {
+            // An explicit stack: inside a List row a Label takes the row's wide icon inset.
+            HStack(spacing: Spacing.xs) {
+                Image(systemName: "doc.text.magnifyingglass")
+                Text(label)
+            }
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .foregroundStyle(Theme.primary)
+                .padding(.horizontal, Spacing.md)
+                .padding(.vertical, Spacing.xs)
+                .background(Theme.primary.opacity(0.12), in: .capsule)
+                .frame(minHeight: 44)
+                .contentShape(.rect)
         }
-        .font(.caption2)
-        .foregroundStyle(Color.appPrimary)
-        .padding(.horizontal, Spacing.sm)
-        .padding(.vertical, 3)
-        .background(Color.appPrimary.opacity(0.12), in: Capsule())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Self.spokenLabel(for: source))
+        .buttonStyle(.plain)
+        .accessibilityLabel(spokenLabel)
+        .accessibilityHint("Shows the passage this card came from")
     }
 
-    static func spokenLabel(for source: CardSource) -> String {
-        var parts: [String] = []
-        if let page = source.page { parts.append("Page \(page)") }
-        if let paragraph = source.paragraph { parts.append("paragraph \(paragraph)") }
-        guard !parts.isEmpty else { return "Source: \(source.documentTitle)" }
-        return parts.joined(separator: ", ")
+    private var label: String {
+        guard let page = source.page else { return "Source" }
+        return "Source · p.\(page)"
+    }
+
+    private var spokenLabel: String {
+        guard let page = source.page else { return "Source" }
+        return "Source, page \(page)"
     }
 }
