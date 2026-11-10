@@ -583,11 +583,8 @@ final class E2EScriptQuizLibraryTests: QSTestCase {
         openSaveSheet("E-5b", cards: 6)
         shot("E-5b", "save-sheet")
         dump("E-5b", "save-sheet")
-        XCTAssertFalse(addToExistingSegment.isEnabled, "Add to Existing enabled with only the sample set")
         XCTAssertTrue(app.staticTexts["You have no sets of your own to add these cards to yet."].exists, "No explanation for the disabled segment")
-        addToExistingSegment.tap()
-        Thread.sleep(forTimeInterval: 0.5)
-        XCTAssertTrue(app.textFields["Name"].exists, "Tapping the disabled segment left New Set")
+        assertAddToExistingInert("E-5b")
     }
 
     func test_E_6() {
