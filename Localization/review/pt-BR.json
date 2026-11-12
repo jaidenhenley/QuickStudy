@@ -2994,10 +2994,10 @@
   "note": "“Hoje mostra” now “A aba Hoje mostra”; button name quoted as “Por quê?”; “Conta Apple” capitalized as Apple Brasil writes it. All factual claims (10 free, 150 Pro, Claude deletes within 30 days, renewal terms) checked and correct."
  },
  "listing:release_notes": {
-  "back": "QuickStudy now speaks your language. The app is available in Spanish, French, German, Japanese, Korean and Portuguese, and cards are created in the language of your notes, whatever the language of your iPhone. Scanning also reads pages in those languages, and spell checking follows the language of each page.",
+  "back": "QuickStudy 2.0 was rebuilt so you study every day. ONE SESSION A DAY: Today shows only the due cards plus your weakest card; streaks count the days you study and each full study week earns a Streak Freeze. FROM PAGE TO CARDS, FASTER: scan with the camera, choose a photo, import a PDF or paste text; keep using the app while your cards are drafted; every draft is kept by default, tap to edit, swipe to remove. KNOW WHY: each card links back to the page and passage it came from; every answer explains why it is right, and missed cards come back tomorrow. NOW IN YOUR LANGUAGE: QuickStudy is available in Spanish, French, German, Japanese, Korean and Portuguese; cards are drafted in the language of your notes, whatever language your iPhone uses; scanning reads pages in those languages and spell-checking follows the language of each page. QUICKSTUDY PRO: an optional subscription with 150 cloud generations a month on any iPhone; typing your own cards and every study mode remain free and unlimited; if a draft would leave your iPhone, QuickStudy asks first.",
   "status": "ok",
   "severity": "none",
-  "note": ""
+  "note": "Rewritten for 2.0 on 2026-11-12 to cover the whole update, reusing reviewed wording from the description and the in-app What's New. Reviewer found nothing to change."
  },
  "libraryFilter.all": {
   "back": "All (m. pl., agrees with conjuntos)",

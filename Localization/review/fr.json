@@ -2994,10 +2994,10 @@
   "note": "Fixed the tautology 'pour que tu ne révises que ce qui est à réviser' → 'ce qui doit l’être'; calque 'gardent chaque session courte' → 't’aident à garder ...'; 'INSTALLE UNE HABITUDE' → 'PRENDS L’HABITUDE D’ÉTUDIER CHAQUE JOUR'; ungrammatical 'Étudier, faire des quiz et modifier fonctionnent' → 'Les révisions, les quiz et les modifications fonctionnent'. All pricing, renewal and 30-day claims verified unchanged."
  },
  "listing:release_notes": {
-  "back": "QuickStudy now speaks your language. The app is available in Spanish, French, German, Japanese, Korean and Portuguese, and cards are drafted in the language of your notes, whatever your iPhone's language. Scanning also reads pages in these languages, and spell checking follows each page's language.",
+  "back": "QuickStudy 2.0 has been redesigned so that you study every day. ONE SESSION A DAY: Today shows only the due cards plus your weakest card; streaks count the days you study and each full study week earns a Streak Freeze. FROM PAGE TO CARDS, FASTER: scan with the camera, choose a photo, import a PDF or paste text; keep using the app while your cards are drafted; every draft is kept by default, tap to edit, swipe to remove. UNDERSTAND WHY: each card links back to the page and passage it came from; every answer explains why it is right, and missed cards come back tomorrow. NOW IN YOUR LANGUAGE: QuickStudy is available in Spanish, French, German, Japanese, Korean and Portuguese; cards are drafted in the language of your notes, whatever language your iPhone uses; scanning reads pages in those languages and spell-checking follows the language of each page. QUICKSTUDY PRO: an optional subscription with 150 cloud generations a month on any iPhone; typing your own cards and every study mode remain free and unlimited; if a draft would leave your iPhone, QuickStudy asks first.",
   "status": "ok",
   "severity": "none",
-  "note": ""
+  "note": "Rewritten for 2.0 on 2026-11-12 to cover the whole update, reusing reviewed wording from the description and the in-app What's New. Reviewer found nothing to change. 'te demande d’abord' is slightly elliptical but identical to description.txt; the header uses the infinitive 'COMPRENDRE POURQUOI' to match the in-app What's New screen."
  },
  "libraryFilter.all": {
   "back": "All (m. pl., agrees with paquets)",

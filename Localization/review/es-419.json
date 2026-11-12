@@ -2958,10 +2958,10 @@
   "note": "Apple's Spanish name for Apple Account is \"Cuenta de Apple\" (capitalized); \"tu cuenta de Apple\" corrected twice. All factual claims checked: 10 free AI generations, 150 cloud a month, Claude deletes within 30 days, 24-hour auto-renewal terms."
  },
  "listing:release_notes": {
-  "back": "QuickStudy now speaks your language. The app is available in Spanish, French, German, Japanese, Korean and Portuguese, and cards are drafted in the language of your notes, no matter what language your iPhone uses. Scanning also reads pages in those languages, and the spell checker follows the language of each page.",
+  "back": "QuickStudy 2.0 was redesigned around studying every day. ONE SESSION A DAY: Today shows only the due cards plus your weakest card; streaks count the days you study and each full study week earns a Streak Freeze. FROM PAGE TO CARDS, FASTER: scan with the camera, choose a photo, import a PDF or paste text; keep using the app while your cards are drafted; every draft is kept by default, tap to edit, swipe to remove. UNDERSTAND WHY: each card links back to the page and passage it came from; every answer explains why it is right, and missed cards come back tomorrow. NOW IN YOUR LANGUAGE: QuickStudy is available in Spanish, French, German, Japanese, Korean and Portuguese; cards are drafted in the language of your notes, whatever language your iPhone uses; scanning reads pages in those languages and spell-checking follows the language of each page. QUICKSTUDY PRO: an optional subscription with 150 cloud generations a month on any iPhone; typing your own cards and every study mode remain free and unlimited; if a draft would leave your iPhone, QuickStudy asks first.",
   "status": "ok",
   "severity": "none",
-  "note": ""
+  "note": "Rewritten for 2.0 on 2026-11-12 to cover the whole update, reusing reviewed wording from the description and the in-app What's New. Reviewer found nothing to change. Left as is for consistency with description.txt: 'Hoy' can read as the adverb, and 'Si un borrador fuera a salir' is colloquial; change both files together if ever revised."
  },
  "libraryFilter.all": {
   "back": "All (masc. pl., sets)",

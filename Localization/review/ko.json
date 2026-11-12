@@ -2994,10 +2994,10 @@
   "note": ""
  },
  "listing:release_notes": {
-  "back": "QuickStudy now supports your language. You can use the app in Spanish, French, German, Japanese, Korean and Portuguese, and regardless of your iPhone's language setting, cards are written in the same language as your notes. When scanning, it can also read pages in these languages, and spell check follows each page's language.",
-  "status": "ok",
-  "severity": "none",
-  "note": ""
+  "back": "QuickStudy 2.0 has been newly changed to fit the habit of studying every day. ONE SESSION A DAY: Today shows only the due cards plus your weakest card; streaks count the days you study and each full study week earns a Streak Freeze. FROM PAGE TO CARDS, FASTER: scan with the camera, choose a photo, import a PDF or paste text; keep using the app while your cards are drafted; every draft is kept by default, tap to edit, swipe to remove. KNOWING THE REASON TOO: each card links back to the page and passage it came from; every answer explains why it is right, and missed cards come back tomorrow. NOW IN YOUR LANGUAGE: QuickStudy is available in Spanish, French, German, Japanese, Korean and Portuguese; cards are drafted in the language of your notes, whatever language your iPhone uses; scanning reads pages in those languages and spell-checking follows the language of each page. QUICKSTUDY PRO: an optional subscription with 150 cloud generations a month on any iPhone; typing your own cards and every study mode remain free and unlimited; if a draft would leave your iPhone, QuickStudy asks first.",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "Rewritten for 2.0 on 2026-11-12 to cover the whole update. Reviewer fixed three lines: '선택형 구독' read as a selection-type subscription, not an optional one, now '선택 사항인 구독으로, … 제공해요'; '원래 있던 페이지' said the card was originally located on the page, now '그 카드가 나온 페이지'; singular '이 언어로 된' could point at the notes' language, now '이 언어들로 된'. The intro adds 'habit' and softens 'rebuilt', matching the in-app string."
  },
  "libraryFilter.all": {
   "back": "All",
