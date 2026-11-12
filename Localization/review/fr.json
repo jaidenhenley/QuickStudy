@@ -456,10 +456,10 @@
   "note": ""
  },
  "CORRECT": {
-  "back": "CORRECT",
-  "status": "ok",
-  "severity": "none",
-  "note": "Shared by the quiz result header and the Session Complete stat cell; 'CORRECT' works for both."
+  "back": "RIGHT ANSWER",
+  "status": "fixed",
+  "severity": "low",
+  "note": "The reviewer's recommendation, applied once the Session Complete stat got its own key: this label now only heads the correct answer in the quiz."
  },
  "Camera Unavailable": {
   "back": "Camera unavailable",
