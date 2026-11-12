@@ -487,11 +487,10 @@ class StudyViewModel {
     func spellCorrect(_ page: ExtractedDocument.Page) -> String {
         guard !page.candidates.isEmpty else { return page.text }
 
+        // The page's own language, not the iPhone's: an English dictionary rewrites a
+        // Spanish page. A language without a dictionary is left as Vision read it.
+        guard let language = Self.spellCheckLanguage(for: page.text) else { return page.text }
         let checker = UITextChecker()
-        let currentLocale = Locale.current.identifier
-        let language = UITextChecker.availableLanguages.contains(currentLocale)
-            ? currentLocale
-            : "en_US"
 
         // Keyed by the recognised text rather than by index: trimming the page text can
         // drop leading empty lines and shift the indices.
@@ -509,6 +508,15 @@ class StudyViewModel {
                 return spellCorrectLine(line, allowedGuesses: allowed, checker: checker, language: language)
             }
             .joined(separator: "\n")
+    }
+
+    static func spellCheckLanguage(for text: String) -> String? {
+        guard let code = SourceLanguage.dominant(in: text)?.rawValue else { return nil }
+        let available = UITextChecker.availableLanguages
+        if available.contains(code) { return code }
+        let preferredRegion = Locale.current.region?.identifier
+        let matches = available.filter { $0.split(separator: "_").first.map(String.init) == code }
+        return matches.first { $0.hasSuffix("_\(preferredRegion ?? "")") } ?? matches.first
     }
 
     private static func words(in text: String) -> [String] {

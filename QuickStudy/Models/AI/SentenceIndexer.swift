@@ -39,7 +39,7 @@ enum SentenceIndexer {
 
         var pieces: [String] = []
         var current = ""
-        for word in sentence.split(whereSeparator: { $0.isWhitespace }) {
+        for word in sentence.split(whereSeparator: { $0.isWhitespace }).flatMap({ hardSplit($0, maxLength: maxLength) }) {
             if !current.isEmpty, current.count + word.count + 1 > maxLength {
                 pieces.append(current)
                 current = ""
@@ -47,6 +47,18 @@ enum SentenceIndexer {
             current += current.isEmpty ? String(word) : " " + word
         }
         if !current.isEmpty { pieces.append(current) }
+        return pieces
+    }
+
+    /// Japanese and Chinese have no spaces, so one "word" can be a whole over-long sentence.
+    private static func hardSplit(_ word: Substring, maxLength: Int) -> [Substring] {
+        guard word.count > maxLength, maxLength > 0 else { return [word] }
+        var pieces: [Substring] = []
+        var rest = word
+        while !rest.isEmpty {
+            pieces.append(rest.prefix(maxLength))
+            rest = rest.dropFirst(maxLength)
+        }
         return pieces
     }
 

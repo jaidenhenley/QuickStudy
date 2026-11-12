@@ -49,6 +49,10 @@ struct CardDraftingCore {
     - Match the length and sentence shape of the correct answer
     - Never state the correct answer in different words
 
+    LANGUAGE:
+    - Write every card in the language of the source sentences, even though these
+      instructions are in English. Never translate the source
+
     Only create cards from information explicitly in the source. Skip anything unclear.
     """)
 
@@ -61,12 +65,13 @@ struct CardDraftingCore {
 
         let chunks = SentenceIndexer.chunks(of: sentences, maxLength: chunkLength)
         progress?.setTotalUnits(chunks.count)
+        let languageRule = SourceLanguage.promptRule(for: text)
 
         var allCards: [AIFlashcard] = []
         var firstFailure: Error?
         for chunk in chunks {
             do {
-                allCards += try await cards(for: chunk)
+                allCards += try await cards(for: chunk, languageRule: languageRule)
             } catch let error as CardGenerationError {
                 // Only a failure the passage itself caused is skipped. A network, quota or
                 // cancellation error would fail every remaining section the same way.
@@ -118,6 +123,7 @@ struct CardDraftingCore {
         \(Self.numbered(sentences))
 
         Create at most \(count) flashcards about "\(topic)".
+        \(SourceLanguage.promptRule(for: text))
         """
 
         do {
@@ -137,7 +143,7 @@ struct CardDraftingCore {
     /// On overflow the chunk is halved and retried. A fresh session per chunk is
     /// deliberate: a shared session accumulates transcript and overflows a 4K window
     /// after a chunk or two.
-    private func cards(for chunk: [IndexedSentence], depth: Int = 0) async throws -> [AIFlashcard] {
+    private func cards(for chunk: [IndexedSentence], languageRule: String, depth: Int = 0) async throws -> [AIFlashcard] {
         guard !chunk.isEmpty else { return [] }
 
         let session = makeSession(Self.cardInstructions)
@@ -147,6 +153,7 @@ struct CardDraftingCore {
         \(Self.numbered(chunk))
 
         Create roughly \(target) cards covering these sentences from first to last.
+        \(languageRule)
         """
 
         do {
@@ -159,8 +166,8 @@ struct CardDraftingCore {
         } catch let error as LanguageModelSession.GenerationError {
             if case .exceededContextWindowSize = error, depth < 2, chunk.count > 1 {
                 let middle = chunk.count / 2
-                return try await cards(for: Array(chunk[..<middle]), depth: depth + 1)
-                     + (try await cards(for: Array(chunk[middle...]), depth: depth + 1))
+                return try await cards(for: Array(chunk[..<middle]), languageRule: languageRule, depth: depth + 1)
+                     + (try await cards(for: Array(chunk[middle...]), languageRule: languageRule, depth: depth + 1))
             }
             throw Self.mapped(error)
         }

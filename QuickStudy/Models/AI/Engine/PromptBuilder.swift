@@ -19,6 +19,7 @@ enum PromptBuilder {
           Cover the whole passage rather than only its opening
         \(sharedRules)
         - Skip unclear content
+        - \(SourceLanguage.promptRule(for: text))
 
         Source:
         \(text)
@@ -36,6 +37,7 @@ enum PromptBuilder {
         \(sharedRules)
         - If the source does not cover "\(topic)" in enough depth, return fewer cards rather
           than inventing facts
+        - \(SourceLanguage.promptRule(for: text))
 
         Source:
         \(text)

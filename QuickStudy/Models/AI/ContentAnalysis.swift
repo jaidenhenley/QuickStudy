@@ -14,7 +14,7 @@ struct ContentAnalysis {
     let language: String?
 
     static func immediate(for text: String) -> ContentAnalysis {
-        let words = text.split { $0.isWhitespace || $0.isNewline }.count
+        let words = SourceLanguage.wordCount(in: text)
         return ContentAnalysis(
             wordCount: words,
             estimatedCards: estimatedCards(forWords: words),
@@ -38,9 +38,7 @@ struct ContentAnalysis {
     }
 
     private static func detectLanguage(_ text: String) -> String? {
-        let recognizer = NLLanguageRecognizer()
-        recognizer.processString(text)
-        guard let code = recognizer.dominantLanguage else { return nil }
-        return Locale.current.localizedString(forLanguageCode: code.rawValue)
+        guard let language = SourceLanguage.dominant(in: text) else { return nil }
+        return Locale.current.localizedString(forLanguageCode: language.rawValue)
     }
 }

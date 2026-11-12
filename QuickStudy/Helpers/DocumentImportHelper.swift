@@ -125,8 +125,8 @@ struct DocumentImportHelper {
         request.revision = VNRecognizeTextRequestRevision3
         request.recognitionLevel = .accurate
         request.usesLanguageCorrection = true
-        request.recognitionLanguages = ["en_US"]
-        request.automaticallyDetectsLanguage = false
+        request.recognitionLanguages = recognitionLanguages(for: request)
+        request.automaticallyDetectsLanguage = true
         request.minimumTextHeight = handwritingMode
             ? (ultraMode ? 0.015 : 0.02)
             : 0.012
@@ -152,6 +152,24 @@ struct DocumentImportHelper {
     }
 
     // MARK: PDF helpers
+
+    /// Pages are often in a language other than the iPhone's, so detection stays on and the
+    /// reader's preferred languages are passed as hints, with English always included.
+    nonisolated private static func recognitionLanguages(for request: VNRecognizeTextRequest) -> [String] {
+        let fallback = "en-US"
+        // A revision that cannot list its languages still reads English, which matches the
+        // behaviour before multilingual import, so the failure needs no further handling.
+        let supported = (try? request.supportedRecognitionLanguages()) ?? [fallback]
+        let preferred = Locale.preferredLanguages.compactMap { identifier -> String? in
+            let code = Locale(identifier: identifier).language.languageCode
+            return supported.first { Locale(identifier: $0).language.languageCode == code }
+        }
+        var languages: [String] = []
+        for language in preferred + [fallback] where !languages.contains(language) {
+            languages.append(language)
+        }
+        return languages
+    }
 
     private nonisolated enum PDFContent {
         case embeddedText([String])
