@@ -1,0 +1,40 @@
+O QuickStudy transforma as páginas que você já tem em flashcards que você vai estudar de verdade. Digitalize uma folha de exercícios, importe um PDF ou cole suas anotações, e o QuickStudy cria os cartões, liga cada um à sua fonte e organiza tudo para você revisar só o que está pendente.
+
+TRANSFORME QUALQUER PÁGINA EM FLASHCARDS
+• Digitalize páginas com a câmera, escolha uma foto, importe um PDF ou cole um texto
+• Os cartões são criados no idioma das suas anotações
+• Todo rascunho é mantido por padrão. Toque para editar, deslize para remover
+
+ESTUDE SÓ O QUE ESTÁ PENDENTE HOJE
+• A aba Hoje mostra uma sessão com os cartões pendentes, além do seu cartão mais fraco
+• A repetição espaçada faz cada cartão avançar conforme você acerta
+
+FAÇA QUIZZES EM POUCOS MINUTOS
+• Perguntas de múltipla escolha com respostas erradas convincentes
+• Um cronômetro e uma barra de progresso mantêm cada sessão curta
+
+SAIBA POR QUE CADA RESPOSTA ESTÁ CERTA
+• Todo cartão explica a sua resposta
+• Toque em “Por quê?” para ver o trecho exato e a página de onde ele veio
+
+APRENDA COM CADA ERRO
+• Uma resposta errada aparece ao lado da certa
+• Os cartões que você errar voltam amanhã
+
+CRIE O HÁBITO DE ESTUDAR TODO DIA
+• As sequências contam os dias em que você estuda
+• Ganhe um Congelamento de sequência a cada semana completa de estudo
+
+ACOMPANHE O PROGRESSO EM CADA MATÉRIA
+• Veja quanto de cada conjunto você já dominou
+• Descubra os cartões que você mais erra
+
+PRIVADO POR PADRÃO
+• Os cartões são criados no seu iPhone com o Apple Intelligence sempre que ele estiver disponível
+• Se um rascunho for sair do seu iPhone, o QuickStudy pergunta antes
+• Os rascunhos na nuvem usam o Private Cloud Compute da Apple ou o servidor do QuickStudy. O servidor cria os cartões com o Claude, da Anthropic, que apaga seu texto em até 30 dias
+• Estudar, fazer quizzes e editar funciona off-line
+
+GRÁTIS E PRO
+O QuickStudy inclui 10 gerações gratuitas com IA por mês. Digitar seus próprios cartões e todos os modos de estudo são sempre grátis e ilimitados.
+O QuickStudy Pro oferece 150 gerações na nuvem por mês em qualquer iPhone. O pagamento é cobrado na sua Conta Apple. A assinatura é renovada automaticamente, a menos que você a cancele pelo menos 24 horas antes do fim do período atual. Gerencie ou cancele a assinatura nos ajustes da sua Conta Apple.

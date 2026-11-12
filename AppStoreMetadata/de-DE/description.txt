@@ -1,0 +1,40 @@
+QuickStudy macht aus den Seiten, die du schon hast, Lernkarten, mit denen du wirklich lernst. Scanne ein Arbeitsblatt, importiere eine PDF oder setze deine Notizen ein: QuickStudy erstellt die Karten, verknüpft jede mit ihrer Quelle und plant sie so ein, dass du nur wiederholst, was fällig ist.
+
+AUS JEDER SEITE WERDEN LERNKARTEN
+• Seiten mit der Kamera scannen, ein Foto auswählen, eine PDF importieren oder Text einsetzen
+• Die Karten entstehen in der Sprache deiner Notizen
+• Jeder Entwurf bleibt standardmäßig erhalten. Zum Bearbeiten tippen, zum Entfernen wischen
+
+NUR LERNEN, WAS HEUTE FÄLLIG IST
+• „Heute“ zeigt dir eine Einheit mit den fälligen Karten und deine schwächste Karte
+• Die Intervallwiederholung schiebt jede Karte weiter, wenn du sie richtig beantwortest
+
+IN MINUTEN SELBST ABFRAGEN
+• Multiple-Choice-Fragen mit glaubwürdigen falschen Antworten
+• Timer und Fortschrittsbalken halten jede Einheit kurz
+
+WISSEN, WARUM JEDE ANTWORT RICHTIG IST
+• Jede Karte erklärt ihre Antwort
+• Tippe auf „Warum“, um die genaue Textstelle und Seite zu sehen, aus der sie stammt
+
+AUS JEDEM FEHLER LERNEN
+• Bei einer falschen Antwort siehst du die richtige direkt daneben
+• Falsch beantwortete Karten kommen morgen wieder
+
+EINE TÄGLICHE LERNROUTINE AUFBAUEN
+• Serien zählen die Tage, an denen du lernst
+• Verdiene für jede volle Lernwoche einen Serienschutz
+
+DEN FORTSCHRITT IN JEDEM FACH VERFOLGEN
+• Sieh, wie viel von jedem Set du schon gemeistert hast
+• Finde die Karten, die du am häufigsten falsch beantwortest
+
+STANDARDMÄSSIG PRIVAT
+• Karten werden auf deinem iPhone mit Apple Intelligence erstellt, sobald es verfügbar ist
+• Wenn ein Entwurf dein iPhone verlassen würde, fragt QuickStudy zuerst
+• Cloud-Entwürfe nutzen Apples Private Cloud Compute oder den QuickStudy-Server. Der Server erstellt Entwürfe mit Claude von Anthropic. Claude löscht deinen Text innerhalb von 30 Tagen
+• Lernen, Quiz und Bearbeiten funktionieren offline
+
+KOSTENLOS UND PRO
+QuickStudy enthält 10 kostenlose KI-Generierungen pro Monat. Eigene Karten einzugeben und alle Lernmodi sind immer kostenlos und unbegrenzt.
+QuickStudy Pro bietet zusätzlich 150 Cloud-Generierungen pro Monat auf jedem iPhone. Die Zahlung wird deinem Apple Account belastet. Das Abo verlängert sich automatisch, es sei denn, du kündigst mindestens 24 Stunden vor Ende des aktuellen Zeitraums. Verwalte oder kündige es in den Einstellungen deines Apple Accounts.

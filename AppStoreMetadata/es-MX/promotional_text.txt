@@ -1,0 +1,1 @@
+Escanea una página, importa un PDF o pega tus apuntes. QuickStudy redacta tarjetas y cuestionarios por ti y te muestra solo lo pendiente de cada día.

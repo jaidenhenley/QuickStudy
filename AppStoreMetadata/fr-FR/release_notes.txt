@@ -1,0 +1,3 @@
+QuickStudy parle maintenant ta langue. L’app est disponible en espagnol, français, allemand, japonais, coréen et portugais, et les cartes sont rédigées dans la langue de tes notes, quelle que soit la langue de ton iPhone.
+
+Le scan lit aussi les pages dans ces langues, et la correction orthographique suit la langue de chaque page.

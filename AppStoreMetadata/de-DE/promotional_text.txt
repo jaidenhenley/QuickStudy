@@ -1,0 +1,1 @@
+Scanne eine Seite, importiere eine PDF oder setze deine Notizen ein. QuickStudy erstellt Lernkarten und Quizze für dich und zeigt dir täglich nur, was fällig ist.

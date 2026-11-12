@@ -1,0 +1,3 @@
+QuickStudy now speaks your language. The app is available in Spanish, French, German, Japanese, Korean and Portuguese, and cards are drafted in the language of your notes, whatever language your iPhone uses.
+
+Scanning also reads pages in those languages, and spell-checking follows the language of each page.

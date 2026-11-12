@@ -1,0 +1,40 @@
+QuickStudy transforme les pages que tu as déjà en flashcards que tu étudieras vraiment. Scanne une feuille d’exercices, importe un PDF ou colle tes notes : QuickStudy rédige les cartes, relie chacune à sa source et les planifie pour que tu ne révises que ce qui doit l’être.
+
+TRANSFORME N’IMPORTE QUELLE PAGE EN FLASHCARDS
+• Scanne des pages avec l’appareil photo, choisis une photo, importe un PDF ou colle du texte
+• Les cartes sont rédigées dans la langue de tes notes
+• Chaque brouillon est conservé par défaut. Touche pour modifier, balaie pour retirer
+
+ÉTUDIE SEULEMENT CE QUI EST À RÉVISER AUJOURD’HUI
+• Aujourd’hui affiche une session avec les cartes à réviser, plus ta carte la plus faible
+• La répétition espacée fait avancer chaque carte quand tu réponds juste
+
+FAIS-TOI UN QUIZ EN QUELQUES MINUTES
+• Des questions à choix multiples avec de fausses réponses crédibles
+• Un minuteur et une barre de progression t’aident à garder chaque session courte
+
+COMPRENDS POURQUOI CHAQUE RÉPONSE EST JUSTE
+• Chaque carte explique sa réponse
+• Touche Pourquoi pour voir le passage exact et la page d’où elle vient
+
+APPRENDS DE CHAQUE ERREUR
+• Une mauvaise réponse s’affiche à côté de la bonne
+• Les cartes ratées reviennent demain
+
+PRENDS L’HABITUDE D’ÉTUDIER CHAQUE JOUR
+• Les séries comptent les jours où tu étudies
+• Gagne un gel de série pour chaque semaine d’étude complète
+
+SUIS LA PROGRESSION DE CHAQUE MATIÈRE
+• Vois quelle part de chaque paquet tu maîtrises
+• Repère les cartes que tu rates le plus
+
+PRIVÉ PAR DÉFAUT
+• Les cartes sont rédigées sur ton iPhone avec Apple Intelligence dès que c’est possible
+• Si un brouillon doit quitter ton iPhone, QuickStudy te demande d’abord
+• Les brouillons dans le cloud utilisent Private Cloud Compute d’Apple ou le serveur de QuickStudy. Le serveur rédige avec Claude d’Anthropic, qui supprime ton texte sous 30 jours
+• Les révisions, les quiz et les modifications fonctionnent hors connexion
+
+GRATUIT ET PRO
+QuickStudy inclut 10 générations IA gratuites par mois. Saisir tes propres cartes et tous les modes d’étude sont toujours gratuits et illimités.
+QuickStudy Pro ajoute 150 générations cloud par mois sur n’importe quel iPhone. Le paiement est débité de ton compte Apple. L’abonnement se renouvelle automatiquement, sauf si tu l’annules au moins 24 heures avant la fin de la période en cours. Gère-le ou annule-le dans les réglages de ton compte Apple.
