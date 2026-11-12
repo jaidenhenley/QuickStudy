@@ -22,3 +22,9 @@ enum Spacing {
     static let lg: CGFloat = 24
     static let xl: CGFloat = 32
 }
+
+enum AppLayout {
+    // Just wider than the iPhone Duo's unfolded portrait screen (669 pt), so only
+    // landscape and wider windows are capped; every portrait layout is unchanged.
+    static let readableWidth: CGFloat = 680
+}

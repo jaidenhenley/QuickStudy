@@ -112,6 +112,7 @@ struct SessionCompleteView: View {
             .padding(.bottom, Spacing.base)
         }
         .background(BackgroundView())
+            .appReadableWidth()
         .navigationBarBackButtonHidden()
         .sensoryFeedback(.success, trigger: appeared) { _, new in new }
         .task {
@@ -121,3 +122,4 @@ struct SessionCompleteView: View {
         .onAppear { appeared = true }
     }
 }
+            .appReadableWidth()

@@ -135,6 +135,7 @@ struct LibraryView: View {
                 }
                 .padding(.horizontal, Spacing.lg)
                 .padding(.bottom, 96)
+                .appReadableWidth(alignment: .leading)
             }
 
             FloatingCreateButton { coordinator.openSourcePicker() }

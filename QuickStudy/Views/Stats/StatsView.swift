@@ -106,6 +106,7 @@ struct StatsView: View {
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.bottom, Spacing.xl)
+            .appReadableWidth(alignment: .leading)
         }
         .background(BackgroundView())
         .navigationTitle("Stats")

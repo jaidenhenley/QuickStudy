@@ -136,6 +136,7 @@ struct TodayView: View {
             .padding(.horizontal, Spacing.lg)
             .padding(.top, Spacing.sm)
             .padding(.bottom, Spacing.xl)
+            .appReadableWidth(alignment: .leading)
             .appAnimation(Motion.standard, value: networkMonitor.isOnline)
             .appAnimation(Motion.standard, value: draftStore.pending?.id)
         }

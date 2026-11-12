@@ -88,6 +88,7 @@ struct StreakView: View {
                 .accessibilityElement(children: .combine)
             }
             .padding(Spacing.lg)
+            .appReadableWidth()
         }
         .background(BackgroundView())
         .navigationTitle("Streak")
