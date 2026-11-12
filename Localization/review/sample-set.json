@@ -1,0 +1,2998 @@
+{
+ "es-419": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the process that plants, algae and some bacteria use to transform light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "It occurs in the chloroplasts, organelles found mainly in the cells of the leaf's mesophyll.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"organelos\" is the Latin American school form."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is the green pigment found inside the chloroplasts. It absorbs red light and blue light and reflects green light; that is why leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbon dioxide enters (to) the leaf through small pores called stomata, and water rises from the roots through the xylem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis occurs in two stages: the light-dependent reactions and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"reacciones dependientes de la luz\" is the standard school term in both Spain and Latin America (also \"fase luminosa\"); kept, consistent across cards 5, 6, 8."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The light-dependent reactions occur in the membranes of the thylakoids. In them water is broken down, oxygen is released, and ATP and NADPH are produced.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The oxygen that photosynthesis releases comes from the water molecules that are broken down, not from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle occurs in the stroma. It uses the ATP and the NADPH to fix carbon dioxide in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis depends on light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "In what part of the cell does photosynthesis occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the chloroplasts.": {
+   "back": "In the chloroplasts.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "The chloroplasts contain the chlorophyll and the membranes that capture light, so (por lo que) the whole process occurs inside them.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"así que\" read as conversational; changed to \"por lo que\" for textbook register."
+  },
+  "In the mitochondria.": {
+   "back": "In the mitochondria.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "In the nucleus.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "In the ribosomes.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "The green pigment that absorbs red and blue light to drive photosynthesis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll captures light energy. The green light it reflects is the reason leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "The sugar the plant stores as an energy reserve.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "The tissue that transports water from the roots upward.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The equation ends in C6H12O6 and 6O2: the sugar the plant keeps and the oxygen it releases.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Only carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "How does carbon dioxide enter (to) a leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small pores called stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "The stomata open on the leaf surface so that gases can enter and leave.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "Through the roots, together with the water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the chloroplast membrane.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two stages of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The light-dependent reactions and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The light-dependent reactions capture the energy, and the Calvin cycle uses it to form sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the Krebs cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and the phases of mitosis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription and then translation of DNA.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where do the light-dependent reactions occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "In the thylakoids.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoids contain the chlorophyll that captures light, that is why the light-dependent reactions occur there.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "In the stroma.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "In the cytoplasm.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stomata.": {
+   "back": "In the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "Where does the oxygen that photosynthesis releases come from?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "From the water molecules that are broken down.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "When water is broken down in the light-dependent reactions, the oxygen is released. Instead, the carbon from carbon dioxide ends up forming part of the sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "From the carbon dioxide the leaf absorbs.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "From the glucose that is degraded in the cell.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "From the air that is inside the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What does the Calvin cycle produce?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar, formed from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"Azúcar ... formado\": masculine agreement is the standard (el azúcar)."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and the NADPH that the light-dependent reactions produce to fix carbon dioxide in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Oxygen, released from water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH for the light-dependent reactions.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll, to capture more light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "Which three factors affect the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"afectan la velocidad\" without \"a\" is normal in Latin America."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "Each one is a resource or a condition the reactions depend on, so, if any of them is missing, the whole process becomes slower.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"así que si...\" changed to \"por lo que, si...\" for textbook register."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Soil type, leaf color and plant height.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Oxygen level, glucose level and leaf size.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Day length, root depth and humidity.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "Transforming light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "Degrading glucose to release energy.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "Absorbing water through the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "Releasing carbon dioxide into the air.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ },
+ "es-ES": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the process that plants, algae and some bacteria use to transform light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "It occurs in the chloroplasts, organelles (orgánulos) found mainly in the cells of the leaf's mesophyll.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"orgánulos\" is the Spain school form."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is the green pigment found inside the chloroplasts. It absorbs red light and blue light and reflects green light; that is why leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbon dioxide enters (into) the leaf through small pores called stomata, and water rises from the roots through the xylem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis occurs in two stages: the light-dependent reactions and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"reacciones dependientes de la luz\" is the standard school term in both Spain and Latin America (also \"fase luminosa\"); kept, consistent across cards 5, 6, 8."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The light-dependent reactions occur in the membranes of the thylakoids. In them water is broken down, oxygen is released, and ATP and NADPH are produced.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The oxygen that photosynthesis releases comes from the water molecules that are broken down, not from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle occurs in the stroma. It uses the ATP and the NADPH to fix carbon dioxide in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis depends on light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "In what part of the cell does photosynthesis occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the chloroplasts.": {
+   "back": "In the chloroplasts.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "The chloroplasts contain the chlorophyll and the membranes that capture light, so (por lo que) the whole process occurs inside them.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"así que\" read as conversational; changed to \"por lo que\" for textbook register."
+  },
+  "In the mitochondria.": {
+   "back": "In the mitochondria.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "In the nucleus.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "In the ribosomes.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "The green pigment that absorbs red and blue light to drive photosynthesis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll captures light energy. The green light it reflects is the reason leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "The sugar the plant stores as an energy reserve.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "The tissue that transports water from the roots upward.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The equation ends in C6H12O6 and 6O2: the sugar the plant keeps and the oxygen it releases.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Only carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "How does carbon dioxide enter (into) a leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small pores called stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "The stomata open on the leaf surface so that gases can enter and leave.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "Through the roots, together with the water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the chloroplast membrane.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two stages of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The light-dependent reactions and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The light-dependent reactions capture the energy, and the Calvin cycle uses it to form sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the Krebs cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and the phases of mitosis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription and then translation of DNA.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where do the light-dependent reactions occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "In the thylakoids.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoids contain the chlorophyll that captures light, that is why the light-dependent reactions occur there.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "In the stroma.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "In the cytoplasm.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stomata.": {
+   "back": "In the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "Where does the oxygen that photosynthesis releases come from?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "From the water molecules that are broken down.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "When water is broken down in the light-dependent reactions, the oxygen is released. Instead, the carbon from carbon dioxide ends up forming part of the sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "From the carbon dioxide the leaf absorbs.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "From the glucose that is degraded in the cell.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "From the air that is inside the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What does the Calvin cycle produce?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar, formed from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"Azúcar ... formado\": masculine agreement is the standard (el azúcar)."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and the NADPH that the light-dependent reactions produce to fix carbon dioxide in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Oxygen, released from water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH for the light-dependent reactions.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll, to capture more light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "Which three factors affect (a) the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"afectan a la velocidad\" is the Peninsular construction."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "Each one is a resource or a condition the reactions depend on, so, if any of them is missing, the whole process slows down.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"así que si...\" changed to \"por lo que, si...\" for textbook register; \"se ralentiza\" is natural in Spain."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Soil type, leaf color and plant height.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Oxygen level, glucose level and leaf size.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Day length, root depth and humidity.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "Transforming light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "Degrading glucose to release energy.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "Absorbing water through the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "Releasing carbon dioxide into the air.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ },
+ "fr": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the process by which plants, algae and certain bacteria convert light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "It takes place in the chloroplasts, organelles present mostly in the cells of the leaf's mesophyll.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is the green pigment contained in the chloroplasts. It absorbs red and blue light and reflects green light, which explains why leaves appear green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbon dioxide enters the leaf through small pores called stomata, and water rises from the roots through the xylem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis takes place in two stages: the photochemical phase and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"phase photochimique\" is the lycée term (SVT) for the light-dependent reactions; used consistently in cards 5, 6, 7, 8."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The photochemical phase takes place in the thylakoid membranes. It splits water, releases dioxygen, and produces ATP and NADPH.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"dioxygène\" is the standard French school term for O2; used consistently in source text, answers and distractors."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The dioxygen released by photosynthesis comes from the split water molecules, and not from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis depends on light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "Where in the cell does photosynthesis take place?",
+   "status": "ok",
+   "severity": "none",
+   "note": "No-break space (U+00A0) before ? and : is used consistently."
+  },
+  "In the chloroplasts.": {
+   "back": "In the chloroplasts.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "The chloroplasts contain the chlorophyll and the membranes that capture light: the whole process therefore takes place inside.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the mitochondria.": {
+   "back": "In the mitochondria.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "In the nucleus.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "In the ribosomes.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "The green pigment that absorbs red and blue light to power photosynthesis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll captures light energy. It is the green light it reflects that gives leaves their green color.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "The sugar the plant stores as an energy reserve.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "The tissue that moves water up from the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and dioxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Partitive \"Du glucose et du dioxygène\" matches the distractors' form."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The equation ends with C6H12O6 and 6O2: the sugar the plant keeps and the dioxygen it gives off.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Only carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and dioxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "How does carbon dioxide get into a leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small pores called stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "The stomata open at the leaf surface to let gases in and out.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "Through the roots, with the water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the chloroplast membrane.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two stages of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The photochemical phase and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The photochemical phase captures energy, and the Calvin cycle uses it to make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the Krebs cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and the phases of mitosis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription then translation of DNA.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where does the photochemical phase take place?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "In the thylakoids.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoids contain the chlorophyll that captures light: that is therefore where the photochemical phase takes place.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "In the stroma.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "In the cytoplasm.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stomata.": {
+   "back": "In the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "Where does the dioxygen released by photosynthesis come from?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "From the split water molecules.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "It is the splitting of water, during the photochemical phase, that releases the dioxygen. The carbon from carbon dioxide, for its part, ends up in the sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "From the carbon dioxide absorbed by the leaf.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "From glucose broken down in the cell.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "From the air contained in the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What does the Calvin cycle produce?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar, made from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and NADPH produced by the photochemical phase to fix carbon dioxide in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Dioxygen, released from water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH for the photochemical phase.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll, to capture more light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "What are the three factors that influence the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "Each is a resource or a condition the reactions depend on: one of them missing is enough to slow the whole process.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Soil type, leaf color and plant height.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Dioxygen level, glucose level and leaf size.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Day length, root depth and humidity.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "The conversion of light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Nominal answer form; distractors 68-70 are nominal too."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants capture sunlight and store its energy in the bonds of a sugar they will be able to use later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "The breakdown of glucose to release energy.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "The absorption of water by the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "The release of carbon dioxide into the air.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ },
+ "de": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"Fotosynthese\" is the Duden-preferred spelling and is used in current German school biology books; spelled consistently throughout."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the process by which plants, algae and some bacteria convert light energy into chemical energy that is stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "It takes place in the chloroplasts. These are organelles that lie mainly in the cells of the mesophyll in the leaf.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is the green pigment in the chloroplasts. It absorbs red and blue light and reflects green light. That is why leaves appear green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall equation reads 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbon dioxide gets into the leaf through small pores, the stomata (Stomata), and water is transported upward from the roots through the xylem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"Kohlenstoffdioxid\" is the current school form; \"Spaltöffnungen (Stomata)\" matches answer 30 verbatim."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis consists of two sub-processes: the light-dependent reactions and the Calvin cycle.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"verläuft in zwei Abschnitten\" changed to \"besteht aus zwei Teilprozessen\", the usual German textbook phrasing; card question 35 aligned."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The light-dependent reactions run in the thylakoid membranes. In them water is split and oxygen released; in addition ATP and NADPH are formed.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The oxygen released in photosynthesis comes from the split water molecules, not from the carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle runs in the stroma. It uses ATP and NADPH to fix carbon dioxide and build sugar from it.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis depends on light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "Where in the cell does photosynthesis take place?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the chloroplasts.": {
+   "back": "In the chloroplasts.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "The chloroplasts contain the chlorophyll and the membranes that capture light. That is why the entire process runs in them.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the mitochondria.": {
+   "back": "In the mitochondria.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "In the cell nucleus.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "In the ribosomes.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "The green pigment that absorbs red and blue light for photosynthesis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll captures light energy. Because it reflects green light, leaves appear green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "The sugar that a plant stores as an energy reserve.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "The tissue that conducts water upward from the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The equation ends with C6H12O6 and 6O2: sugar that the plant keeps and oxygen that it gives off.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Only carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "How does carbon dioxide get into a leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small pores, the stomata (Stomata).",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "The stomata on the leaf surface open so that gases can enter and exit.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "Through the roots, together with the water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the membrane of the chloroplast.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two sub-processes of photosynthesis?",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"Abschnitte\" changed to \"Teilprozesse\" to match the fixed source paragraph and textbook usage; answer and distractors remain nominative and parallel."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The light-dependent reactions and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The light-dependent reactions capture energy, and the Calvin cycle uses it to build sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the citric acid cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"Citratzyklus\" is the German school term for the Krebs cycle."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and the phases of mitosis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription and then translation of DNA.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where do the light-dependent reactions run?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "In the thylakoids.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoids contain the chlorophyll that captures light. That is why the light-dependent reactions run there.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "In the stroma.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "In the cytoplasm.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stomata.": {
+   "back": "In the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "Where does the oxygen that photosynthesis releases come from?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "From water molecules that are split.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "In the splitting of water in the light-dependent reactions the oxygen is set free. The carbon from carbon dioxide, by contrast, is built into sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "From carbon dioxide that the leaf takes up.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "From glucose that is broken down in the cell.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "From the air that is in the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What is formed in the Calvin cycle?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar, built from carbon dioxide.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and NADPH from the light-dependent reactions to fix carbon dioxide and build sugar from it.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Oxygen, released from water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH for the light-dependent reactions.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll, to capture more light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "Which three factors influence the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "Each of them is a starting material or a condition the reactions depend on. If one is missing, the entire process slows down.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Soil type, leaf color and plant height.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Oxygen content, glucose content and leaf size.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Day length, root depth and air humidity.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "The conversion of light energy into chemical energy that is stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "The breakdown of glucose to release energy.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "The uptake of water via the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "The release of carbon dioxide to the air.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ },
+ "pt-BR": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the process by which plants, algae and some bacteria transform light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "It occurs in the chloroplasts, organelles found mainly in the cells of the leaf mesophyll.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is the green pigment present in the chloroplasts. It absorbs red and blue light and reflects green light, and that is why leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbonic gas (CO2) enters the leaf through small pores called stomata, and water rises from the roots through the xylem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"gás carbônico\" is the standard Brazilian school term for CO2; used consistently."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis occurs in two phases: the photochemical phase and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"fase fotoquímica\" is the standard Brazilian school term for the light-dependent reactions."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The photochemical phase occurs in the thylakoid membranes. In it, water is broken, oxygen is released, and ATP and NADPH are produced.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The oxygen released in photosynthesis comes from the water molecules that are broken, and not from carbonic gas.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle occurs in the stroma. It uses ATP and NADPH to fix carbonic gas in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis depends on light intensity, carbonic gas concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "In what part of the cell does photosynthesis occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the chloroplasts.": {
+   "back": "In the chloroplasts.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "The chloroplasts contain the chlorophyll and the membranes that capture light, so the whole process happens inside them.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the mitochondria.": {
+   "back": "In the mitochondria.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "In the nucleus.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "In the ribosomes.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "The green pigment that absorbs red and blue light to carry out photosynthesis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"para realizar a fotossíntese\" (to carry out) is slightly looser than \"to power\", but natural and accurate; kept."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll captures light energy. The green light it reflects is the reason leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "The sugar the plant stores as an energy reserve.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "The tissue that carries water from the roots upward.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The equation ends in C6H12O6 and 6O2: the sugar the plant keeps and the oxygen it releases.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Only carbonic gas.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and oxygen.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "How does carbonic gas get into a leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small pores called stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "The stomata open on the leaf surface so gases can enter and leave.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "Through the roots, together with the water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the chloroplast membrane.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two phases of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The photochemical phase and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The photochemical phase captures the energy, and the Calvin cycle uses it to produce sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the Krebs cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and the phases of mitosis.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription and then translation of DNA.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where does the photochemical phase occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "In the thylakoids.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoids contain the chlorophyll that captures light, so the photochemical phase happens in them.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "In the stroma.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "In the cytoplasm.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stomata.": {
+   "back": "In the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "Where does the oxygen released in photosynthesis come from?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "From the water molecules that are broken.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "The breaking of water in the photochemical phase releases the oxygen. The carbon of carbonic gas, for its part, is incorporated into the sugar.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"vai parar no açúcar\" is colloquial; changed to \"é incorporado ao açúcar\"."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "From carbonic gas absorbed by the leaf.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "From glucose broken down in the cell.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "From the air that stays inside the stomata.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What does the Calvin cycle produce?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar, formed from carbonic gas.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and NADPH produced in the photochemical phase to fix carbonic gas in the form of sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Oxygen, released from water.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH for the photochemical phase.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll, to capture more light.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "What are the three factors that affect the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbonic gas concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "Each one is a resource or a condition the reactions depend on, so the lack of any one of them makes the whole process slower.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"então\" changed to \"por isso\" for textbook register."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Soil type, leaf color and plant height.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Oxygen level, glucose level and leaf size.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Day length, root depth and humidity.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "Transforming light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants capture sunlight and store that energy in the bonds of a sugar they can use later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "Breaking down glucose to release energy.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "Absorbing water through the roots.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "Releasing carbonic gas into the air.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ },
+ "ja": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the function by which plants, algae and some bacteria change light energy into chemical energy and store it in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "Photosynthesis is carried out in chloroplasts. Chloroplasts are one kind of organelle and are contained mainly in mesophyll cells.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"葉の葉肉の細胞\" was redundant; changed to \"葉肉細胞\"."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is a green pigment contained in chloroplasts. Because it absorbs red light and blue light and reflects green light, leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall reaction equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbon dioxide is taken into the leaf through small holes called stomata, and water is carried from the roots through the xylem vessels.",
+   "status": "ok",
+   "severity": "none",
+   "note": "道管 is the school term for the water-conducting xylem tissue."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis consists of two stages: the photochemical reactions and the Calvin cycle.",
+   "status": "ok",
+   "severity": "none",
+   "note": "光化学反応 kept over 明反応: 明反応/暗反応 are dropped from current 高校生物 textbooks, and 光化学反応 is the common name for the thylakoid-stage reactions. Strictly, some textbooks use 光化学反応 only for the photosystem excitation step, but it is the best named term available and is used consistently in cards 5, 6, 7, 8."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The photochemical reactions occur in the thylakoid membrane. They split water, release oxygen, and make ATP and NADPH.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The oxygen released in photosynthesis derives not from carbon dioxide but from split water molecules.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle proceeds in the stroma. It uses ATP and NADPH to fix carbon dioxide and make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis is affected by light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "Where in the cell is photosynthesis carried out?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the chloroplasts.": {
+   "back": "Chloroplasts",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "Chloroplasts have chlorophyll and membranes that capture light, so the whole process of photosynthesis proceeds inside the chloroplast.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the mitochondria.": {
+   "back": "Mitochondria",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "Nucleus",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "Ribosomes",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "A green pigment that absorbs red and blue light and uses it for photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll captures light energy. Because chlorophyll reflects green light, leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "Sugar that a plant stores as an energy source",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "Tissue that carries water up from the roots",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and oxygen",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The right-hand side of the equation is C6H12O6 and 6O2. The sugar is stored in the plant, and the oxygen is released outside.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Carbon dioxide only",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and oxygen",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "Through where does carbon dioxide enter the leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Question asks どこから (through where) rather than how, so the noun-phrase answer and distractors fit naturally."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small holes called stomata",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "Stomata open on the leaf surface and let gases move in and out.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "From the roots, together with water",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the chloroplast membrane",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two stages of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The photochemical reactions and the Calvin cycle",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The photochemical reactions capture energy, and the Calvin cycle uses that energy to make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the citric acid cycle",
+   "status": "ok",
+   "severity": "none",
+   "note": "解糖系とクエン酸回路 are the Japanese school terms."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and each phase of somatic cell division (mitosis)",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription of DNA and the translation that follows",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where do the photochemical reactions occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "Thylakoids",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoids have the light-capturing chlorophyll, so the photochemical reactions occur there.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "Stroma",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "Cytosol",
+   "status": "ok",
+   "severity": "none",
+   "note": "細胞質基質 (cytosol) is the Japanese school term; plausible wrong answer."
+  },
+  "In the stomata.": {
+   "back": "Stomata",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "From what does the oxygen released in photosynthesis derive?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "Split water molecules",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "When water is split in the photochemical reactions, oxygen is produced. Meanwhile, the carbon of carbon dioxide is taken into sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "Carbon dioxide taken in by the leaf",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "Glucose broken down in the cell",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "Air inside the stomata",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What is made in the Calvin cycle?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar made from carbon dioxide",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and NADPH made in the photochemical reactions to fix carbon dioxide and make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Oxygen released from water",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH used for the photochemical reactions",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll for capturing more light",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "What are the three factors that affect the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbon dioxide concentration, temperature",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "Each is a material or condition the reactions need, so if even one is lacking, photosynthesis as a whole slows down.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Type of soil, leaf color, plant height",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Oxygen concentration, glucose concentration, leaf size",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Length of the day, root depth, humidity",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "Changing light energy into chemical energy and storing it in glucose",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants capture sunlight, store that energy in the bonds of sugar, and use it later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "Breaking down glucose to extract energy",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "Absorbing water from the roots",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "Releasing carbon dioxide into the air",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ },
+ "ko": {
+  "Photosynthesis": {
+   "back": "Photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose.": {
+   "back": "Photosynthesis is the process in which plants, algae and some bacteria convert light energy into chemical energy stored in glucose.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer.": {
+   "back": "Photosynthesis occurs in the chloroplast. The chloroplast is one of the cell organelles and is found mainly in the cells that make up the leaf's mesophyll tissue.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green.": {
+   "back": "Chlorophyll is the green pigment inside the chloroplast. Chlorophyll absorbs red light and blue light and reflects green light, and because of this leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.": {
+   "back": "The overall reaction equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem.": {
+   "back": "Carbon dioxide enters the leaf through small holes called stomata, and water is carried upward from the roots through the xylem vessels.",
+   "status": "ok",
+   "severity": "none",
+   "note": "\"이산화 탄소\" with a space follows Korean textbook spacing; 물관 is the school term for xylem vessels."
+  },
+  "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle.": {
+   "back": "Photosynthesis consists of two stages: the light reactions and the Calvin cycle.",
+   "status": "fixed",
+   "severity": "low",
+   "note": "\"두 단계로 일어난다\" is awkward; changed to \"두 단계로 이루어진다\"."
+  },
+  "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH.": {
+   "back": "The light reactions occur in the thylakoid membrane. In the light reactions water is split and oxygen is released, and ATP and NADPH are produced.",
+   "status": "ok",
+   "severity": "none",
+   "note": "명반응 is the standard Korean high-school (생명과학II) term; used consistently."
+  },
+  "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide.": {
+   "back": "The oxygen released in photosynthesis comes not from carbon dioxide but from the water molecules that are split.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar.": {
+   "back": "The Calvin cycle occurs in the stroma. It uses ATP and NADPH to fix carbon dioxide and make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "The rate of photosynthesis varies with light intensity, carbon dioxide concentration and temperature.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where in the cell does photosynthesis take place?": {
+   "back": "Where in the cell does photosynthesis occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the chloroplasts.": {
+   "back": "Chloroplast",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them.": {
+   "back": "The chloroplast has chlorophyll that absorbs light and membranes, so the entire process of photosynthesis occurs inside the chloroplast.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the mitochondria.": {
+   "back": "Mitochondria",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the nucleus.": {
+   "back": "Nucleus",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the ribosomes.": {
+   "back": "Ribosome",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is chlorophyll?": {
+   "back": "What is chlorophyll?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The green pigment that absorbs red and blue light to power photosynthesis.": {
+   "back": "A green pigment that absorbs red light and blue light and uses it for photosynthesis",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll captures light energy. The green light it reflects is why leaves look green.": {
+   "back": "Chlorophyll absorbs light energy. Because chlorophyll reflects green light, leaves look green.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The sugar a plant stores for energy.": {
+   "back": "Sugar that a plant stores as an energy source",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "A pigment that absorbs green light and reflects red light.": {
+   "back": "A pigment that absorbs green light and reflects red light",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The tissue that carries water up from the roots.": {
+   "back": "Tissue that carries water upward from the roots",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the products of photosynthesis?": {
+   "back": "What are the products of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and oxygen.": {
+   "back": "Glucose and oxygen",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases.": {
+   "back": "The right side of the equation is C6H12O6 and 6O2. The sugar is stored by the plant, and the oxygen is released outside.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Carbon dioxide only.": {
+   "back": "Only carbon dioxide",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glucose and water.": {
+   "back": "Glucose and water",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Water and oxygen.": {
+   "back": "Water and oxygen",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "How does carbon dioxide get into a leaf?": {
+   "back": "How does carbon dioxide enter the leaf?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through small pores called stomata.": {
+   "back": "Through small holes called stomata",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Stomata open on the leaf surface so gases can move in and out.": {
+   "back": "Stomata open on the leaf surface so that gases can pass in and out.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the roots, with water.": {
+   "back": "Through the roots together with water",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the bark of the stem.": {
+   "back": "Through the bark of the stem",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Through the chloroplast membrane.": {
+   "back": "Through the chloroplast membrane",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What are the two stages of photosynthesis?": {
+   "back": "What are the two stages of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light-dependent reactions and the Calvin cycle.": {
+   "back": "The light reactions and the Calvin cycle",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The light reactions capture energy, and the Calvin cycle spends it building sugar.": {
+   "back": "The light reactions absorb energy, and the Calvin cycle uses that energy to make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Glycolysis and the Krebs cycle.": {
+   "back": "Glycolysis and the TCA cycle",
+   "status": "ok",
+   "severity": "none",
+   "note": "해당 과정과 TCA 회로 are the Korean school terms."
+  },
+  "Interphase and the stages of mitosis.": {
+   "back": "Interphase and each phase of somatic cell division",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Transcription and then translation of DNA.": {
+   "back": "Transcription of DNA and the translation after it",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where do the light-dependent reactions happen?": {
+   "back": "Where do the light reactions occur?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the thylakoids.": {
+   "back": "Thylakoid",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "The thylakoids hold the chlorophyll that captures light, so the light reactions run there.": {
+   "back": "The thylakoid has the chlorophyll that absorbs light, so the light reactions occur there.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stroma.": {
+   "back": "Stroma",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the cytoplasm.": {
+   "back": "Cytoplasm",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "In the stomata.": {
+   "back": "Stomata",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Where does the oxygen released by photosynthesis come from?": {
+   "back": "Where does the oxygen released in photosynthesis come from?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From water molecules that are split.": {
+   "back": "Water molecules that are split",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead.": {
+   "back": "Oxygen is released when water is split in the light reactions. In contrast, the carbon of carbon dioxide is incorporated into sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From carbon dioxide taken in by the leaf.": {
+   "back": "Carbon dioxide absorbed by the leaf",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From glucose broken down in the cell.": {
+   "back": "Glucose broken down in the cell",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "From the air inside the stomata.": {
+   "back": "Air inside the stomata",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What does the Calvin cycle produce?": {
+   "back": "What is made in the Calvin cycle?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Sugar, built from carbon dioxide.": {
+   "back": "Sugar made from carbon dioxide",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar.": {
+   "back": "It uses the ATP and NADPH made in the light reactions to fix carbon dioxide and make sugar.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen, released from water.": {
+   "back": "Oxygen released from water",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "ATP and NADPH for the light reactions.": {
+   "back": "ATP and NADPH used in the light reactions",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Chlorophyll for capturing more light.": {
+   "back": "Chlorophyll for absorbing more light",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Which three factors affect the rate of photosynthesis?": {
+   "back": "What are the three factors that affect the rate of photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Light intensity, carbon dioxide concentration, and temperature.": {
+   "back": "Light intensity, carbon dioxide concentration, temperature",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process.": {
+   "back": "All are materials or conditions the reactions need, so if any one is lacking, the whole process slows down.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Soil type, leaf color, and plant height.": {
+   "back": "Type of soil, leaf color, plant height",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Oxygen level, glucose level, and leaf size.": {
+   "back": "Oxygen concentration, glucose concentration, leaf size",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Day length, root depth, and humidity.": {
+   "back": "Length of daytime, root depth, humidity",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "What is photosynthesis?": {
+   "back": "What is photosynthesis?",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Turning light energy into chemical energy stored in glucose.": {
+   "back": "Converting light energy into chemical energy stored in glucose",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Plants capture sunlight and store its energy in the bonds of a sugar they can use later.": {
+   "back": "Plants absorb sunlight and store that energy in the chemical bonds of sugar so it can be used later.",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Breaking down glucose to release energy.": {
+   "back": "Breaking down glucose to release energy",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Absorbing water through the roots.": {
+   "back": "Absorbing water through the roots",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  },
+  "Releasing carbon dioxide into the air.": {
+   "back": "Releasing carbon dioxide into the air",
+   "status": "ok",
+   "severity": "none",
+   "note": "Accurate; matches source and terminology."
+  }
+ }
+}
