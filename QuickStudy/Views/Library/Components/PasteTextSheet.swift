@@ -99,11 +99,6 @@ struct PasteTextSheet: View {
     }
 
     private var engineLabel: String {
-        switch firstEngine {
-        case .privateCloud: return "Private Cloud Compute"
-        case .cloud: return "QuickStudy Cloud"
-        case .externalAPI: return "Your AI endpoint"
-        default: return "On this iPhone"
-        }
+        (firstEngine ?? .onDevice).displayName
     }
 }

@@ -52,6 +52,17 @@ struct ImportModifiers: ViewModifier {
             .onChange(of: draftStore.pending?.id) { _, id in
                 guard id == nil else { return }
                 coordinator.showReview = false
+                coordinator.showDraftingProgress = false
+            }
+            .sheet(
+                isPresented: $coordinator.showDraftingProgress,
+                onDismiss: { coordinator.finishDraftingProgressDismiss() }
+            ) {
+                DraftingProgressSheet(
+                    coordinator: coordinator,
+                    progress: studyViewModel.generationProgress,
+                    draftStore: draftStore
+                )
             }
             .sheet(isPresented: $coordinator.showPaywall) {
                 PaywallView(surface: .exhausted)

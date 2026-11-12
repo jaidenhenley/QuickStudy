@@ -52,6 +52,7 @@ struct LibraryView: View {
                         ) {
                             DraftStatusCard(
                                 content: card,
+                                onOpenProgress: { coordinator.openDraftingProgress() },
                                 onReview: { coordinator.showReview = true },
                                 onDiscard: { draftStore.set(nil) },
                                 onClose: {

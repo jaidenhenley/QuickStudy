@@ -7,12 +7,14 @@ import SwiftUI
 
 struct DraftStatusCard: View {
     let content: LibraryViewModel.StatusCard
+    let onOpenProgress: () -> Void
     let onReview: () -> Void
     let onDiscard: () -> Void
     let onClose: () -> Void
     let onRecover: (ImportFailure.Recovery) -> Void
 
     @State private var showDiscardAlert = false
+    @State private var showCancelAlert = false
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .subheadline) private var iconSize = 28.0
 
@@ -24,11 +26,14 @@ struct DraftStatusCard: View {
             case .drafting(let status):
                 VStack(alignment: .leading, spacing: Spacing.md) {
                     HStack(alignment: .top, spacing: Spacing.md) {
-                        Image(systemName: "sparkles")
-                            .font(.title3)
-                            .foregroundStyle(Theme.aiAccentText)
-                            .frame(width: iconSize)
-                            .accessibilityHidden(true)
+                        // At accessibility sizes the icon column squeezes the title to a word per line.
+                        if !stacksVertically {
+                            Image(systemName: "sparkles")
+                                .font(.title3)
+                                .foregroundStyle(Theme.aiAccentText)
+                                .frame(width: iconSize)
+                                .accessibilityHidden(true)
+                        }
                         VStack(alignment: .leading, spacing: 2) {
                             Text(status.title)
                                 .font(.headline)
@@ -37,8 +42,11 @@ struct DraftStatusCard: View {
                                 .foregroundStyle(.secondary)
                         }
                         .accessibilityElement(children: .combine)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityHint("Shows drafting progress")
+                        .accessibilityAction(.default, onOpenProgress)
                         Spacer(minLength: 0)
-                        DraftStatusCloseButton(label: "Cancel drafting", action: onClose)
+                        DraftStatusCloseButton(label: "Cancel drafting") { showCancelAlert = true }
                     }
                     if let fraction = status.fraction {
                         ProgressView(value: fraction)
@@ -51,6 +59,15 @@ struct DraftStatusCard: View {
                             .accessibilityHidden(true)
                     }
                 }
+                // The close button's own tap wins over this one, so the X still cancels.
+                .contentShape(.rect)
+                .onTapGesture(perform: onOpenProgress)
+                .alert("Cancel Drafting?", isPresented: $showCancelAlert) {
+                    Button("Cancel Drafting", role: .destructive, action: onClose)
+                    Button("Keep Drafting", role: .cancel) {}
+                } message: {
+                    Text(LibraryViewModel.cancelDraftingMessage)
+                }
 
             case .ready(let draft):
                 let layout = stacksVertically
@@ -58,11 +75,13 @@ struct DraftStatusCard: View {
                     : AnyLayout(HStackLayout(spacing: Spacing.md))
                 layout {
                     HStack(alignment: .top, spacing: Spacing.md) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Theme.success)
-                            .frame(width: iconSize)
-                            .accessibilityHidden(true)
+                        if !stacksVertically {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(Theme.success)
+                                .frame(width: iconSize)
+                                .accessibilityHidden(true)
+                        }
                         VStack(alignment: .leading, spacing: 2) {
                             Text(LibraryViewModel.readyTitle(for: draft))
                                 .font(.headline)
@@ -101,11 +120,13 @@ struct DraftStatusCard: View {
             case .failed(let failure):
                 VStack(alignment: .leading, spacing: Spacing.md) {
                     HStack(alignment: .top, spacing: Spacing.md) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Theme.danger)
-                            .frame(width: iconSize)
-                            .accessibilityHidden(true)
+                        if !stacksVertically {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .font(.title3)
+                                .foregroundStyle(Theme.danger)
+                                .frame(width: iconSize)
+                                .accessibilityHidden(true)
+                        }
                         VStack(alignment: .leading, spacing: 2) {
                             Text(failure.title)
                                 .font(.headline)
@@ -136,5 +157,6 @@ struct DraftStatusCard: View {
         .padding(Spacing.base)
         .frame(maxWidth: .infinity, alignment: .leading)
         .appGlassCard(cornerRadius: AppRadius.xl)
+        .onChange(of: content.kind) { _, _ in showCancelAlert = false }
     }
 }

@@ -69,6 +69,11 @@ final class LibraryViewModel {
         return nil
     }
 
+    /// Cancelling keeps nothing that was read, so the message says the import starts over.
+    static var cancelDraftingMessage: String {
+        String(localized: "Nothing read so far will be kept. To draft these cards later, import it again.")
+    }
+
     static func readyTitle(for draft: DraftSet) -> String {
         "\(draft.title) is ready"
     }

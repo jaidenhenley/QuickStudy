@@ -98,6 +98,14 @@ extension QSTestCase {
 
     var isDrafting: Bool { cancelDraftingButton.exists }
 
+    /// The card's X asks before cancelling, so this confirms the alert as a user would.
+    func cancelDrafting(_ id: String) {
+        cancelDraftingButton.tap()
+        let confirm = app.alerts.buttons["Cancel Drafting"]
+        XCTAssertTrue(confirm.waitForExistence(timeout: 5), "\(id): Cancel drafting did not ask for confirmation")
+        confirm.tap()
+    }
+
     func failureCard(_ title: String) -> XCUIElement { statusText(beginningWith: title) }
 
     private func visibleFailureTitle() -> String? {
@@ -223,7 +231,7 @@ extension QSTestCase {
     /// Picker items are cells identified "<name>, <extension>" (folders "<name>, Folder"). The picker reopens wherever it was
     /// last left, so this walks to On My iPhone > QuickStudy Fixtures from Recents, the root or another folder.
     func pickFile(_ id: String, named name: String) {
-        XCTAssertTrue(filesPicker.waitForExistence(timeout: 10), "\(id): Files picker did not open")
+        XCTAssertTrue(filesPicker.waitForExistence(timeout: 20), "\(id): Files picker did not open (a blank sheet means the simulator's picker service is stuck: reboot it)")
         Thread.sleep(forTimeInterval: 1)
         let file = app.cells["\((name as NSString).deletingPathExtension), \((name as NSString).pathExtension)"]
         let folder = app.cells["QuickStudy Fixtures, Folder"]

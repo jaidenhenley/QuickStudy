@@ -33,6 +33,18 @@ final class ImportCoordinator {
         let fraction: Double?
     }
 
+    /// The run behind the drafting status, kept after it finishes so the progress sheet
+    /// can show how long each stage took until the draft is reviewed or replaced.
+    struct DraftingRun: Equatable {
+        let title: String
+        let readingStartedAt: Date?
+        var readingFinishedAt: Date?
+        var draftingStartedAt: Date?
+        var finishedAt: Date?
+        var pageCount: Int?
+        var wordCount: Int?
+    }
+
     struct PageChoice {
         let fileName: String
         let document: PDFDocument
@@ -73,9 +85,11 @@ final class ImportCoordinator {
     var showPhotoPicker = false
     var showReplaceDraftAlert = false
     var showPaywall = false
+    var showDraftingProgress = false
     var hasUnlimitedGenerations = false
     private(set) var stage: Stage = .idle
     private(set) var pageChoice: PageChoice? = nil
+    private(set) var run: DraftingRun? = nil
 
     private var draftingTitle: String? = nil
     private var readingShare = 0.0
@@ -88,6 +102,12 @@ final class ImportCoordinator {
     private var awaitingConsent: DraftRequest? = nil
     private var pendingConsentDecision: HostedConsent.Decision? = nil
     private var generationTask: Task<Void, Never>? = nil
+    private var presentAfterProgress: ProgressHandoff? = nil
+
+    private enum ProgressHandoff {
+        case review
+        case consent
+    }
 
     var isScannerSupported: Bool {
         #if targetEnvironment(simulator)
@@ -280,6 +300,7 @@ final class ImportCoordinator {
         guard let request = awaitingConsent else { return }
         awaitingConsent = nil
         guard let decision = pendingConsentDecision else {
+            run = nil
             discardRetainedWork()
             return
         }
@@ -287,6 +308,7 @@ final class ImportCoordinator {
             // Without an on-device model a decline leaves nothing that can draft, and the
             // consent copy promises Type cards instead.
             if let aiSettings, AICapability.state(for: aiSettings) == .unsupportedDevice {
+                run = nil
                 discardRetainedWork()
                 showTypeCards = true
                 return
@@ -374,6 +396,44 @@ final class ImportCoordinator {
         generationTask = nil
         stage = .idle
         draftingTitle = nil
+        run = nil
+        showDraftingProgress = false
+    }
+
+    // MARK: - Drafting progress sheet
+
+    func openDraftingProgress() {
+        guard stage != .idle else { return }
+        showDraftingProgress = true
+    }
+
+    /// Presenting a sheet while another is dismissing drops the second one, so Review and
+    /// the consent question wait for the progress sheet to finish closing.
+    func reviewFromDraftingProgress() {
+        presentAfterProgress = .review
+        showDraftingProgress = false
+    }
+
+    func finishDraftingProgressDismiss() {
+        defer { presentAfterProgress = nil }
+        switch presentAfterProgress {
+        case .review:
+            guard draftStore?.pending != nil else { return }
+            showReview = true
+        case .consent:
+            showHostedConsent = true
+        case nil:
+            break
+        }
+    }
+
+    private func presentConsent() {
+        guard showDraftingProgress else {
+            showHostedConsent = true
+            return
+        }
+        presentAfterProgress = .consent
+        showDraftingProgress = false
     }
 
     // MARK: - Failure and recovery
@@ -410,6 +470,8 @@ final class ImportCoordinator {
     private func fail(_ failure: ImportFailure) {
         stage = .idle
         draftingTitle = nil
+        run = nil
+        showDraftingProgress = false
         self.failure = failure
     }
 
@@ -455,15 +517,16 @@ final class ImportCoordinator {
         }
     }
 
-    private static func timeLeft(in progress: GenerationProgress, now: Date) -> String? {
+    static func timeLeft(in progress: GenerationProgress, now: Date, capitalized: Bool = false) -> String? {
         guard let unitStartedAt = progress.unitStartedAt else { return nil }
         let remaining = progress.expectedSeconds - now.timeIntervalSince(unitStartedAt)
         guard remaining > 0 else { return nil }
         guard remaining >= 60 else {
-            return "about \(max(5, Int((remaining / 5).rounded()) * 5)) seconds left"
+            let seconds = max(5, Int((remaining / 5).rounded()) * 5)
+            return capitalized ? String(localized: "About \(seconds) seconds left") : String(localized: "about \(seconds) seconds left")
         }
         let minutes = Int((remaining / 60).rounded(.up))
-        return "about \(minutes) \(minutes == 1 ? "minute" : "minutes") left"
+        return capitalized ? String(localized: "About \(minutes) minutes left") : String(localized: "about \(minutes) minutes left")
     }
 
     /// Reading pages is fast next to drafting, so it gets a small slice of the bar and
@@ -473,6 +536,12 @@ final class ImportCoordinator {
         draftingTitle = title
         self.readingShare = readingShare
         self.stage = stage
+        let now = Date()
+        if case .reading = stage {
+            run = DraftingRun(title: title, readingStartedAt: now)
+        } else {
+            run = DraftingRun(title: title, readingStartedAt: nil, draftingStartedAt: now)
+        }
     }
 
     /// A cancelled run has already been reset by `cancelGeneration`, and a new run may
@@ -506,17 +575,28 @@ final class ImportCoordinator {
 
         if needsConsent(sourceLength: retainedText.utf16.count) {
             awaitingConsent = request
+            if case .reading = stage { run?.readingFinishedAt = .now }
             stage = .idle
             draftingTitle = nil
-            showHostedConsent = true
+            presentConsent()
             return
         }
 
         if case .reading = stage {
+            run?.readingFinishedAt = .now
+            run?.draftingStartedAt = .now
             stage = .drafting
         } else {
+            // After the consent question the pages were already read, so their timing stays.
+            let readRun = run.flatMap { $0.title == request.displayTitle && $0.readingFinishedAt != nil && $0.finishedAt == nil ? $0 : nil }
             beginRun(title: request.displayTitle, stage: .drafting, readingShare: 0)
+            if var readRun {
+                readRun.draftingStartedAt = .now
+                run = readRun
+            }
         }
+        run?.pageCount = request.extracted.pages.count
+        run?.wordCount = SourceLanguage.wordCount(in: request.extracted.joinedText)
         defer { endRun() }
 
         guard let draft = await study.makeDraft(
@@ -528,6 +608,7 @@ final class ImportCoordinator {
             return
         }
         guard !Task.isCancelled else { return }
+        run?.finishedAt = .now
         draftStore?.set(draft)
         discardRetainedWork()
     }
