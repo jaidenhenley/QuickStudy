@@ -1,0 +1,3 @@
+Pro Monthly display name: Pro（月額）
+Pro Yearly display name: Pro（年額）
+Description (both plans): どのiPhoneでもクラウドで生成。

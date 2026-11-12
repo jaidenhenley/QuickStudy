@@ -42,6 +42,9 @@ struct HostedAPI {
         struct Body: Decodable {
             let code: String
             let message: String
+            let reason: String?
+            let needed: Int?
+            let remaining: Int?
         }
         let error: Body
     }
@@ -121,7 +124,15 @@ struct HostedAPI {
         guard let http = response as? HTTPURLResponse else { throw CardGenerationError.invalidResponse }
         guard (200...299).contains(http.statusCode) else {
             if let server = try? JSONDecoder().decode(ServerError.self, from: data) {
-                throw Self.error(code: server.error.code, message: server.error.message)
+                throw Self.error(
+                    code: server.error.code,
+                    message: server.error.message,
+                    quotaReason: HostedQuotaReason(
+                        code: server.error.reason,
+                        needed: server.error.needed,
+                        remaining: server.error.remaining
+                    )
+                )
             }
             throw CardGenerationError.badStatusCode(http.statusCode)
         }
@@ -136,7 +147,11 @@ struct HostedAPI {
         }
     }
 
-    static func error(code: String, message: String) -> CardGenerationError {
+    static func error(
+        code: String,
+        message: String,
+        quotaReason: HostedQuotaReason = .unspecified
+    ) -> CardGenerationError {
         switch code {
         case "unauthorized":
             return .attestationFailed(message)
@@ -145,7 +160,7 @@ struct HostedAPI {
         case "not_subscribed":
             return .notSubscribed(message)
         case "quota_exhausted":
-            return .hostedQuotaExhausted(message)
+            return .hostedQuotaExhausted(quotaReason)
         case "input_too_large":
             return .hostedInputTooLarge(message)
         default:

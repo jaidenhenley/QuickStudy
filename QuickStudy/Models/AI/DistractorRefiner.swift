@@ -101,17 +101,49 @@ enum DistractorRefiner {
     /// need to be per-language, and the threshold comparisons are tolerant enough without it.
     /// Numbers are kept at any length: dropping "97" made "roughly 3 percent" read as a
     /// paraphrase of "roughly 97 percent", so every changed-number distractor was discarded.
+    /// Chinese, Japanese and Korean do not separate words the way these rules assume
+    /// (no spaces, or particles fused to the word), so their text is compared by character
+    /// pairs instead. Whole-word tokens there never overlap, which rejected every distractor
+    /// as "not from the source".
     nonisolated private static func tokens(_ text: String) -> Set<String> {
-        Set(
-            text.lowercased()
-                .components(separatedBy: CharacterSet.alphanumerics.inverted)
-                .filter { $0.count > 2 || $0.contains(where: \.isNumber) }
-        )
+        var result: Set<String> = []
+        for word in text.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted) where !word.isEmpty {
+            var run: [Character] = []
+            var runIsUnspaced = false
+            func flush() {
+                if runIsUnspaced {
+                    // A lone character is a whole word here (水, 물), so it still counts.
+                    if run.count == 1 { result.insert(String(run)) }
+                    for index in run.indices.dropLast() { result.insert(String(run[index...index + 1])) }
+                } else if run.count > 2 || run.contains(where: \.isNumber) {
+                    result.insert(String(run))
+                }
+                run.removeAll(keepingCapacity: true)
+            }
+            for character in word {
+                let unspaced = isUnspacedScript(character)
+                if unspaced != runIsUnspaced { flush() }
+                runIsUnspaced = unspaced
+                run.append(character)
+            }
+            flush()
+        }
+        return result
+    }
+
+    nonisolated private static func isUnspacedScript(_ character: Character) -> Bool {
+        guard let scalar = character.unicodeScalars.first else { return false }
+        switch scalar.value {
+        case 0x3040...0x30FF, 0x3400...0x4DBF, 0x4E00...0x9FFF, 0xAC00...0xD7AF, 0xF900...0xFAFF:
+            return true
+        default:
+            return false
+        }
     }
 
     nonisolated private static func isSentence(_ text: String) -> Bool {
         guard let last = text.last else { return false }
-        return ".!?".contains(last) && text.split(separator: " ").count > 3
+        return ".!?。！？".contains(last) && text.split(separator: " ").count > 3
     }
 
     nonisolated private static func containsDigit(_ text: String) -> Bool {

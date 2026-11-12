@@ -74,9 +74,22 @@ struct SessionCompleteView: View {
                     : AnyLayout(HStackLayout(spacing: 0))
 
                 statsLayout {
-                    SessionStatCell(target: summary.cardCount, label: "CARDS")
-                    SessionStatCell(target: summary.correctCount, label: "CORRECT")
-                    SessionStatCell(target: Int((summary.accuracy * 100).rounded()), suffix: "%", label: "ACCURACY")
+                    SessionStatCell(
+                        target: summary.cardCount,
+                        label: LocalizedStringResource("sessionStat.cards", defaultValue: "CARDS", comment: "Session Complete stat: cards studied."),
+                        spokenLabel: LocalizedStringResource("sessionStat.cards.spoken", defaultValue: "Cards", comment: "Spoken name of the cards-studied stat.")
+                    )
+                    SessionStatCell(
+                        target: summary.correctCount,
+                        label: LocalizedStringResource("sessionStat.correct", defaultValue: "CORRECT", comment: "Session Complete stat: how many answers were right."),
+                        spokenLabel: LocalizedStringResource("sessionStat.correct.spoken", defaultValue: "Correct", comment: "Spoken name of the right-answers count.")
+                    )
+                    SessionStatCell(
+                        target: Int((summary.accuracy * 100).rounded()),
+                        isPercent: true,
+                        label: LocalizedStringResource("sessionStat.accuracy", defaultValue: "ACCURACY", comment: "Session Complete stat: share of answers that were right."),
+                        spokenLabel: LocalizedStringResource("sessionStat.accuracy.spoken", defaultValue: "Accuracy", comment: "Spoken name of the accuracy stat.")
+                    )
                 }
                 .padding(Spacing.base)
                 .appGlassCard(cornerRadius: AppRadius.lg)
@@ -99,17 +112,19 @@ struct SessionCompleteView: View {
                 }
             }
             .padding(Spacing.lg)
+            .appReadableWidth()
         }
         .scrollEdgeEffectStyle(.soft, for: .bottom)
         .safeAreaInset(edge: .bottom) {
             Button(action: summary.hasMoreDue ? onAgain : onDone) {
-                Text(summary.hasMoreDue ? "One more session" : "Done")
+                Text(summary.hasMoreDue ? String(localized: "One more session") : String(localized: "Done"))
                     .font(.headline)
                     .frame(maxWidth: .infinity)
             }
             .appProminentButtonStyle(tint: Theme.primaryFill)
             .padding(.horizontal, Spacing.lg)
             .padding(.bottom, Spacing.base)
+            .appReadableWidth()
         }
         .background(BackgroundView())
         .navigationBarBackButtonHidden()

@@ -18,11 +18,11 @@ enum AICapability {
         switch settings.mode {
         case .externalAPI:
             guard settings.endpoint != nil else {
-                return .needsSetup("Add an API endpoint in Settings to generate cards.")
+                return .needsSetup(String(localized: "Add an API endpoint in Settings to generate cards."))
             }
             guard let key = settings.apiKey,
                   !key.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                return .needsSetup("Add an API key in Settings to generate cards.")
+                return .needsSetup(String(localized: "Add an API key in Settings to generate cards."))
             }
             return .ready
 
@@ -36,7 +36,7 @@ enum AICapability {
             } catch {
                 return .needsSetup(
                     (error as? CardGenerationError)?.errorDescription
-                        ?? "On-device AI isn't ready yet. Try again in a few minutes."
+                        ?? String(localized: "On-device AI isn't ready yet. Try again in a few minutes.")
                 )
             }
             #else

@@ -63,7 +63,7 @@ struct SessionCard: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .contentShape(.rect)
             }
-            .accessibilityValue(showBreakdown ? "Expanded" : "Collapsed")
+            .accessibilityValue(showBreakdown ? Text("Expanded") : Text("Collapsed"))
 
             if showBreakdown {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -77,7 +77,7 @@ struct SessionCard: View {
                         .font(.footnote)
                         .foregroundStyle(Theme.onPrimary)
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel("\(entry.title), \(entry.cardCount) \(entry.cardCount == 1 ? "card" : "cards")")
+                        .accessibilityLabel("\(entry.title), \(entry.cardCount) cards")
                     }
                 }
                 .appTransition(.move(edge: .top).combined(with: .opacity))

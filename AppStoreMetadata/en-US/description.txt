@@ -1,0 +1,40 @@
+QuickStudy turns the pages you already have into flashcards you will actually study. Scan a worksheet, import a PDF or paste your notes, and QuickStudy drafts the cards, links each one back to its source and schedules them so you review only what is due.
+
+TURN ANY PAGE INTO FLASHCARDS
+• Scan pages with the camera, pick a photo, import a PDF or paste text
+• Cards are drafted in the language of your notes
+• Every draft is kept by default. Tap to edit, swipe to remove
+
+STUDY ONLY WHAT'S DUE TODAY
+• Today shows one session with the cards that are due, plus your weakest card
+• Spaced repetition moves each card forward as you get it right
+
+QUIZ YOURSELF IN MINUTES
+• Multiple-choice questions with believable wrong answers
+• A timer and progress bar keep each session short
+
+KNOW WHY EACH ANSWER IS RIGHT
+• Every card explains its answer
+• Tap Why to see the exact passage and page it came from
+
+LEARN FROM EVERY MISTAKE
+• A wrong answer shows the right one side by side
+• Missed cards come back tomorrow
+
+BUILD A DAILY STUDY HABIT
+• Streaks count the days you study
+• Earn a Streak Freeze for every full study week
+
+TRACK EVERY SUBJECT'S PROGRESS
+• See how much of each set you have mastered
+• Find the cards you miss most
+
+PRIVATE BY DEFAULT
+• Cards are drafted on your iPhone with Apple Intelligence whenever it is available
+• If a draft would leave your iPhone, QuickStudy asks first
+• Cloud drafts use Apple's Private Cloud Compute or the QuickStudy server. The server drafts with Anthropic's Claude, which deletes your text within 30 days
+• Studying, quizzes and editing work offline
+
+FREE AND PRO
+QuickStudy includes 10 free AI generations a month. Typing your own cards and every study mode are always free and unlimited.
+QuickStudy Pro adds 150 cloud generations a month on any iPhone. Payment is charged to your Apple Account. The subscription renews automatically unless you cancel at least 24 hours before the end of the current period. Manage or cancel it in your Apple Account settings.

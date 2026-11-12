@@ -17,14 +17,14 @@ struct CardSource: Codable, Equatable, Hashable {
     /// "p.3 ¶2" — the pill on every draft and quiz question.
     var shortLabel: String {
         var parts: [String] = []
-        if let page { parts.append("p.\(page)") }
+        if let page { parts.append(String(localized: "p.\(page)", comment: "Abbreviated page number on the source pill, as in p.3 ¶2.")) }
         if let paragraph { parts.append("¶\(paragraph)") }
         return parts.isEmpty ? documentTitle : parts.joined(separator: " ")
     }
 
     /// "From HIG-notes.pdf, page 2" — the attribution under a wrong answer.
     var longLabel: String {
-        guard let page else { return "From \(documentTitle)" }
-        return "From \(documentTitle), page \(page)"
+        guard let page else { return String(localized: "From \(documentTitle)") }
+        return String(localized: "From \(documentTitle), page \(page)")
     }
 }

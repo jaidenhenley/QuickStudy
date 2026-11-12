@@ -6,8 +6,8 @@
 import SwiftUI
 
 struct SourceRow: View {
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringResource
+    let subtitle: LocalizedStringResource
     let systemImage: String
     var tint: Color = Theme.primary
     let action: () -> Void
@@ -36,7 +36,7 @@ struct SourceRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(title), \(subtitle)")
+        .accessibilityLabel("\(String(localized: title)), \(String(localized: subtitle))")
         .accessibilityAddTraits(.isButton)
     }
 }

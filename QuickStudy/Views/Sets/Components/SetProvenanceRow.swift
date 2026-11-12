@@ -55,15 +55,15 @@ struct SetProvenanceRow: View {
 
     private var title: String {
         switch sourceType {
-        case .manual: return "Cards you typed"
-        case .demo: return "Sample set"
+        case .manual: return String(localized: "Cards you typed")
+        case .demo: return String(localized: "Sample set")
         default:
             switch provenance?.engine {
-            case .cloud: return "Drafted in the cloud"
-            case .externalAPI: return "Drafted with your API key"
-            case .onDevice: return "Drafted on this iPhone"
-            case .privateCloud: return "Drafted with Private Cloud Compute"
-            case nil: return "Drafted by AI"
+            case .cloud: return String(localized: "Drafted in the cloud")
+            case .externalAPI: return String(localized: "Drafted with your API key")
+            case .onDevice: return String(localized: "Drafted on this iPhone")
+            case .privateCloud: return String(localized: "Drafted with Private Cloud Compute")
+            case nil: return String(localized: "Drafted by AI")
             }
         }
     }
@@ -71,17 +71,18 @@ struct SetProvenanceRow: View {
     private var detail: String {
         let origin: String
         switch sourceType {
-        case .scan: origin = "From a scan"
-        case .photo: origin = "From a photo"
-        case .pdf: origin = "From a PDF"
-        case .paste: origin = "From pasted text"
-        case .manual: return "Written by hand, no AI involved"
-        case .demo: return "Included with QuickStudy"
+        case .scan: origin = String(localized: "From a scan")
+        case .photo: origin = String(localized: "From a photo")
+        case .pdf: origin = String(localized: "From a PDF")
+        case .paste: origin = String(localized: "From pasted text")
+        case .manual: return String(localized: "Written by hand, no AI involved")
+        case .demo: return String(localized: "Included with QuickStudy")
         }
-        guard let provenance else { return "\(origin) · saved before engines were recorded" }
+        guard let provenance else { return String(localized: "\(origin) · saved before engines were recorded") }
         switch provenance.engine {
-        case .cloud: return "\(origin) · QuickStudy server"
-        case .externalAPI, .onDevice, .privateCloud: return "\(origin) · \(provenance.model ?? "unknown model")"
+        case .cloud: return String(localized: "\(origin) · QuickStudy server")
+        case .externalAPI, .onDevice, .privateCloud: let model = provenance.model ?? String(localized: "unknown model")
+            return String(localized: "\(origin) · \(model)")
         }
     }
 }

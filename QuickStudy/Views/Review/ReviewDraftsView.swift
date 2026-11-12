@@ -198,7 +198,7 @@ struct ReviewDraftsView: View {
         }
         .onChange(of: draft.cards) { _, _ in persistDraft() }
         .confirmationDialog(
-            "Replace \(draft.cards.count) \(draft.cards.count == 1 ? "card" : "cards")?",
+            "Replace \(draft.cards.count) cards?",
             isPresented: $showRegenerateConfirm,
             titleVisibility: .visible
         ) {
@@ -229,10 +229,9 @@ struct ReviewDraftsView: View {
     }
 
     private var headerSummary: String {
-        let count = draft.cards.count == 1 ? "1 card" : "\(draft.cards.count) cards"
-        let summary = "\(count) from \(draft.document.title)"
+        let summary = String(localized: "\(draft.cards.count) cards from \(draft.document.title)")
         guard let pages = draft.pageRangeLabel else { return summary }
-        return "\(summary), \(pages)"
+        return String(localized: "\(summary), \(pages)")
     }
 
     private var hasUnsavedEdits: Bool {
@@ -240,9 +239,9 @@ struct ReviewDraftsView: View {
     }
 
     private var regenerateErrorMessage: String {
-        let base = studyViewModel.generationErrorMessage ?? "Your current draft is unchanged. Try again in a moment."
+        let base = studyViewModel.generationErrorMessage ?? String(localized: "Your current draft is unchanged. Try again in a moment.")
         guard let code = studyViewModel.generationErrorCode else { return base }
-        return "\(base) · \(code)"
+        return String(localized: "\(base) · \(code)")
     }
 
     private func announce(_ message: String) {
@@ -261,7 +260,7 @@ struct ReviewDraftsView: View {
             draft.remove(id)
         }
         let remaining = draft.cards.count
-        announce("Card deleted. \(remaining) \(remaining == 1 ? "card" : "cards") left")
+        announce(String(localized: "Card deleted. \(remaining) cards left"))
         if let neighborID {
             accessibilityFocusedCardID = neighborID
         } else {
@@ -276,7 +275,7 @@ struct ReviewDraftsView: View {
             lastRemoval = nil
         }
         accessibilityFocusedCardID = removal.card.id
-        announce("Card restored")
+        announce(String(localized: "Card restored"))
     }
 
     private func finishSave() {

@@ -78,7 +78,7 @@ struct SuggestionRow: View {
         .alert("Generation Failed", isPresented: $showError) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text(studyViewModel.generationErrorMessage ?? "Please try again.")
+            Text(studyViewModel.generationErrorMessage ?? String(localized: "Please try again."))
         }
         .onChange(of: isGenerating) { _, generating in
             if generating {

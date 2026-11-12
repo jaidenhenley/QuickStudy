@@ -23,12 +23,12 @@ struct ImportFailure: Identifiable {
 }
 
 extension ImportFailure {
-    var pasteRecoveryLabel: String { keepsText ? "Edit Text" : "Paste Text" }
+    var pasteRecoveryLabel: String { keepsText ? String(localized: "Edit Text") : String(localized: "Paste Text") }
 
     static func generation(cause: String?) -> ImportFailure {
         ImportFailure(
-            title: "Something went wrong",
-            message: cause ?? "We couldn't draft cards from this source.",
+            title: String(localized: "Something went wrong"),
+            message: cause ?? String(localized: "We couldn't draft cards from this source."),
             keepsText: true,
             recoveries: [.tryAgain, .pasteText]
         )
@@ -36,7 +36,7 @@ extension ImportFailure {
 
     static func noText(message: String) -> ImportFailure {
         ImportFailure(
-            title: "We couldn't read this",
+            title: String(localized: "We couldn't read this"),
             message: message,
             keepsText: false,
             recoveries: [.tryAgain, .pasteText]
@@ -45,7 +45,7 @@ extension ImportFailure {
 
     static func processing(message: String) -> ImportFailure {
         ImportFailure(
-            title: "Something went wrong",
+            title: String(localized: "Something went wrong"),
             message: message,
             keepsText: false,
             recoveries: [.tryAgain, .pasteText]
@@ -54,8 +54,8 @@ extension ImportFailure {
 
     static func unreadablePDF() -> ImportFailure {
         ImportFailure(
-            title: "We couldn't open this PDF",
-            message: "It may be damaged or password protected.",
+            title: String(localized: "We couldn't open this PDF"),
+            message: String(localized: "It may be damaged or password protected."),
             keepsText: false,
             recoveries: [.tryAgain, .pasteText]
         )
@@ -63,8 +63,8 @@ extension ImportFailure {
 
     static func quotaExhausted(resetDate: Date) -> ImportFailure {
         ImportFailure(
-            title: "Free generations used",
-            message: "You've used all \(GenerationAllowance.monthlyLimit) free generations this month. They reset on \(resetDate.formatted(.dateTime.month(.wide).day())).",
+            title: String(localized: "Free generations used"),
+            message: String(localized: "You've used all \(GenerationAllowance.monthlyLimit) free generations this month. They reset on \(resetDate.formatted(.dateTime.month(.wide).day()))."),
             keepsText: false,
             recoveries: []
         )
@@ -74,7 +74,7 @@ extension ImportFailure {
     /// same failure, so the only real recovery is typing cards by hand.
     static func deviceNotReady(message: String) -> ImportFailure {
         ImportFailure(
-            title: "On-device AI isn't ready",
+            title: String(localized: "On-device AI isn't ready"),
             message: message,
             keepsText: false,
             recoveries: [.typeCards]
@@ -82,8 +82,8 @@ extension ImportFailure {
     }
 
     static let emptyPaste = ImportFailure(
-        title: "We couldn't read this",
-        message: "Paste some notes to generate cards from.",
+        title: String(localized: "We couldn't read this"),
+        message: String(localized: "Paste some notes to generate cards from."),
         keepsText: false,
         recoveries: [.pasteText]
     )

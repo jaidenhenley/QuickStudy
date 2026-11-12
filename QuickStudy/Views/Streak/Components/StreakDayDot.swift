@@ -51,11 +51,11 @@ struct StreakDayDot: View {
 
     private var accessibilityValue: String {
         switch state {
-        case .studied: return "studied"
-        case .frozen: return "freeze used"
-        case .today: return "today"
-        case .missed: return "missed"
-        case .future: return "upcoming"
+        case .studied: return String(localized: "studied")
+        case .frozen: return String(localized: "freeze used")
+        case .today: return String(localized: "today")
+        case .missed: return String(localized: "missed")
+        case .future: return String(localized: "upcoming")
         }
     }
 

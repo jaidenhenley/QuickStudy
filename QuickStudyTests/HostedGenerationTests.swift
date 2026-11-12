@@ -38,9 +38,26 @@ struct HostedGenerationTests {
         }
     }
 
-    @Test func quotaMessageIsShownVerbatim() {
-        let error = HostedAPI.error(code: "quota_exhausted", message: "Monthly Pro generations are used up.")
-        #expect(error.errorDescription == "Monthly Pro generations are used up.")
+    @Test func quotaCopyComesFromTheReasonNotTheServerText() {
+        let english = "Monthly Pro generations are used up."
+        let error = HostedAPI.error(
+            code: "quota_exhausted",
+            message: "server text",
+            quotaReason: HostedQuotaReason(code: "monthly_limit", needed: nil, remaining: nil)
+        )
+        #expect(error.errorDescription == english)
+        #expect(HostedAPI.error(code: "quota_exhausted", message: english).errorDescription != english)
+    }
+
+    @Test func quotaReasonsDecodeFromServerCodes() {
+        #expect(HostedQuotaReason(code: "rate_limited", needed: nil, remaining: nil) == .rateLimited)
+        #expect(HostedQuotaReason(code: "free_generation_in_progress", needed: nil, remaining: nil) == .freeGenerationInProgress)
+        #expect(
+            HostedQuotaReason(code: "document_exceeds_remaining", needed: 3, remaining: 1)
+                == .documentExceedsRemaining(needed: 3, remaining: 1)
+        )
+        #expect(HostedQuotaReason(code: "document_exceeds_remaining", needed: nil, remaining: nil) == .monthlyLimitReached)
+        #expect(HostedQuotaReason(code: nil, needed: nil, remaining: nil) == .unspecified)
     }
 
     @Test func hostedEngineNeverSpendsTheOnDeviceAllowance() {
@@ -65,7 +82,7 @@ struct HostedGenerationTests {
     @MainActor
     @Test func proFallsBackOnlyWhenTheServerCannotServeThem() {
         #expect(AIController.fallsBackOnDevice(after: CardGenerationError.networkError("m"), isPro: true))
-        #expect(AIController.fallsBackOnDevice(after: CardGenerationError.hostedQuotaExhausted("m"), isPro: true))
+        #expect(AIController.fallsBackOnDevice(after: CardGenerationError.hostedQuotaExhausted(.unspecified), isPro: true))
         #expect(AIController.fallsBackOnDevice(after: CardGenerationError.hostedInputTooLarge("m"), isPro: true))
         #expect(!AIController.fallsBackOnDevice(after: CardGenerationError.hostedUnavailable("m"), isPro: true))
     }
@@ -81,7 +98,7 @@ struct HostedGenerationTests {
 
     @MainActor
     @Test func serverHandsOffByTheFallbackRules() {
-        #expect(AIController.movesOn(after: CardGenerationError.hostedQuotaExhausted("m"), from: .cloud, isPro: true))
+        #expect(AIController.movesOn(after: CardGenerationError.hostedQuotaExhausted(.unspecified), from: .cloud, isPro: true))
         #expect(!AIController.movesOn(after: CardGenerationError.hostedUnavailable("m"), from: .cloud, isPro: true))
         #expect(!AIController.movesOn(after: CardGenerationError.networkError("m"), from: .onDevice, isPro: false))
         #expect(!AIController.movesOn(after: CardGenerationError.networkError("m"), from: .externalAPI, isPro: false))

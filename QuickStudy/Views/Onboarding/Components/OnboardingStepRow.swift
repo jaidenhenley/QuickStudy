@@ -7,8 +7,8 @@ import SwiftUI
 
 struct OnboardingStepRow: View {
     let number: Int
-    let title: String
-    let detail: String
+    let title: LocalizedStringKey
+    let detail: LocalizedStringKey
 
     @ScaledMetric(relativeTo: .headline) private var badgeSize = 36
 

@@ -1,0 +1,310 @@
+{
+ "es-419": [
+  {
+   "v": "Haz",
+   "d": "tarjetas de<br>cualquier hoja",
+   "sub": "Escanea, fotografía o pega tus apuntes.",
+   "back": "Make / cards from / any sheet. Scan, photograph or paste your notes."
+  },
+  {
+   "v": "Estudia",
+   "d": "solo lo que<br>toca hoy",
+   "sub": "Una sesión corta, elegida para ti.",
+   "back": "Study / only what's / your turn today. A short session, chosen for you."
+  },
+  {
+   "v": "Ponte",
+   "d": "a prueba<br>en minutos",
+   "sub": "Preguntas de opción múltiple con tus apuntes.",
+   "back": "Put yourself / to the test / in minutes. Multiple-choice questions with your notes."
+  },
+  {
+   "v": "Entiende",
+   "d": "el porqué de<br>cada respuesta",
+   "sub": "Cada respuesta trae su explicación.",
+   "back": "Understand / the why of / each answer. Each answer brings its explanation."
+  },
+  {
+   "v": "Aprende",
+   "d": "de cada<br>error",
+   "sub": "Las tarjetas falladas vuelven mañana.",
+   "back": "Learn / from each / mistake. Failed cards come back tomorrow."
+  },
+  {
+   "v": "Crea",
+   "d": "un hábito de<br>estudio diario",
+   "sub": "Termina una sesión y alarga tu racha.",
+   "back": "Create / a habit of / daily study. Finish a session and lengthen your streak."
+  },
+  {
+   "v": "Sigue",
+   "d": "tu progreso en<br>cada materia",
+   "sub": "Pendientes, en curso y dominados.",
+   "back": "Follow / your progress in / each subject. Pending, in progress and mastered."
+  }
+ ],
+ "es-ES": [
+  {
+   "v": "Haz",
+   "d": "tarjetas de<br>cualquier hoja",
+   "sub": "Escanea, fotografía o pega tus apuntes.",
+   "back": "Make / cards from / any sheet. Scan, photograph or paste your notes."
+  },
+  {
+   "v": "Estudia",
+   "d": "solo lo que<br>toca hoy",
+   "sub": "Una sesión corta, elegida para ti.",
+   "back": "Study / only what's / your turn today. A short session, chosen for you."
+  },
+  {
+   "v": "Ponte",
+   "d": "a prueba<br>en minutos",
+   "sub": "Preguntas tipo test con tus apuntes.",
+   "back": "Put yourself / to the test / in minutes. Test-type questions with your notes."
+  },
+  {
+   "v": "Entiende",
+   "d": "el porqué de<br>cada respuesta",
+   "sub": "Cada respuesta trae su explicación.",
+   "back": "Understand / the why of / each answer. Each answer brings its explanation."
+  },
+  {
+   "v": "Aprende",
+   "d": "de cada<br>error",
+   "sub": "Las tarjetas falladas vuelven mañana.",
+   "back": "Learn / from each / mistake. Failed cards come back tomorrow."
+  },
+  {
+   "v": "Crea",
+   "d": "un hábito de<br>estudio diario",
+   "sub": "Termina una sesión y alarga tu racha.",
+   "back": "Create / a habit of / daily study. Finish a session and lengthen your streak."
+  },
+  {
+   "v": "Sigue",
+   "d": "tu progreso en<br>cada materia",
+   "sub": "Pendientes, en curso y dominados.",
+   "back": "Follow / your progress in / each subject. Pending, in progress and mastered."
+  }
+ ],
+ "fr": [
+  {
+   "v": "Transforme",
+   "d": "chaque page<br>en flashcards",
+   "sub": "Scanne, photographie ou colle tes notes.",
+   "back": "Transform / each page / into flashcards. Scan, photograph or paste your notes."
+  },
+  {
+   "v": "Révise",
+   "d": "juste les<br>cartes du jour",
+   "sub": "Une session courte, choisie pour toi.",
+   "back": "Review / just the / cards of the day. A short session, chosen for you."
+  },
+  {
+   "v": "Teste-toi",
+   "d": "en quelques<br>minutes",
+   "sub": "Des QCM créés à partir de tes notes.",
+   "back": "Test yourself / in a few / minutes. Multiple-choice questions created from your notes."
+  },
+  {
+   "v": "Comprends",
+   "d": "le pourquoi de<br>chaque réponse",
+   "sub": "Chaque réponse a son explication.",
+   "back": "Understand / the why of / each answer. Each answer has its explanation."
+  },
+  {
+   "v": "Apprends",
+   "d": "de tes<br>erreurs",
+   "sub": "Les cartes ratées reviennent demain.",
+   "back": "Learn / from your / mistakes. Missed cards come back tomorrow."
+  },
+  {
+   "v": "Crée",
+   "d": "ta routine<br>de révision",
+   "sub": "Termine une session, prolonge ta série.",
+   "back": "Create / your routine / of revision. Finish a session, extend your streak."
+  },
+  {
+   "v": "Suis",
+   "d": "tes progrès<br>par matière",
+   "sub": "À réviser, en cours et maîtrisés.",
+   "back": "Follow / your progress / by subject. To review, in progress and mastered."
+  }
+ ],
+ "de": [
+  {
+   "v": "Mach",
+   "d": "jede Seite zu<br>Lernkarten",
+   "sub": "Scanne, fotografiere oder setze deine Notizen ein.",
+   "back": "Make / every page into / flashcards. Scan, photograph or paste in your notes."
+  },
+  {
+   "v": "Lerne",
+   "d": "nur, was heute<br>fällig ist",
+   "sub": "Eine kurze Einheit, für dich ausgewählt.",
+   "back": "Study / only what today / is due. A short session, selected for you."
+  },
+  {
+   "v": "Teste",
+   "d": "dich selbst<br>in Minuten",
+   "sub": "Multiple Choice aus deinen Notizen.",
+   "back": "Test / yourself / in minutes. Multiple choice from your notes."
+  },
+  {
+   "v": "Versteh,",
+   "d": "warum jede<br>Antwort stimmt",
+   "sub": "Zu jeder Antwort gibt es eine Erklärung.",
+   "back": "Understand, / why every / answer is right. For every answer there is an explanation."
+  },
+  {
+   "v": "Wachse",
+   "d": "an jedem<br>Fehler",
+   "sub": "Falsch beantwortete Karten kommen morgen wieder.",
+   "back": "Grow / from every / mistake. Wrongly answered cards come back tomorrow."
+  },
+  {
+   "v": "Bleib",
+   "d": "jeden Tag<br>am Ball",
+   "sub": "Schließ eine Einheit ab, verlängere deine Serie.",
+   "back": "Stay / every day / on the ball. Finish a session, extend your streak."
+  },
+  {
+   "v": "Behalt",
+   "d": "jedes Fach<br>im Blick",
+   "sub": "Fällig, begonnen und gemeistert.",
+   "back": "Keep / every subject / Due, started and mastered."
+  }
+ ],
+ "ja": [
+  {
+   "v": "すぐに",
+   "d": "どのページも<br>フラッシュカードに",
+   "sub": "ノートをスキャン、撮影、ペーストするだけ。",
+   "back": "Right away / any page / into flashcards. Just scan, photograph or paste your notes."
+  },
+  {
+   "v": "今日は",
+   "d": "復習予定の<br>カードだけ",
+   "sub": "あなたに合わせた短いセッション。",
+   "back": "Today / scheduled-for-review / cards only. A short session matched to you."
+  },
+  {
+   "v": "数分で",
+   "d": "実力を<br>クイズで確認",
+   "sub": "ノートから作る4択問題。",
+   "back": "In a few minutes / your ability / confirm with a quiz. Four-choice questions made from your notes."
+  },
+  {
+   "v": "なぜ",
+   "d": "正解なのか<br>までわかる",
+   "sub": "すべての答えに解説つき。",
+   "back": "Why / it is correct / you understand even that. Every answer has an explanation attached."
+  },
+  {
+   "v": "ミスも",
+   "d": "学びに<br>変える",
+   "sub": "間違えたカードは明日また出題。",
+   "back": "Even mistakes / into learning / turn. Cards you got wrong are asked again tomorrow."
+  },
+  {
+   "v": "毎日",
+   "d": "勉強する<br>習慣をつくる",
+   "sub": "セッションを終えて、連続記録を伸ばそう。",
+   "back": "Every day / studying / make the habit. Finish a session and let's extend your streak record."
+  },
+  {
+   "v": "ひと目で",
+   "d": "教科ごとの<br>進捗がわかる",
+   "sub": "復習予定、学習中、習得済み。",
+   "back": "At a glance / per-subject / Due for review, studying, mastered."
+  }
+ ],
+ "ko": [
+  {
+   "v": "바로",
+   "d": "어떤 페이지든<br>플래시카드로",
+   "sub": "노트를 스캔, 촬영하거나 붙여넣으세요.",
+   "back": "Right away / whatever page / into flashcards. Scan, photograph or paste your notes."
+  },
+  {
+   "v": "오늘은",
+   "d": "복습할 카드만<br>공부해요",
+   "sub": "나에게 맞춘 짧은 세션.",
+   "back": "Today / only cards to review / (you) study. A short session fitted to me."
+  },
+  {
+   "v": "퀴즈",
+   "d": "몇 분 만에<br>실력 확인",
+   "sub": "내 노트로 만든 객관식 문제.",
+   "back": "Quiz / within a few minutes / skill check. Multiple-choice questions made from my notes."
+  },
+  {
+   "v": "정답",
+   "d": "이유까지<br>알려줘요",
+   "sub": "모든 답에 이유가 함께 나와요.",
+   "back": "Correct answer / even the reason / (we) tell you. Every answer comes out with a reason."
+  },
+  {
+   "v": "오답도",
+   "d": "실력으로<br>바꿔요",
+   "sub": "틀린 카드는 내일 다시 나와요.",
+   "back": "Even wrong answers / into skill / (you) turn. Cards you got wrong come out again tomorrow."
+  },
+  {
+   "v": "매일",
+   "d": "공부하는<br>습관 만들기",
+   "sub": "세션을 끝내고 연속 학습을 이어가요.",
+   "back": "Every day / studying / habit making. Finish a session and continue your study streak."
+  },
+  {
+   "v": "한눈에",
+   "d": "과목별<br>진행 상황",
+   "sub": "복습 필요, 학습 중, 암기 완료.",
+   "back": "At a glance / per subject / Needs review, studying, memorized."
+  }
+ ],
+ "pt-BR": [
+  {
+   "v": "Faça",
+   "d": "flashcards de<br>qualquer página",
+   "sub": "Digitalize, fotografe ou cole suas anotações.",
+   "back": "Make / flashcards from / any page. Scan, photograph or paste your notes."
+  },
+  {
+   "v": "Estude",
+   "d": "só o que está<br>pendente hoje",
+   "sub": "Uma sessão curta, escolhida para você.",
+   "back": "Study / only what is / pending today. A short session, chosen for you."
+  },
+  {
+   "v": "Teste-se",
+   "d": "em poucos<br>minutos",
+   "sub": "Questões de múltipla escolha com suas anotações.",
+   "back": "Test yourself / in a few / minutes. Multiple-choice questions with your notes."
+  },
+  {
+   "v": "Entenda",
+   "d": "o porquê de<br>cada resposta",
+   "sub": "Toda resposta vem com explicação.",
+   "back": "Understand / the why of / each answer. Every answer comes with an explanation."
+  },
+  {
+   "v": "Aprenda",
+   "d": "com cada<br>erro",
+   "sub": "Cartões que você errou voltam amanhã.",
+   "back": "Learn / with each / mistake. Cards you got wrong come back tomorrow."
+  },
+  {
+   "v": "Crie",
+   "d": "um hábito de<br>estudo diário",
+   "sub": "Termine uma sessão e aumente sua sequência.",
+   "back": "Create / a habit of / daily study. Finish a session and increase your streak."
+  },
+  {
+   "v": "Confira",
+   "d": "seu progresso<br>por matéria",
+   "sub": "Pendentes, em andamento e dominados.",
+   "back": "Check / your progress / by subject. Pending, in progress and mastered."
+  }
+ ]
+}

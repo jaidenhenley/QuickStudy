@@ -58,7 +58,7 @@ struct CardSourceSheet: View {
             .scrollPosition(id: $scrolledLine, anchor: .center)
             .scrollBounceBehavior(.basedOnSize)
             .background(BackgroundView())
-            .navigationTitle(source.page.map { "Source · Page \($0)" } ?? "Source")
+            .navigationTitle(source.page.map { String(localized: "Source · Page \($0)") } ?? String(localized: "Source"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -72,7 +72,7 @@ struct CardSourceSheet: View {
                             showsFullPage.toggle()
                         }
                     } label: {
-                        Text(showsFullPage ? "Show Passage" : "Show Full Page")
+                        Text(showsFullPage ? String(localized: "Show Passage") : String(localized: "Show Full Page"))
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Theme.primary)

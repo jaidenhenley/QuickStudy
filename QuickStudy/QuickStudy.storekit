@@ -34,6 +34,41 @@
               "description": "Cloud generation on any iPhone.",
               "displayName": "Pro Monthly",
               "locale": "en_US"
+            },
+            {
+              "description": "Generación en la nube en cualquier iPhone.",
+              "displayName": "Pro mensual",
+              "locale": "es_MX"
+            },
+            {
+              "description": "Generación en la nube en cualquier iPhone.",
+              "displayName": "Pro mensual",
+              "locale": "es_ES"
+            },
+            {
+              "description": "Génération dans le cloud sur n’importe quel iPhone.",
+              "displayName": "Pro mensuel",
+              "locale": "fr_FR"
+            },
+            {
+              "description": "Cloud-Generierung auf jedem iPhone.",
+              "displayName": "Pro monatlich",
+              "locale": "de_DE"
+            },
+            {
+              "description": "どのiPhoneでもクラウドで生成。",
+              "displayName": "Pro（月額）",
+              "locale": "ja"
+            },
+            {
+              "description": "모든 iPhone에서 클라우드 생성.",
+              "displayName": "Pro 월간",
+              "locale": "ko"
+            },
+            {
+              "description": "Geração na nuvem em qualquer iPhone.",
+              "displayName": "Pro mensal",
+              "locale": "pt_BR"
             }
           ],
           "productID": "com.henley.jaiden.QuickStudy.pro.monthly",
@@ -54,6 +89,41 @@
               "description": "Cloud generation on any iPhone.",
               "displayName": "Pro Yearly",
               "locale": "en_US"
+            },
+            {
+              "description": "Generación en la nube en cualquier iPhone.",
+              "displayName": "Pro anual",
+              "locale": "es_MX"
+            },
+            {
+              "description": "Generación en la nube en cualquier iPhone.",
+              "displayName": "Pro anual",
+              "locale": "es_ES"
+            },
+            {
+              "description": "Génération dans le cloud sur n’importe quel iPhone.",
+              "displayName": "Pro annuel",
+              "locale": "fr_FR"
+            },
+            {
+              "description": "Cloud-Generierung auf jedem iPhone.",
+              "displayName": "Pro jährlich",
+              "locale": "de_DE"
+            },
+            {
+              "description": "どのiPhoneでもクラウドで生成。",
+              "displayName": "Pro（年額）",
+              "locale": "ja"
+            },
+            {
+              "description": "모든 iPhone에서 클라우드 생성.",
+              "displayName": "Pro 연간",
+              "locale": "ko"
+            },
+            {
+              "description": "Geração na nuvem em qualquer iPhone.",
+              "displayName": "Pro anual",
+              "locale": "pt_BR"
             }
           ],
           "productID": "com.henley.jaiden.QuickStudy.pro.yearly",

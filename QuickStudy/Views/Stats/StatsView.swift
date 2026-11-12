@@ -59,14 +59,14 @@ struct StatsView: View {
                         .accessibilityAddTraits(.isHeader)
 
                     VStack(alignment: .leading, spacing: Spacing.sm) {
-                        Text("\(Int((statsViewModel.overallProgress * 100).rounded()))%")
+                        Text(statsViewModel.overallProgress.formatted(.percent.precision(.fractionLength(0))))
                             .font(.title2)
                             .fontWeight(.bold)
                             .appNumericTransition(value: statsViewModel.overallProgress * 100)
                         ProgressView(value: statsViewModel.overallProgress)
                             .tint(Color.appPrimary)
                             .appAnimation(Motion.standard, value: statsViewModel.overallProgress)
-                        Text("Across \(statsViewModel.setCount) \(statsViewModel.setCount == 1 ? "set" : "sets")")
+                        Text("Across \(statsViewModel.setCount) sets")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -74,7 +74,7 @@ struct StatsView: View {
                     .appGlassCard(cornerRadius: AppRadius.lg)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("Overall progress")
-                    .accessibilityValue("\(Int((statsViewModel.overallProgress * 100).rounded())) percent, across \(statsViewModel.setCount) \(statsViewModel.setCount == 1 ? "set" : "sets")")
+                    .accessibilityValue(String(localized: "\(Int((statsViewModel.overallProgress * 100).rounded())) percent, across \(statsViewModel.setCount) sets"))
 
                     if !statsViewModel.toughest.isEmpty {
                         Text("TOUGHEST CARDS")
@@ -106,6 +106,7 @@ struct StatsView: View {
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.bottom, Spacing.xl)
+            .appReadableWidth(alignment: .leading)
         }
         .background(BackgroundView())
         .navigationTitle("Stats")

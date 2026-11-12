@@ -52,7 +52,7 @@ struct PageThumbnailCell: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Page \(pageIndex + 1)")
-        .accessibilityValue(isSelected ? "Selected" : "Not selected")
+        .accessibilityValue(isSelected ? Text("Selected") : Text("Not selected"))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .task(id: pageIndex) {
             image = await viewModel.thumbnail(at: pageIndex)

@@ -54,7 +54,7 @@ struct PasteTextSheet: View {
             .padding(.top, Spacing.sm)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 summaryLayout {
-                    Text(analysis.wordCount > 0 ? "\(analysis.wordCount) words · about \(analysis.estimatedCards) \(analysis.estimatedCards == 1 ? "card" : "cards")" : "")
+                    Text(analysis.wordCount > 0 ? String(localized: "\(analysis.wordCount) words · about \(analysis.estimatedCards) cards") : "")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .accessibilityAddTraits(.updatesFrequently)
@@ -99,11 +99,6 @@ struct PasteTextSheet: View {
     }
 
     private var engineLabel: String {
-        switch firstEngine {
-        case .privateCloud: return "Private Cloud Compute"
-        case .cloud: return "QuickStudy Cloud"
-        case .externalAPI: return "Your AI endpoint"
-        default: return "On this iPhone"
-        }
+        (firstEngine ?? .onDevice).displayName
     }
 }

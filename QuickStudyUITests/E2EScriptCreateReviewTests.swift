@@ -95,7 +95,8 @@ final class E2EScriptCreateReviewTests: QSTestCase {
             XCTAssertTrue(draftingCard.label.hasPrefix("Drafting small"), "Status card does not name the PDF: \(draftingCard.label)")
             softLifecycle("B-4", name: "after-lc-drafting")
         }
-        let outcome = finishGeneration("B-4")
+        // A multi-page PDF drafts in chunks, about a minute each on-device in the simulator.
+        let outcome = finishGeneration("B-4", timeout: 300)
         assertReachedReview("B-4", outcome)
         let pills = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Source, page'")).count
         note("B-4", "page source pills visible: \(pills)")
@@ -183,11 +184,17 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         Thread.sleep(forTimeInterval: 1)
     }
 
+    /// The grid scrolls under the bottom bar and XCUITest still calls a covered cell hittable, so this scrolls until the cell
+    /// clears the bar (whose top sits above the page summary).
     private func scrollToPage(_ number: Int) -> XCUIElement {
         let cell = app.buttons["Page \(number)"]
+        let summary = app.staticTexts.matching(NSPredicate(format: "label ENDSWITH ' selected'")).firstMatch
+        let barTop = summary.exists ? summary.frame.minY - 24 : app.windows.firstMatch.frame.height * 0.7
         var attempts = 0
-        while !(cell.exists && cell.isHittable), attempts < 6 {
-            app.scrollViews.firstMatch.swipeUp(velocity: .slow)
+        while !(cell.exists && cell.frame.maxY < barTop), attempts < 8 {
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
+                .press(forDuration: 0.05, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35)))
+            Thread.sleep(forTimeInterval: 0.6)
             attempts += 1
         }
         return cell
@@ -227,13 +234,16 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         app.buttons["Draft 10 Pages"].tap()
         let started = Date()
         var sampledReading = false
-        while !(isDrafting && draftingCard.label.contains("Drafting cards")), Date().timeIntervalSince(started) < 120 {
+        // The card disappears while consent is asked, so its label is read without failing when it is gone.
+        var cardLabel: String { app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Drafting '")).allElementsBoundByIndex.first?.label ?? "" }
+        while !(isDrafting && cardLabel.contains("Drafting cards")), Date().timeIntervalSince(started) < 120 {
             if app.buttons["Not Now"].exists { declineConsentIfAsked("B-8", wait: 0.5) }
-            if !sampledReading, draftingCard.exists, draftingCard.label.contains("Reading page") {
+            let reading = cardLabel
+            if !sampledReading, reading.contains("Reading page") {
                 sampledReading = true
                 shot("B-8", "reading")
-                note("B-8", "reading: \(draftingCard.label) at \(Int(Date().timeIntervalSince(started))) s")
-                XCTAssertTrue(draftingCard.label.hasSuffix("of 10"), "Reading counts all 320 pages, not the 10 chosen: \(draftingCard.label)")
+                note("B-8", "reading: \(reading) at \(Int(Date().timeIntervalSince(started))) s")
+                XCTAssertTrue(reading.hasSuffix("of 10"), "Reading counts all 320 pages, not the 10 chosen: \(reading)")
             }
             if let title = Self.failureTitles.first(where: { failureCard($0).exists }) {
                 shot("B-8", "failure")
@@ -248,7 +258,7 @@ final class E2EScriptCreateReviewTests: QSTestCase {
             XCTFail("B-8: no 'Drafting cards' status within 120 s. Labels: \(app.labelSnapshot().sorted())")
             return
         }
-        let firstLabel = draftingCard.label
+        let firstLabel = cardLabel
         note("B-8", "drafting after \(Int(Date().timeIntervalSince(started))) s: \(firstLabel)")
         XCTAssertTrue(firstLabel.hasPrefix("Drafting large"), "Status card does not name the PDF: \(firstLabel)")
         shot("B-8", "drafting")
@@ -256,8 +266,9 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         var progressed = false
         let watchStart = Date()
         while Date().timeIntervalSince(watchStart) < 60, isDrafting {
-            if draftingCard.label != firstLabel {
-                note("B-8", "progress: '\(firstLabel)' -> '\(draftingCard.label)' after \(Int(Date().timeIntervalSince(watchStart))) s")
+            let current = cardLabel
+            if !current.isEmpty, current != firstLabel {
+                note("B-8", "progress: '\(firstLabel)' -> '\(current)' after \(Int(Date().timeIntervalSince(watchStart))) s")
                 progressed = true
                 break
             }
@@ -266,7 +277,7 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         XCTAssertTrue(progressed || !isDrafting, "B-8: status stalled at '\(firstLabel)' for 60 s")
         shot("B-8", "before-cancel")
         guard isDrafting else { return }
-        cancelDraftingButton.tap()
+        cancelDrafting("B-8")
         Thread.sleep(forTimeInterval: 2)
         shot("B-8", "after-cancel")
         note("B-8", "labels after Cancel: \(app.labelSnapshot().sorted())")
@@ -404,7 +415,7 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         Thread.sleep(forTimeInterval: 1)
         app.tapTab("Library")
         XCTAssertTrue(isDrafting, "Drafting status lost after switching tabs")
-        cancelDraftingButton.tap()
+        cancelDrafting("B-14")
         Thread.sleep(forTimeInterval: 2)
         shot("B-14", "after-cancel")
         dump("B-14", "after-cancel")
@@ -479,7 +490,7 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         shot("B-16", "after-draft-cards")
         XCTAssertFalse(asked, "Consent asked after it was declined")
         XCTAssertTrue(isDrafting, "No drafting status")
-        cancelDraftingButton.tap()
+        cancelDrafting("B-16")
     }
 
     /// Starting a second import while one drafts asks before cancelling it.
@@ -500,6 +511,88 @@ final class E2EScriptCreateReviewTests: QSTestCase {
         app.alerts["Replace your draft?"].buttons["Replace"].tap()
         XCTAssertTrue(app.navigationBars["New Set"].waitForExistence(timeout: QSApp.uiTimeout), "Replace did not open New Set")
         XCTAssertFalse(isDrafting, "Replace left the old draft running")
+    }
+
+    /// Long enough that on-device drafting outlasts the steps below on the simulator.
+    private let progressNote = """
+    Cellular respiration releases energy stored in glucose. It begins with glycolysis in the cytoplasm, which splits one glucose molecule into two pyruvate molecules and yields a small amount of ATP and NADH. \
+    In the presence of oxygen, pyruvate enters the mitochondria and is converted to acetyl CoA. The Krebs cycle then oxidizes acetyl CoA, producing carbon dioxide, NADH and FADH2. \
+    The electron transport chain on the inner mitochondrial membrane passes electrons from NADH and FADH2 to oxygen, pumping protons across the membrane. ATP synthase uses the resulting proton gradient to make most of the cell's ATP. \
+    Without oxygen, cells rely on fermentation. Muscle cells produce lactic acid, while yeast produce ethanol and carbon dioxide. Fermentation regenerates NAD+ so glycolysis can continue, but it yields far less ATP than aerobic respiration. \
+    Photosynthesis is the reverse process in many ways. Chloroplasts capture light energy in the thylakoid membranes, splitting water and releasing oxygen. The Calvin cycle in the stroma uses ATP and NADPH to fix carbon dioxide into sugars.
+    """
+
+    /// The card's X asks first, and tapping the card opens a progress sheet that can also cancel.
+    func test_B_18() {
+        launch(.onboardedEmpty)
+        openPasteSheet("B-18")
+        typeIntoPasteSheet("B-18", text: progressNote)
+        tapDraftCards("B-18")
+        XCTAssertTrue(waitForDrafting("B-18", timeout: 25), "B-18: drafting status never appeared")
+        settle(1)
+
+        cancelDraftingButton.tap()
+        let cardAlert = app.alerts["Cancel Drafting?"]
+        XCTAssertTrue(cardAlert.waitForExistence(timeout: 4), "B-18: the X cancelled without asking")
+        if cardAlert.buttons["Keep Drafting"].exists { cardAlert.buttons["Keep Drafting"].tap() }
+        settle(1)
+        guard isDrafting else {
+            XCTAssertTrue(readyCard.exists, "B-18: Keep Drafting stopped the draft")
+            note("B-18", "draft finished during the card alert; sheet steps skipped")
+            discardLeftoverDraft("B-18")
+            return
+        }
+
+        draftingCard.tap()
+        let sheetCancel = app.buttons["Cancel Drafting"]
+        XCTAssertTrue(sheetCancel.waitForExistence(timeout: 5) || app.buttons["Review"].exists, "B-18: tapping the card did not open the progress sheet")
+        XCTAssertTrue(app.staticTexts["PROGRESS"].exists, "B-18: no PROGRESS section")
+        XCTAssertTrue(app.element(labelContaining: "Draft cards").exists, "B-18: no Draft cards step")
+        shot("B-18", "progress-sheet")
+        dump("B-18", "progress-sheet")
+
+        app.buttons["Done"].tap()
+        settle(1)
+        XCTAssertFalse(app.staticTexts["PROGRESS"].exists, "B-18: Done did not close the sheet")
+        guard isDrafting else {
+            note("B-18", "draft finished before the cancel step; skipped it")
+            discardLeftoverDraft("B-18")
+            return
+        }
+
+        draftingCard.tap()
+        guard sheetCancel.waitForExistence(timeout: 5) else {
+            XCTAssertTrue(app.buttons["Review"].exists, "B-18: the sheet did not reopen")
+            note("B-18", "draft finished as the sheet reopened; cancel step skipped")
+            discardLeftoverDraft("B-18")
+            return
+        }
+        sheetCancel.tap()
+        let sheetAlert = app.alerts["Cancel Drafting?"]
+        XCTAssertTrue(sheetAlert.waitForExistence(timeout: 4), "B-18: the sheet cancelled without asking")
+        // The short note can finish while the alert is up; the app then withdraws the question.
+        let confirm = sheetAlert.buttons["Cancel Drafting"]
+        guard confirm.exists else {
+            XCTAssertTrue(app.buttons["Review"].waitForExistence(timeout: 4), "B-18: the alert vanished but the sheet shows no Review")
+            note("B-18", "draft finished while the alert was up; the alert closed itself")
+            discardLeftoverDraft("B-18")
+            return
+        }
+        confirm.tap()
+        settle(2)
+        shot("B-18", "after-cancel")
+        XCTAssertFalse(app.staticTexts["PROGRESS"].exists, "B-18: the sheet stayed up after cancelling")
+        XCTAssertFalse(isDrafting, "B-18: still drafting after cancelling from the sheet")
+        XCTAssertFalse(readyCard.exists, "B-18: a confirmed cancel left a ready draft")
+        XCTAssertFalse(dismissFailureButton.exists, "B-18: a user cancel left a failure card")
+    }
+
+    /// Later tests start from Library and a waiting draft would raise Replace your draft? there.
+    private func discardLeftoverDraft(_ id: String) {
+        if app.buttons["Done"].exists { app.buttons["Done"].tap(); settle(1) }
+        guard readyCard.waitForExistence(timeout: 3) else { return }
+        openDiscardAlert(id).buttons["Discard Draft"].tap()
+        settle(1)
     }
 
     // MARK: C

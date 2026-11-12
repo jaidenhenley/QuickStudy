@@ -65,13 +65,13 @@ final class QuizSessionViewModel {
         return false
     }
 
-    var positionLabel: String { "Session · \(index + 1) of \(questions.count)" }
+    var positionLabel: String { String(localized: "Session · \(index + 1) of \(questions.count)") }
 
-    var positionAccessibilityLabel: String { "Session, question \(index + 1) of \(questions.count)" }
+    var positionAccessibilityLabel: String { String(localized: "Session, question \(index + 1) of \(questions.count)") }
 
     func elapsedLabel(now: Date = Date()) -> String {
         let total = Int(now.timeIntervalSince(session.startedAt))
-        return String(format: "%d:%02d", total / 60, total % 60)
+        return Duration.seconds(total).formatted(.time(pattern: .minuteSecond(padMinuteToLength: 1)))
     }
 
     var states: [QuestionState] {
@@ -191,9 +191,9 @@ final class QuizSessionViewModel {
             streak: streak,
             cardsVsYesterday: yesterdayCards > 0 ? session.cardCount - yesterdayCards : nil,
             reinforcement: reinforcement,
-            headline: isStrong ? "Nicely done" : "Session complete",
-            subtitle: isStrong ? "Session complete · \(session.elapsedLabel)" : session.elapsedLabel,
-            subtitleSpoken: isStrong ? "Session complete, \(elapsedSpoken)" : elapsedSpoken,
+            headline: isStrong ? String(localized: "Nicely done") : String(localized: "Session complete"),
+            subtitle: isStrong ? String(localized: "Session complete · \(session.elapsedLabel)") : session.elapsedLabel,
+            subtitleSpoken: isStrong ? String(localized: "Session complete, \(elapsedSpoken)") : elapsedSpoken,
             hasMoreDue: !study.dueCards(calendar: calendar).isEmpty
         )
     }

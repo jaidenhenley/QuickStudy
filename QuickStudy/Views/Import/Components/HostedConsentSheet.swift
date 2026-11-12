@@ -32,15 +32,15 @@ struct HostedConsentSheet: View {
                         .background(Theme.primary.opacity(0.14), in: Circle())
                         .accessibilityHidden(true)
 
-                    Text(hasOnDeviceModel ? "Draft in the Cloud?" : "Draft This Set in the Cloud?")
+                    Text(hasOnDeviceModel ? String(localized: "Draft in the Cloud?") : String(localized: "Draft This Set in the Cloud?"))
                         .font(.title2)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
                         .accessibilityAddTraits(.isHeader)
 
                     Text(hasOnDeviceModel
-                         ? "Cloud drafting makes better cards. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days. Not Now drafts on this iPhone."
-                         : "This iPhone can’t draft cards on its own. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days.")
+                         ? String(localized: "Cloud drafting makes better cards. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days. Not Now drafts on this iPhone.")
+                         : String(localized: "This iPhone can’t draft cards on its own. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days."))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)

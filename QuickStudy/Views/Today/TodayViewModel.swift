@@ -169,22 +169,35 @@ class TodayViewModel {
     }
 
     /// Longest stems first, so "what is the X" does not match "what is" and leave "the X".
+    /// Other languages keep their article ("la clorofila"), which reads naturally after the
+    /// localized "cards on …" phrase.
     private static let questionStems = [
         "what is the", "what is a", "what is an", "what is",
         "what are the", "what are", "what does the", "what does", "what do",
         "when should you use", "when does", "when do",
         "how does the", "how does", "how do",
-        "why does", "why do", "which", "define", "explain"
+        "why does", "why do", "which", "define", "explain",
+        "qué es", "qué son", "cuáles son", "cuál es",
+        "qu’est-ce que", "qu'est-ce que", "quels sont", "quelles sont", "quel est", "quelle est", "que sont",
+        "was ist", "was sind",
+        "o que é", "o que são", "quais são", "qual é"
     ]
 
-    private static func topic(from question: String) -> String {
-        var text = question
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .trimmingCharacters(in: CharacterSet(charactersIn: "?."))
+    /// Japanese and Korean put the question word last.
+    private static let questionEndings = [
+        "とは何ですか", "とは何か", "は何ですか", "は何か",
+        "이란 무엇인가요", "란 무엇인가요", "은 무엇인가요", "는 무엇인가요",
+        "이란 무엇인가", "란 무엇인가", "은 무엇인가", "는 무엇인가"
+    ]
+
+    static func topic(from question: String) -> String {
+        let punctuation = CharacterSet(charactersIn: "?.¿？。").union(.whitespacesAndNewlines)
+        var text = question.trimmingCharacters(in: punctuation)
         let lowered = text.lowercased()
-        for stem in questionStems where lowered.hasPrefix(stem + " ") {
+        if let stem = questionStems.first(where: { lowered.hasPrefix($0 + " ") }) {
             text = String(text.dropFirst(stem.count)).trimmingCharacters(in: .whitespaces)
-            break
+        } else if let ending = questionEndings.first(where: { text.hasSuffix($0) && text.count > $0.count }) {
+            text = String(text.dropLast(ending.count))
         }
         return text
     }
@@ -239,7 +252,7 @@ class TodayViewModel {
     }
 
     private static func dayLabel(for date: Date, now: Date, calendar: Calendar) -> String {
-        if calendar.isDateInTomorrow(date) { return "Tomorrow" }
+        if calendar.isDateInTomorrow(date) { return String(localized: "Tomorrow") }
         let days = calendar.dateComponents(
             [.day],
             from: calendar.startOfDay(for: now),

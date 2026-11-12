@@ -13,11 +13,11 @@ struct ResultCard: View {
         case shake
     }
 
-    let label: String
+    let label: LocalizedStringKey
     let text: String
     let tint: Color
     let symbol: String
-    let spokenLabel: String
+    let spokenLabel: LocalizedStringKey
     let emphasis: Emphasis?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

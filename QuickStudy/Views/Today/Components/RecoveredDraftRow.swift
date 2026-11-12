@@ -33,7 +33,7 @@ struct RecoveredDraftRow: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .lineLimit(stacksVertically ? nil : 2)
-                    Text("\(draft.cards.count) \(draft.cards.count == 1 ? "card" : "cards") drafted · not yet saved")
+                    Text("\(draft.cards.count) cards drafted · not yet saved")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

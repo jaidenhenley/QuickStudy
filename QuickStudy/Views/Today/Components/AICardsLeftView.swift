@@ -55,22 +55,22 @@ struct AICardsLeftView: View {
         .disabled(todayViewModel.isPro)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(label)
-        .accessibilityHint(todayViewModel.isPro ? "" : "Opens QuickStudy Pro")
+        .accessibilityHint(todayViewModel.isPro ? Text(verbatim: "") : Text("Opens QuickStudy Pro"))
     }
 
     private var label: String {
         if todayViewModel.isManualOnly {
-            return "AI generation isn't available on this iPhone"
+            return String(localized: "AI generation isn't available on this iPhone")
         }
         if todayViewModel.hasOnlyFreeCloudSet {
-            return "1 free cloud set on this iPhone"
+            return String(localized: "1 free cloud set on this iPhone")
         }
         if todayViewModel.isPro {
             let left = todayViewModel.hostedRemaining ?? todayViewModel.hostedLimit
-            return "QuickStudy Pro · \(left) of \(todayViewModel.hostedLimit) generations left this month"
+            return String(localized: "QuickStudy Pro · \(left) of \(todayViewModel.hostedLimit) generations left this month")
         }
         return todayViewModel.canGenerate
-            ? "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month"
-            : "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left · resets \(todayViewModel.generationsResetLabel)"
+            ? String(localized: "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left this month")
+            : String(localized: "\(todayViewModel.generationsRemaining) of \(todayViewModel.generationsLimit) free generations left · resets \(todayViewModel.generationsResetLabel)")
     }
 }

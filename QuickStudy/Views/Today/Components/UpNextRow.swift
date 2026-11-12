@@ -32,6 +32,6 @@ struct UpNextRow: View {
         .padding(Spacing.base)
         .appGlassCard(cornerRadius: AppRadius.lg)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(entry.title), \(entry.dayLabel), \(entry.cardCount) \(entry.cardCount == 1 ? "card" : "cards")")
+        .accessibilityLabel("\(entry.title), \(entry.dayLabel), \(entry.cardCount) cards")
     }
 }

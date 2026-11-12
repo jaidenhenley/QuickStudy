@@ -25,7 +25,7 @@ struct StatSetRow: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(Theme.successText)
                 } else {
-                    Text("\(Int((entry.progress * 100).rounded()))%")
+                    Text(entry.progress.formatted(.percent.precision(.fractionLength(0))))
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -43,10 +43,10 @@ struct StatSetRow: View {
 
     private var accessibilityValue: String {
         if entry.mastery == .mastered {
-            return "Mastered"
+            return String(localized: "Mastered")
         } else {
             let percent = Int((entry.progress * 100).rounded())
-            return "\(percent) percent"
+            return String(localized: "\(percent) percent")
         }
     }
 }

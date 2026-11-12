@@ -104,7 +104,7 @@ struct SettingsView: View {
                             }
                         }
                     )) {
-                        Text(store.isPro ? "QuickStudy's Server" : "On-Device").tag(CardGenerationMode.onDevice)
+                        Text(store.isPro ? String(localized: "QuickStudy's Server") : String(localized: "On-Device")).tag(CardGenerationMode.onDevice)
                         Text("External API").tag(CardGenerationMode.externalAPI)
                     }
 
@@ -144,7 +144,7 @@ struct SettingsView: View {
 
                 Section {
                     if store.isPro {
-                        LabeledContent("QuickStudy Pro", value: "Active")
+                        LabeledContent("QuickStudy Pro", value: String(localized: "Active"))
                         Button("Manage Subscription") { showManageSubscription = true }
                     } else {
                         Button("Upgrade to QuickStudy Pro") { showPaywall = true }
@@ -153,8 +153,8 @@ struct SettingsView: View {
                     Text("Pro")
                 } footer: {
                     Text(store.isPro
-                         ? "Cards are generated on QuickStudy's server with Anthropic's Claude, which deletes your text within 30 days."
-                         : "Better cards on any iPhone, generated in the cloud.")
+                         ? String(localized: "Cards are generated on QuickStudy's server with Anthropic's Claude, which deletes your text within 30 days.")
+                         : String(localized: "Better cards on any iPhone, generated in the cloud."))
                 }
                 .listRowBackground(Theme.chipFill)
 
@@ -223,7 +223,7 @@ struct SettingsView: View {
             .alert("Couldn't Save API Key", isPresented: $showKeychainError) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(keychainErrorMessage ?? "Please try again.")
+                Text(keychainErrorMessage ?? String(localized: "Please try again."))
             }
             .onChange(of: aiSettings.apiFormat) { _, newFormat in
                 switch newFormat {

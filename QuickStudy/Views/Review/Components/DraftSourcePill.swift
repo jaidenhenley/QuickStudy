@@ -33,12 +33,12 @@ struct DraftSourcePill: View {
     }
 
     private var label: String {
-        guard let page = source.page else { return "Source" }
-        return "Source · p.\(page)"
+        guard let page = source.page else { return String(localized: "Source") }
+        return String(localized: "Source · p.\(page)")
     }
 
     private var spokenLabel: String {
-        guard let page = source.page else { return "Source" }
-        return "Source, page \(page)"
+        guard let page = source.page else { return String(localized: "Source") }
+        return String(localized: "Source, page \(page)")
     }
 }

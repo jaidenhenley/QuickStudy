@@ -136,6 +136,7 @@ struct TodayView: View {
             .padding(.horizontal, Spacing.lg)
             .padding(.top, Spacing.sm)
             .padding(.bottom, Spacing.xl)
+            .appReadableWidth(alignment: .leading)
             .appAnimation(Motion.standard, value: networkMonitor.isOnline)
             .appAnimation(Motion.standard, value: draftStore.pending?.id)
         }
@@ -188,8 +189,9 @@ struct TodayView: View {
     }
 
     private var formattedDate: String {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE · MMM d"
-        return f.string(from: Date()).uppercased()
+        let now = Date()
+        let weekday = now.formatted(.dateTime.weekday(.wide))
+        let monthDay = now.formatted(.dateTime.month(.abbreviated).day())
+        return String(localized: "\(weekday) · \(monthDay)").localizedUppercase
     }
 }

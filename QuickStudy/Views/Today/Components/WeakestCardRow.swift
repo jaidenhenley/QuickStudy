@@ -32,7 +32,7 @@ struct WeakestCardRow: View {
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
-                Text("Missed \(weakest.missCount) \(weakest.missCount == 1 ? "time" : "times") · Drill")
+                Text("Missed \(weakest.missCount) times · Drill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

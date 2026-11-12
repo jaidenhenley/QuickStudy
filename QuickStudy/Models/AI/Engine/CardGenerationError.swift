@@ -30,7 +30,7 @@ enum CardGenerationError: LocalizedError {
     case unexpected(String)
     case notSubscribed(String)
     case freeHostedGenerationUsed
-    case hostedQuotaExhausted(String)
+    case hostedQuotaExhausted(HostedQuotaReason)
     case hostedInputTooLarge(String)
     case hostedUnavailable(String)
     case privateCloudQuotaReached(resetsAt: Date?)
@@ -40,67 +40,66 @@ enum CardGenerationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
-            return "Missing API key."
+            return String(localized: "Missing API key.")
         case .invalidEndpoint:
-            return "Invalid API endpoint."
+            return String(localized: "Invalid API endpoint.")
         case .invalidResponse:
-            return "The API returned an invalid response."
+            return String(localized: "The API returned an invalid response.")
         case .decodingFailed:
-            return "Failed to decode the API response."
+            return String(localized: "Failed to decode the API response.")
         case .deviceNotEligible:
-            return "This iPhone doesn't support on-device AI."
+            return String(localized: "This iPhone doesn't support on-device AI.")
         case .appleIntelligenceNotEnabled:
-            return "Turn on Apple Intelligence in Settings to generate cards on this iPhone."
+            return String(localized: "Turn on Apple Intelligence in Settings to generate cards on this iPhone.")
         case .modelNotReady:
-            return "Apple Intelligence is still downloading. Try again in a few minutes."
+            return String(localized: "Apple Intelligence is still downloading. Try again in a few minutes.")
         case .contextWindowExceeded:
-            return "This page is too dense to process on this iPhone. Try scanning fewer pages at once."
+            return String(localized: "This page is too dense to process on this iPhone. Try scanning fewer pages at once.")
         case .guardrailViolation:
-            return "This content can't be turned into cards. Try a different page."
+            return String(localized: "This content can't be turned into cards. Try a different page.")
         case .unsupportedLanguage:
-            return "On-device AI doesn't support this document's language yet."
+            return String(localized: "On-device AI doesn't support this document's language yet.")
         case .generationFailed:
-            return "Couldn't draft cards from this. Try a different source."
+            return String(localized: "Couldn't draft cards from this. Try a different source.")
         case .networkError(let message):
             return message
         case .badStatusCode(let code):
-            return "The API returned status code \(code)."
+            return String(localized: "The API returned status code \(code).")
         case .unsupportedProviderResponse:
-            return "The API returned an unsupported response format."
+            return String(localized: "The API returned an unsupported response format.")
         case .keychainError(let status):
-            return "Failed to save API key (Keychain error \(status))."
+            return String(localized: "Failed to save API key (Keychain error \(status)).")
         case .attestationUnavailable:
-            return "Pro generation needs a real iPhone to verify the app."
+            return String(localized: "Pro generation needs a real iPhone to verify the app.")
         case .attestationKeyUnknown:
-            return "This iPhone needs to re-verify with QuickStudy. Try again."
+            return String(localized: "This iPhone needs to re-verify with QuickStudy. Try again.")
         case .deviceAttestationFailed:
-            return "This iPhone couldn't verify with QuickStudy. Try again in a moment."
+            return String(localized: "This iPhone couldn't verify with QuickStudy. Try again in a moment.")
         case .unexpected:
-            return "Couldn't draft cards from this. Try a different source."
+            return String(localized: "Couldn't draft cards from this. Try a different source.")
             // Server messages can carry verification internals (certificate and signature
-            // failures), so only the quota message, which names rate limit vs monthly cap in
-            // plain words, is shown as sent.
+            // failures), and they are English only, so the app always shows its own copy.
         case .attestationFailed:
-            return "QuickStudy couldn't verify this iPhone. Try again in a moment."
+            return String(localized: "QuickStudy couldn't verify this iPhone. Try again in a moment.")
         case .notSubscribed:
-            return "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen."
+            return String(localized: "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen.")
         case .freeHostedGenerationUsed:
-            return "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI."
-        case .hostedQuotaExhausted(let message):
-            return message
+            return String(localized: "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI.")
+        case .hostedQuotaExhausted(let reason):
+            return reason.message
         case .hostedInputTooLarge:
-            return "This is too long to draft in one go. Try importing fewer pages at once."
+            return String(localized: "This is too long to draft in one go. Try importing fewer pages at once.")
         case .hostedUnavailable:
-            return "Cloud generation is unavailable right now. Try again shortly."
+            return String(localized: "Cloud generation is unavailable right now. Try again shortly.")
         case .privateCloudQuotaReached(let resetsAt):
             guard let resetsAt else {
-                return "You've reached today's limit for Private Cloud Compute. Try again tomorrow."
+                return String(localized: "You've reached today's limit for Private Cloud Compute. Try again tomorrow.")
             }
-            return "You've reached today's limit for Private Cloud Compute. It resets \(resetsAt.formatted(.relative(presentation: .named)))."
+            return String(localized: "You've reached today's limit for Private Cloud Compute. It resets \(resetsAt.formatted(.relative(presentation: .named))).")
         case .privateCloudUnavailable:
-            return "Private Cloud Compute is unavailable right now. Try again shortly."
+            return String(localized: "Private Cloud Compute is unavailable right now. Try again shortly.")
         case .privateCloudNetworkFailure:
-            return "Couldn't reach Private Cloud Compute. Check your connection and try again."
+            return String(localized: "Couldn't reach Private Cloud Compute. Check your connection and try again.")
         }
     }
     

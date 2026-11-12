@@ -38,12 +38,12 @@ struct PaywallHeaderView: View {
             }
 
             VStack(alignment: .leading, spacing: Spacing.md) {
-                ForEach(Array([
+                ForEach(Array(([
                     (symbol: "brain", text: "Keeps drafting when Apple's daily limit runs out"),
                     (symbol: "iphone", text: "Works on every iPhone"),
                     (symbol: "doc.text", text: "Long PDFs and full chapters"),
                     (symbol: "sparkles", text: "\(ProProduct.hostedMonthlyLimit) generations a month · long documents count as more")
-                ].enumerated()), id: \.offset) { index, item in
+                ] as [(symbol: String, text: LocalizedStringKey)]).enumerated()), id: \.offset) { index, item in
                     PaywallFeatureRow(symbol: item.symbol, text: item.text)
                         .appStagedReveal(2 + index, shown: appeared)
                 }

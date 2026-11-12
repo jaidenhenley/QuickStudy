@@ -31,7 +31,7 @@ final class ChoosePagesViewModel {
     }
 
     var subtitle: String {
-        "\(fileName) · \(pageCount) \(pageCount == 1 ? "page" : "pages")"
+        String(localized: "\(fileName) · \(pageCount) pages")
     }
 
     var sortedSelection: [Int] { selection.sorted() }
@@ -40,28 +40,25 @@ final class ChoosePagesViewModel {
 
     var summary: String {
         let pages = sortedSelection
-        guard let first = pages.first, let last = pages.last else { return "No pages selected" }
+        guard let first = pages.first, let last = pages.last else { return String(localized: "No pages selected") }
         if pages.count > 1, last - first + 1 == pages.count {
-            return "Pages \(first + 1) to \(last + 1) selected"
+            return String(localized: "Pages \(first + 1) to \(last + 1) selected")
         }
-        return "\(pages.count) \(pages.count == 1 ? "page" : "pages") selected"
+        return String(localized: "\(pages.count) pages selected")
     }
 
     var estimate: String {
         let count = selection.count
         let seconds = Double(count) * Self.secondsPerPage
-        let duration: String
         if seconds < 60 {
-            duration = "\(Int(seconds.rounded())) seconds"
-        } else {
-            let minutes = Int((seconds / 60).rounded(.up))
-            duration = "\(minutes) \(minutes == 1 ? "minute" : "minutes")"
+            return String(localized: "\(count) pages · about \(Int(seconds.rounded())) seconds on this iPhone")
         }
-        return "\(count) \(count == 1 ? "page" : "pages") · about \(duration) on this iPhone"
+        let minutes = Int((seconds / 60).rounded(.up))
+        return String(localized: "\(count) pages · about \(minutes) minutes on this iPhone")
     }
 
     var buttonTitle: String {
-        selection.count == 1 ? "Draft 1 Page" : "Draft \(selection.count) Pages"
+        String(localized: "Draft \(selection.count) Pages")
     }
 
     func isSelected(_ index: Int) -> Bool { selection.contains(index) }

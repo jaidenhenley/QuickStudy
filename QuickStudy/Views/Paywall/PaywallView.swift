@@ -40,16 +40,16 @@ struct PaywallView: View {
                 if store.isPro {
                     showWelcome = true
                 } else {
-                    present("The purchase went through but couldn't be verified. Try Restore Subscription.")
+                    present(String(localized: "The purchase went through but couldn't be verified. Try Restore Subscription."))
                 }
             case .success(.pending):
-                present("Your purchase needs approval before it can finish. You'll get Pro once it's approved.")
+                present(String(localized: "Your purchase needs approval before it can finish. You'll get Pro once it's approved."))
             case .success(.userCancelled):
                 break
             case .failure(let error):
                 present(error.localizedDescription)
             @unknown default:
-                present("The purchase didn't complete. Try again.")
+                present(String(localized: "The purchase didn't complete. Try again."))
             }
         }
         .background(BackgroundView())
@@ -64,7 +64,7 @@ struct PaywallView: View {
         .alert("Purchase didn't finish", isPresented: $showPurchaseMessage) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text(purchaseMessage ?? "Try again.")
+            Text(purchaseMessage ?? String(localized: "Try again."))
         }
         .alert("You're on QuickStudy Pro", isPresented: $showWelcome) {
             Button("Continue") { dismiss() }

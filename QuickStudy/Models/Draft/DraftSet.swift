@@ -70,8 +70,10 @@ struct DraftSet: Identifiable, Codable {
     /// "page 4", "pages 4 to 9", or "6 pages" when the chosen pages aren't contiguous.
     var pageRangeLabel: String? {
         guard document.pageBreaks != nil, let first = contentPages.first, let last = contentPages.last else { return nil }
-        if contentPages.count == 1 { return "page \(first)" }
-        return last - first + 1 == contentPages.count ? "pages \(first) to \(last)" : "\(contentPages.count) pages"
+        if contentPages.count == 1 { return String(localized: "page \(first)") }
+        return last - first + 1 == contentPages.count
+            ? String(localized: "pages \(first) to \(last)")
+            : String(localized: "\(contentPages.count) pages")
     }
 
     mutating func remove(_ cardID: UUID) {
@@ -85,14 +87,15 @@ struct DraftSet: Identifiable, Codable {
     /// Only on-device and Private Cloud drafts spend a free generation; hosted Pro and
     /// the user's own API key don't, so the warning mustn't claim they did.
     var discardWarning: String {
-        let deleted = cards.isEmpty
-            ? "This draft will be deleted."
-            : "The \(cards.count) drafted \(cards.count == 1 ? "card" : "cards") will be deleted."
-        switch provenance?.engine {
-        case .onDevice, .privateCloud:
-            return deleted + " This used one of your free generations."
-        case .cloud, .externalAPI, .none:
-            return deleted
+        switch (provenance?.engine, cards.isEmpty) {
+        case (.onDevice, true), (.privateCloud, true):
+            return String(localized: "This draft will be deleted. This used one of your free generations.")
+        case (.onDevice, false), (.privateCloud, false):
+            return String(localized: "The \(cards.count) drafted cards will be deleted. This used one of your free generations.")
+        case (_, true):
+            return String(localized: "This draft will be deleted.")
+        case (_, false):
+            return String(localized: "The \(cards.count) drafted cards will be deleted.")
         }
     }
 }

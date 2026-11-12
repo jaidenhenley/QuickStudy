@@ -1,0 +1,3062 @@
+{
+ "%@ complete": {
+  "back": "complete at %@",
+  "status": "fixed",
+  "severity": "low",
+  "note": "VoiceOver part after the card count; '45 % terminé' read awkwardly. Now 'terminé à %@' (lowercase, it sits mid-list after a comma)."
+ },
+ "%@ is ready": {
+  "back": "%@: it's ready",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "'%@ est prêt' forced masculine agreement on a set title (e.g. 'Photosynthèse est prêt'). Now '%@ : c’est prêt', which has no agreement."
+ },
+ "%@ so far": {
+  "back": "%@ up to now",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@ · %@": {
+  "back": "%1$@ · %2$@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@ · %lld cards": {
+  "back": "%1$@ · %arg cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@ · %lld pages": {
+  "back": "%1$@ · %arg pages",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@ · QuickStudy server": {
+  "back": "%@ · QuickStudy server",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@ · saved before engines were recorded": {
+  "back": "%@ · saved before tracking of the engine used",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@, %@": {
+  "back": "%1$@, %2$@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@, %@, %lld cards": {
+  "back": "%1$@, %2$@, %arg cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@, %lld cards": {
+  "back": "%1$@, %arg cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@, missed %lld times": {
+  "back": "%1$@, missed %arg times",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%@. %@": {
+  "back": "%1$@. %2$@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld DUE": {
+  "back": "%lld TO REVIEW",
+  "status": "ok",
+  "severity": "none",
+  "note": "Checked length: 'À RÉVISER' is ~2x English, but the caption2 badge sits alone on its own line in a half-width tile (~85pt of ~140pt), so it fits; kept for glossary consistency with 'Due'/'Cards due today'. May wrap at accessibility sizes."
+ },
+ "%lld Streak Freezes ready": {
+  "back": "%lld streak freezes ready",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards": {
+  "back": "%lld cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards drafted": {
+  "back": "%lld cards drafted",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards drafted from %lld pages": {
+  "back": "%arg cards drafted from %arg pages",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards drafted · not yet saved": {
+  "back": "%lld cards drafted · not yet saved",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards from %@": {
+  "back": "%arg cards from %2$@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards will be added to %@.": {
+  "back": "%arg cards will be added into %2$@.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cards, %lld minutes": {
+  "back": "%arg cards, %arg minutes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld cloud generations a month on any iPhone.": {
+  "back": "%lld cloud generations per month on any iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld day streak": {
+  "back": "Streak of %lld days",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld days": {
+  "back": "%lld days",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld due": {
+  "back": "%lld to review",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld generations a month · long documents count as more": {
+  "back": "%lld generations per month · long documents count for several",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'comptent pour plus' is unidiomatic and vague; now 'comptent pour plusieurs' (count as several generations)."
+ },
+ "%lld of %lld": {
+  "back": "%1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld of %lld free generations left this month": {
+  "back": "Free generations remaining this month: %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld of %lld free generations left · resets %@": {
+  "back": "Free generations remaining: %1$lld out of %2$lld · reset on %3$@",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "'renouvellement le' reads as a subscription renewal; the free allowance is reset. Now 'réinitialisées le %3$@' (date is day + month, e.g. '1 décembre')."
+ },
+ "%lld pages": {
+  "back": "%lld pages",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld pages selected": {
+  "back": "%lld pages selected",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld pages · about %lld minutes on this iPhone": {
+  "back": "%arg pages · about %arg minutes on this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld pages · about %lld seconds on this iPhone": {
+  "back": "%arg pages · about %arg seconds on this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld percent": {
+  "back": "%lld percent",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld percent, across %lld sets": {
+  "back": "%1$lld percent, over %arg decks",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'répartis sur' was a wrong agreement/odd verb; now simply 'sur %arg paquets'."
+ },
+ "%lld sets": {
+  "back": "%lld decks",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld words": {
+  "back": "%lld words",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "%lld words · about %lld cards": {
+  "back": "%arg words · about %arg cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "1 free cloud set on this iPhone": {
+  "back": "1 free cloud deck on this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "10 free generations a month": {
+  "back": "10 free generations per month",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "A sample biology set. Feel the loop before you add your own.": {
+  "back": "A sample biology deck. Try out the principle before adding your own notes.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "ACCURACY": {
+  "back": "ACCURACY",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "AI + Input": {
+  "back": "AI and input",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "AI Source": {
+  "back": "Source of the AI",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "AI generation isn't available on this iPhone": {
+  "back": "Generation by AI is not available on this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "AI reads it and writes Q&A. Edit anything.": {
+  "back": "The AI reads all that and writes question-answers. Edit whatever you want.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "API Key": {
+  "back": "API key",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "API Provider": {
+  "back": "API provider",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "About": {
+  "back": "About",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "About %lld minutes left": {
+  "back": "About %lld minutes remaining",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "About %lld seconds left": {
+  "back": "About %lld seconds remaining",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Accuracy": {
+  "back": "Accuracy",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Across %lld sets": {
+  "back": "Over %lld decks",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Active": {
+  "back": "Active",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Add a set title and one complete card": {
+  "back": "Add a deck title and one complete card",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Add an API endpoint in Settings to generate cards.": {
+  "back": "Add an API endpoint in Settings to generate cards.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Add an API key in Settings to generate cards.": {
+  "back": "Add an API key in Settings to generate cards.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Add another card": {
+  "back": "Add another card",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Add to Existing": {
+  "back": "Existing deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Adds a sample biology set you can study right away. Turning this off removes it; turning it back on starts it fresh.": {
+  "back": "Adds a sample biology deck you can study right away. If you turn it off, it is deleted; if you turn it back on, it starts from zero.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "After your first set, generations run on-device and never leave it.": {
+  "back": "After your first deck, generations happen on the device and never leave it.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "All": {
+  "back": "All",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "All caught up": {
+  "back": "Everything is up to date",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Allow": {
+  "back": "Allow",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Allow camera access": {
+  "back": "Allow access to the camera",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Answer": {
+  "back": "Answer",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Apple Intelligence couldn't process part of this document, so those sections have no cards. Pro drafts with QuickStudy's cloud model instead.": {
+  "back": "Apple Intelligence could not process part of this document, so these sections have no cards. Pro drafts instead with QuickStudy's cloud model.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Apple Intelligence is still downloading. Try again in a few minutes.": {
+  "back": "Apple Intelligence is still downloading. Try again in a few minutes.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Auto-applies if you miss a day. Earn one per full study week.": {
+  "back": "Applies automatically if you miss a day. Earn one per complete study week.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "BY SET": {
+  "back": "BY DECK",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Back": {
+  "back": "Back",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Better cards on any iPhone, generated in the cloud.": {
+  "back": "Better cards on any iPhone, generated in the cloud.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Build your first set": {
+  "back": "Create your first deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "CARD %lld": {
+  "back": "CARD %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "CARDS": {
+  "back": "CARDS",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "CORRECT": {
+  "back": "RIGHT ANSWER",
+  "status": "fixed",
+  "severity": "low",
+  "note": "The reviewer's recommendation, applied once the Session Complete stat got its own key: this label now only heads the correct answer in the quiz."
+ },
+ "Camera Unavailable": {
+  "back": "Camera unavailable",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cancel": {
+  "back": "Cancel",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cancel Drafting": {
+  "back": "Cancel the drafting",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cancel Drafting?": {
+  "back": "Cancel the drafting?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cancel drafting": {
+  "back": "Cancel the drafting",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Capture your source": {
+  "back": "Capture your source",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card %lld": {
+  "back": "Card %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card %lld added": {
+  "back": "Card %lld added",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card %lld definition": {
+  "back": "Definition of card %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card %lld term": {
+  "back": "Term of card %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card deleted. %lld cards left": {
+  "back": "Card deleted. %lld cards remaining",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card removed": {
+  "back": "Card removed",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Card restored": {
+  "back": "Card restored",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cards": {
+  "back": "Cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cards are generated on QuickStudy's server with Anthropic's Claude, which deletes your text within 30 days.": {
+  "back": "Cards are generated on QuickStudy's server with Anthropic's Claude, which deletes your text within 30 days.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cards due today": {
+  "back": "Cards to review today",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cards in rotation": {
+  "back": "Cards in rotation",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cards mastered": {
+  "back": "Cards mastered",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cards you typed": {
+  "back": "Cards that you typed",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Choose Not now and every draft stays on-device.": {
+  "back": "Choose \"Not now\" and every draft stays on the device.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Button name now quoted with « » so it doesn't read as the sentence's verb."
+ },
+ "Choose PDF": {
+  "back": "Choose a PDF",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Choose Pages": {
+  "back": "Choose the pages",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Choose Photo": {
+  "back": "Choose a photo",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Clear Name": {
+  "back": "Clear the name",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Close": {
+  "back": "Close",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cloud drafting makes better cards. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days. Not Now drafts on this iPhone.": {
+  "back": "Drafting in the cloud gives better cards. Your text is sent to Apple's Private Cloud Compute or to QuickStudy's server, which uses Anthropic's Claude. Claude deletes it within 30 days. If you choose \"Not now\", the cards are drafted on this iPhone.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'Avec Pas maintenant, ...' was unclear; now 'Si tu choisis « Pas maintenant », les cartes sont rédigées sur cet iPhone.' Privacy facts (PCC, server, Claude, 30 days) verified unchanged."
+ },
+ "Cloud drafting on any iPhone, whenever you need it.": {
+  "back": "Drafting in the cloud on any iPhone, when you need it.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Cloud generation is unavailable right now. Try again shortly.": {
+  "back": "Generation in the cloud is unavailable for the moment. Try again in a moment.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Collapsed": {
+  "back": "Collapsed",
+  "status": "ok",
+  "severity": "none",
+  "note": "'Réduit' matches VoiceOver’s French state wording."
+ },
+ "Continue": {
+  "back": "Continue",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Correct": {
+  "back": "Correct",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Correct answer": {
+  "back": "Right answer",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Could not load the selected photo. Try a different image.": {
+  "back": "Unable to load the selected photo. Try another image.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't Save API Key": {
+  "back": "Unable to save the API key",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't draft cards from this. Try a different source.": {
+  "back": "Unable to draft cards from this. Try another source.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't find enough about %@ in this set to make new cards.": {
+  "back": "Not enough content about %@ in this deck to create new cards.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't open your draft": {
+  "back": "Unable to open your draft",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't open your library": {
+  "back": "Unable to open your library",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't open your study history": {
+  "back": "Unable to open your study history",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't reach Private Cloud Compute. Check your connection and try again.": {
+  "back": "Unable to reach Private Cloud Compute. Check your connection and try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Couldn't regenerate": {
+  "back": "Unable to regenerate",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Data": {
+  "back": "Data",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Day streak": {
+  "back": "Days of streak",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Definition": {
+  "back": "Definition",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Delete": {
+  "back": "Delete",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Delete \"%@\"? This cannot be undone.": {
+  "back": "Delete \"%@\"? This action is irreversible.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Delete All Data": {
+  "back": "Delete all data",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Delete All Study Sets": {
+  "back": "Delete all decks",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Delete Everything": {
+  "back": "Delete everything",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Delete Set": {
+  "back": "Delete the deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Discard": {
+  "back": "Delete",
+  "status": "ok",
+  "severity": "none",
+  "note": "'Supprimer' for Discard is acceptable: the button opens 'Supprimer le brouillon ?' whose message says the draft/cards will be deleted and, where relevant, that a free generation was used."
+ },
+ "Discard Draft": {
+  "back": "Delete the draft",
+  "status": "ok",
+  "severity": "none",
+  "note": "Same verb as Delete; consequence spelled out in the confirmation message."
+ },
+ "Discard Draft?": {
+  "back": "Delete the draft?",
+  "status": "ok",
+  "severity": "none",
+  "note": "Confirmation message (DraftSet.discardMessage) makes the consequence explicit."
+ },
+ "Dismiss": {
+  "back": "Hide",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Document scanning isn't available on this device. Import a photo or PDF instead.": {
+  "back": "Document scanning is not available on this device. Import a photo or a PDF instead.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Done": {
+  "back": "Done",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Double tap to edit": {
+  "back": "Tap twice to edit",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Draft %lld Pages": {
+  "back": "Draft %lld pages",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Draft Cards": {
+  "back": "Draft the cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Draft This Set in the Cloud?": {
+  "back": "Draft this deck in the cloud?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Draft cards": {
+  "back": "Draft the cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Draft in the Cloud?": {
+  "back": "Draft in the cloud?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Draft in the cloud": {
+  "back": "Draft in the cloud",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafted by AI": {
+  "back": "Drafted by the AI",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafted in the cloud": {
+  "back": "Drafted in the cloud",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafted on this iPhone": {
+  "back": "Drafted on this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafted with Private Cloud Compute": {
+  "back": "Drafted with Private Cloud Compute",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafted with your API key": {
+  "back": "Drafted with your API key",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafting %@": {
+  "back": "Drafting of %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafting cards": {
+  "back": "Drafting of the cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafting cards · %@": {
+  "back": "Drafting of the cards · %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafting cards · %lld of %lld": {
+  "back": "Drafting of the cards · %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafts are kept": {
+  "back": "Drafts are kept",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Drafts may run on Apple's Private Cloud Compute or on QuickStudy's server. The server sends your text to Anthropic's Claude, which deletes it within 30 days. Turn this off to keep every draft on this iPhone.": {
+  "back": "Drafting can happen on Apple's Private Cloud Compute or on QuickStudy's server. The server sends your text to Anthropic's Claude, which deletes it within 30 days. Turn off this option to keep every draft on this iPhone.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'Les brouillons peuvent s’exécuter' is unnatural (drafts don't execute); now 'La rédaction peut se faire'. 30-day claim unchanged."
+ },
+ "Drafts run on Apple's servers with your permission. Your text isn't stored.": {
+  "back": "Drafting happens on Apple's servers, with your permission. Your text is not stored.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Same 's’exécutent' issue; now 'La rédaction se fait sur les serveurs d’Apple'. 'Not stored' applies to Apple PCC, as in English."
+ },
+ "Drop in a PDF": {
+  "back": "Drop a PDF",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Due": {
+  "back": "To review",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Each card links back to the page and passage it came from.": {
+  "back": "Each card refers back to the page and passage it comes from.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Edit Text": {
+  "back": "Edit the text",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Elapsed time": {
+  "back": "Elapsed time",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Endpoint URL": {
+  "back": "URL of the endpoint",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Every answer explains why it's right. Missed cards come back tomorrow.": {
+  "back": "Each answer explains why it is right. Missed cards come back tomorrow.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Expanded": {
+  "back": "Expanded",
+  "status": "ok",
+  "severity": "none",
+  "note": "Session breakdown disclosure; 'Développé' matches VoiceOver’s own French state wording."
+ },
+ "External API": {
+  "back": "External API",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Failed to decode the API response.": {
+  "back": "Unable to decode the API's response.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Failed to import the PDF. Please check the file and try again.": {
+  "back": "Failure importing the PDF. Check the file and try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Failed to open the file. Try a different document.": {
+  "back": "Unable to open the file. Try another document.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Failed to process the photo. Please try again.": {
+  "back": "Failure processing the photo. Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Failed to process the scan. Please try again.": {
+  "back": "Failure processing the scan. Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Failed to save API key (Keychain error %d).": {
+  "back": "Failure saving the API key (Keychain error %d).",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Fastest · recommended": {
+  "back": "The fastest · recommended",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Filter sets": {
+  "back": "Filter the decks",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Finish a session to start a streak.": {
+  "back": "Finish a session to launch a streak.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Four or more cards make better quiz questions, because each card's answer becomes a wrong option for the others.": {
+  "back": "With four cards or more, the quiz questions are better, because each card's answer becomes a wrong choice for the others.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'une mauvaise option' sounds like 'a bad idea'; now 'un mauvais choix' (a wrong choice in the quiz)."
+ },
+ "Free generations used": {
+  "back": "Free generations exhausted",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From %@": {
+  "back": "Taken from %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From %@ · on-device": {
+  "back": "Taken from %@ · on the device",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From %@, page %lld": {
+  "back": "Taken from %1$@, page %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From Files": {
+  "back": "From Files",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From Notes, Safari or any app": {
+  "back": "From Notes, Safari or any app",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From a PDF": {
+  "back": "From a PDF",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From a photo": {
+  "back": "From a photo",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From a scan": {
+  "back": "From a scan",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From pasted text": {
+  "back": "From pasted text",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "From your photo library": {
+  "back": "From your photo library",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Generate %lld cards on %@": {
+  "back": "Generate %arg cards on %2$@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Generate cards": {
+  "back": "Generate cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Generating cards": {
+  "back": "Generation of the cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Generation Failed": {
+  "back": "Failure of the generation",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Generation will resume once you're back online": {
+  "back": "Generation will resume as soon as you are online again",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Get Started": {
+  "back": "Start",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Getting started": {
+  "back": "Starting up",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Go to Library": {
+  "back": "Go to the library",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Handwriting Mode": {
+  "back": "Handwriting mode",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Hidden": {
+  "back": "Hidden",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "Was feminine 'Masquée'; the value describes the quiz hint (l’indice, masculine). Now 'Masqué'."
+ },
+ "How it works": {
+  "back": "How it works",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "In progress": {
+  "back": "In progress",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Included with QuickStudy": {
+  "back": "Included with QuickStudy",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Incorrect": {
+  "back": "Incorrect",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Invalid API endpoint.": {
+  "back": "API endpoint not valid.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "It may be damaged or password protected.": {
+  "back": "It is perhaps damaged or protected by a password.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Keep Drafting": {
+  "back": "Continue the drafting",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Keeps drafting when Apple's daily limit runs out": {
+  "back": "Continues the drafting when Apple's daily limit is reached",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Know why": {
+  "back": "Understand why",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Lecture slides, readings, handouts": {
+  "back": "Lecture slides, readings, handouts",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Let's make your first set": {
+  "back": "Let's create your first deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Library": {
+  "back": "Library",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Linked to your notes": {
+  "back": "Linked to your notes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Long PDFs and full chapters": {
+  "back": "Long PDFs and entire chapters",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Longest streak was %lld days": {
+  "back": "Your longest streak was %lld days",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Longest was %lld": {
+  "back": "Record: %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Longest yet": {
+  "back": "New record",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Manage Subscription": {
+  "back": "Manage the subscription",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Manual cards and every study mode are always unlimited.": {
+  "back": "Manual cards and all study modes are always unlimited.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Manual cards, always free": {
+  "back": "Manual cards, always free",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Mastered": {
+  "back": "Mastered",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Maybe later": {
+  "back": "Later",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Missed %lld times · Drill": {
+  "back": "Missed %lld times · Practice",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Missed %lld · review tomorrow": {
+  "back": "Missed %lld times · to review tomorrow",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Missed %lld, review tomorrow": {
+  "back": "Missed %lld times, to review tomorrow",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Missing API key.": {
+  "back": "API key missing.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Model Name": {
+  "back": "Name of the model",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Monthly Pro generations are used up.": {
+  "back": "The month's Pro generations are exhausted.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "More with Pro": {
+  "back": "More with Pro",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "NAME": {
+  "back": "NAME",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "NEEDS REINFORCEMENT": {
+  "back": "TO REINFORCE",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Name": {
+  "back": "Name",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "New Set": {
+  "back": "New deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Next question": {
+  "back": "Next question",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Nicely done": {
+  "back": "Well played",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No Streak Freeze yet": {
+  "back": "No streak freeze yet",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No cards due right now.": {
+  "back": "No card to review for the moment.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No cards due today. New ones unlock as your review cycle picks back up.": {
+  "back": "No card to review today. New ones unlock when your review cycle resumes.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No cards left": {
+  "back": "No more cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No pages selected": {
+  "back": "No page selected",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No sets": {
+  "back": "No deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No sets match this filter.": {
+  "back": "No deck matches this filter.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No sets match “%@”.": {
+  "back": "No deck matches \"%@\".",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No stats yet": {
+  "back": "No statistics yet",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No text was detected. This PDF may be a scan of a page rather than text.": {
+  "back": "No text detected. This PDF is perhaps the scan of a page rather than text.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "No text was detected. Try better lighting, hold steady, or fill the frame with the page.": {
+  "back": "No text detected. Try with better lighting, hold the device very steady, or frame the whole page.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Not Now": {
+  "back": "Not now",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Not applicable": {
+  "back": "Not applicable",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Not selected": {
+  "back": "Not selected",
+  "status": "ok",
+  "severity": "none",
+  "note": "Feminine is correct (la page)."
+ },
+ "Not started": {
+  "back": "Not started",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Notes in.\nFlashcards out.": {
+  "back": "Your notes going in.\nCards coming out.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Notes, lecture transcript, anything": {
+  "back": "Notes, lecture transcription, anything you want",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Nothing read so far will be kept. To draft these cards later, import it again.": {
+  "back": "Nothing of what has been read will be kept. To draft these cards later, import it again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "OK": {
+  "back": "OK",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "OVERALL PROGRESS": {
+  "back": "OVERALL PROGRESS",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "On this iPhone": {
+  "back": "On this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "On-Device": {
+  "back": "On the device",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "On-device AI doesn't support this document's language yet.": {
+  "back": "On-device AI does not yet support this document's language.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "On-device AI isn't ready": {
+  "back": "On-device AI is not ready",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "On-device AI isn't ready yet. Try again in a few minutes.": {
+  "back": "On-device AI is not ready yet. Try again in a few minutes.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "One more session": {
+  "back": "One more session",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "One session a day": {
+  "back": "One session per day",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Opens Library": {
+  "back": "Opens the library",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Opens QuickStudy Pro": {
+  "back": "Opens QuickStudy Pro",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Opens Settings": {
+  "back": "Opens Settings",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Option %@, %@": {
+  "back": "Option %1$@, %2$@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Or keep it on this iPhone": {
+  "back": "Or keep it on this iPhone",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Or start with your own": {
+  "back": "Or start with your own notes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Overall progress": {
+  "back": "Overall progress",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "PRO": {
+  "back": "PRO",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "PROGRESS": {
+  "back": "PROGRESS",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Page": {
+  "back": "Page",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Page %lld": {
+  "back": "Page %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Page %lld of %lld": {
+  "back": "Page %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pages %lld to %lld selected": {
+  "back": "Pages %1$lld to %2$lld selected",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Part %lld of %lld": {
+  "back": "Part %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Paste Text": {
+  "back": "Paste some text",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Paste some notes to generate cards from.": {
+  "back": "Paste some notes to generate cards.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Paste text": {
+  "back": "Paste some text",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Paste your notes here": {
+  "back": "Paste your notes here",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pasted Notes": {
+  "back": "Pasted notes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Photo": {
+  "back": "Photo",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Photo of notes or textbook": {
+  "back": "Photo of notes or of a textbook",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Photo, PDF, or paste. Anything with text works.": {
+  "back": "Photo, PDF or pasted text. Anything that contains text works.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pick how you want to start. You can always add more later.": {
+  "back": "Choose how to start. You can always add more later.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Please try again.": {
+  "back": "Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Practice anyway": {
+  "back": "Practice anyway",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Privacy": {
+  "back": "Privacy",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Privacy Policy": {
+  "back": "Privacy policy",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Private Cloud Compute is unavailable right now. Try again shortly.": {
+  "back": "Private Cloud Compute is unavailable for the moment. Try again in a moment.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Private by default": {
+  "back": "Private by default",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pro": {
+  "back": "Pro",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pro generation needs a real iPhone to verify the app.": {
+  "back": "Pro generation requires a real iPhone to verify the app.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pro sends your scanned text to QuickStudy's server, where Anthropic's Claude generates cards and deletes the text within 30 days.": {
+  "back": "Pro sends the text you scanned to QuickStudy's server, where Anthropic's Claude generates the cards and deletes the text within 30 days.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Pro ›": {
+  "back": "Pro ›",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Purchase didn't finish": {
+  "back": "The purchase did not go through",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QUESTION": {
+  "back": "QUESTION",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Question": {
+  "back": "Question",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy Cloud": {
+  "back": "QuickStudy Cloud",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy Pro · %lld of %lld generations left this month": {
+  "back": "QuickStudy Pro · %1$lld out of %2$lld generations remaining this month",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen.": {
+  "back": "QuickStudy could not confirm your Pro subscription. Tap \"Restore Subscription\" on the Pro screen.",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "Used 'Restaurer l’abonnement', but Apple's French SubscriptionStoreView button reads 'Rétablir l’abonnement' (verified in _StoreKit_SwiftUI.framework fr localization, key RESTORE_SUBSCRIPTION_LABEL). Now 'Touche « Rétablir l’abonnement » sur l’écran Pro.'"
+ },
+ "QuickStudy couldn't verify this iPhone. Try again in a moment.": {
+  "back": "QuickStudy could not verify this iPhone. Try again in a moment.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy drafts flashcards with Apple Intelligence, on this iPhone or in Apple's Private Cloud Compute.": {
+  "back": "QuickStudy drafts cards with Apple Intelligence, on this iPhone or in Apple's Private Cloud Compute.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy has been rebuilt around studying every day.": {
+  "back": "QuickStudy has been redesigned so that you study every day.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy is still drafting %@. Starting a new set will cancel it.": {
+  "back": "QuickStudy is still drafting %@. If you start a new deck, the drafting will be cancelled.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone.": {
+  "back": "QuickStudy turns your notes into cards with Apple Intelligence, directly on this iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "QuickStudy's Server": {
+  "back": "QuickStudy's server",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "RECOMMENDED · 90 SECONDS": {
+  "back": "RECOMMENDED · 90 SECONDS",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Read pages": {
+  "back": "Read the pages",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "'Pages lues' (pages read) is a past state but the step row is also shown as pending/in progress; sibling steps are infinitives ('Rédiger les cartes'). Now 'Lire les pages'."
+ },
+ "Reading page %lld of %lld": {
+  "back": "Reading page %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Ready to review": {
+  "back": "Ready to check",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Regenerate": {
+  "back": "Regenerate",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Regenerating": {
+  "back": "Regeneration",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Remove card %lld": {
+  "back": "Remove card %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Rename": {
+  "back": "Rename",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Rename Set": {
+  "back": "Rename the deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Replace": {
+  "back": "Replace",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Replace %lld cards?": {
+  "back": "Replace %lld cards?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Replace your draft?": {
+  "back": "Replace your draft?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Restores the removed card": {
+  "back": "Restores the removed card",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Resume %@": {
+  "back": "Resume %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Returns to the question so you can answer again": {
+  "back": "Returns to the question so you can answer again",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Review": {
+  "back": "Check",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Review Cards": {
+  "back": "Check the cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "SUGGESTED": {
+  "back": "SUGGESTIONS",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Sample Content": {
+  "back": "Sample content",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Sample set": {
+  "back": "Sample deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Save": {
+  "back": "Save",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Save %lld Cards": {
+  "back": "Save %lld cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Save %lld cards": {
+  "back": "Save %lld cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Save Cards": {
+  "back": "Save the cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Save a set to start tracking your progress.": {
+  "back": "Save a deck to track your progress.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Save to": {
+  "back": "Save into",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Scan": {
+  "back": "Scan",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Used as the draft/set display title (a noun), not an action; 'Scanner' read as a verb. Now 'Scan'."
+ },
+ "Scan Document": {
+  "back": "Scan a document",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Scan Document, Fastest · recommended": {
+  "back": "Scan a document, the fastest · recommended",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Scan a page": {
+  "back": "Scan a page",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Scan a page, drop in a PDF, or paste your notes. Your first cards start here.": {
+  "back": "Scan a page, drop a PDF or paste your notes. Your first cards start here.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Scanned Document": {
+  "back": "Scanned document",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Search sets": {
+  "back": "Search decks",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "See QuickStudy Pro": {
+  "back": "Discover QuickStudy Pro",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Selected": {
+  "back": "Selected",
+  "status": "ok",
+  "severity": "none",
+  "note": "Feminine is correct: it describes a PDF page thumbnail (la page)."
+ },
+ "Sends anonymous counts, like whether onboarding finished or a paywall was shown, to help improve QuickStudy. It never sends card text or document text.": {
+  "back": "Sends anonymous counters, like the end of the introduction or the display of a subscription screen, to help improve QuickStudy. The text of cards and documents is never sent.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'Il n’envoie jamais' had no clear antecedent; now passive 'Le texte des cartes et des documents n’est jamais envoyé.'"
+ },
+ "Session complete": {
+  "back": "Session finished",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Session complete · %@": {
+  "back": "Session finished · %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Session complete, %@": {
+  "back": "Session finished, %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Session progress": {
+  "back": "Progress of the session",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Session results, streaks, and a freeze for every full study week.": {
+  "back": "Session results, streaks and a freeze for each complete study week.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Session · %lld of %lld": {
+  "back": "Session · %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Session, question %lld of %lld": {
+  "back": "Session, question %1$lld out of %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Set name": {
+  "back": "Name of the deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Set title": {
+  "back": "Title of the deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Settings": {
+  "back": "Settings",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Share anonymous usage": {
+  "back": "Share anonymous usage data",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Show Full Page": {
+  "back": "Show the whole page",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Show Passage": {
+  "back": "Show the passage",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Show Sample Set": {
+  "back": "Show the sample deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Shown": {
+  "back": "Shown",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "Was feminine 'Affichée'; describes the hint (l’indice, masculine). Now 'Affiché'."
+ },
+ "Shows drafting progress": {
+  "back": "Shows the progress of the drafting",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Shows the passage this card came from": {
+  "back": "Shows the passage this card comes from",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Shows the source excerpt": {
+  "back": "Shows the excerpt of the source",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Snap a page, drop a PDF, paste text. QuickStudy drafts cards in seconds.": {
+  "back": "Take a photo of a page, drop a PDF, paste some text. QuickStudy drafts the cards in a few seconds.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Snap your notes": {
+  "back": "Photograph your notes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Some sections weren't drafted": {
+  "back": "Some sections were not drafted",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Something went wrong": {
+  "back": "A problem occurred",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source": {
+  "back": "Source",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source of this card": {
+  "back": "Source of this card",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source · Page %lld": {
+  "back": "Source · Page %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source · p.%lld": {
+  "back": "Source · p. %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source, %@": {
+  "back": "Source, %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source, page %lld": {
+  "back": "Source, page %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Source: %@": {
+  "back": "Source: %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Spaced repetition surfaces what you need next.": {
+  "back": "Spaced repetition brings up what you need next.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Spell Check": {
+  "back": "Spell checker",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Start Session": {
+  "back": "Start the session",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Stats": {
+  "back": "Statistics",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Streak": {
+  "back": "Streak",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Streaks and Streak Freezes": {
+  "back": "Streaks and streak freezes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Study": {
+  "back": "Study",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Study smart, daily": {
+  "back": "Study smart, every day",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Study, quiz and edit offline anytime, anywhere.": {
+  "back": "Study, do quizzes and edit offline, wherever and whenever you want.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Submit": {
+  "back": "Validate",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Suggested from your notes. You can rename it anytime.": {
+  "back": "Suggested from your notes. You can rename it at any time.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Swipe to remove. No more approving every card.": {
+  "back": "Swipe to remove. Done with approving every card.",
+  "status": "ok",
+  "severity": "none",
+  "note": "Kept 'Balaie': Apple French uses 'balayer' for swipe and 'faire glisser' for drag; 'Balaie' is its tutoiement form."
+ },
+ "Switch to On-Device in Settings to keep generating": {
+  "back": "Choose \"On the device\" in Settings to keep generating",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'Passe à Sur l’appareil' read as broken grammar; now 'Choisis « Sur l’appareil » dans les Réglages ...'."
+ },
+ "TODAY'S SESSION": {
+  "back": "SESSION OF THE DAY",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "TOUGHEST CARDS": {
+  "back": "MOST DIFFICULT CARDS",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Taking longer than usual · %@ so far": {
+  "back": "Longer than usual · %@ up to now",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Tap + to scan, import or paste your first notes.": {
+  "back": "Tap + to scan, import or paste your first notes.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Tap a card to edit. Swipe left to delete.": {
+  "back": "Tap a card to edit it. Swipe left to delete it.",
+  "status": "ok",
+  "severity": "none",
+  "note": "'Balaie vers la gauche' matches Apple’s 'balayer' for swipe."
+ },
+ "Tap pages to choose up to 10.": {
+  "back": "Tap pages to choose up to 10 of them.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Term": {
+  "back": "Term",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The %lld drafted cards will be deleted.": {
+  "back": "%lld drafted cards will be deleted.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The %lld drafted cards will be deleted. This used one of your free generations.": {
+  "back": "%lld drafted cards will be deleted. This used one of your free generations.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The API returned an invalid response.": {
+  "back": "The API returned a non-valid response.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The API returned an unsupported response format.": {
+  "back": "The API returned an unsupported response format.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The API returned status code %lld.": {
+  "back": "The API returned status code %lld.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The camera stopped before the scan finished. Please try again.": {
+  "back": "The camera stopped before the end of the scan. Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The purchase didn't complete. Try again.": {
+  "back": "The purchase did not go through. Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "The purchase went through but couldn't be verified. Try Restore Subscription.": {
+  "back": "The purchase was indeed made, but could not be verified. Tap \"Restore Subscription\".",
+  "status": "fixed",
+  "severity": "medium",
+  "note": "Same: now names Apple's actual French label « Rétablir l’abonnement »."
+ },
+ "They reset on %@.": {
+  "back": "They will be reset on %@.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'se renouvellent' suggests subscription renewal; now 'Elles seront réinitialisées le %@.' (%@ = day + month)."
+ },
+ "This content can't be turned into cards. Try a different page.": {
+  "back": "This content cannot be turned into cards. Try another page.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This document needs %lld generations and you have %lld left this month. Try importing fewer pages.": {
+  "back": "This document requires %arg generations and you have %2$lld of them left this month. Try importing fewer pages.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This draft will be deleted.": {
+  "back": "This draft will be deleted.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This draft will be deleted. This used one of your free generations.": {
+  "back": "This draft will be deleted. This used one of your free generations.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This iPhone can’t draft cards on its own. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days.": {
+  "back": "This iPhone cannot draft cards alone. Your text is sent to Apple's Private Cloud Compute or to QuickStudy's server, which uses Anthropic's Claude. Claude deletes it within 30 days.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This iPhone couldn't verify with QuickStudy. Try again in a moment.": {
+  "back": "This iPhone could not verify itself with QuickStudy. Try again in a moment.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud.": {
+  "back": "This iPhone does not support Apple Intelligence, so QuickStudy drafts your cards in the cloud.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This iPhone doesn't support on-device AI.": {
+  "back": "This iPhone does not support on-device AI.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This iPhone needs to re-verify with QuickStudy. Try again.": {
+  "back": "This iPhone must be verified again with QuickStudy. Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI.": {
+  "back": "This iPhone's free cloud deck has already been used. Type your own cards or switch to Pro to keep drafting with AI.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This is too long to draft in one go. Try importing fewer pages at once.": {
+  "back": "This is too long to be drafted in one go. Try importing fewer pages at a time.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This page is too dense to process on this iPhone. Try scanning fewer pages at once.": {
+  "back": "This page is too dense to be processed on this iPhone. Try scanning fewer pages at a time.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This week": {
+  "back": "This week",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This will permanently delete all of your study sets, cards, drafts and study history. This action cannot be undone.": {
+  "back": "This action will permanently delete all your decks, cards, drafts and your study history. It is irreversible.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "This will permanently delete all study sets, cards, drafts and study history.": {
+  "back": "This action will permanently delete all the decks, cards, drafts and the study history.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Three steps. Under a minute.": {
+  "back": "Three steps. Less than a minute.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Title": {
+  "back": "Title",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Today": {
+  "back": "Today",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Today shows only the cards that are due, plus your weakest card.": {
+  "back": "Today shows only the cards to review, plus your weakest card.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Tomorrow": {
+  "back": "Tomorrow",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Too many requests. Try again in a minute.": {
+  "back": "Too many requests. Try again in a minute.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Try Again": {
+  "back": "Try again",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Try a demo set": {
+  "back": "Try a demo deck",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Try again.": {
+  "back": "Try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Turn on Apple Intelligence in Settings to generate cards on this iPhone.": {
+  "back": "Turn on Apple Intelligence in Settings to generate cards on this iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Type Cards": {
+  "back": "Type cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Type cards": {
+  "back": "Type cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Type your own cards and study with every mode, unlimited.": {
+  "back": "Type your own cards and study with all modes, without limit.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "UP NEXT": {
+  "back": "COMING NEXT",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Undo": {
+  "back": "Undo",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Undo the last removal, or discard this draft.": {
+  "back": "Undo the last removal or delete this draft.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Upgrade to Pro": {
+  "back": "Switch to Pro",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Upgrade to QuickStudy Pro": {
+  "back": "Switch to QuickStudy Pro",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Use External API": {
+  "back": "Use an external API",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "VERSION %@": {
+  "back": "VERSION %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Version": {
+  "back": "Version",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "WEAKEST CARD": {
+  "back": "WEAKEST CARD",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "WHERE IT RAN": {
+  "back": "WHERE IT RAN",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'OÙ ÇA S’EST EXÉCUTÉ' was stiff and clumsy; now casual 'OÙ ÇA A TOURNÉ'."
+ },
+ "WHERE IT'S RUNNING": {
+  "back": "WHERE IT'S RUNNING",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'OÙ ÇA S’EXÉCUTE' → 'OÙ ÇA TOURNE', pairs with 'OÙ ÇA A TOURNÉ'."
+ },
+ "We couldn't draft cards from this source.": {
+  "back": "Unable to draft cards from this source.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Only string using formal 'Nous'; aligned with sibling failure titles ('Impossible de ...')."
+ },
+ "We couldn't open this PDF": {
+  "back": "Unable to open this PDF",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "We couldn't read this": {
+  "back": "Unable to read this",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "We draft your cards": {
+  "back": "We draft your cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "We'll ask for camera access next. Photos are read on this iPhone; the text from them helps draft your cards.": {
+  "back": "We will ask you for camera access next. Photos are read on this iPhone; the text extracted from them is used to draft your cards.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "We'll surface this one again tomorrow.": {
+  "back": "We will ask you this card again tomorrow.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "What's New": {
+  "back": "What's new",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "What's in this?": {
+  "back": "What is inside?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Why": {
+  "back": "Why",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Why this answer, source %@": {
+  "back": "Why this answer, source %@",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Why?": {
+  "back": "Why?",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Works best with **1 to 10 pages of notes**.": {
+  "back": "Works best with **1 to 10 pages of notes**.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Works best with 1 to 10 pages of notes.": {
+  "back": "Works best with 1 to 10 pages of notes.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Works offline": {
+  "back": "Works offline",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Works on every iPhone": {
+  "back": "Works on all iPhones",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Written by hand, no AI involved": {
+  "back": "Written by hand, without AI",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "YOUR ANSWER": {
+  "back": "YOUR ANSWER",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Yes": {
+  "back": "Yes",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Yes, generate cards": {
+  "back": "Yes, generate cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You beat yesterday by %lld cards": {
+  "back": "You did %lld more cards than yesterday",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You can choose up to 10 pages.": {
+  "back": "You can choose up to 10 pages.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You have a draft from %@ waiting. Starting a new set will discard it.": {
+  "back": "A draft from %@ is waiting for you. If you start a new deck, it will be deleted.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You have no sets of your own to add these cards to yet.": {
+  "back": "You don't yet have a deck of your own to add these cards to.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You now have %lld cloud generations a month. Long documents count as one generation per %@ characters.": {
+  "back": "You now have %1$lld cloud generations per month. Long documents count as one generation per block of %2$@ characters.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You'll be asked before anything leaves this iPhone.": {
+  "back": "We will ask your consent before anything leaves this iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You're offline. Card generation needs a connection.": {
+  "back": "You are offline. Card generation requires a connection.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You're on QuickStudy Pro": {
+  "back": "QuickStudy Pro is activated",
+  "status": "fixed",
+  "severity": "low",
+  "note": "'Tu es sur QuickStudy Pro' is a calque; now 'QuickStudy Pro est activé' (gender-neutral alert title)."
+ },
+ "You've reached today's limit for Private Cloud Compute. It resets %@.": {
+  "back": "You have reached the day's limit for Private Cloud Compute. It will be reset %@.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Consistent reset wording; %@ is relative ('demain', 'dans 3 heures'), so no 'le': 'Elle sera réinitialisée %@.'"
+ },
+ "You've reached today's limit for Private Cloud Compute. Try again tomorrow.": {
+  "back": "You have reached the day's limit for Private Cloud Compute. Try again tomorrow.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You've reached your cloud generation limit. Try again later.": {
+  "back": "You have reached your limit of cloud generations. Try again later.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "You've used all %lld free generations this month. They reset on %@.": {
+  "back": "You have used this month's %1$lld free generations. They will be reset on %2$@.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Same reset wording fix: 'Elles seront réinitialisées le %2$@.'"
+ },
+ "Your AI endpoint": {
+  "back": "Your AI endpoint",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your answer, incorrect": {
+  "back": "Your answer, incorrect",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your current draft is unchanged. Try again in a moment.": {
+  "back": "Your current draft has not changed. Try again in a moment.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your edits will be lost.": {
+  "back": "Your edits will be lost.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Anthropic, which drafts it, deletes your text within 30 days.": {
+  "back": "Your first deck is drafted in the cloud with your permission, so that you see what QuickStudy can do. Anthropic, which drafts it, deletes your text within 30 days.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your free generation is already being drafted. Wait for it to finish.": {
+  "back": "Your free generation is already being drafted. Wait for it to finish.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your free generations for this month are used up.": {
+  "back": "Your free generations for this month are exhausted.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your next set can be drafted in the cloud, with your permission.": {
+  "back": "Your next deck can be drafted in the cloud, with your permission.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your notes will be sent to your chosen provider using your key, under that provider's privacy policy.": {
+  "back": "Your notes will be sent to the provider you chose with your key, according to that provider's privacy policy.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your purchase needs approval before it can finish. You'll get Pro once it's approved.": {
+  "back": "Your purchase must be approved before completing. You will have Pro as soon as it is approved.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your saved sets couldn't be opened right now. Changes won't be saved until you restart QuickStudy.": {
+  "back": "Unable to open your saved decks for the moment. Changes will not be saved until you have restarted QuickStudy.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone.": {
+  "back": "Unable to read your saved decks, so QuickStudy created a new library. A copy of the original was kept on this iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your study history couldn't be opened right now. Sessions won't be saved until you restart QuickStudy.": {
+  "back": "Unable to open your study history for the moment. Sessions will not be saved until you have restarted QuickStudy.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPhone.": {
+  "back": "Unable to read your study history, so streaks and statistics start from zero. A copy of the original was kept on this iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your unsaved draft couldn't be opened right now. Restart QuickStudy to try again.": {
+  "back": "Unable to open your unsaved draft for the moment. Restart QuickStudy to try again.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "Your unsaved draft couldn't be read. Create the set again from your notes. A copy of the original was kept on this iPhone.": {
+  "back": "Unable to read your unsaved draft. Recreate the deck from your notes. A copy of the original was kept on this iPhone.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "about %lld minutes left": {
+  "back": "about %lld minutes remaining",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "about %lld seconds left": {
+  "back": "about %lld seconds remaining",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "cards · %lld min": {
+  "back": "cards · %lld min",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "freeze used": {
+  "back": "freeze used",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "missed": {
+  "back": "missed",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "p.%lld": {
+  "back": "p. %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "page %lld": {
+  "back": "page %lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "pages %lld to %lld": {
+  "back": "pages %1$lld to %2$lld",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "studied": {
+  "back": "studied",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "today": {
+  "back": "today",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "unknown model": {
+  "back": "unknown model",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "upcoming": {
+  "back": "upcoming",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "~%lld cards": {
+  "back": "~%lld cards",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "InfoPlist:NSCameraUsageDescription": {
+  "back": "We use the camera to scan documents to study.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "InfoPlist:NSPhotoLibraryUsageDescription": {
+  "back": "QuickStudy reads the text of photos you choose to create cards.",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "listing:name": {
+  "back": "QuickStudy",
+  "status": "ok",
+  "severity": "none",
+  "note": ""
+ },
+ "listing:subtitle": {
+  "back": "Turn your notes into cards",
+  "status": "ok",
+  "severity": "none",
+  "note": "30/30 chars."
+ },
+ "listing:promotional_text": {
+  "back": "Scan a page, import a PDF or paste your notes. QuickStudy drafts flashcards and quizzes for you, then shows you each day only what is to be reviewed.",
+  "status": "ok",
+  "severity": "none",
+  "note": "165/170 chars."
+ },
+ "listing:keywords": {
+  "back": "flashcards, index cards, revision, quiz, exam, baccalaureate, memorize, course, scan, pdf, student, high school, uni, midterm exams",
+  "status": "ok",
+  "severity": "none",
+  "note": "98/100 chars, native French student search terms, no app name."
+ },
+ "listing:description": {
+  "back": "QuickStudy turns the pages you already have into flashcards you will really study. Scan a worksheet, import a PDF or paste your notes: QuickStudy drafts the cards, links each to its source and schedules them so you only review what needs it. [...] BUILD THE HABIT OF STUDYING EVERY DAY [...] A timer and a progress bar help you keep each session short [...] Reviews, quizzes and edits work offline [...] FREE AND PRO: 10 free AI generations a month; manual cards and all study modes always free and unlimited. QuickStudy Pro adds 150 cloud generations a month on any iPhone. Payment is charged to your Apple Account. The subscription renews automatically unless you cancel it at least 24 hours before the end of the current period. Manage or cancel it in your Apple Account settings.",
+  "status": "fixed",
+  "severity": "low",
+  "note": "Fixed the tautology 'pour que tu ne révises que ce qui est à réviser' → 'ce qui doit l’être'; calque 'gardent chaque session courte' → 't’aident à garder ...'; 'INSTALLE UNE HABITUDE' → 'PRENDS L’HABITUDE D’ÉTUDIER CHAQUE JOUR'; ungrammatical 'Étudier, faire des quiz et modifier fonctionnent' → 'Les révisions, les quiz et les modifications fonctionnent'. All pricing, renewal and 30-day claims verified unchanged."
+ },
+ "listing:release_notes": {
+  "back": "QuickStudy 2.0 has been redesigned so that you study every day. ONE SESSION A DAY: Today shows only the due cards plus your weakest card; streaks count the days you study and each full study week earns a Streak Freeze. FROM PAGE TO CARDS, FASTER: scan with the camera, choose a photo, import a PDF or paste text; keep using the app while your cards are drafted; every draft is kept by default, tap to edit, swipe to remove. UNDERSTAND WHY: each card links back to the page and passage it came from; every answer explains why it is right, and missed cards come back tomorrow. NOW IN YOUR LANGUAGE: QuickStudy is available in Spanish, French, German, Japanese, Korean and Portuguese; cards are drafted in the language of your notes, whatever language your iPhone uses; scanning reads pages in those languages and spell-checking follows the language of each page. QUICKSTUDY PRO: an optional subscription with 150 cloud generations a month on any iPhone; typing your own cards and every study mode remain free and unlimited; if a draft would leave your iPhone, QuickStudy asks first.",
+  "status": "ok",
+  "severity": "none",
+  "note": "Rewritten for 2.0 on 2026-11-12 to cover the whole update, reusing reviewed wording from the description and the in-app What's New. Reviewer found nothing to change. 'te demande d’abord' is slightly elliptical but identical to description.txt; the header uses the infinitive 'COMPRENDRE POURQUOI' to match the in-app What's New screen."
+ },
+ "libraryFilter.all": {
+  "back": "All (m. pl., agrees with paquets)",
+  "status": "ok",
+  "severity": "none",
+  "note": "Masculine plural matches 'paquets'."
+ },
+ "libraryFilter.due": {
+  "back": "To review",
+  "status": "ok",
+  "severity": "none",
+  "note": "Glossary due = à réviser; reads well as a chip."
+ },
+ "libraryFilter.inProgress": {
+  "back": "In progress",
+  "status": "ok",
+  "severity": "none",
+  "note": "Natural for sets being studied; same as the drafting-state key, which is fine here."
+ },
+ "libraryFilter.mastered": {
+  "back": "Mastered (m. pl.)",
+  "status": "ok",
+  "severity": "none",
+  "note": "Plural agrees with paquets; badge key stays singular 'Maîtrisé'."
+ },
+ "sessionStat.cards": {
+  "back": "CARDS",
+  "status": "ok",
+  "severity": "none",
+  "note": "6 chars."
+ },
+ "sessionStat.correct": {
+  "back": "SUCCEEDED (f. pl., cards)",
+  "status": "ok",
+  "severity": "none",
+  "note": "8 chars; 'réussies' agrees with cartes and is the casual opposite of glossary 'ratée'. 'CORRECTES' would also work but is longer."
+ },
+ "sessionStat.accuracy": {
+  "back": "PRECISION",
+  "status": "ok",
+  "severity": "none",
+  "note": "9 chars; standard for quiz accuracy."
+ },
+ "sessionStat.cards.spoken": {
+  "back": "Cards",
+  "status": "ok",
+  "severity": "none",
+  "note": "'Cartes, 5'."
+ },
+ "sessionStat.correct.spoken": {
+  "back": "Succeeded",
+  "status": "ok",
+  "severity": "none",
+  "note": "'Réussies, 4' reads naturally."
+ },
+ "sessionStat.accuracy.spoken": {
+  "back": "Precision",
+  "status": "ok",
+  "severity": "none",
+  "note": "'Précision, 80 %'."
+ }
+}

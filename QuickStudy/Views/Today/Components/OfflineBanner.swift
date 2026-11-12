@@ -51,7 +51,7 @@ struct OfflineBanner: View {
 
     private var subtitle: String {
         canSwitchToOnDevice
-            ? "Switch to On-Device in Settings to keep generating"
-            : "Generation will resume once you're back online"
+            ? String(localized: "Switch to On-Device in Settings to keep generating")
+            : String(localized: "Generation will resume once you're back online")
     }
 }

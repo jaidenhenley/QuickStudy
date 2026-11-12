@@ -7,8 +7,8 @@ import SwiftUI
 
 struct OnboardingSourceRow: View {
     let symbol: String
-    let title: String
-    let detail: String
+    let title: LocalizedStringKey
+    let detail: LocalizedStringKey
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .headline) private var tileSize = 40
