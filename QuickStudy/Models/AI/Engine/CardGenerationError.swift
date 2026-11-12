@@ -30,7 +30,7 @@ enum CardGenerationError: LocalizedError {
     case unexpected(String)
     case notSubscribed(String)
     case freeHostedGenerationUsed
-    case hostedQuotaExhausted(String)
+    case hostedQuotaExhausted(HostedQuotaReason)
     case hostedInputTooLarge(String)
     case hostedUnavailable(String)
     case privateCloudQuotaReached(resetsAt: Date?)
@@ -78,16 +78,15 @@ enum CardGenerationError: LocalizedError {
         case .unexpected:
             return "Couldn't draft cards from this. Try a different source."
             // Server messages can carry verification internals (certificate and signature
-            // failures), so only the quota message, which names rate limit vs monthly cap in
-            // plain words, is shown as sent.
+            // failures), and they are English only, so the app always shows its own copy.
         case .attestationFailed:
             return "QuickStudy couldn't verify this iPhone. Try again in a moment."
         case .notSubscribed:
             return "QuickStudy couldn't confirm your Pro subscription. Try Restore Subscription on the Pro screen."
         case .freeHostedGenerationUsed:
-            return "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI."
-        case .hostedQuotaExhausted(let message):
-            return message
+            return String(localized: "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI.")
+        case .hostedQuotaExhausted(let reason):
+            return reason.message
         case .hostedInputTooLarge:
             return "This is too long to draft in one go. Try importing fewer pages at once."
         case .hostedUnavailable:
