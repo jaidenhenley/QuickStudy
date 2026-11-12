@@ -252,7 +252,7 @@ class TodayViewModel {
     }
 
     private static func dayLabel(for date: Date, now: Date, calendar: Calendar) -> String {
-        if calendar.isDateInTomorrow(date) { return "Tomorrow" }
+        if calendar.isDateInTomorrow(date) { return String(localized: "Tomorrow") }
         let days = calendar.dateComponents(
             [.day],
             from: calendar.startOfDay(for: now),

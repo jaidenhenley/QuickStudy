@@ -34,6 +34,6 @@ struct StatToughCardRow: View {
         .appGlassCard(cornerRadius: AppRadius.lg)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(card.question)
-        .accessibilityValue("\(card.setTitle), missed \(card.missCount) \(card.missCount == 1 ? "time" : "times")")
+        .accessibilityValue("\(card.setTitle), missed \(card.missCount) times")
     }
 }

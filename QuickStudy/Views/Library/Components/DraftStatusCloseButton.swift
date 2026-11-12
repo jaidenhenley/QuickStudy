@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct DraftStatusCloseButton: View {
-    let label: String
+    let label: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {

@@ -29,9 +29,9 @@ final class SessionStore {
     var loadIssueMessage: String {
         switch loadIssue {
         case .corrupt:
-            "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPhone."
+            String(localized: "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPhone.")
         case .unreadable:
-            "Your study history couldn't be opened right now. Sessions won't be saved until you restart QuickStudy."
+            String(localized: "Your study history couldn't be opened right now. Sessions won't be saved until you restart QuickStudy.")
         case nil:
             ""
         }

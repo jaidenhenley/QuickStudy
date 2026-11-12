@@ -81,7 +81,7 @@ struct LibraryView: View {
                             let query = libraryViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
                             Group {
                                 if visible.isEmpty {
-                                    Text(query.isEmpty ? "No sets match this filter." : "No sets match \u{201C}\(query)\u{201D}.")
+                                    Text(query.isEmpty ? String(localized: "No sets match this filter.") : String(localized: "No sets match \u{201C}\(query)\u{201D}."))
                                         .multilineTextAlignment(.center)
                                         .font(.subheadline)
                                         .foregroundStyle(.secondary)
@@ -210,7 +210,7 @@ struct LibraryView: View {
 
     private func announceResultCount() {
         let count = libraryViewModel.sets(from: studyViewModel.savedSets).count
-        let message = count == 0 ? "No sets" : "\(count) \(count == 1 ? "set" : "sets")"
+        let message = count == 0 ? String(localized: "No sets") : String(localized: "\(count) sets")
         AccessibilityNotification.Announcement(message).post()
     }
 

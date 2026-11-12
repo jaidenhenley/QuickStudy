@@ -44,13 +44,13 @@ final class LibraryViewModel {
         var label: String {
             switch self {
             case .all:
-                return "All"
+                return String(localized: "libraryFilter.all", defaultValue: "All", comment: "Library filter chip: every set.")
             case .due:
-                return "Due"
+                return String(localized: "libraryFilter.due", defaultValue: "Due", comment: "Library filter chip: sets with cards due today.")
             case .inProgress:
-                return "In progress"
+                return String(localized: "libraryFilter.inProgress", defaultValue: "In progress", comment: "Library filter chip: sets being learned, not yet mastered.")
             case .mastered:
-                return "Mastered"
+                return String(localized: "libraryFilter.mastered", defaultValue: "Mastered", comment: "Library filter chip: sets whose every card is mastered.")
             }
         }
     }
@@ -75,21 +75,20 @@ final class LibraryViewModel {
     }
 
     static func readyTitle(for draft: DraftSet) -> String {
-        "\(draft.title) is ready"
+        String(localized: "\(draft.title) is ready")
     }
 
     static func readyDetail(for draft: DraftSet) -> String {
         let count = draft.cards.count
-        let cards = "\(count) \(count == 1 ? "card" : "cards") drafted"
-        guard draft.pageCount > 1 else { return cards }
-        return "\(cards) from \(draft.pageCount) pages"
+        guard draft.pageCount > 1 else { return String(localized: "\(count) cards drafted") }
+        return String(localized: "\(count) cards drafted from \(draft.pageCount) pages")
     }
 
     static func label(for recovery: ImportFailure.Recovery, in failure: ImportFailure) -> String {
         switch recovery {
-        case .tryAgain: "Try Again"
+        case .tryAgain: String(localized: "Try Again")
         case .pasteText: failure.pasteRecoveryLabel
-        case .typeCards: "Type Cards"
+        case .typeCards: String(localized: "Type Cards")
         }
     }
 

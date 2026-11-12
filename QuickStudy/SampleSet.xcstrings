@@ -1,0 +1,3272 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "A pigment that absorbs green light and reflects red light." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un pigmento que absorbe la luz verde y refleja la luz roja."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un pigmento que absorbe la luz verde y refleja la luz roja."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un pigment qui absorbe la lumière verte et réfléchit la lumière rouge."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Farbstoff, der grünes Licht absorbiert und rotes Licht reflektiert."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "緑色光を吸収して赤色光を反射する色素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "녹색광을 흡수하고 적색광을 반사하는 색소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um pigmento que absorve luz verde e reflete luz vermelha."
+          }
+        }
+      }
+    },
+    "ATP and NADPH for the light reactions." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ATP y NADPH para las reacciones dependientes de la luz."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ATP y NADPH para las reacciones dependientes de la luz."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De l’ATP et du NADPH pour la phase photochimique."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ATP und NADPH für die lichtabhängigen Reaktionen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応に使うATPとNADPH"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응에 쓰이는 ATP와 NADPH"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ATP e NADPH para a fase fotoquímica."
+          }
+        }
+      }
+    },
+    "Absorbing water through the roots." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Absorber agua a través de las raíces."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Absorber agua a través de las raíces."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’absorption de l’eau par les racines."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Aufnahme von Wasser über die Wurzeln."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "根から水を吸収すること"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "뿌리를 통해 물을 흡수하는 것"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Absorver água pelas raízes da planta."
+          }
+        }
+      }
+    },
+    "Breaking down glucose to release energy." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Degradar la glucosa para liberar energía."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Degradar la glucosa para liberar energía."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La dégradation du glucose pour libérer de l’énergie."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Abbau von Glucose, um Energie freizusetzen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グルコースを分解してエネルギーを取り出すこと"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "포도당을 분해하여 에너지를 방출하는 것"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quebrar a glicose para liberar energia."
+          }
+        }
+      }
+    },
+    "Carbon dioxide enters the leaf through small pores called stomata, and water is carried up from the roots through the xylem." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El dióxido de carbono entra a la hoja a través de pequeños poros llamados estomas, y el agua sube desde las raíces por el xilema."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El dióxido de carbono entra en la hoja a través de pequeños poros llamados estomas, y el agua sube desde las raíces por el xilema."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dioxyde de carbone entre dans la feuille par de petits pores appelés stomates, et l’eau monte depuis les racines par le xylème."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kohlenstoffdioxid gelangt durch kleine Poren, die Spaltöffnungen (Stomata), in das Blatt, und Wasser wird von den Wurzeln durch das Xylem nach oben transportiert."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二酸化炭素は気孔と呼ばれる小さな穴から葉に取り込まれ、水は根から道管を通って運ばれる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이산화 탄소는 기공이라는 작은 구멍을 통해 잎으로 들어오고, 물은 뿌리에서 물관을 통해 위로 운반된다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O gás carbônico entra na folha por pequenos poros chamados estômatos, e a água sobe das raízes pelo xilema."
+          }
+        }
+      }
+    },
+    "Carbon dioxide only." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dióxido de carbono."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dióxido de carbono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uniquement du dioxyde de carbone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur Kohlenstoffdioxid."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二酸化炭素のみ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이산화 탄소만"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apenas gás carbônico."
+          }
+        }
+      }
+    },
+    "Chlorophyll captures light energy. The green light it reflects is why leaves look green." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La clorofila capta la energía luminosa. La luz verde que refleja es la razón por la que las hojas se ven verdes."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La clorofila capta la energía luminosa. La luz verde que refleja es la razón por la que las hojas se ven verdes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La chlorophylle capte l’énergie lumineuse. C’est la lumière verte qu’elle réfléchit qui donne aux feuilles leur couleur verte."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chlorophyll fängt Lichtenergie ein. Weil es grünes Licht reflektiert, erscheinen Blätter grün."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クロロフィルは光エネルギーをとらえる。クロロフィルが緑色光を反射するので、葉は緑色に見える。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엽록소는 빛에너지를 흡수한다. 엽록소가 녹색광을 반사하기 때문에 잎이 초록색으로 보인다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A clorofila capta a energia luminosa. A luz verde que ela reflete é o motivo de as folhas parecerem verdes."
+          }
+        }
+      }
+    },
+    "Chlorophyll for capturing more light." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clorofila, para captar más luz."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clorofila, para captar más luz."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De la chlorophylle, pour capter plus de lumière."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chlorophyll, um mehr Licht einzufangen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "より多くの光をとらえるためのクロロフィル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빛을 더 많이 흡수하기 위한 엽록소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clorofila, para captar mais luz."
+          }
+        }
+      }
+    },
+    "Chlorophyll is the green pigment inside chloroplasts. It absorbs red and blue light and reflects green light, which is why leaves look green." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La clorofila es el pigmento verde que se encuentra dentro de los cloroplastos. Absorbe la luz roja y la azul y refleja la luz verde; por eso las hojas se ven verdes."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La clorofila es el pigmento verde que se encuentra dentro de los cloroplastos. Absorbe la luz roja y la azul y refleja la luz verde; por eso las hojas se ven verdes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La chlorophylle est le pigment vert contenu dans les chloroplastes. Elle absorbe la lumière rouge et bleue et réfléchit la lumière verte, ce qui explique pourquoi les feuilles paraissent vertes."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chlorophyll ist der grüne Farbstoff in den Chloroplasten. Es absorbiert rotes und blaues Licht und reflektiert grünes Licht. Deshalb erscheinen Blätter grün."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クロロフィルは葉緑体に含まれる緑色の色素である。赤色光と青色光を吸収し、緑色光を反射するため、葉は緑色に見える。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엽록소는 엽록체 안에 있는 초록색 색소이다. 엽록소는 적색광과 청색광을 흡수하고 녹색광을 반사하는데, 이 때문에 잎이 초록색으로 보인다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A clorofila é o pigmento verde presente nos cloroplastos. Ela absorve luz vermelha e azul e reflete luz verde, e é por isso que as folhas parecem verdes."
+          }
+        }
+      }
+    },
+    "Chloroplasts hold the chlorophyll and membranes that capture light, so the whole process runs inside them." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los cloroplastos contienen la clorofila y las membranas que captan la luz, por lo que todo el proceso ocurre dentro de ellos."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los cloroplastos contienen la clorofila y las membranas que captan la luz, por lo que todo el proceso ocurre dentro de ellos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les chloroplastes contiennent la chlorophylle et les membranes qui captent la lumière : tout le processus se déroule donc à l’intérieur."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Chloroplasten enthalten das Chlorophyll und die Membranen, die Licht einfangen. Deshalb läuft der gesamte Prozess in ihnen ab."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "葉緑体には光をとらえるクロロフィルと膜があるため、光合成の過程はすべて葉緑体の中で進む。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엽록체에는 빛을 흡수하는 엽록소와 막이 있어서, 광합성의 전 과정이 엽록체 안에서 일어난다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os cloroplastos contêm a clorofila e as membranas que captam a luz, por isso todo o processo acontece dentro deles."
+          }
+        }
+      }
+    },
+    "Day length, root depth, and humidity." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La duración del día, la profundidad de las raíces y la humedad."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La duración del día, la profundidad de las raíces y la humedad."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La durée du jour, la profondeur des racines et l’humidité."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tageslänge, Wurzeltiefe und Luftfeuchtigkeit."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日の長さ、根の深さ、湿度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "낮의 길이, 뿌리의 깊이, 습도"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duração do dia, profundidade das raízes e umidade."
+          }
+        }
+      }
+    },
+    "Each is an input or condition the reactions depend on, so a shortage of any one slows the whole process." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada uno es un recurso o una condición de la que dependen las reacciones, por lo que, si falta cualquiera de ellos, todo el proceso se vuelve más lento."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada uno es un recurso o una condición de la que dependen las reacciones, por lo que, si falta cualquiera de ellos, todo el proceso se ralentiza."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chacun est une ressource ou une condition dont dépendent les réactions : il suffit que l’un d’eux manque pour ralentir tout le processus."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeder davon ist ein Ausgangsstoff oder eine Bedingung, von der die Reaktionen abhängen. Fehlt einer, verlangsamt sich der gesamte Prozess."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "どれも反応に必要な材料や条件なので、どれか1つでも不足すると、光合成全体の進み方が遅くなる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두 반응에 필요한 재료나 조건이므로, 어느 하나라도 부족하면 전체 과정이 느려진다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada um é um recurso ou uma condição de que as reações dependem, por isso a falta de qualquer um deles deixa todo o processo mais lento."
+          }
+        }
+      }
+    },
+    "From carbon dioxide taken in by the leaf." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del dióxido de carbono que absorbe la hoja."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del dióxido de carbono que absorbe la hoja."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du dioxyde de carbone absorbé par la feuille."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Kohlenstoffdioxid, das das Blatt aufnimmt."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "葉が取り込んだ二酸化炭素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잎이 흡수한 이산화 탄소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do gás carbônico absorvido pela folha."
+          }
+        }
+      }
+    },
+    "From glucose broken down in the cell." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De la glucosa que se degrada en la célula."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De la glucosa que se degrada en la célula."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du glucose dégradé dans la cellule."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Glucose, die in der Zelle abgebaut wird."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "細胞内で分解されたグルコース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세포에서 분해된 포도당"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da glicose degradada na célula."
+          }
+        }
+      }
+    },
+    "From the air inside the stomata." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del aire que hay dentro de los estomas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del aire que hay dentro de los estomas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De l’air contenu dans les stomates."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus der Luft, die in den Spaltöffnungen ist."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気孔の中にある空気"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기공 안에 있는 공기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do ar que fica dentro dos estômatos."
+          }
+        }
+      }
+    },
+    "From water molecules that are split." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De las moléculas de agua que se descomponen."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De las moléculas de agua que se descomponen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des molécules d’eau décomposées."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Wassermolekülen, die gespalten werden."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分解された水分子"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분해되는 물 분자"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das moléculas de água que são quebradas."
+          }
+        }
+      }
+    },
+    "Glucose and oxygen." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucosa y oxígeno."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucosa y oxígeno."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du glucose et du dioxygène."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucose und Sauerstoff."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グルコースと酸素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "포도당과 산소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicose e oxigênio."
+          }
+        }
+      }
+    },
+    "Glucose and water." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucosa y agua."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucosa y agua."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du glucose et de l’eau."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucose und Wasser."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グルコースと水"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "포도당과 물"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glicose e água."
+          }
+        }
+      }
+    },
+    "Glycolysis and the Krebs cycle." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La glucólisis y el ciclo de Krebs."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La glucólisis y el ciclo de Krebs."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La glycolyse et le cycle de Krebs."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Glykolyse und der Citratzyklus."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解糖系とクエン酸回路"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "해당 과정과 TCA 회로"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A glicólise e o ciclo de Krebs."
+          }
+        }
+      }
+    },
+    "How does carbon dioxide get into a leaf?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cómo entra el dióxido de carbono a una hoja?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cómo entra el dióxido de carbono en una hoja?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment le dioxyde de carbone entre-t-il dans une feuille ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie gelangt Kohlenstoffdioxid in ein Blatt?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二酸化炭素はどこから葉に入るか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이산화 탄소는 어떻게 잎으로 들어오는가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como o gás carbônico entra em uma folha?"
+          }
+        }
+      }
+    },
+    "In the chloroplasts." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los cloroplastos."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los cloroplastos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les chloroplastes."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Chloroplasten."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "葉緑体"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엽록체"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nos cloroplastos."
+          }
+        }
+      }
+    },
+    "In the cytoplasm." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el citoplasma."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el citoplasma."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans le cytoplasme."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Cytoplasma."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "細胞質基質"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세포질"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No citoplasma."
+          }
+        }
+      }
+    },
+    "In the mitochondria." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las mitocondrias."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En las mitocondrias."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les mitochondries."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Mitochondrien."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ミトコンドリア"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미토콘드리아"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nas mitocôndrias."
+          }
+        }
+      }
+    },
+    "In the nucleus." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el núcleo."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el núcleo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans le noyau."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Zellkern."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "核"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "핵"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No núcleo."
+          }
+        }
+      }
+    },
+    "In the ribosomes." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los ribosomas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los ribosomas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les ribosomes."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Ribosomen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リボソーム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "리보솜"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nos ribossomos."
+          }
+        }
+      }
+    },
+    "In the stomata." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los estomas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los estomas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les stomates."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Spaltöffnungen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気孔"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기공"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nos estômatos."
+          }
+        }
+      }
+    },
+    "In the stroma." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el estroma."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el estroma."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans le stroma."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Stroma."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストロマ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스트로마"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No estroma."
+          }
+        }
+      }
+    },
+    "In the thylakoids." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los tilacoides."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En los tilacoides."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les thylakoïdes."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Thylakoiden."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チラコイド"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "틸라코이드"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nos tilacoides."
+          }
+        }
+      }
+    },
+    "Interphase and the stages of mitosis." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La interfase y las fases de la mitosis."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La interfase y las fases de la mitosis."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’interphase et les phases de la mitose."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Interphase und die Phasen der Mitose."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "間期と体細胞分裂の各期"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "간기와 체세포 분열의 각 시기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A interfase e as fases da mitose."
+          }
+        }
+      }
+    },
+    "It takes place in chloroplasts, organelles found mostly in the cells of a leaf's mesophyll layer." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocurre en los cloroplastos, organelos que se encuentran principalmente en las células del mesófilo de la hoja."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocurre en los cloroplastos, orgánulos que se encuentran principalmente en las células del mesófilo de la hoja."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elle se déroule dans les chloroplastes, des organites présents surtout dans les cellules du mésophylle de la feuille."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie findet in den Chloroplasten statt. Das sind Organellen, die vor allem in den Zellen des Mesophylls im Blatt liegen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成は葉緑体で行われる。葉緑体は細胞小器官の一つで、主に葉肉細胞に含まれている。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성은 엽록체에서 일어난다. 엽록체는 세포 소기관의 하나로, 주로 잎의 엽육 조직을 이루는 세포에 들어 있다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ela ocorre nos cloroplastos, organelas encontradas principalmente nas células do mesofilo da folha."
+          }
+        }
+      }
+    },
+    "It uses the ATP and NADPH made by the light reactions to fix carbon dioxide into sugar." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa el ATP y el NADPH que producen las reacciones dependientes de la luz para fijar el dióxido de carbono en forma de azúcar."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa el ATP y el NADPH que producen las reacciones dependientes de la luz para fijar el dióxido de carbono en forma de azúcar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il utilise l’ATP et le NADPH produits par la phase photochimique pour fixer le dioxyde de carbone sous forme de sucre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er nutzt das ATP und NADPH aus den lichtabhängigen Reaktionen, um Kohlenstoffdioxid zu fixieren und daraus Zucker aufzubauen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応でつくられたATPとNADPHを使って二酸化炭素を固定し、糖をつくる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응에서 만들어진 ATP와 NADPH를 이용해 이산화 탄소를 고정하여 당을 만든다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ele usa o ATP e o NADPH produzidos na fase fotoquímica para fixar o gás carbônico na forma de açúcar."
+          }
+        }
+      }
+    },
+    "Light intensity, carbon dioxide concentration, and temperature." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La intensidad de la luz, la concentración de dióxido de carbono y la temperatura."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La intensidad de la luz, la concentración de dióxido de carbono y la temperatura."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’intensité lumineuse, la concentration en dioxyde de carbone et la température."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichtintensität, Kohlenstoffdioxidkonzentration und Temperatur."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光の強さ、二酸化炭素濃度、温度"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빛의 세기, 이산화 탄소 농도, 온도"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensidade luminosa, concentração de gás carbônico e temperatura."
+          }
+        }
+      }
+    },
+    "Oxygen level, glucose level, and leaf size." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El nivel de oxígeno, el nivel de glucosa y el tamaño de las hojas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El nivel de oxígeno, el nivel de glucosa y el tamaño de las hojas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le taux de dioxygène, le taux de glucose et la taille des feuilles."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauerstoffgehalt, Glucosegehalt und Blattgröße."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "酸素濃度、グルコース濃度、葉の大きさ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "산소 농도, 포도당 농도, 잎의 크기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nível de oxigênio, nível de glicose e tamanho das folhas."
+          }
+        }
+      }
+    },
+    "Oxygen, released from water." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oxígeno, liberado a partir del agua."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oxígeno, liberado a partir del agua."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du dioxygène, libéré à partir de l’eau."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sauerstoff, freigesetzt aus Wasser."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "水から放出される酸素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "물에서 방출된 산소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oxigênio, liberado a partir da água."
+          }
+        }
+      }
+    },
+    "Photosynthesis" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotosíntesis"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotosíntesis"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photosynthèse"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotosynthese"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotossíntese"
+          }
+        }
+      }
+    },
+    "Photosynthesis happens in two stages: the light-dependent reactions and the Calvin cycle." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fotosíntesis ocurre en dos etapas: las reacciones dependientes de la luz y el ciclo de Calvin."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fotosíntesis ocurre en dos etapas: las reacciones dependientes de la luz y el ciclo de Calvin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La photosynthèse se déroule en deux étapes : la phase photochimique et le cycle de Calvin."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fotosynthese besteht aus zwei Teilprozessen: den lichtabhängigen Reaktionen und dem Calvin-Zyklus."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成は、光化学反応とカルビン回路の2つの段階からなる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성은 명반응과 캘빈 회로의 두 단계로 이루어진다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A fotossíntese ocorre em duas fases: a fase fotoquímica e o ciclo de Calvin."
+          }
+        }
+      }
+    },
+    "Photosynthesis is the process plants, algae, and some bacteria use to turn light energy into chemical energy stored in glucose." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fotosíntesis es el proceso que usan las plantas, las algas y algunas bacterias para transformar la energía luminosa en energía química almacenada en la glucosa."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fotosíntesis es el proceso que usan las plantas, las algas y algunas bacterias para transformar la energía luminosa en energía química almacenada en la glucosa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La photosynthèse est le processus par lequel les plantes, les algues et certaines bactéries convertissent l’énergie lumineuse en énergie chimique stockée dans le glucose."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fotosynthese ist der Prozess, mit dem Pflanzen, Algen und einige Bakterien Lichtenergie in chemische Energie umwandeln, die in Glucose gespeichert ist."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成とは、植物や藻類、一部の細菌が、光エネルギーを化学エネルギーに変えてグルコースに蓄えるはたらきである。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성은 식물, 조류, 일부 세균이 빛에너지를 포도당에 저장된 화학 에너지로 전환하는 과정이다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A fotossíntese é o processo pelo qual plantas, algas e algumas bactérias transformam energia luminosa em energia química armazenada na glicose."
+          }
+        }
+      }
+    },
+    "Plants capture sunlight and store its energy in the bonds of a sugar they can use later." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las plantas captan la luz solar y almacenan su energía en los enlaces de un azúcar que pueden usar más tarde."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las plantas captan la luz solar y almacenan su energía en los enlaces de un azúcar que pueden usar más tarde."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les plantes captent la lumière du soleil et stockent son énergie dans les liaisons d’un sucre qu’elles pourront utiliser plus tard."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pflanzen fangen Sonnenlicht ein und speichern seine Energie in den Bindungen eines Zuckers, den sie später nutzen können."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "植物は太陽の光をとらえ、そのエネルギーを糖の結合に蓄えて、あとで利用する。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "식물은 햇빛을 흡수하고, 그 에너지를 나중에 쓸 수 있도록 당의 화학 결합에 저장한다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As plantas captam a luz do sol e armazenam essa energia nas ligações de um açúcar que podem usar depois."
+          }
+        }
+      }
+    },
+    "Releasing carbon dioxide into the air." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liberar dióxido de carbono al aire."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liberar dióxido de carbono al aire."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le rejet de dioxyde de carbone dans l’air."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Abgabe von Kohlenstoffdioxid an die Luft."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二酸化炭素を空気中に放出すること"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이산화 탄소를 공기 중으로 방출하는 것"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liberar gás carbônico no ar."
+          }
+        }
+      }
+    },
+    "Soil type, leaf color, and plant height." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tipo de suelo, el color de las hojas y la altura de la planta."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tipo de suelo, el color de las hojas y la altura de la planta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le type de sol, la couleur des feuilles et la hauteur de la plante."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bodenart, Blattfarbe und Pflanzenhöhe."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "土の種類、葉の色、植物の高さ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "토양의 종류, 잎의 색, 식물의 키"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de solo, cor das folhas e altura da planta."
+          }
+        }
+      }
+    },
+    "Splitting water in the light reactions frees the oxygen. The carbon from carbon dioxide ends up in sugar instead." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al descomponerse el agua en las reacciones dependientes de la luz, se libera el oxígeno. En cambio, el carbono del dióxido de carbono termina formando parte del azúcar."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al descomponerse el agua en las reacciones dependientes de la luz, se libera el oxígeno. En cambio, el carbono del dióxido de carbono termina formando parte del azúcar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C’est la décomposition de l’eau, pendant la phase photochimique, qui libère le dioxygène. Le carbone du dioxyde de carbone, lui, se retrouve dans le sucre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei der Spaltung von Wasser in den lichtabhängigen Reaktionen wird der Sauerstoff frei. Der Kohlenstoff aus dem Kohlenstoffdioxid wird dagegen in Zucker eingebaut."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応で水が分解されると、酸素が生じる。一方、二酸化炭素の炭素は糖に取り込まれる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응에서 물이 분해될 때 산소가 방출된다. 반면 이산화 탄소의 탄소는 당에 포함된다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A quebra da água na fase fotoquímica libera o oxigênio. Já o carbono do gás carbônico é incorporado ao açúcar."
+          }
+        }
+      }
+    },
+    "Stomata open on the leaf surface so gases can move in and out." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los estomas se abren en la superficie de la hoja para que los gases puedan entrar y salir."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los estomas se abren en la superficie de la hoja para que los gases puedan entrar y salir."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les stomates s’ouvrent à la surface de la feuille pour permettre aux gaz d’entrer et de sortir."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Spaltöffnungen an der Blattoberfläche öffnen sich, damit Gase ein- und austreten können."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気孔は葉の表面で開き、気体が出入りできるようにする。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기공은 잎 표면에서 열려 기체가 드나들 수 있게 한다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os estômatos se abrem na superfície da folha para que os gases possam entrar e sair."
+          }
+        }
+      }
+    },
+    "Sugar, built from carbon dioxide." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azúcar, formado a partir del dióxido de carbono."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Azúcar, formado a partir del dióxido de carbono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du sucre, fabriqué à partir du dioxyde de carbone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zucker, aufgebaut aus Kohlenstoffdioxid."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二酸化炭素からつくられる糖"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이산화 탄소로 만든 당"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Açúcar, formado a partir do gás carbônico."
+          }
+        }
+      }
+    },
+    "The Calvin cycle takes place in the stroma. It uses ATP and NADPH to fix carbon dioxide into sugar." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El ciclo de Calvin ocurre en el estroma. Usa el ATP y el NADPH para fijar el dióxido de carbono en forma de azúcar."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El ciclo de Calvin ocurre en el estroma. Usa el ATP y el NADPH para fijar el dióxido de carbono en forma de azúcar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le cycle de Calvin se déroule dans le stroma. Il utilise l’ATP et le NADPH pour fixer le dioxyde de carbone sous forme de sucre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Calvin-Zyklus läuft im Stroma ab. Er nutzt ATP und NADPH, um Kohlenstoffdioxid zu fixieren und daraus Zucker aufzubauen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カルビン回路はストロマで進む。ATPとNADPHを使って二酸化炭素を固定し、糖をつくる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "캘빈 회로는 스트로마에서 일어난다. ATP와 NADPH를 이용해 이산화 탄소를 고정하여 당을 만든다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O ciclo de Calvin ocorre no estroma. Ele usa ATP e NADPH para fixar o gás carbônico na forma de açúcar."
+          }
+        }
+      }
+    },
+    "The equation ends in C6H12O6 and 6O2: sugar the plant keeps and oxygen it releases." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ecuación termina en C6H12O6 y 6O2: el azúcar que la planta conserva y el oxígeno que libera."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ecuación termina en C6H12O6 y 6O2: el azúcar que la planta conserva y el oxígeno que libera."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’équation se termine par C6H12O6 et 6O2 : le sucre que la plante conserve et le dioxygène qu’elle rejette."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Gleichung endet mit C6H12O6 und 6O2: Zucker, den die Pflanze behält, und Sauerstoff, den sie abgibt."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "反応式の右辺は C6H12O6 と 6O2 である。糖は植物の中に蓄えられ、酸素は外に放出される。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "반응식의 오른쪽은 C6H12O6과 6O2이다. 당은 식물이 저장하고, 산소는 밖으로 방출된다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A equação termina em C6H12O6 e 6O2: o açúcar que a planta guarda e o oxigênio que ela libera."
+          }
+        }
+      }
+    },
+    "The green pigment that absorbs red and blue light to power photosynthesis." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El pigmento verde que absorbe la luz roja y la azul para impulsar la fotosíntesis."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El pigmento verde que absorbe la luz roja y la azul para impulsar la fotosíntesis."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le pigment vert qui absorbe la lumière rouge et bleue pour alimenter la photosynthèse."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der grüne Farbstoff, der rotes und blaues Licht für die Fotosynthese absorbiert."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赤色光と青色光を吸収して光合成に使う緑色の色素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "적색광과 청색광을 흡수해 광합성에 쓰는 초록색 색소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O pigmento verde que absorve luz vermelha e azul para realizar a fotossíntese."
+          }
+        }
+      }
+    },
+    "The light reactions capture energy, and the Calvin cycle spends it building sugar." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reacciones dependientes de la luz captan la energía, y el ciclo de Calvin la usa para formar azúcar."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reacciones dependientes de la luz captan la energía, y el ciclo de Calvin la usa para formar azúcar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La phase photochimique capte l’énergie, et le cycle de Calvin l’utilise pour fabriquer du sucre."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die lichtabhängigen Reaktionen fangen Energie ein, und der Calvin-Zyklus nutzt sie, um Zucker aufzubauen."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応でエネルギーをとらえ、カルビン回路ではそのエネルギーを使って糖をつくる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응에서 에너지를 흡수하고, 캘빈 회로에서 그 에너지를 이용해 당을 만든다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A fase fotoquímica capta a energia, e o ciclo de Calvin a usa para produzir açúcar."
+          }
+        }
+      }
+    },
+    "The light-dependent reactions and the Calvin cycle." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reacciones dependientes de la luz y el ciclo de Calvin."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reacciones dependientes de la luz y el ciclo de Calvin."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La phase photochimique et le cycle de Calvin."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die lichtabhängigen Reaktionen und der Calvin-Zyklus."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応とカルビン回路"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응과 캘빈 회로"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A fase fotoquímica e o ciclo de Calvin."
+          }
+        }
+      }
+    },
+    "The light-dependent reactions take place in the thylakoid membranes. They split water, release oxygen, and produce ATP and NADPH." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reacciones dependientes de la luz ocurren en las membranas de los tilacoides. En ellas se descompone el agua, se libera oxígeno y se producen ATP y NADPH."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reacciones dependientes de la luz ocurren en las membranas de los tilacoides. En ellas se descompone el agua, se libera oxígeno y se producen ATP y NADPH."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La phase photochimique se déroule dans les membranes des thylakoïdes. Elle décompose l’eau, libère du dioxygène et produit de l’ATP et du NADPH."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die lichtabhängigen Reaktionen laufen in den Thylakoidmembranen ab. Dabei wird Wasser gespalten und Sauerstoff freigesetzt, außerdem entstehen ATP und NADPH."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応はチラコイド膜で起こる。水を分解して酸素を放出し、ATPとNADPHをつくる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응은 틸라코이드 막에서 일어난다. 명반응에서는 물이 분해되어 산소가 방출되고, ATP와 NADPH가 생성된다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A fase fotoquímica ocorre nas membranas dos tilacoides. Nela, a água é quebrada, o oxigênio é liberado e são produzidos ATP e NADPH."
+          }
+        }
+      }
+    },
+    "The overall equation is 6CO2 + 6H2O + light energy → C6H12O6 + 6O2." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ecuación global es 6CO2 + 6H2O + energía luminosa → C6H12O6 + 6O2."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ecuación global es 6CO2 + 6H2O + energía luminosa → C6H12O6 + 6O2."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’équation globale est 6CO2 + 6H2O + énergie lumineuse → C6H12O6 + 6O2."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Gesamtgleichung lautet 6CO2 + 6H2O + Lichtenergie → C6H12O6 + 6O2."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全体の反応式は 6CO2 + 6H2O + 光エネルギー → C6H12O6 + 6O2 である。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 반응식은 6CO2 + 6H2O + 빛에너지 → C6H12O6 + 6O2이다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A equação geral é 6CO2 + 6H2O + energia luminosa → C6H12O6 + 6O2."
+          }
+        }
+      }
+    },
+    "The oxygen released by photosynthesis comes from the water molecules that are split, not from carbon dioxide." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El oxígeno que libera la fotosíntesis proviene de las moléculas de agua que se descomponen, no del dióxido de carbono."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El oxígeno que libera la fotosíntesis proviene de las moléculas de agua que se descomponen, no del dióxido de carbono."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dioxygène libéré par la photosynthèse provient des molécules d’eau décomposées, et non du dioxyde de carbone."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der bei der Fotosynthese freigesetzte Sauerstoff stammt aus den gespaltenen Wassermolekülen, nicht aus dem Kohlenstoffdioxid."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成で放出される酸素は、二酸化炭素ではなく、分解された水分子に由来する。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성에서 방출되는 산소는 이산화 탄소가 아니라 분해되는 물 분자에서 나온다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O oxigênio liberado na fotossíntese vem das moléculas de água que são quebradas, e não do gás carbônico."
+          }
+        }
+      }
+    },
+    "The rate of photosynthesis depends on light intensity, carbon dioxide concentration, and temperature." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La velocidad de la fotosíntesis depende de la intensidad de la luz, la concentración de dióxido de carbono y la temperatura."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La velocidad de la fotosíntesis depende de la intensidad de la luz, la concentración de dióxido de carbono y la temperatura."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vitesse de la photosynthèse dépend de l’intensité lumineuse, de la concentration en dioxyde de carbone et de la température."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Fotosyntheserate hängt von der Lichtintensität, der Kohlenstoffdioxidkonzentration und der Temperatur ab."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成速度は、光の強さ、二酸化炭素濃度、温度の影響を受ける。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성 속도는 빛의 세기, 이산화 탄소 농도, 온도에 따라 달라진다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A taxa de fotossíntese depende da intensidade luminosa, da concentração de gás carbônico e da temperatura."
+          }
+        }
+      }
+    },
+    "The sugar a plant stores for energy." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El azúcar que la planta almacena como reserva de energía."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El azúcar que la planta almacena como reserva de energía."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le sucre que la plante stocke comme réserve d’énergie."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zucker, den eine Pflanze als Energievorrat speichert."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "植物がエネルギー源として蓄える糖"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "식물이 에너지원으로 저장하는 당"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O açúcar que a planta armazena como reserva de energia."
+          }
+        }
+      }
+    },
+    "The thylakoids hold the chlorophyll that captures light, so the light reactions run there." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los tilacoides contienen la clorofila que capta la luz, por eso allí ocurren las reacciones dependientes de la luz."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los tilacoides contienen la clorofila que capta la luz, por eso allí ocurren las reacciones dependientes de la luz."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les thylakoïdes contiennent la chlorophylle qui capte la lumière : c’est donc là que se déroule la phase photochimique."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Thylakoide enthalten das Chlorophyll, das Licht einfängt. Deshalb laufen die lichtabhängigen Reaktionen dort ab."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チラコイドには光をとらえるクロロフィルがあるため、光化学反応はそこで起こる。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "틸라코이드에는 빛을 흡수하는 엽록소가 있으므로 명반응이 그곳에서 일어난다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os tilacoides contêm a clorofila que capta a luz, por isso a fase fotoquímica acontece neles."
+          }
+        }
+      }
+    },
+    "The tissue that carries water up from the roots." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tejido que transporta el agua desde las raíces hacia arriba."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tejido que transporta el agua desde las raíces hacia arriba."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le tissu qui fait monter l’eau depuis les racines."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Gewebe, das Wasser von den Wurzeln nach oben leitet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "根から水を運び上げる組織"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "뿌리에서 물을 위로 운반하는 조직"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O tecido que leva a água das raízes para cima."
+          }
+        }
+      }
+    },
+    "Through small pores called stomata." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de pequeños poros llamados estomas."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de pequeños poros llamados estomas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par de petits pores appelés stomates."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durch kleine Poren, die Spaltöffnungen (Stomata)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気孔と呼ばれる小さな穴から"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기공이라는 작은 구멍을 통해"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por pequenos poros chamados estômatos."
+          }
+        }
+      }
+    },
+    "Through the bark of the stem." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de la corteza del tallo."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de la corteza del tallo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par l’écorce de la tige."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durch die Rinde des Stängels."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "茎の樹皮から"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "줄기의 껍질을 통해"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pela casca do caule."
+          }
+        }
+      }
+    },
+    "Through the chloroplast membrane." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de la membrana del cloroplasto."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de la membrana del cloroplasto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par la membrane du chloroplaste."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durch die Membran des Chloroplasten."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "葉緑体の膜から"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엽록체 막을 통해"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pela membrana do cloroplasto."
+          }
+        }
+      }
+    },
+    "Through the roots, with water." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de las raíces, junto con el agua."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A través de las raíces, junto con el agua."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par les racines, avec l’eau."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durch die Wurzeln, zusammen mit dem Wasser."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "水と一緒に根から"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "물과 함께 뿌리를 통해"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pelas raízes, junto com a água."
+          }
+        }
+      }
+    },
+    "Transcription and then translation of DNA." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La transcripción y luego la traducción del ADN."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La transcripción y luego la traducción del ADN."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La transcription puis la traduction de l’ADN."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Transkription und danach die Translation der DNA."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNAの転写とそれに続く翻訳"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DNA의 전사와 그 후의 번역"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A transcrição e depois a tradução do DNA."
+          }
+        }
+      }
+    },
+    "Turning light energy into chemical energy stored in glucose." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transformar la energía luminosa en energía química almacenada en la glucosa."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transformar la energía luminosa en energía química almacenada en la glucosa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La conversion de l’énergie lumineuse en énergie chimique stockée dans le glucose."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Umwandlung von Lichtenergie in chemische Energie, die in Glucose gespeichert ist."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光エネルギーを化学エネルギーに変えてグルコースに蓄えること"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빛에너지를 포도당에 저장된 화학 에너지로 전환하는 것"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transformar energia luminosa em energia química armazenada na glicose."
+          }
+        }
+      }
+    },
+    "Water and oxygen." : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua y oxígeno."
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agua y oxígeno."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De l’eau et du dioxygène."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wasser und Sauerstoff."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "水と酸素"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "물과 산소"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Água e oxigênio."
+          }
+        }
+      }
+    },
+    "What are the products of photosynthesis?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuáles son los productos de la fotosíntesis?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuáles son los productos de la fotosíntesis?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quels sont les produits de la photosynthèse ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was sind die Produkte der Fotosynthese?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成の生成物は何か？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성의 산물은 무엇인가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quais são os produtos da fotossíntese?"
+          }
+        }
+      }
+    },
+    "What are the two stages of photosynthesis?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuáles son las dos etapas de la fotosíntesis?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuáles son las dos etapas de la fotosíntesis?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelles sont les deux étapes de la photosynthèse ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was sind die zwei Teilprozesse der Fotosynthese?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成の2つの段階は何か？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성의 두 단계는 무엇인가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quais são as duas fases da fotossíntese?"
+          }
+        }
+      }
+    },
+    "What does the Calvin cycle produce?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué produce el ciclo de Calvin?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué produce el ciclo de Calvin?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que produit le cycle de Calvin ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was entsteht im Calvin-Zyklus?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カルビン回路では何がつくられるか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "캘빈 회로에서는 무엇이 만들어지는가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que o ciclo de Calvin produz?"
+          }
+        }
+      }
+    },
+    "What is chlorophyll?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué es la clorofila?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué es la clorofila?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’est-ce que la chlorophylle ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was ist Chlorophyll?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クロロフィルとは何か？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엽록소란 무엇인가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que é a clorofila?"
+          }
+        }
+      }
+    },
+    "What is photosynthesis?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué es la fotosíntesis?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué es la fotosíntesis?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qu’est-ce que la photosynthèse ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was ist Fotosynthese?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成とは何か？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성이란 무엇인가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O que é a fotossíntese?"
+          }
+        }
+      }
+    },
+    "Where do the light-dependent reactions happen?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Dónde ocurren las reacciones dependientes de la luz?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Dónde ocurren las reacciones dependientes de la luz?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Où se déroule la phase photochimique ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wo laufen die lichtabhängigen Reaktionen ab?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光化学反応はどこで起こるか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명반응은 어디에서 일어나는가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onde ocorre a fase fotoquímica?"
+          }
+        }
+      }
+    },
+    "Where does the oxygen released by photosynthesis come from?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿De dónde proviene el oxígeno que libera la fotosíntesis?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿De dónde proviene el oxígeno que libera la fotosíntesis?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D’où provient le dioxygène libéré par la photosynthèse ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woher stammt der Sauerstoff, den die Fotosynthese freisetzt?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成で放出される酸素は何に由来するか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성에서 방출되는 산소는 어디에서 나오는가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De onde vem o oxigênio liberado na fotossíntese?"
+          }
+        }
+      }
+    },
+    "Where in the cell does photosynthesis take place?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿En qué parte de la célula ocurre la fotosíntesis?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿En qué parte de la célula ocurre la fotosíntesis?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Où se déroule la photosynthèse dans la cellule ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wo in der Zelle findet die Fotosynthese statt?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成は細胞のどこで行われるか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성은 세포의 어디에서 일어나는가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em que parte da célula ocorre a fotossíntese?"
+          }
+        }
+      }
+    },
+    "Which three factors affect the rate of photosynthesis?" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué tres factores afectan la velocidad de la fotosíntesis?"
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué tres factores afectan a la velocidad de la fotosíntesis?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quels sont les trois facteurs qui influencent la vitesse de la photosynthèse ?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welche drei Faktoren beeinflussen die Fotosyntheserate?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光合成速度に影響する3つの要因は何か？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광합성 속도에 영향을 주는 세 가지 요인은 무엇인가?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quais são os três fatores que afetam a taxa de fotossíntese?"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

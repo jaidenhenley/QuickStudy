@@ -144,7 +144,7 @@ class StudyViewModel {
             }
 
             var choices = [card.answer] + wrong.prefix(3)
-            if choices.count < 2 { choices.append("Not applicable") }
+            if choices.count < 2 { choices.append(String(localized: "Not applicable")) }
             choices.shuffle()
 
             return QuizQuestion(
@@ -195,9 +195,9 @@ class StudyViewModel {
     var libraryIssueMessage: String {
         switch libraryIssue {
         case .corrupt:
-            "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone."
+            String(localized: "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone.")
         case .unreadable:
-            "Your saved sets couldn't be opened right now. Changes won't be saved until you restart QuickStudy."
+            String(localized: "Your saved sets couldn't be opened right now. Changes won't be saved until you restart QuickStudy.")
         case nil:
             ""
         }
@@ -368,7 +368,7 @@ class StudyViewModel {
     /// A raw URLError description is not user-facing copy.
     private static func message(for error: Error) -> String {
         (error as? CardGenerationError)?.errorDescription
-            ?? "Couldn't draft cards from this. Try a different source."
+            ?? String(localized: "Couldn't draft cards from this. Try a different source.")
     }
 
     @MainActor
@@ -392,7 +392,7 @@ class StudyViewModel {
                 engine: engine
             )
             guard !cards.isEmpty else {
-                generationErrorMessage = "Couldn't find enough about \(topic) in this set to make new cards."
+                generationErrorMessage = String(localized: "Couldn't find enough about \(topic) in this set to make new cards.")
                 generationErrorCode = "QS-506"
                 return
             }

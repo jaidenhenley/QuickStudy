@@ -50,7 +50,7 @@ struct SetTile: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(Theme.successText)
             } else {
-                Text("\(Int((set.progress * 100).rounded()))%")
+                Text(set.progress, format: .percent.precision(.fractionLength(0)))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -64,12 +64,12 @@ struct SetTile: View {
 
     private var accessibilityLabel: String {
         let dueCount = set.dueCount()
-        var parts = ["\(set.title), \(set.cards.count) \(set.cards.count == 1 ? "card" : "cards")"]
-        if dueCount > 0 { parts.append("\(dueCount) due") }
+        var parts = ["\(set.title), \(String(localized: "\(set.cards.count) cards"))"]
+        if dueCount > 0 { parts.append(String(localized: "\(dueCount) due")) }
         parts.append(
             set.masteryState == .mastered
-                ? "Mastered"
-                : "\(Int((set.progress * 100).rounded()))% complete"
+                ? String(localized: "Mastered")
+                : String(localized: "\(set.progress.formatted(.percent.precision(.fractionLength(0)))) complete")
         )
         return parts.joined(separator: ", ")
     }

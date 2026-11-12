@@ -12,8 +12,8 @@ struct StreakView: View {
     @ScaledMetric(relativeTo: .largeTitle) private var flameBadgeSize = 76
     @ScaledMetric(relativeTo: .subheadline) private var freezeIconSize = 32
 
-    private let weekdayLetters = ["M", "T", "W", "T", "F", "S", "S"]
-    private let weekdayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    private let weekdayLetters = StreakView.mondayFirst(Calendar.current.veryShortStandaloneWeekdaySymbols)
+    private let weekdayNames = StreakView.mondayFirst(Calendar.current.standaloneWeekdaySymbols)
 
     var body: some View {
         let summary = StreakCalculator.summary(
@@ -36,7 +36,7 @@ struct StreakView: View {
                 .padding(.top, Spacing.lg)
 
                 VStack(spacing: Spacing.base) {
-                    Text("\(summary.current) \(summary.current == 1 ? "day" : "days")")
+                    Text("\(summary.current) days")
                         .font(.system(.largeTitle, design: .rounded))
                         .fontWeight(.bold)
                         .appNumericTransition(value: Double(summary.current))
@@ -97,24 +97,28 @@ struct StreakView: View {
 
     private func subtitle(for summary: StreakSummary) -> String {
         if summary.current == 0 {
-            return "Finish a session to start a streak."
+            return String(localized: "Finish a session to start a streak.")
         }
         if summary.current >= summary.longest {
-            return "Longest yet"
+            return String(localized: "Longest yet")
         }
-        return "Longest was \(summary.longest)"
+        return String(localized: "Longest was \(summary.longest)")
     }
 
     private func spokenSubtitle(for summary: StreakSummary) -> String {
         if summary.current == 0 || summary.current >= summary.longest {
             return subtitle(for: summary)
         }
-        return "Longest streak was \(summary.longest) \(summary.longest == 1 ? "day" : "days")"
+        return String(localized: "Longest streak was \(summary.longest) days")
     }
 
     private func freezeTitle(for summary: StreakSummary) -> String {
         summary.freezesAvailable == 0
-            ? "No Streak Freeze yet"
-            : "\(summary.freezesAvailable) Streak \(summary.freezesAvailable == 1 ? "Freeze" : "Freezes") ready"
+            ? String(localized: "No Streak Freeze yet")
+            : String(localized: "\(summary.freezesAvailable) Streak Freezes ready")
+    }
+
+    private static func mondayFirst(_ sundayFirst: [String]) -> [String] {
+        Array(sundayFirst.dropFirst()) + sundayFirst.prefix(1)
     }
 }

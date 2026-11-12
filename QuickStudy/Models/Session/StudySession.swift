@@ -46,7 +46,8 @@ struct StudySession: Identifiable, Codable {
     var elapsed: TimeInterval { (endedAt ?? Date()).timeIntervalSince(startedAt) }
 
     var elapsedLabel: String {
-        let total = Int(elapsed)
-        return "\(total / 60)m \(total % 60)s"
+        Duration.seconds(Int(elapsed)).formatted(
+            .units(allowed: [.minutes, .seconds], width: .narrow, zeroValueUnits: .show(length: 1))
+        )
     }
 }

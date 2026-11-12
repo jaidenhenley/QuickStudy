@@ -19,7 +19,7 @@ final class SaveDraftViewModel {
         let cardCount: Int
 
         var countLabel: String {
-            cardCount == 1 ? "1 card" : "\(cardCount) cards"
+            String(localized: "\(cardCount) cards")
         }
     }
 
@@ -42,7 +42,7 @@ final class SaveDraftViewModel {
     }
 
     var title: String {
-        cards.count == 1 ? "Save 1 Card" : "Save \(cards.count) Cards"
+        String(localized: "Save \(cards.count) Cards")
     }
 
     var canAddToExisting: Bool { !existingSets.isEmpty }
@@ -57,8 +57,7 @@ final class SaveDraftViewModel {
 
     var addFooter: String {
         guard let selectedSet else { return "" }
-        let count = cards.count == 1 ? "1 card" : "\(cards.count) cards"
-        return "\(count) will be added to \(selectedSet.title)."
+        return String(localized: "\(cards.count) cards will be added to \(selectedSet.title).")
     }
 
     private var selectedSet: ExistingSet? {

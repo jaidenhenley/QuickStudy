@@ -107,7 +107,7 @@ struct QuizSessionView: View {
                                                 .contentShape(Rectangle())
                                             }
                                             .accessibilityLabel("Why this answer, source \(source.longLabel)")
-                                            .accessibilityValue(quizSessionViewModel.showsHint ? "Shown" : "Hidden")
+                                            .accessibilityValue(quizSessionViewModel.showsHint ? String(localized: "Shown") : String(localized: "Hidden"))
                                             .accessibilityHint("Shows the source excerpt")
                                             // Hidden rather than removed until the answer is submitted, so revealing
                                             // it never moves the question or the options.
@@ -261,7 +261,7 @@ struct QuizSessionView: View {
         .onChange(of: quizSessionViewModel.phase) { _, newPhase in
             switch newPhase {
             case .revealed(let correct):
-                AccessibilityNotification.Announcement(correct ? "Correct" : "Incorrect").post()
+                AccessibilityNotification.Announcement(correct ? String(localized: "Correct") : String(localized: "Incorrect")).post()
                 Task {
                     await Task.yield()
                     focusTarget = .result

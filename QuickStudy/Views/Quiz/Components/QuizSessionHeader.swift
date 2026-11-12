@@ -20,7 +20,7 @@ struct QuizSessionHeader: View {
         // At accessibility sizes the full "Session · 3 of 17" truncates, so the visible text
         // drops the prefix while the spoken label keeps it.
         let visibleLabel = dynamicTypeSize.isAccessibilitySize
-            ? "\(currentIndex + 1) of \(states.count)"
+            ? String(localized: "\(currentIndex + 1) of \(states.count)")
             : positionLabel
 
         VStack(alignment: .leading, spacing: Spacing.base) {

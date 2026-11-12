@@ -79,11 +79,11 @@ struct OnboardingAIIntroPage: View {
     private var subtitle: String {
         switch setup {
         case .privateCloud:
-            return "QuickStudy drafts flashcards with Apple Intelligence, on this iPhone or in Apple's Private Cloud Compute."
+            return String(localized: "QuickStudy drafts flashcards with Apple Intelligence, on this iPhone or in Apple's Private Cloud Compute.")
         case .onDevice:
-            return "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone."
+            return String(localized: "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone.")
         case .cloudOnly:
-            return "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud."
+            return String(localized: "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud.")
         }
     }
 
@@ -91,21 +91,21 @@ struct OnboardingAIIntroPage: View {
         switch setup {
         case .privateCloud:
             return [
-                (symbol: "lock.icloud", title: "Private Cloud Compute", detail: "Drafts run on Apple's servers with your permission. Your text isn't stored."),
-                (symbol: "checkmark.shield", title: "Or keep it on this iPhone", detail: "Choose Not now and every draft stays on-device."),
-                (symbol: "bolt", title: "Works offline", detail: "Study, quiz and edit offline anytime, anywhere."),
-                (symbol: "sparkles", title: "10 free generations a month", detail: "Manual cards and every study mode are always unlimited.")
+                (symbol: "lock.icloud", title: String(localized: "Private Cloud Compute"), detail: String(localized: "Drafts run on Apple's servers with your permission. Your text isn't stored.")),
+                (symbol: "checkmark.shield", title: String(localized: "Or keep it on this iPhone"), detail: String(localized: "Choose Not now and every draft stays on-device.")),
+                (symbol: "bolt", title: String(localized: "Works offline"), detail: String(localized: "Study, quiz and edit offline anytime, anywhere.")),
+                (symbol: "sparkles", title: String(localized: "10 free generations a month"), detail: String(localized: "Manual cards and every study mode are always unlimited."))
             ]
         case .onDevice:
             return [
-                (symbol: "checkmark.shield", title: "On this iPhone", detail: "After your first set, generations run on-device and never leave it."),
-                (symbol: "bolt", title: "Works offline", detail: "Study, quiz and edit offline anytime, anywhere."),
-                (symbol: "sparkles", title: "10 free generations a month", detail: "Manual cards and every study mode are always unlimited.")
+                (symbol: "checkmark.shield", title: String(localized: "On this iPhone"), detail: String(localized: "After your first set, generations run on-device and never leave it.")),
+                (symbol: "bolt", title: String(localized: "Works offline"), detail: String(localized: "Study, quiz and edit offline anytime, anywhere.")),
+                (symbol: "sparkles", title: String(localized: "10 free generations a month"), detail: String(localized: "Manual cards and every study mode are always unlimited."))
             ]
         case .cloudOnly:
             return [
-                (symbol: "square.and.pencil", title: "Manual cards, always free", detail: "Type your own cards and study with every mode, unlimited."),
-                (symbol: "icloud", title: "More with Pro", detail: "Cloud drafting on any iPhone, whenever you need it.")
+                (symbol: "square.and.pencil", title: String(localized: "Manual cards, always free"), detail: String(localized: "Type your own cards and study with every mode, unlimited.")),
+                (symbol: "icloud", title: String(localized: "More with Pro"), detail: String(localized: "Cloud drafting on any iPhone, whenever you need it."))
             ]
         }
     }
@@ -113,9 +113,9 @@ struct OnboardingAIIntroPage: View {
     private var footnote: String {
         switch setup {
         case .privateCloud:
-            return "You'll be asked before anything leaves this iPhone."
+            return String(localized: "You'll be asked before anything leaves this iPhone.")
         case .onDevice, .cloudOnly:
-            return "Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Anthropic, which drafts it, deletes your text within 30 days."
+            return String(localized: "Your first set is drafted in the cloud with your permission, so you see what QuickStudy can do. Anthropic, which drafts it, deletes your text within 30 days.")
         }
     }
 }

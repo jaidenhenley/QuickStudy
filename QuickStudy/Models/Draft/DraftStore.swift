@@ -25,9 +25,9 @@ final class DraftStore {
     var loadIssueMessage: String {
         switch loadIssue {
         case .corrupt:
-            "Your unsaved draft couldn't be read. Create the set again from your notes. A copy of the original was kept on this iPhone."
+            String(localized: "Your unsaved draft couldn't be read. Create the set again from your notes. A copy of the original was kept on this iPhone.")
         case .unreadable:
-            "Your unsaved draft couldn't be opened right now. Restart QuickStudy to try again."
+            String(localized: "Your unsaved draft couldn't be opened right now. Restart QuickStudy to try again.")
         case nil:
             ""
         }

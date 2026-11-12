@@ -9,15 +9,16 @@ import SwiftUI
 
 struct SessionStatCell: View {
     let target: Int
-    var suffix: String = ""
-    let label: String
+    var isPercent = false
+    let label: LocalizedStringResource
+    let spokenLabel: LocalizedStringResource
 
     @State private var shown = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 2) {
-            Text("\(shown)\(suffix)")
+            Text(isPercent ? (Double(shown) / 100).formatted(.percent) : shown.formatted())
                 .font(.title2)
                 .fontWeight(.bold)
                 .appNumericTransition(value: Double(shown))
@@ -27,8 +28,8 @@ struct SessionStatCell: View {
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(label.capitalized)
-        .accessibilityValue(suffix == "%" ? "\(target) percent" : "\(target)")
+        .accessibilityLabel(Text(spokenLabel))
+        .accessibilityValue(isPercent ? (Double(target) / 100).formatted(.percent) : target.formatted())
         .onAppear {
             withAnimation(reduceMotion ? Motion.crossfade : Motion.countUp) {
                 shown = target

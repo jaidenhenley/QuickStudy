@@ -23,7 +23,7 @@ struct ContentAnalysis {
     }
 
     var estimatedCardsLabel: String {
-        estimatedCards == 1 ? "~1 card" : "~\(estimatedCards) cards"
+        String(localized: "~\(estimatedCards) cards")
     }
 
     /// Measured against real drafts: 402 words gave 16 cards, 140 gave 6, 37 gave 2. Sentence

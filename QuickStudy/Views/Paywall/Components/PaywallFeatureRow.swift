@@ -7,7 +7,7 @@ import SwiftUI
 
 struct PaywallFeatureRow: View {
     let symbol: String
-    let text: String
+    let text: LocalizedStringKey
 
     @ScaledMetric(relativeTo: .headline) private var iconWidth = 26.0
 
@@ -20,6 +20,8 @@ struct PaywallFeatureRow: View {
                 .accessibilityHidden(true)
             Text(text)
                 .font(.callout)
+                // The store view proposes a tight height, which truncates long translations.
+                .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
         .accessibilityElement(children: .combine)

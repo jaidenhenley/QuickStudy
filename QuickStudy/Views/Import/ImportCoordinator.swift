@@ -127,10 +127,10 @@ final class ImportCoordinator {
 
     var replaceDraftMessage: String {
         if stage != .idle, let draftingTitle {
-            return "QuickStudy is still drafting \(draftingTitle). Starting a new set will cancel it."
+            return String(localized: "QuickStudy is still drafting \(draftingTitle). Starting a new set will cancel it.")
         }
         if let draft = draftStore?.pending {
-            return "You have a draft from \(draft.title) waiting. Starting a new set will discard it."
+            return String(localized: "You have a draft from \(draft.title) waiting. Starting a new set will discard it.")
         }
         return ""
     }
@@ -247,7 +247,7 @@ final class ImportCoordinator {
             switch error {
             case .appleIntelligenceNotEnabled, .modelNotReady:
                 fail(.deviceNotReady(
-                    message: error.errorDescription ?? "On-device AI isn't ready yet. Try again in a few minutes."
+                    message: error.errorDescription ?? String(localized: "On-device AI isn't ready yet. Try again in a few minutes.")
                 ))
                 return false
             default:
@@ -337,7 +337,7 @@ final class ImportCoordinator {
         if pendingScannerFailure {
             pendingScannerFailure = false
             retrySource = .capture(.scan)
-            fail(.processing(message: "The camera stopped before the scan finished. Please try again."))
+            fail(.processing(message: String(localized: "The camera stopped before the scan finished. Please try again.")))
             return
         }
         guard let images = pendingOCRImages else { return }
@@ -369,7 +369,7 @@ final class ImportCoordinator {
             generationTask = Task { await self.openPDF(url: url, using: helper, study: study) }
         case .failure:
             retrySource = .capture(.pdf)
-            fail(.processing(message: "Failed to open the file. Try a different document."))
+            fail(.processing(message: String(localized: "Failed to open the file. Try a different document.")))
         }
     }
 
@@ -490,7 +490,7 @@ final class ImportCoordinator {
 
     func draftingStatus(progress: GenerationProgress, now: Date = .now) -> DraftingStatus? {
         guard let draftingTitle else { return nil }
-        let title = "Drafting \(draftingTitle)"
+        let title = String(localized: "Drafting \(draftingTitle)")
         switch stage {
         case .idle:
             return nil
@@ -498,22 +498,22 @@ final class ImportCoordinator {
             let pages = max(total, 1)
             return DraftingStatus(
                 title: title,
-                detail: "Reading page \(min(page + 1, pages)) of \(pages)",
+                detail: String(localized: "Reading page \(min(page + 1, pages)) of \(pages)"),
                 fraction: readingShare * Double(min(page, pages)) / Double(pages)
             )
         case .drafting:
             guard progress.startedAt != nil else {
-                return DraftingStatus(title: title, detail: "Drafting cards", fraction: readingShare > 0 ? readingShare : nil)
+                return DraftingStatus(title: title, detail: String(localized: "Drafting cards"), fraction: readingShare > 0 ? readingShare : nil)
             }
             let fraction = readingShare + (1 - readingShare) * progress.fraction(now: now)
             if progress.isChunked {
                 let current = min(progress.completedUnits + 1, progress.totalUnits)
-                return DraftingStatus(title: title, detail: "Drafting cards · \(current) of \(progress.totalUnits)", fraction: fraction)
+                return DraftingStatus(title: title, detail: String(localized: "Drafting cards · \(current) of \(progress.totalUnits)"), fraction: fraction)
             }
             guard let timeLeft = Self.timeLeft(in: progress, now: now) else {
-                return DraftingStatus(title: title, detail: "Drafting cards", fraction: fraction)
+                return DraftingStatus(title: title, detail: String(localized: "Drafting cards"), fraction: fraction)
             }
-            return DraftingStatus(title: title, detail: "Drafting cards · \(timeLeft)", fraction: fraction)
+            return DraftingStatus(title: title, detail: String(localized: "Drafting cards · \(timeLeft)"), fraction: fraction)
         }
     }
 
@@ -622,8 +622,8 @@ final class ImportCoordinator {
         await startDrafting(
             DraftRequest(
                 extracted: ExtractedDocument(pages: [.init(text: trimmed, candidates: [])]),
-                title: "Pasted Notes",
-                displayTitle: SetTitleSuggester.title(from: trimmed.components(separatedBy: .newlines).flatMap(StudyViewModel.sentenceLines)) ?? "Pasted Notes",
+                title: String(localized: "Pasted Notes"),
+                displayTitle: SetTitleSuggester.title(from: trimmed.components(separatedBy: .newlines).flatMap(StudyViewModel.sentenceLines)) ?? String(localized: "Pasted Notes"),
                 sourceType: .paste
             ),
             study: study
@@ -631,7 +631,7 @@ final class ImportCoordinator {
     }
 
     private func processOCR(images: [UIImage], using helper: DocumentImportHelper, study: StudyViewModel) async {
-        beginRun(title: "Scan", stage: .reading(page: 0, of: images.count), readingShare: 0.15)
+        beginRun(title: String(localized: "Scan"), stage: .reading(page: 0, of: images.count), readingShare: 0.15)
         defer { endRun() }
 
         do {
@@ -641,16 +641,16 @@ final class ImportCoordinator {
             guard !Task.isCancelled else { return }
             guard !extracted.isEmpty else {
                 retrySource = .capture(.scan)
-                fail(.noText(message: "No text was detected. Try better lighting, hold steady, or fill the frame with the page."))
+                fail(.noText(message: String(localized: "No text was detected. Try better lighting, hold steady, or fill the frame with the page.")))
                 return
             }
             await startDrafting(
-                DraftRequest(extracted: extracted, title: "Scanned Document", displayTitle: "Scan", sourceType: .scan),
+                DraftRequest(extracted: extracted, title: String(localized: "Scanned Document"), displayTitle: String(localized: "Scan"), sourceType: .scan),
                 study: study
             )
         } catch {
             retrySource = .capture(.scan)
-            failIfNotCancelled(.processing(message: "Failed to process the scan. Please try again."))
+            failIfNotCancelled(.processing(message: String(localized: "Failed to process the scan. Please try again.")))
         }
     }
 
@@ -670,7 +670,7 @@ final class ImportCoordinator {
             failIfNotCancelled(.unreadablePDF())
         } catch {
             retrySource = .capture(.pdf)
-            failIfNotCancelled(.processing(message: "Failed to import the PDF. Please check the file and try again."))
+            failIfNotCancelled(.processing(message: String(localized: "Failed to import the PDF. Please check the file and try again.")))
         }
     }
 
@@ -695,7 +695,7 @@ final class ImportCoordinator {
             guard !Task.isCancelled else { return }
             guard !extracted.isEmpty else {
                 retrySource = .capture(.pdf)
-                fail(.noText(message: "No text was detected. This PDF may be a scan of a page rather than text."))
+                fail(.noText(message: String(localized: "No text was detected. This PDF may be a scan of a page rather than text.")))
                 return
             }
             await startDrafting(
@@ -704,7 +704,7 @@ final class ImportCoordinator {
             )
         } catch {
             retrySource = .capture(.pdf)
-            failIfNotCancelled(.processing(message: "Failed to import the PDF. Please check the file and try again."))
+            failIfNotCancelled(.processing(message: String(localized: "Failed to import the PDF. Please check the file and try again.")))
         }
     }
 
@@ -712,13 +712,13 @@ final class ImportCoordinator {
         guard let item = selectedPhotoItem else { return }
         selectedPhotoItem = nil
         retrySource = .capture(.photo)
-        beginRun(title: "Photo", stage: .reading(page: 0, of: 1), readingShare: 0.15)
+        beginRun(title: String(localized: "Photo"), stage: .reading(page: 0, of: 1), readingShare: 0.15)
         defer { endRun() }
 
         do {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let image = UIImage(data: data) else {
-                failIfNotCancelled(.processing(message: "Could not load the selected photo. Try a different image."))
+                failIfNotCancelled(.processing(message: String(localized: "Could not load the selected photo. Try a different image.")))
                 return
             }
             guard !Task.isCancelled else { return }
@@ -727,15 +727,15 @@ final class ImportCoordinator {
             }
             guard !Task.isCancelled else { return }
             guard !extracted.isEmpty else {
-                fail(.noText(message: "No text was detected. Try better lighting, hold steady, or fill the frame with the page."))
+                fail(.noText(message: String(localized: "No text was detected. Try better lighting, hold steady, or fill the frame with the page.")))
                 return
             }
             await startDrafting(
-                DraftRequest(extracted: extracted, title: "Photo", displayTitle: "Photo", sourceType: .photo),
+                DraftRequest(extracted: extracted, title: String(localized: "Photo"), displayTitle: String(localized: "Photo"), sourceType: .photo),
                 study: study
             )
         } catch {
-            failIfNotCancelled(.processing(message: "Failed to process the photo. Please try again."))
+            failIfNotCancelled(.processing(message: String(localized: "Failed to process the photo. Please try again.")))
         }
     }
 }

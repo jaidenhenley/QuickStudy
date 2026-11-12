@@ -24,7 +24,7 @@ struct SourcePageView: View {
                     .foregroundStyle(isHighlighted ? Theme.textPrimary : .secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(isHighlighted ? .isSelected : [])
-                    .accessibilityValue(absolute == highlighted?.lowerBound ? "Source of this card" : "")
+                    .accessibilityValue(absolute == highlighted?.lowerBound ? String(localized: "Source of this card") : "")
                     .id(absolute)
                     .anchorPreference(key: HighlightedLineBounds.self, value: .bounds) { anchor in
                         isHighlighted ? [anchor] : []
