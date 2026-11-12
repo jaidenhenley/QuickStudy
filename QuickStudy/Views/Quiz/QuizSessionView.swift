@@ -240,6 +240,7 @@ struct QuizSessionView: View {
                 .padding(.horizontal, Spacing.lg)
                 .padding(.top, Spacing.sm)
                 .padding(.bottom, Spacing.base)
+                .appReadableWidth()
                 .sensoryFeedback(.selection, trigger: quizSessionViewModel.selectedChoice)
                 .sensoryFeedback(trigger: quizSessionViewModel.phase) { _, newPhase in
                     switch newPhase {
