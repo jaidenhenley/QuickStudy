@@ -50,11 +50,19 @@ final class ChoosePagesViewModel {
     var estimate: String {
         let count = selection.count
         let seconds = Double(count) * Self.secondsPerPage
+        // A string with two plural numbers cannot also vary by device in the String Catalog,
+        // so the iPad wording has its own keys.
+        let onPad = UIDevice.current.userInterfaceIdiom == .pad
         if seconds < 60 {
-            return String(localized: "\(count) pages · about \(Int(seconds.rounded())) seconds on this iPhone")
+            let rounded = Int(seconds.rounded())
+            return onPad
+                ? String(localized: "\(count) pages · about \(rounded) seconds on this iPad")
+                : String(localized: "\(count) pages · about \(rounded) seconds on this iPhone")
         }
         let minutes = Int((seconds / 60).rounded(.up))
-        return String(localized: "\(count) pages · about \(minutes) minutes on this iPhone")
+        return onPad
+            ? String(localized: "\(count) pages · about \(minutes) minutes on this iPad")
+            : String(localized: "\(count) pages · about \(minutes) minutes on this iPhone")
     }
 
     var buttonTitle: String {

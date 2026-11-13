@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 /// The app's own translations, read from the String Catalogs in the repository, so a UI test
 /// can find controls by the label the app shows in whatever language it was launched in.
@@ -50,8 +51,9 @@ enum Localized {
     private static func resolve(_ key: String, count: Int?, table: String) -> String {
         guard let entry = catalog(table)[key] as? [String: Any],
               let localizations = entry["localizations"] as? [String: Any],
-              let unit = localizations[language] as? [String: Any] ?? localizations["en"] as? [String: Any]
+              let localization = localizations[language] as? [String: Any] ?? localizations["en"] as? [String: Any]
         else { return substitute(key, count: count) }
+        let unit = deviceForm(of: localization)
         if let plural = (unit["variations"] as? [String: Any])?["plural"] as? [String: Any] {
             let form = count == 1 && plural["one"] != nil ? "one" : "other"
             return substitute(value(of: plural[form]) ?? key, count: count)
@@ -60,8 +62,17 @@ enum Localized {
     }
 
     private static func englishValue(_ key: String, entry: [String: Any]) -> String {
-        let english = (entry["localizations"] as? [String: Any])?["en"]
-        return value(of: english) ?? key
+        let english = (entry["localizations"] as? [String: Any])?["en"] as? [String: Any]
+        return value(of: english.map(deviceForm)) ?? key
+    }
+
+    /// Strings that say "iPhone" carry an iPad variant; the walk reads the one the simulator shows.
+    private static func deviceForm(of localization: [String: Any]) -> [String: Any] {
+        guard let device = (localization["variations"] as? [String: Any])?["device"] as? [String: Any] else {
+            return localization
+        }
+        let idiom = UIDevice.current.userInterfaceIdiom == .pad ? "ipad" : "other"
+        return device[idiom] as? [String: Any] ?? device["other"] as? [String: Any] ?? localization
     }
 
     private static func value(of unit: Any?) -> String? {

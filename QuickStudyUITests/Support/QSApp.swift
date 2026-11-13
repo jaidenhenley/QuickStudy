@@ -131,7 +131,8 @@ extension XCUIApplication {
     }
 
     func tapTab(_ title: String, file: StaticString = #filePath, line: UInt = #line) {
-        let tab = tabBars.buttons[title]
+        // iPadOS draws the tabs as plain buttons in the top bar, outside any tab bar element.
+        let tab = UIDevice.current.userInterfaceIdiom == .pad ? buttons[title].firstMatch : tabBars.buttons[title]
         XCTAssertTrue(tab.waitForExistence(timeout: QSApp.uiTimeout), "Tab '\(title)' missing", file: file, line: line)
         tab.tap()
     }

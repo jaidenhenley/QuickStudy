@@ -19,20 +19,30 @@ struct LocalizationCatalogTests {
         return try #require(json["strings"] as? [String: [String: Any]])
     }
 
-    /// Every text a localization can show: the plain value, each plural form, and each
-    /// substitution's plural forms.
+    /// Every text a localization can show: the plain value, each plural form, each device
+    /// variant, and each substitution's plural forms.
     private static func values(of localization: [String: Any]) -> [String] {
         var found: [String] = []
         if let unit = localization["stringUnit"] as? [String: Any], let value = unit["value"] as? String {
             found.append(value)
         }
-        if let plural = (localization["variations"] as? [String: Any])?["plural"] as? [String: [String: Any]] {
+        let variations = localization["variations"] as? [String: Any]
+        if let plural = variations?["plural"] as? [String: [String: Any]] {
             found += plural.values.flatMap(values)
+        }
+        if let device = variations?["device"] as? [String: [String: Any]] {
+            found += device.values.flatMap(values)
         }
         if let substitutions = localization["substitutions"] as? [String: [String: Any]] {
             found += substitutions.values.flatMap(values)
         }
         return found
+    }
+
+    /// A string that says "iPhone" carries an iPad variant; each is checked as its own form.
+    private static func deviceForms(of localization: [String: Any]) -> [[String: Any]] {
+        let device = (localization["variations"] as? [String: Any])?["device"] as? [String: [String: Any]]
+        return device.map { Array($0.values) } ?? [localization]
     }
 
     @Test(arguments: tables)
@@ -81,20 +91,25 @@ struct LocalizationCatalogTests {
         for (key, entry) in try Self.catalog("Localizable") {
             let localizations = entry["localizations"] as? [String: [String: Any]] ?? [:]
             // Keys such as libraryFilter.all carry their English in the catalog, not in the key.
-            let english = localizations["en"].flatMap { ($0["stringUnit"] as? [String: Any])?["value"] as? String } ?? key
+            let english = localizations["en"]
+                .flatMap { Self.deviceForms(of: $0).first }
+                .flatMap { ($0["stringUnit"] as? [String: Any])?["value"] as? String } ?? key
             let expected = arguments(in: english.contains("%#@") ? key : english)
             for (language, localization) in localizations where language != "en" {
-                var used: [Int: String] = [:]
+                var substituted: [Int: String] = [:]
                 let substitutions = localization["substitutions"] as? [String: [String: Any]] ?? [:]
                 for substitution in substitutions.values {
-                    if let position = substitution["argNum"] as? Int { used[position] = "number" }
+                    if let position = substitution["argNum"] as? Int { substituted[position] = "number" }
                 }
-                let unit = (localization["stringUnit"] as? [String: Any])?["value"] as? String
-                let plural = (localization["variations"] as? [String: Any])?["plural"] as? [String: [String: Any]] ?? [:]
-                for text in [unit].compactMap({ $0 }) + plural.values.flatMap(Self.values) {
-                    used.merge(arguments(in: text)) { current, _ in current }
+                for form in Self.deviceForms(of: localization) {
+                    var used = substituted
+                    let unit = (form["stringUnit"] as? [String: Any])?["value"] as? String
+                    let plural = (form["variations"] as? [String: Any])?["plural"] as? [String: [String: Any]] ?? [:]
+                    for text in [unit].compactMap({ $0 }) + plural.values.flatMap(Self.values) {
+                        used.merge(arguments(in: text)) { current, _ in current }
+                    }
+                    #expect(used == expected, "\(language): \"\(key)\" uses \(used), English uses \(expected)")
                 }
-                #expect(used == expected, "\(language): \"\(key)\" uses \(used), English uses \(expected)")
             }
         }
     }

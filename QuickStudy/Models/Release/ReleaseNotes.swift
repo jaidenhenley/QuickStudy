@@ -3,7 +3,7 @@
 //  QuickStudy
 //
 
-import Foundation
+import UIKit
 
 enum ReleaseNotes {
     static let current = ReleaseNote(
@@ -40,7 +40,10 @@ enum ReleaseNotes {
         proFeature: .init(
             symbol: "sparkles",
             title: "QuickStudy Pro",
-            detail: String(localized: "\(ProProduct.hostedMonthlyLimit) cloud generations a month on any iPhone.")
+            // A plural string cannot also vary by device in the String Catalog, so iPad has its own key.
+            detail: UIDevice.current.userInterfaceIdiom == .pad
+                ? String(localized: "\(ProProduct.hostedMonthlyLimit) cloud generations a month on any iPad.")
+                : String(localized: "\(ProProduct.hostedMonthlyLimit) cloud generations a month on any iPhone.")
         ),
         cloudNotice: String(localized: "Your next set can be drafted in the cloud, with your permission.")
     )

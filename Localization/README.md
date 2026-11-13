@@ -23,6 +23,7 @@ Xcode fills the catalogs from code on every build. English stays in the code; tr
 - When one English word plays two roles (a filter chip and a badge, a header and a stat), give each role its own key with `String(localized: "area.role", defaultValue: "…")`. Other languages need different words.
 - Dates, numbers, durations and percentages go through `.formatted(…)`.
 - Card text, set titles and document text are user content and are never localized. Cards are drafted in the language of the source material, not the iPhone's (`SourceLanguage`).
+- A string that names the device ("on this iPhone") carries an iPad variant: in the catalog, vary it by device (`ipad` and `other`) in every language, English included. Korean particles after the device name differ (iPhone은/을, iPad는/를). A string with plural forms or plural substitutions cannot also vary by device (the catalog compiler rejects it), so give it a second key that says iPad and pick the key in code, as `ChoosePagesViewModel.estimate` does.
 - New strings need all seven translations before release. `LocalizationCatalogTests` fails the unit tests when one is missing, uses an em dash, or drops a format argument.
 
 ## Translating

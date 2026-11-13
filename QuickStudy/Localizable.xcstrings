@@ -3242,6 +3242,88 @@
         }
       }
     },
+    "%lld cloud generations a month on any iPad." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld générations cloud par mois sur n’importe quel iPad."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Cloud-Generierungen pro Monat auf jedem iPad."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "どのiPadでも、毎月%lld回のクラウド生成。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어떤 iPad에서든 매월 %lld회까지 클라우드에서 생성할 수 있어요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld gerações na nuvem por mês em qualquer iPad."
+          }
+        },
+        "es-419" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld generación en la nube al mes en cualquier iPad."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld generaciones en la nube al mes en cualquier iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld generaciones en la nube al mes en cualquier iPad."
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld generación en la nube al mes en cualquier iPad."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld generaciones en la nube al mes en cualquier iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld generaciones en la nube al mes en cualquier iPad."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld cloud generations a month on any iPhone." : {
       "localizations" : {
         "fr" : {
@@ -4348,6 +4430,358 @@
         }
       }
     },
+    "%lld pages · about %lld minutes on this iPad" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · about %#@minutes@ on this iPad"
+          },
+          "substitutions" : {
+            "minutes" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minute"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutes"
+                    }
+                  }
+                }
+              }
+            },
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg page"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · environ %#@minutes@ sur cet iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg page"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  }
+                }
+              }
+            },
+            "minutes" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minute"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutes"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutes"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · etwa %#@minutes@ auf diesem iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg Seite"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg Seiten"
+                    }
+                  }
+                }
+              }
+            },
+            "minutes" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg Minute"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg Minuten"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldページ · このiPadで約%2$lld分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld페이지 · 이 iPad에서 약 %2$lld분"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · cerca de %#@minutes@ neste iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg página"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  }
+                }
+              }
+            },
+            "minutes" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minuto"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutos"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · unos %#@minutes@ en este iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg página"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  }
+                }
+              }
+            },
+            "minutes" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minuto"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutos"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · unos %#@minutes@ en este iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg página"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  }
+                }
+              }
+            },
+            "minutes" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minuto"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutos"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg minutos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld pages · about %lld minutes on this iPhone" : {
       "localizations" : {
         "en" : {
@@ -4691,6 +5125,240 @@
                     "stringUnit" : {
                       "state" : "translated",
                       "value" : "%arg minutos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld pages · about %lld seconds on this iPad" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · about %2$lld seconds on this iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg page"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · environ %#@seconds@ sur cet iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg page"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  }
+                }
+              }
+            },
+            "seconds" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg seconde"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg secondes"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg secondes"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · etwa %2$lld Sekunden auf diesem iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg Seite"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg Seiten"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldページ · このiPadで約%2$lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld페이지 · 이 iPad에서 약 %2$lld초"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · cerca de %2$lld segundos neste iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg página"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · unos %2$lld segundos en este iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg página"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es-ES" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%#@pages@ · unos %2$lld segundos en este iPad"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg página"
+                    }
+                  },
+                  "many" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg páginas"
                     }
                   }
                 }
@@ -5842,45 +6510,147 @@
     "1 free cloud set on this iPhone" : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 paquet cloud gratuit sur cet iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 paquet cloud gratuit sur cet iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 paquet cloud gratuit sur cet iPhone"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 kostenloses Cloud-Set auf diesem iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 kostenloses Cloud-Set auf diesem iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 kostenloses Cloud-Set auf diesem iPhone"
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneで無料のクラウド作成：1セット"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadで無料のクラウド作成：1セット"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneで無料のクラウド作成：1セット"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone에서 무료 클라우드 세트 1개"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad에서 무료 클라우드 세트 1개"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone에서 무료 클라우드 세트 1개"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 conjunto grátis na nuvem neste iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 conjunto grátis na nuvem neste iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 conjunto grátis na nuvem neste iPhone"
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 conjunto gratis en la nube en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 conjunto gratis en la nube en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 conjunto gratis en la nube en este iPhone"
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 conjunto gratis en la nube en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 conjunto gratis en la nube en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 conjunto gratis en la nube en este iPhone"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 free cloud set on this iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "1 free cloud set on this iPhone"
+                }
+              }
+            }
           }
         }
       }
@@ -6072,45 +6842,147 @@
     "AI generation isn't available on this iPhone" : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La génération par IA n’est pas disponible sur cet iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La génération par IA n’est pas disponible sur cet iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La génération par IA n’est pas disponible sur cet iPhone"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "KI-Generierung ist auf diesem iPhone nicht verfügbar"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "KI-Generierung ist auf diesem iPad nicht verfügbar"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "KI-Generierung ist auf diesem iPhone nicht verfügbar"
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneではAI生成を利用できません"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadではAI生成を利用できません"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneではAI生成を利用できません"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone에서는 AI 생성을 사용할 수 없어요"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad에서는 AI 생성을 사용할 수 없어요"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone에서는 AI 생성을 사용할 수 없어요"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A geração com IA não está disponível neste iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A geração com IA não está disponível neste iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A geração com IA não está disponível neste iPhone"
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La generación con IA no está disponible en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con IA no está disponible en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con IA no está disponible en este iPhone"
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La generación con IA no está disponible en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con IA no está disponible en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con IA no está disponible en este iPhone"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "AI generation isn't available on this iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "AI generation isn't available on this iPhone"
+                }
+              }
+            }
           }
         }
       }
@@ -7068,15 +7940,39 @@
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Después de tu primer conjunto, las generaciones se hacen en tu iPhone y nunca salen de él."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Después de tu primer conjunto, las generaciones se hacen en tu iPad y nunca salen de él."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Después de tu primer conjunto, las generaciones se hacen en tu iPhone y nunca salen de él."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Después de tu primer conjunto, las generaciones se hacen en tu iPhone y nunca salen de él."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Después de tu primer conjunto, las generaciones se hacen en tu iPad y nunca salen de él."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Después de tu primer conjunto, las generaciones se hacen en tu iPhone y nunca salen de él."
+                }
+              }
+            }
           }
         }
       }
@@ -7501,45 +8397,147 @@
     "Better cards on any iPhone, generated in the cloud." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De meilleures cartes sur n’importe quel iPhone, générées dans le cloud."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "De meilleures cartes sur n’importe quel iPad, générées dans le cloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "De meilleures cartes sur n’importe quel iPhone, générées dans le cloud."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bessere Karten auf jedem iPhone, in der Cloud erstellt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Bessere Karten auf jedem iPad, in der Cloud erstellt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Bessere Karten auf jedem iPhone, in der Cloud erstellt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "どのiPhoneでも、クラウドでより質の高いカードを生成します。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "どのiPadでも、クラウドでより質の高いカードを生成します。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "どのiPhoneでも、クラウドでより質の高いカードを生成します。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "클라우드에서 생성해 어떤 iPhone에서든 더 좋은 카드를 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "클라우드에서 생성해 어떤 iPad에서든 더 좋은 카드를 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "클라우드에서 생성해 어떤 iPhone에서든 더 좋은 카드를 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cartões melhores em qualquer iPhone, gerados na nuvem."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cartões melhores em qualquer iPad, gerados na nuvem."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cartões melhores em qualquer iPhone, gerados na nuvem."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mejores tarjetas en cualquier iPhone, generadas en la nube."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Mejores tarjetas en cualquier iPad, generadas en la nube."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Mejores tarjetas en cualquier iPhone, generadas en la nube."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mejores tarjetas en cualquier iPhone, generadas en la nube."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Mejores tarjetas en cualquier iPad, generadas en la nube."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Mejores tarjetas en cualquier iPhone, generadas en la nube."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Better cards on any iPad, generated in the cloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Better cards on any iPhone, generated in the cloud."
+                }
+              }
+            }
           }
         }
       }
@@ -8645,15 +9643,39 @@
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige “Ahora no” y todos los borradores se quedan en tu iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Elige “Ahora no” y todos los borradores se quedan en tu iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Elige “Ahora no” y todos los borradores se quedan en tu iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige “Ahora no” y todos los borradores se quedan en tu iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Elige “Ahora no” y todos los borradores se quedan en tu iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Elige “Ahora no” y todos los borradores se quedan en tu iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -8891,45 +9913,147 @@
     "Cloud drafting makes better cards. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days. Not Now drafts on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La rédaction dans le cloud donne de meilleures cartes. Ton texte est envoyé à Private Cloud Compute d’Apple ou au serveur de QuickStudy, qui utilise Claude d’Anthropic. Claude le supprime sous 30 jours. Si tu choisis « Pas maintenant », les cartes sont rédigées sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La rédaction dans le cloud donne de meilleures cartes. Ton texte est envoyé à Private Cloud Compute d’Apple ou au serveur de QuickStudy, qui utilise Claude d’Anthropic. Claude le supprime sous 30 jours. Si tu choisis « Pas maintenant », les cartes sont rédigées sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La rédaction dans le cloud donne de meilleures cartes. Ton texte est envoyé à Private Cloud Compute d’Apple ou au serveur de QuickStudy, qui utilise Claude d’Anthropic. Claude le supprime sous 30 jours. Si tu choisis « Pas maintenant », les cartes sont rédigées sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit dem Erstellen in der Cloud werden die Karten besser. Dein Text wird an Apples Private Cloud Compute oder an den Server von QuickStudy gesendet, der Claude von Anthropic nutzt. Claude löscht ihn innerhalb von 30 Tagen. Mit „Nicht jetzt“ werden Entwürfe auf diesem iPhone erstellt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Mit dem Erstellen in der Cloud werden die Karten besser. Dein Text wird an Apples Private Cloud Compute oder an den Server von QuickStudy gesendet, der Claude von Anthropic nutzt. Claude löscht ihn innerhalb von 30 Tagen. Mit „Nicht jetzt“ werden Entwürfe auf diesem iPad erstellt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Mit dem Erstellen in der Cloud werden die Karten besser. Dein Text wird an Apples Private Cloud Compute oder an den Server von QuickStudy gesendet, der Claude von Anthropic nutzt. Claude löscht ihn innerhalb von 30 Tagen. Mit „Nicht jetzt“ werden Entwürfe auf diesem iPhone erstellt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "クラウドで作成すると、より質の高いカードができます。テキストはAppleのPrivate Cloud Compute、またはAnthropicのClaudeを使用するQuickStudyのサーバに送信されます。Claudeは30日以内にテキストを削除します。「今はしない」を選ぶと、このiPhone上で作成します。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "クラウドで作成すると、より質の高いカードができます。テキストはAppleのPrivate Cloud Compute、またはAnthropicのClaudeを使用するQuickStudyのサーバに送信されます。Claudeは30日以内にテキストを削除します。「今はしない」を選ぶと、このiPad上で作成します。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "クラウドで作成すると、より質の高いカードができます。テキストはAppleのPrivate Cloud Compute、またはAnthropicのClaudeを使用するQuickStudyのサーバに送信されます。Claudeは30日以内にテキストを削除します。「今はしない」を選ぶと、このiPhone上で作成します。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "클라우드에서 초안을 만들면 더 좋은 카드가 나와요. 텍스트는 Apple의 Private Cloud Compute 또는 Anthropic의 Claude를 사용하는 QuickStudy 서버로 전송돼요. Claude는 30일 이내에 텍스트를 삭제해요. ‘나중에’를 누르면 이 iPhone에서 초안을 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "클라우드에서 초안을 만들면 더 좋은 카드가 나와요. 텍스트는 Apple의 Private Cloud Compute 또는 Anthropic의 Claude를 사용하는 QuickStudy 서버로 전송돼요. Claude는 30일 이내에 텍스트를 삭제해요. ‘나중에’를 누르면 이 iPad에서 초안을 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "클라우드에서 초안을 만들면 더 좋은 카드가 나와요. 텍스트는 Apple의 Private Cloud Compute 또는 Anthropic의 Claude를 사용하는 QuickStudy 서버로 전송돼요. Claude는 30일 이내에 텍스트를 삭제해요. ‘나중에’를 누르면 이 iPhone에서 초안을 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Criar na nuvem gera cartões melhores. Seu texto é enviado ao Private Cloud Compute da Apple ou ao servidor do QuickStudy, que usa o Claude, da Anthropic. O Claude apaga o texto em até 30 dias. Com “Agora não”, os cartões são criados neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Criar na nuvem gera cartões melhores. Seu texto é enviado ao Private Cloud Compute da Apple ou ao servidor do QuickStudy, que usa o Claude, da Anthropic. O Claude apaga o texto em até 30 dias. Com “Agora não”, os cartões são criados neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Criar na nuvem gera cartões melhores. Seu texto é enviado ao Private Cloud Compute da Apple ou ao servidor do QuickStudy, que usa o Claude, da Anthropic. O Claude apaga o texto em até 30 dias. Com “Agora não”, os cartões são criados neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redactar en la nube genera mejores tarjetas. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días. Si eliges “Ahora no”, se redacta en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactar en la nube genera mejores tarjetas. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días. Si eliges “Ahora no”, se redacta en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactar en la nube genera mejores tarjetas. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días. Si eliges “Ahora no”, se redacta en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redactar en la nube genera mejores tarjetas. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días. Si eliges “Ahora no”, se redacta en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactar en la nube genera mejores tarjetas. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días. Si eliges “Ahora no”, se redacta en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactar en la nube genera mejores tarjetas. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días. Si eliges “Ahora no”, se redacta en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cloud drafting makes better cards. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days. Not Now drafts on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cloud drafting makes better cards. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days. Not Now drafts on this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -8937,45 +10061,147 @@
     "Cloud drafting on any iPhone, whenever you need it." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La rédaction dans le cloud sur n’importe quel iPhone, quand tu en as besoin."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La rédaction dans le cloud sur n’importe quel iPad, quand tu en as besoin."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La rédaction dans le cloud sur n’importe quel iPhone, quand tu en as besoin."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Erstellen in der Cloud, auf jedem iPhone und wann immer du es brauchst."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Erstellen in der Cloud, auf jedem iPad und wann immer du es brauchst."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Erstellen in der Cloud, auf jedem iPhone und wann immer du es brauchst."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "どのiPhoneでも、必要なときにクラウドで作成できます。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "どのiPadでも、必要なときにクラウドで作成できます。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "どのiPhoneでも、必要なときにクラウドで作成できます。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "필요할 때면 언제든, 어떤 iPhone에서든 클라우드에서 초안을 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "필요할 때면 언제든, 어떤 iPad에서든 클라우드에서 초안을 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "필요할 때면 언제든, 어떤 iPhone에서든 클라우드에서 초안을 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Criação na nuvem em qualquer iPhone, sempre que você precisar."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Criação na nuvem em qualquer iPad, sempre que você precisar."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Criação na nuvem em qualquer iPhone, sempre que você precisar."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redacción en la nube en cualquier iPhone, cuando la necesites."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redacción en la nube en cualquier iPad, cuando la necesites."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redacción en la nube en cualquier iPhone, cuando la necesites."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redacción en la nube en cualquier iPhone, cuando la necesites."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redacción en la nube en cualquier iPad, cuando la necesites."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redacción en la nube en cualquier iPhone, cuando la necesites."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cloud drafting on any iPad, whenever you need it."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cloud drafting on any iPhone, whenever you need it."
+                }
+              }
+            }
           }
         }
       }
@@ -10833,45 +12059,147 @@
     "Drafted on this iPhone" : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rédigé sur cet iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Rédigé sur cet iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Rédigé sur cet iPhone"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auf diesem iPhone erstellt"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf diesem iPad erstellt"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf diesem iPhone erstellt"
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhone上で作成"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPad上で作成"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhone上で作成"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone에서 초안 작성됨"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad에서 초안 작성됨"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone에서 초안 작성됨"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Criado neste iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Criado neste iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Criado neste iPhone"
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redactado en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactado en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactado en este iPhone"
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redactado en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactado en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Redactado en este iPhone"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Drafted on this iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Drafted on this iPhone"
+                }
+              }
+            }
           }
         }
       }
@@ -11207,45 +12535,147 @@
     "Drafts may run on Apple's Private Cloud Compute or on QuickStudy's server. The server sends your text to Anthropic's Claude, which deletes it within 30 days. Turn this off to keep every draft on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La rédaction peut se faire sur Private Cloud Compute d’Apple ou sur le serveur de QuickStudy. Le serveur envoie ton texte à Claude d’Anthropic, qui le supprime sous 30 jours. Désactive cette option pour garder chaque brouillon sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La rédaction peut se faire sur Private Cloud Compute d’Apple ou sur le serveur de QuickStudy. Le serveur envoie ton texte à Claude d’Anthropic, qui le supprime sous 30 jours. Désactive cette option pour garder chaque brouillon sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La rédaction peut se faire sur Private Cloud Compute d’Apple ou sur le serveur de QuickStudy. Le serveur envoie ton texte à Claude d’Anthropic, qui le supprime sous 30 jours. Désactive cette option pour garder chaque brouillon sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entwürfe laufen möglicherweise auf Apples Private Cloud Compute oder auf dem Server von QuickStudy. Der Server sendet deinen Text an Claude von Anthropic. Claude löscht ihn innerhalb von 30 Tagen. Schalte dies aus, damit jeder Entwurf auf diesem iPhone bleibt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Entwürfe laufen möglicherweise auf Apples Private Cloud Compute oder auf dem Server von QuickStudy. Der Server sendet deinen Text an Claude von Anthropic. Claude löscht ihn innerhalb von 30 Tagen. Schalte dies aus, damit jeder Entwurf auf diesem iPad bleibt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Entwürfe laufen möglicherweise auf Apples Private Cloud Compute oder auf dem Server von QuickStudy. Der Server sendet deinen Text an Claude von Anthropic. Claude löscht ihn innerhalb von 30 Tagen. Schalte dies aus, damit jeder Entwurf auf diesem iPhone bleibt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "作成は、AppleのPrivate Cloud ComputeまたはQuickStudyのサーバで行われる場合があります。サーバはテキストをAnthropicのClaudeに送信し、Claudeは30日以内にテキストを削除します。すべての作成をこのiPhone上で行うには、この設定をオフにしてください。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "作成は、AppleのPrivate Cloud ComputeまたはQuickStudyのサーバで行われる場合があります。サーバはテキストをAnthropicのClaudeに送信し、Claudeは30日以内にテキストを削除します。すべての作成をこのiPad上で行うには、この設定をオフにしてください。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "作成は、AppleのPrivate Cloud ComputeまたはQuickStudyのサーバで行われる場合があります。サーバはテキストをAnthropicのClaudeに送信し、Claudeは30日以内にテキストを削除します。すべての作成をこのiPhone上で行うには、この設定をオフにしてください。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "초안은 Apple의 Private Cloud Compute나 QuickStudy 서버에서 작성될 수 있어요. 서버는 텍스트를 Anthropic의 Claude로 보내며, Claude는 30일 이내에 텍스트를 삭제해요. 모든 초안을 이 iPhone에서만 작성하려면 이 옵션을 끄세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "초안은 Apple의 Private Cloud Compute나 QuickStudy 서버에서 작성될 수 있어요. 서버는 텍스트를 Anthropic의 Claude로 보내며, Claude는 30일 이내에 텍스트를 삭제해요. 모든 초안을 이 iPad에서만 작성하려면 이 옵션을 끄세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "초안은 Apple의 Private Cloud Compute나 QuickStudy 서버에서 작성될 수 있어요. 서버는 텍스트를 Anthropic의 Claude로 보내며, Claude는 30일 이내에 텍스트를 삭제해요. 모든 초안을 이 iPhone에서만 작성하려면 이 옵션을 끄세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Os rascunhos podem ser criados no Private Cloud Compute da Apple ou no servidor do QuickStudy. O servidor envia seu texto ao Claude, da Anthropic, que o apaga em até 30 dias. Desative para manter todos os rascunhos neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Os rascunhos podem ser criados no Private Cloud Compute da Apple ou no servidor do QuickStudy. O servidor envia seu texto ao Claude, da Anthropic, que o apaga em até 30 dias. Desative para manter todos os rascunhos neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Os rascunhos podem ser criados no Private Cloud Compute da Apple ou no servidor do QuickStudy. O servidor envia seu texto ao Claude, da Anthropic, que o apaga em até 30 dias. Desative para manter todos os rascunhos neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los borradores pueden ejecutarse en Private Cloud Compute de Apple o en el servidor de QuickStudy. El servidor envía tu texto a Claude de Anthropic, que lo elimina en un plazo de 30 días. Desactiva esto para que todos los borradores se queden en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Los borradores pueden ejecutarse en Private Cloud Compute de Apple o en el servidor de QuickStudy. El servidor envía tu texto a Claude de Anthropic, que lo elimina en un plazo de 30 días. Desactiva esto para que todos los borradores se queden en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Los borradores pueden ejecutarse en Private Cloud Compute de Apple o en el servidor de QuickStudy. El servidor envía tu texto a Claude de Anthropic, que lo elimina en un plazo de 30 días. Desactiva esto para que todos los borradores se queden en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los borradores pueden ejecutarse en Private Cloud Compute de Apple o en el servidor de QuickStudy. El servidor envía tu texto a Claude de Anthropic, que lo elimina en un plazo de 30 días. Desactiva esto para que todos los borradores se queden en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Los borradores pueden ejecutarse en Private Cloud Compute de Apple o en el servidor de QuickStudy. El servidor envía tu texto a Claude de Anthropic, que lo elimina en un plazo de 30 días. Desactiva esto para que todos los borradores se queden en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Los borradores pueden ejecutarse en Private Cloud Compute de Apple o en el servidor de QuickStudy. El servidor envía tu texto a Claude de Anthropic, que lo elimina en un plazo de 30 días. Desactiva esto para que todos los borradores se queden en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Drafts may run on Apple's Private Cloud Compute or on QuickStudy's server. The server sends your text to Anthropic's Claude, which deletes it within 30 days. Turn this off to keep every draft on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Drafts may run on Apple's Private Cloud Compute or on QuickStudy's server. The server sends your text to Anthropic's Claude, which deletes it within 30 days. Turn this off to keep every draft on this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -16017,45 +17447,147 @@
     "On this iPhone" : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sur cet iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sur cet iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Sur cet iPhone"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auf diesem iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf diesem iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Auf diesem iPhone"
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhone上"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPad上"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhone上"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone에서"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad에서"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone에서"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neste iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Neste iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Neste iPhone"
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "En este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "En este iPhone"
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "En este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "En este iPhone"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On this iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On this iPhone"
+                }
+              }
+            }
           }
         }
       }
@@ -16532,45 +18064,147 @@
     "Or keep it on this iPhone" : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ou garde-le sur cet iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ou garde-le sur cet iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ou garde-le sur cet iPhone"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oder auf diesem iPhone behalten"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Oder auf diesem iPad behalten"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Oder auf diesem iPhone behalten"
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "またはこのiPhone内で処理"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "またはこのiPad内で処理"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "またはこのiPhone内で処理"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "또는 이 iPhone에서만 처리"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "또는 이 iPad에서만 처리"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "또는 이 iPhone에서만 처리"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ou mantenha neste iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ou mantenha neste iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ou mantenha neste iPhone"
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O déjalo en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O déjalo en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O déjalo en este iPhone"
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O déjalo en este iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O déjalo en este iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O déjalo en este iPhone"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Or keep it on this iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Or keep it on this iPhone"
+                }
+              }
+            }
           }
         }
       }
@@ -17749,45 +19383,147 @@
     "Pro generation needs a real iPhone to verify the app." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La génération Pro nécessite un vrai iPhone pour vérifier l’app."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La génération Pro nécessite un vrai iPad pour vérifier l’app."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La génération Pro nécessite un vrai iPhone pour vérifier l’app."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Für die Pro-Generierung wird ein echtes iPhone benötigt, um die App zu verifizieren."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Für die Pro-Generierung wird ein echtes iPad benötigt, um die App zu verifizieren."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Für die Pro-Generierung wird ein echtes iPhone benötigt, um die App zu verifizieren."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Proの生成には、Appを確認するために実機のiPhoneが必要です。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Proの生成には、Appを確認するために実機のiPadが必要です。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Proの生成には、Appを確認するために実機のiPhoneが必要です。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pro 생성을 사용하려면 실제 iPhone에서 앱을 인증해야 해요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Pro 생성을 사용하려면 실제 iPad에서 앱을 인증해야 해요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Pro 생성을 사용하려면 실제 iPhone에서 앱을 인증해야 해요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A geração do Pro precisa de um iPhone real para verificar o app."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A geração do Pro precisa de um iPad real para verificar o app."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A geração do Pro precisa de um iPhone real para verificar o app."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La generación con Pro necesita un iPhone real para verificar la app."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con Pro necesita un iPad real para verificar la app."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con Pro necesita un iPhone real para verificar la app."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La generación con Pro necesita un iPhone real para verificar la app."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con Pro necesita un iPad real para verificar la app."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "La generación con Pro necesita un iPhone real para verificar la app."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Pro generation needs a real iPad to verify the app."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Pro generation needs a real iPhone to verify the app."
+                }
+              }
+            }
           }
         }
       }
@@ -18228,45 +19964,147 @@
     "QuickStudy couldn't verify this iPhone. Try again in a moment." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy n’a pas pu vérifier cet iPhone. Réessaie dans un instant."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy n’a pas pu vérifier cet iPad. Réessaie dans un instant."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy n’a pas pu vérifier cet iPhone. Réessaie dans un instant."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy konnte dieses iPhone nicht verifizieren. Versuche es gleich noch einmal."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy konnte dieses iPad nicht verifizieren. Versuche es gleich noch einmal."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy konnte dieses iPhone nicht verifizieren. Versuche es gleich noch einmal."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudyでこのiPhoneを確認できませんでした。しばらくしてからもう一度お試しください。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudyでこのiPadを確認できませんでした。しばらくしてからもう一度お試しください。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudyでこのiPhoneを確認できませんでした。しばらくしてからもう一度お試しください。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy에서 이 iPhone을 인증할 수 없어요. 잠시 후 다시 시도하세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy에서 이 iPad를 인증할 수 없어요. 잠시 후 다시 시도하세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy에서 이 iPhone을 인증할 수 없어요. 잠시 후 다시 시도하세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O QuickStudy não conseguiu verificar este iPhone. Tente novamente em instantes."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O QuickStudy não conseguiu verificar este iPad. Tente novamente em instantes."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O QuickStudy não conseguiu verificar este iPhone. Tente novamente em instantes."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy no pudo verificar este iPhone. Inténtalo de nuevo en un momento."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy no pudo verificar este iPad. Inténtalo de nuevo en un momento."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy no pudo verificar este iPhone. Inténtalo de nuevo en un momento."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy no ha podido verificar este iPhone. Inténtalo de nuevo en un momento."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy no ha podido verificar este iPad. Inténtalo de nuevo en un momento."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy no ha podido verificar este iPhone. Inténtalo de nuevo en un momento."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy couldn't verify this iPad. Try again in a moment."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy couldn't verify this iPhone. Try again in a moment."
+                }
+              }
+            }
           }
         }
       }
@@ -18274,45 +20112,147 @@
     "QuickStudy drafts flashcards with Apple Intelligence, on this iPhone or in Apple's Private Cloud Compute." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy rédige des cartes avec Apple Intelligence, sur cet iPhone ou dans Private Cloud Compute d’Apple."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy rédige des cartes avec Apple Intelligence, sur cet iPad ou dans Private Cloud Compute d’Apple."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy rédige des cartes avec Apple Intelligence, sur cet iPhone ou dans Private Cloud Compute d’Apple."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy erstellt Lernkarten mit Apple Intelligence, auf diesem iPhone oder in Apples Private Cloud Compute."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy erstellt Lernkarten mit Apple Intelligence, auf diesem iPad oder in Apples Private Cloud Compute."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy erstellt Lernkarten mit Apple Intelligence, auf diesem iPhone oder in Apples Private Cloud Compute."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudyは、Apple Intelligenceを使って、このiPhone上またはAppleのPrivate Cloud Computeでフラッシュカードを作成します。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudyは、Apple Intelligenceを使って、このiPad上またはAppleのPrivate Cloud Computeでフラッシュカードを作成します。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudyは、Apple Intelligenceを使って、このiPhone上またはAppleのPrivate Cloud Computeでフラッシュカードを作成します。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy는 이 iPhone 또는 Apple의 Private Cloud Compute에서 Apple Intelligence로 플래시카드 초안을 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy는 이 iPad 또는 Apple의 Private Cloud Compute에서 Apple Intelligence로 플래시카드 초안을 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy는 이 iPhone 또는 Apple의 Private Cloud Compute에서 Apple Intelligence로 플래시카드 초안을 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O QuickStudy cria flashcards com o Apple Intelligence, neste iPhone ou no Private Cloud Compute da Apple."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O QuickStudy cria flashcards com o Apple Intelligence, neste iPad ou no Private Cloud Compute da Apple."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O QuickStudy cria flashcards com o Apple Intelligence, neste iPhone ou no Private Cloud Compute da Apple."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy redacta tarjetas con Apple Intelligence, en este iPhone o en Private Cloud Compute de Apple."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy redacta tarjetas con Apple Intelligence, en este iPad o en Private Cloud Compute de Apple."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy redacta tarjetas con Apple Intelligence, en este iPhone o en Private Cloud Compute de Apple."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy redacta tarjetas con Apple Intelligence, en este iPhone o en Private Cloud Compute de Apple."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy redacta tarjetas con Apple Intelligence, en este iPad o en Private Cloud Compute de Apple."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy redacta tarjetas con Apple Intelligence, en este iPhone o en Private Cloud Compute de Apple."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy drafts flashcards with Apple Intelligence, on this iPad or in Apple's Private Cloud Compute."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy drafts flashcards with Apple Intelligence, on this iPhone or in Apple's Private Cloud Compute."
+                }
+              }
+            }
           }
         }
       }
@@ -18412,45 +20352,147 @@
     "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy transforme tes notes en cartes avec Apple Intelligence, directement sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy transforme tes notes en cartes avec Apple Intelligence, directement sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy transforme tes notes en cartes avec Apple Intelligence, directement sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy macht aus Notizen Lernkarten, mit Apple Intelligence direkt auf diesem iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy macht aus Notizen Lernkarten, mit Apple Intelligence direkt auf diesem iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy macht aus Notizen Lernkarten, mit Apple Intelligence direkt auf diesem iPhone."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudyは、Apple Intelligenceを使って、このiPhone上でノートをフラッシュカードにします。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudyは、Apple Intelligenceを使って、このiPad上でノートをフラッシュカードにします。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudyは、Apple Intelligenceを使って、このiPhone上でノートをフラッシュカードにします。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy는 Apple Intelligence를 사용해 이 iPhone에서 바로 노트를 플래시카드로 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy는 Apple Intelligence를 사용해 이 iPad에서 바로 노트를 플래시카드로 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy는 Apple Intelligence를 사용해 이 iPhone에서 바로 노트를 플래시카드로 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O QuickStudy transforma anotações em flashcards com o Apple Intelligence, direto neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O QuickStudy transforma anotações em flashcards com o Apple Intelligence, direto neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O QuickStudy transforma anotações em flashcards com o Apple Intelligence, direto neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy convierte tus apuntes en tarjetas con Apple Intelligence, directamente en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy convierte tus apuntes en tarjetas con Apple Intelligence, directamente en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy convierte tus apuntes en tarjetas con Apple Intelligence, directamente en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QuickStudy convierte tus apuntes en tarjetas con Apple Intelligence, directamente en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy convierte tus apuntes en tarjetas con Apple Intelligence, directamente en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy convierte tus apuntes en tarjetas con Apple Intelligence, directamente en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "QuickStudy turns notes into flashcards using Apple Intelligence, right on this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -23754,45 +25796,147 @@
     "This iPhone can’t draft cards on its own. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cet iPhone ne peut pas rédiger de cartes seul. Ton texte est envoyé à Private Cloud Compute d’Apple ou au serveur de QuickStudy, qui utilise Claude d’Anthropic. Claude le supprime sous 30 jours."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPad ne peut pas rédiger de cartes seul. Ton texte est envoyé à Private Cloud Compute d’Apple ou au serveur de QuickStudy, qui utilise Claude d’Anthropic. Claude le supprime sous 30 jours."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPhone ne peut pas rédiger de cartes seul. Ton texte est envoyé à Private Cloud Compute d’Apple ou au serveur de QuickStudy, qui utilise Claude d’Anthropic. Claude le supprime sous 30 jours."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieses iPhone kann Karten nicht allein erstellen. Dein Text wird an Apples Private Cloud Compute oder an den Server von QuickStudy gesendet, der Claude von Anthropic nutzt. Claude löscht ihn innerhalb von 30 Tagen."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPad kann Karten nicht allein erstellen. Dein Text wird an Apples Private Cloud Compute oder an den Server von QuickStudy gesendet, der Claude von Anthropic nutzt. Claude löscht ihn innerhalb von 30 Tagen."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPhone kann Karten nicht allein erstellen. Dein Text wird an Apples Private Cloud Compute oder an den Server von QuickStudy gesendet, der Claude von Anthropic nutzt. Claude löscht ihn innerhalb von 30 Tagen."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneだけではカードを作成できません。テキストはAppleのPrivate Cloud Compute、またはAnthropicのClaudeを使用するQuickStudyのサーバに送信されます。Claudeは30日以内にテキストを削除します。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadだけではカードを作成できません。テキストはAppleのPrivate Cloud Compute、またはAnthropicのClaudeを使用するQuickStudyのサーバに送信されます。Claudeは30日以内にテキストを削除します。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneだけではカードを作成できません。テキストはAppleのPrivate Cloud Compute、またはAnthropicのClaudeを使用するQuickStudyのサーバに送信されます。Claudeは30日以内にテキストを削除します。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone은 자체적으로 카드 초안을 만들 수 없어요. 텍스트는 Apple의 Private Cloud Compute 또는 Anthropic의 Claude를 사용하는 QuickStudy 서버로 전송돼요. Claude는 30일 이내에 텍스트를 삭제해요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad는 자체적으로 카드 초안을 만들 수 없어요. 텍스트는 Apple의 Private Cloud Compute 또는 Anthropic의 Claude를 사용하는 QuickStudy 서버로 전송돼요. Claude는 30일 이내에 텍스트를 삭제해요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone은 자체적으로 카드 초안을 만들 수 없어요. 텍스트는 Apple의 Private Cloud Compute 또는 Anthropic의 Claude를 사용하는 QuickStudy 서버로 전송돼요. Claude는 30일 이내에 텍스트를 삭제해요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone não consegue criar cartões sozinho. Seu texto é enviado ao Private Cloud Compute da Apple ou ao servidor do QuickStudy, que usa o Claude, da Anthropic. O Claude apaga o texto em até 30 dias."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad não consegue criar cartões sozinho. Seu texto é enviado ao Private Cloud Compute da Apple ou ao servidor do QuickStudy, que usa o Claude, da Anthropic. O Claude apaga o texto em até 30 dias."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone não consegue criar cartões sozinho. Seu texto é enviado ao Private Cloud Compute da Apple ou ao servidor do QuickStudy, que usa o Claude, da Anthropic. O Claude apaga o texto em até 30 dias."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no puede redactar tarjetas por sí solo. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no puede redactar tarjetas por sí solo. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no puede redactar tarjetas por sí solo. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no puede redactar tarjetas por sí solo. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no puede redactar tarjetas por sí solo. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no puede redactar tarjetas por sí solo. Tu texto se envía a Private Cloud Compute de Apple o al servidor de QuickStudy, que usa Claude de Anthropic. Claude lo elimina en un plazo de 30 días."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPad can’t draft cards on its own. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPhone can’t draft cards on its own. Your text is sent to Apple’s Private Cloud Compute or to QuickStudy’s server, which uses Anthropic’s Claude. Claude deletes it within 30 days."
+                }
+              }
+            }
           }
         }
       }
@@ -23800,45 +25944,147 @@
     "This iPhone couldn't verify with QuickStudy. Try again in a moment." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cet iPhone n’a pas pu se vérifier auprès de QuickStudy. Réessaie dans un instant."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPad n’a pas pu se vérifier auprès de QuickStudy. Réessaie dans un instant."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPhone n’a pas pu se vérifier auprès de QuickStudy. Réessaie dans un instant."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieses iPhone konnte nicht mit QuickStudy verifiziert werden. Versuche es gleich noch einmal."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPad konnte nicht mit QuickStudy verifiziert werden. Versuche es gleich noch einmal."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPhone konnte nicht mit QuickStudy verifiziert werden. Versuche es gleich noch einmal."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneをQuickStudyで確認できませんでした。しばらくしてからもう一度お試しください。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadをQuickStudyで確認できませんでした。しばらくしてからもう一度お試しください。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneをQuickStudyで確認できませんでした。しばらくしてからもう一度お試しください。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone을 QuickStudy에서 인증하지 못했어요. 잠시 후 다시 시도하세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad를 QuickStudy에서 인증하지 못했어요. 잠시 후 다시 시도하세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone을 QuickStudy에서 인증하지 못했어요. 잠시 후 다시 시도하세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone não conseguiu se verificar com o QuickStudy. Tente novamente em instantes."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad não conseguiu se verificar com o QuickStudy. Tente novamente em instantes."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone não conseguiu se verificar com o QuickStudy. Tente novamente em instantes."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no pudo verificarse con QuickStudy. Inténtalo de nuevo en un momento."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no pudo verificarse con QuickStudy. Inténtalo de nuevo en un momento."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no pudo verificarse con QuickStudy. Inténtalo de nuevo en un momento."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no ha podido verificarse con QuickStudy. Inténtalo de nuevo en un momento."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no ha podido verificarse con QuickStudy. Inténtalo de nuevo en un momento."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no ha podido verificarse con QuickStudy. Inténtalo de nuevo en un momento."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPad couldn't verify with QuickStudy. Try again in a moment."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPhone couldn't verify with QuickStudy. Try again in a moment."
+                }
+              }
+            }
           }
         }
       }
@@ -23846,45 +26092,147 @@
     "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cet iPhone ne prend pas en charge Apple Intelligence, donc QuickStudy rédige tes cartes dans le cloud."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPad ne prend pas en charge Apple Intelligence, donc QuickStudy rédige tes cartes dans le cloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPhone ne prend pas en charge Apple Intelligence, donc QuickStudy rédige tes cartes dans le cloud."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieses iPhone unterstützt Apple Intelligence nicht, daher erstellt QuickStudy deine Karten in der Cloud."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPad unterstützt Apple Intelligence nicht, daher erstellt QuickStudy deine Karten in der Cloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPhone unterstützt Apple Intelligence nicht, daher erstellt QuickStudy deine Karten in der Cloud."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneはApple Intelligenceに対応していないため、QuickStudyはクラウドでカードを作成します。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadはApple Intelligenceに対応していないため、QuickStudyはクラウドでカードを作成します。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneはApple Intelligenceに対応していないため、QuickStudyはクラウドでカードを作成します。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone은 Apple Intelligence를 지원하지 않아서 QuickStudy가 클라우드에서 카드 초안을 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad는 Apple Intelligence를 지원하지 않아서 QuickStudy가 클라우드에서 카드 초안을 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone은 Apple Intelligence를 지원하지 않아서 QuickStudy가 클라우드에서 카드 초안을 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone não tem o Apple Intelligence, então o QuickStudy cria seus cartões na nuvem."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad não tem o Apple Intelligence, então o QuickStudy cria seus cartões na nuvem."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone não tem o Apple Intelligence, então o QuickStudy cria seus cartões na nuvem."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no tiene Apple Intelligence, así que QuickStudy redacta tus tarjetas en la nube."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no tiene Apple Intelligence, así que QuickStudy redacta tus tarjetas en la nube."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no tiene Apple Intelligence, así que QuickStudy redacta tus tarjetas en la nube."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no tiene Apple Intelligence, así que QuickStudy redacta tus tarjetas en la nube."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no tiene Apple Intelligence, así que QuickStudy redacta tus tarjetas en la nube."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no tiene Apple Intelligence, así que QuickStudy redacta tus tarjetas en la nube."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPad doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPhone doesn't run Apple Intelligence, so QuickStudy drafts your cards in the cloud."
+                }
+              }
+            }
           }
         }
       }
@@ -23892,45 +26240,147 @@
     "This iPhone doesn't support on-device AI." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cet iPhone ne prend pas en charge l’IA sur l’appareil."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPad ne prend pas en charge l’IA sur l’appareil."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPhone ne prend pas en charge l’IA sur l’appareil."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieses iPhone unterstützt keine KI auf dem Gerät."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPad unterstützt keine KI auf dem Gerät."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPhone unterstützt keine KI auf dem Gerät."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneはデバイス上のAIに対応していません。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadはデバイス上のAIに対応していません。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneはデバイス上のAIに対応していません。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone은 기기 내 AI를 지원하지 않아요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad는 기기 내 AI를 지원하지 않아요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone은 기기 내 AI를 지원하지 않아요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone não é compatível com IA no aparelho."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad não é compatível com IA no aparelho."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone não é compatível com IA no aparelho."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no admite IA en el dispositivo."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no admite IA en el dispositivo."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no admite IA en el dispositivo."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone no admite IA en el dispositivo."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad no admite IA en el dispositivo."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone no admite IA en el dispositivo."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPad doesn't support on-device AI."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPhone doesn't support on-device AI."
+                }
+              }
+            }
           }
         }
       }
@@ -23938,45 +26388,147 @@
     "This iPhone needs to re-verify with QuickStudy. Try again." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cet iPhone doit être de nouveau vérifié auprès de QuickStudy. Réessaie."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPad doit être de nouveau vérifié auprès de QuickStudy. Réessaie."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cet iPhone doit être de nouveau vérifié auprès de QuickStudy. Réessaie."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieses iPhone muss sich erneut bei QuickStudy verifizieren. Versuche es erneut."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPad muss sich erneut bei QuickStudy verifizieren. Versuche es erneut."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dieses iPhone muss sich erneut bei QuickStudy verifizieren. Versuche es erneut."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneをQuickStudyで再確認する必要があります。もう一度お試しください。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadをQuickStudyで再確認する必要があります。もう一度お試しください。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneをQuickStudyで再確認する必要があります。もう一度お試しください。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone을 QuickStudy에서 다시 인증해야 해요. 다시 시도하세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad를 QuickStudy에서 다시 인증해야 해요. 다시 시도하세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone을 QuickStudy에서 다시 인증해야 해요. 다시 시도하세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone precisa ser verificado de novo com o QuickStudy. Tente novamente."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad precisa ser verificado de novo com o QuickStudy. Tente novamente."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone precisa ser verificado de novo com o QuickStudy. Tente novamente."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone debe volver a verificarse con QuickStudy. Inténtalo de nuevo."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad debe volver a verificarse con QuickStudy. Inténtalo de nuevo."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone debe volver a verificarse con QuickStudy. Inténtalo de nuevo."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este iPhone debe volver a verificarse con QuickStudy. Inténtalo de nuevo."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPad debe volver a verificarse con QuickStudy. Inténtalo de nuevo."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Este iPhone debe volver a verificarse con QuickStudy. Inténtalo de nuevo."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPad needs to re-verify with QuickStudy. Try again."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPhone needs to re-verify with QuickStudy. Try again."
+                }
+              }
+            }
           }
         }
       }
@@ -23984,45 +26536,147 @@
     "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le paquet cloud gratuit de cet iPhone a déjà été utilisé. Saisis tes propres cartes ou passe à Pro pour continuer à rédiger avec l’IA."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Le paquet cloud gratuit de cet iPad a déjà été utilisé. Saisis tes propres cartes ou passe à Pro pour continuer à rédiger avec l’IA."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Le paquet cloud gratuit de cet iPhone a déjà été utilisé. Saisis tes propres cartes ou passe à Pro pour continuer à rédiger avec l’IA."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das kostenlose Cloud-Set dieses iPhones wurde bereits verwendet. Gib eigene Karten ein oder nutze Pro, um weiter mit KI zu erstellen."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Das kostenlose Cloud-Set dieses iPads wurde bereits verwendet. Gib eigene Karten ein oder nutze Pro, um weiter mit KI zu erstellen."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Das kostenlose Cloud-Set dieses iPhones wurde bereits verwendet. Gib eigene Karten ein oder nutze Pro, um weiter mit KI zu erstellen."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneの無料クラウド作成（1セット分）はすでに使用済みです。カードを自分で入力するか、Proにアップグレードして引き続きAIで作成しましょう。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadの無料クラウド作成（1セット分）はすでに使用済みです。カードを自分で入力するか、Proにアップグレードして引き続きAIで作成しましょう。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneの無料クラウド作成（1セット分）はすでに使用済みです。カードを自分で入力するか、Proにアップグレードして引き続きAIで作成しましょう。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone의 무료 클라우드 세트를 이미 사용했어요. 카드를 직접 입력하거나, Pro로 업그레이드해 AI로 계속 초안을 만드세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad의 무료 클라우드 세트를 이미 사용했어요. 카드를 직접 입력하거나, Pro로 업그레이드해 AI로 계속 초안을 만드세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone의 무료 클라우드 세트를 이미 사용했어요. 카드를 직접 입력하거나, Pro로 업그레이드해 AI로 계속 초안을 만드세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O conjunto grátis na nuvem deste iPhone já foi usado. Digite seus próprios cartões ou assine o Pro para continuar criando com IA."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O conjunto grátis na nuvem deste iPad já foi usado. Digite seus próprios cartões ou assine o Pro para continuar criando com IA."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "O conjunto grátis na nuvem deste iPhone já foi usado. Digite seus próprios cartões ou assine o Pro para continuar criando com IA."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ya se usó el conjunto gratuito en la nube de este iPhone. Escribe tus propias tarjetas o pásate a Pro para seguir redactando con IA."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ya se usó el conjunto gratuito en la nube de este iPad. Escribe tus propias tarjetas o pásate a Pro para seguir redactando con IA."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ya se usó el conjunto gratuito en la nube de este iPhone. Escribe tus propias tarjetas o pásate a Pro para seguir redactando con IA."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ya se ha usado el conjunto gratuito en la nube de este iPhone. Escribe tus propias tarjetas o pásate a Pro para seguir redactando con IA."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ya se ha usado el conjunto gratuito en la nube de este iPad. Escribe tus propias tarjetas o pásate a Pro para seguir redactando con IA."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ya se ha usado el conjunto gratuito en la nube de este iPhone. Escribe tus propias tarjetas o pásate a Pro para seguir redactando con IA."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPad's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This iPhone's free cloud set has already been used. Type your own cards, or go Pro to keep drafting with AI."
+                }
+              }
+            }
           }
         }
       }
@@ -24076,45 +26730,147 @@
     "This page is too dense to process on this iPhone. Try scanning fewer pages at once." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette page est trop dense pour être traitée sur cet iPhone. Essaie de scanner moins de pages à la fois."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cette page est trop dense pour être traitée sur cet iPad. Essaie de scanner moins de pages à la fois."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Cette page est trop dense pour être traitée sur cet iPhone. Essaie de scanner moins de pages à la fois."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Seite enthält zu viel Text, um sie auf diesem iPhone zu verarbeiten. Scanne weniger Seiten auf einmal."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Diese Seite enthält zu viel Text, um sie auf diesem iPad zu verarbeiten. Scanne weniger Seiten auf einmal."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Diese Seite enthält zu viel Text, um sie auf diesem iPhone zu verarbeiten. Scanne weniger Seiten auf einmal."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このページは情報量が多すぎて、このiPhoneでは処理できません。一度にスキャンするページを減らしてみてください。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このページは情報量が多すぎて、このiPadでは処理できません。一度にスキャンするページを減らしてみてください。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このページは情報量が多すぎて、このiPhoneでは処理できません。一度にスキャンするページを減らしてみてください。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 페이지는 내용이 너무 많아 이 iPhone에서 처리할 수 없어요. 한 번에 더 적은 페이지를 스캔해 보세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 페이지는 내용이 너무 많아 이 iPad에서 처리할 수 없어요. 한 번에 더 적은 페이지를 스캔해 보세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 페이지는 내용이 너무 많아 이 iPhone에서 처리할 수 없어요. 한 번에 더 적은 페이지를 스캔해 보세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta página é densa demais para ser processada neste iPhone. Tente digitalizar menos páginas por vez."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Esta página é densa demais para ser processada neste iPad. Tente digitalizar menos páginas por vez."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Esta página é densa demais para ser processada neste iPhone. Tente digitalizar menos páginas por vez."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta página es demasiado densa para procesarla en este iPhone. Intenta escanear menos páginas a la vez."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Esta página es demasiado densa para procesarla en este iPad. Intenta escanear menos páginas a la vez."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Esta página es demasiado densa para procesarla en este iPhone. Intenta escanear menos páginas a la vez."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta página es demasiado densa para procesarla en este iPhone. Prueba a escanear menos páginas a la vez."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Esta página es demasiado densa para procesarla en este iPad. Prueba a escanear menos páginas a la vez."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Esta página es demasiado densa para procesarla en este iPhone. Prueba a escanear menos páginas a la vez."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This page is too dense to process on this iPad. Try scanning fewer pages at once."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "This page is too dense to process on this iPhone. Try scanning fewer pages at once."
+                }
+              }
+            }
           }
         }
       }
@@ -24674,45 +27430,147 @@
     "Turn on Apple Intelligence in Settings to generate cards on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active Apple Intelligence dans les Réglages pour générer des cartes sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Active Apple Intelligence dans les Réglages pour générer des cartes sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Active Apple Intelligence dans les Réglages pour générer des cartes sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktiviere Apple Intelligence in den Einstellungen, um Karten auf diesem iPhone zu erstellen."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Aktiviere Apple Intelligence in den Einstellungen, um Karten auf diesem iPad zu erstellen."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Aktiviere Apple Intelligence in den Einstellungen, um Karten auf diesem iPhone zu erstellen."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このiPhoneでカードを生成するには、設定でApple Intelligenceをオンにしてください。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPadでカードを生成するには、設定でApple Intelligenceをオンにしてください。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "このiPhoneでカードを生成するには、設定でApple Intelligenceをオンにしてください。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone에서 카드를 생성하려면 설정에서 Apple Intelligence를 켜세요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad에서 카드를 생성하려면 설정에서 Apple Intelligence를 켜세요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone에서 카드를 생성하려면 설정에서 Apple Intelligence를 켜세요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ative o Apple Intelligence nos Ajustes para gerar cartões neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ative o Apple Intelligence nos Ajustes para gerar cartões neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ative o Apple Intelligence nos Ajustes para gerar cartões neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activa Apple Intelligence en Ajustes para generar tarjetas en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Activa Apple Intelligence en Ajustes para generar tarjetas en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Activa Apple Intelligence en Ajustes para generar tarjetas en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activa Apple Intelligence en Ajustes para generar tarjetas en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Activa Apple Intelligence en Ajustes para generar tarjetas en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Activa Apple Intelligence en Ajustes para generar tarjetas en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Turn on Apple Intelligence in Settings to generate cards on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Turn on Apple Intelligence in Settings to generate cards on this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -25548,45 +28406,147 @@
     "We'll ask for camera access next. Photos are read on this iPhone; the text from them helps draft your cards." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On te demandera ensuite l’accès à l’appareil photo. Les photos sont lues sur cet iPhone ; le texte qui en est extrait sert à rédiger tes cartes."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On te demandera ensuite l’accès à l’appareil photo. Les photos sont lues sur cet iPad ; le texte qui en est extrait sert à rédiger tes cartes."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On te demandera ensuite l’accès à l’appareil photo. Les photos sont lues sur cet iPhone ; le texte qui en est extrait sert à rédiger tes cartes."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Als Nächstes fragen wir nach Kamerazugriff. Fotos werden auf diesem iPhone gelesen; der daraus gewonnene Text hilft beim Erstellen deiner Karten."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Als Nächstes fragen wir nach Kamerazugriff. Fotos werden auf diesem iPad gelesen; der daraus gewonnene Text hilft beim Erstellen deiner Karten."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Als Nächstes fragen wir nach Kamerazugriff. Fotos werden auf diesem iPhone gelesen; der daraus gewonnene Text hilft beim Erstellen deiner Karten."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "次にカメラへのアクセスを求めます。写真はこのiPhone上で読み取られ、そこから得た文字がカードの作成に使われます。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "次にカメラへのアクセスを求めます。写真はこのiPad上で読み取られ、そこから得た文字がカードの作成に使われます。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "次にカメラへのアクセスを求めます。写真はこのiPhone上で読み取られ、そこから得た文字がカードの作成に使われます。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "다음 단계에서 카메라 접근 권한을 요청할게요. 사진은 이 iPhone에서 읽히고, 사진 속 텍스트로 카드 초안을 만들어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "다음 단계에서 카메라 접근 권한을 요청할게요. 사진은 이 iPad에서 읽히고, 사진 속 텍스트로 카드 초안을 만들어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "다음 단계에서 카메라 접근 권한을 요청할게요. 사진은 이 iPhone에서 읽히고, 사진 속 텍스트로 카드 초안을 만들어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vamos pedir acesso à câmera em seguida. As fotos são lidas neste iPhone, e o texto delas ajuda a criar seus cartões."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vamos pedir acesso à câmera em seguida. As fotos são lidas neste iPad, e o texto delas ajuda a criar seus cartões."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vamos pedir acesso à câmera em seguida. As fotos são lidas neste iPhone, e o texto delas ajuda a criar seus cartões."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A continuación pediremos acceso a la cámara. Las fotos se leen en este iPhone; el texto que contienen ayuda a redactar tus tarjetas."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A continuación pediremos acceso a la cámara. Las fotos se leen en este iPad; el texto que contienen ayuda a redactar tus tarjetas."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A continuación pediremos acceso a la cámara. Las fotos se leen en este iPhone; el texto que contienen ayuda a redactar tus tarjetas."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A continuación pediremos acceso a la cámara. Las fotos se leen en este iPhone; el texto que contienen ayuda a redactar tus tarjetas."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A continuación pediremos acceso a la cámara. Las fotos se leen en este iPad; el texto que contienen ayuda a redactar tus tarjetas."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "A continuación pediremos acceso a la cámara. Las fotos se leen en este iPhone; el texto que contienen ayuda a redactar tus tarjetas."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "We'll ask for camera access next. Photos are read on this iPad; the text from them helps draft your cards."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "We'll ask for camera access next. Photos are read on this iPhone; the text from them helps draft your cards."
+                }
+              }
+            }
           }
         }
       }
@@ -26008,45 +28968,147 @@
     "Works on every iPhone" : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fonctionne sur tous les iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Fonctionne sur tous les iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Fonctionne sur tous les iPhone"
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Funktioniert auf jedem iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funktioniert auf jedem iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funktioniert auf jedem iPhone"
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "すべてのiPhoneで使える"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "すべてのiPadで使える"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "すべてのiPhoneで使える"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "모든 iPhone에서 작동"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "모든 iPad에서 작동"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "모든 iPhone에서 작동"
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Funciona em todos os iPhones"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funciona em todos os iPads"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funciona em todos os iPhones"
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Funciona en todos los iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funciona en todos los iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funciona en todos los iPhone"
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Funciona en todos los iPhone"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funciona en todos los iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Funciona en todos los iPhone"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Works on every iPad"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Works on every iPhone"
+                }
+              }
+            }
           }
         }
       }
@@ -26576,45 +29638,147 @@
     "You'll be asked before anything leaves this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On te demandera ton accord avant que quoi que ce soit ne quitte cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On te demandera ton accord avant que quoi que ce soit ne quitte cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "On te demandera ton accord avant que quoi que ce soit ne quitte cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du wirst gefragt, bevor etwas dieses iPhone verlässt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Du wirst gefragt, bevor etwas dieses iPad verlässt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Du wirst gefragt, bevor etwas dieses iPhone verlässt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "データがこのiPhoneから送信される前に、必ず確認します。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "データがこのiPadから送信される前に、必ず確認します。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "データがこのiPhoneから送信される前に、必ず確認します。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 iPhone 밖으로 무언가를 보내기 전에 먼저 물어볼게요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPad 밖으로 무언가를 보내기 전에 먼저 물어볼게요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "이 iPhone 밖으로 무언가를 보내기 전에 먼저 물어볼게요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vamos perguntar antes de qualquer coisa sair deste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vamos perguntar antes de qualquer coisa sair deste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Vamos perguntar antes de qualquer coisa sair deste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se te preguntará antes de que algo salga de este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Se te preguntará antes de que algo salga de este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Se te preguntará antes de que algo salga de este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se te preguntará antes de que algo salga de este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Se te preguntará antes de que algo salga de este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Se te preguntará antes de que algo salga de este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You'll be asked before anything leaves this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You'll be asked before anything leaves this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -27410,45 +30574,147 @@
     "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impossible de lire tes paquets enregistrés, donc QuickStudy a créé une nouvelle bibliothèque. Une copie de l’original a été conservée sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Impossible de lire tes paquets enregistrés, donc QuickStudy a créé une nouvelle bibliothèque. Une copie de l’original a été conservée sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Impossible de lire tes paquets enregistrés, donc QuickStudy a créé une nouvelle bibliothèque. Une copie de l’original a été conservée sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deine gesicherten Sets konnten nicht gelesen werden, daher hat QuickStudy eine neue Bibliothek angelegt. Eine Kopie des Originals wurde auf diesem iPhone aufbewahrt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Deine gesicherten Sets konnten nicht gelesen werden, daher hat QuickStudy eine neue Bibliothek angelegt. Eine Kopie des Originals wurde auf diesem iPad aufbewahrt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Deine gesicherten Sets konnten nicht gelesen werden, daher hat QuickStudy eine neue Bibliothek angelegt. Eine Kopie des Originals wurde auf diesem iPhone aufbewahrt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存したセットを読み込めなかったため、QuickStudyは新しいライブラリを作成しました。元のデータのコピーはこのiPhoneに保管されています。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "保存したセットを読み込めなかったため、QuickStudyは新しいライブラリを作成しました。元のデータのコピーはこのiPadに保管されています。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "保存したセットを読み込めなかったため、QuickStudyは新しいライブラリを作成しました。元のデータのコピーはこのiPhoneに保管されています。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "저장된 세트를 읽을 수 없어 QuickStudy가 새 보관함을 시작했어요. 원본 사본은 이 iPhone에 보관되어 있어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "저장된 세트를 읽을 수 없어 QuickStudy가 새 보관함을 시작했어요. 원본 사본은 이 iPad에 보관되어 있어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "저장된 세트를 읽을 수 없어 QuickStudy가 새 보관함을 시작했어요. 원본 사본은 이 iPhone에 보관되어 있어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Não foi possível ler seus conjuntos salvos, então o QuickStudy iniciou uma nova biblioteca. Uma cópia do original foi mantida neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível ler seus conjuntos salvos, então o QuickStudy iniciou uma nova biblioteca. Uma cópia do original foi mantida neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível ler seus conjuntos salvos, então o QuickStudy iniciou uma nova biblioteca. Uma cópia do original foi mantida neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se pudieron leer tus conjuntos guardados, así que QuickStudy empezó una biblioteca nueva. Se conservó una copia del original en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se pudieron leer tus conjuntos guardados, así que QuickStudy empezó una biblioteca nueva. Se conservó una copia del original en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se pudieron leer tus conjuntos guardados, así que QuickStudy empezó una biblioteca nueva. Se conservó una copia del original en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se han podido leer tus conjuntos guardados, así que QuickStudy ha empezado una biblioteca nueva. Se ha conservado una copia del original en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se han podido leer tus conjuntos guardados, así que QuickStudy ha empezado una biblioteca nueva. Se ha conservado una copia del original en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se han podido leer tus conjuntos guardados, así que QuickStudy ha empezado una biblioteca nueva. Se ha conservado una copia del original en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your saved sets couldn't be read, so QuickStudy started a new library. A copy of the original was kept on this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -27502,45 +30768,147 @@
     "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impossible de lire ton historique d’étude, donc les séries et les statistiques repartent de zéro. Une copie de l’original a été conservée sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Impossible de lire ton historique d’étude, donc les séries et les statistiques repartent de zéro. Une copie de l’original a été conservée sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Impossible de lire ton historique d’étude, donc les séries et les statistiques repartent de zéro. Une copie de l’original a été conservée sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dein Lernverlauf konnte nicht gelesen werden, daher beginnen Serien und Statistiken neu. Eine Kopie des Originals wurde auf diesem iPhone aufbewahrt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dein Lernverlauf konnte nicht gelesen werden, daher beginnen Serien und Statistiken neu. Eine Kopie des Originals wurde auf diesem iPad aufbewahrt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dein Lernverlauf konnte nicht gelesen werden, daher beginnen Serien und Statistiken neu. Eine Kopie des Originals wurde auf diesem iPhone aufbewahrt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "学習履歴を読み込めなかったため、連続記録と統計は最初からになります。元のデータのコピーはこのiPhoneに保管されています。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "学習履歴を読み込めなかったため、連続記録と統計は最初からになります。元のデータのコピーはこのiPadに保管されています。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "学習履歴を読み込めなかったため、連続記録と統計は最初からになります。元のデータのコピーはこのiPhoneに保管されています。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "학습 기록을 읽을 수 없어 연속 학습과 통계가 새로 시작돼요. 원본 사본은 이 iPhone에 보관되어 있어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "학습 기록을 읽을 수 없어 연속 학습과 통계가 새로 시작돼요. 원본 사본은 이 iPad에 보관되어 있어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "학습 기록을 읽을 수 없어 연속 학습과 통계가 새로 시작돼요. 원본 사본은 이 iPhone에 보관되어 있어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Não foi possível ler seu histórico de estudo, então sequências e estatísticas recomeçam do zero. Uma cópia do original foi mantida neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível ler seu histórico de estudo, então sequências e estatísticas recomeçam do zero. Uma cópia do original foi mantida neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível ler seu histórico de estudo, então sequências e estatísticas recomeçam do zero. Uma cópia do original foi mantida neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se pudo leer tu historial de estudio, así que las rachas y estadísticas empiezan de cero. Se conservó una copia del original en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se pudo leer tu historial de estudio, así que las rachas y estadísticas empiezan de cero. Se conservó una copia del original en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se pudo leer tu historial de estudio, así que las rachas y estadísticas empiezan de cero. Se conservó una copia del original en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se ha podido leer tu historial de estudio, así que las rachas y estadísticas empiezan de cero. Se ha conservado una copia del original en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se ha podido leer tu historial de estudio, así que las rachas y estadísticas empiezan de cero. Se ha conservado una copia del original en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se ha podido leer tu historial de estudio, así que las rachas y estadísticas empiezan de cero. Se ha conservado una copia del original en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your study history couldn't be read, so streaks and stats start fresh. A copy of the original was kept on this iPhone."
+                }
+              }
+            }
           }
         }
       }
@@ -27594,45 +30962,147 @@
     "Your unsaved draft couldn't be read. Create the set again from your notes. A copy of the original was kept on this iPhone." : {
       "localizations" : {
         "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impossible de lire ton brouillon non enregistré. Recrée le paquet à partir de tes notes. Une copie de l’original a été conservée sur cet iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Impossible de lire ton brouillon non enregistré. Recrée le paquet à partir de tes notes. Une copie de l’original a été conservée sur cet iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Impossible de lire ton brouillon non enregistré. Recrée le paquet à partir de tes notes. Une copie de l’original a été conservée sur cet iPhone."
+                }
+              }
+            }
           }
         },
         "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dein ungesicherter Entwurf konnte nicht gelesen werden. Erstelle das Set erneut aus deinen Notizen. Eine Kopie des Originals wurde auf diesem iPhone aufbewahrt."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dein ungesicherter Entwurf konnte nicht gelesen werden. Erstelle das Set erneut aus deinen Notizen. Eine Kopie des Originals wurde auf diesem iPad aufbewahrt."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Dein ungesicherter Entwurf konnte nicht gelesen werden. Erstelle das Set erneut aus deinen Notizen. Eine Kopie des Originals wurde auf diesem iPhone aufbewahrt."
+                }
+              }
+            }
           }
         },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存していない下書きを読み込めませんでした。ノートからもう一度セットを作成してください。元のデータのコピーはこのiPhoneに保管されています。"
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "保存していない下書きを読み込めませんでした。ノートからもう一度セットを作成してください。元のデータのコピーはこのiPadに保管されています。"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "保存していない下書きを読み込めませんでした。ノートからもう一度セットを作成してください。元のデータのコピーはこのiPhoneに保管されています。"
+                }
+              }
+            }
           }
         },
         "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "저장하지 않은 초안을 읽을 수 없어요. 노트로 세트를 다시 만드세요. 원본 사본은 이 iPhone에 보관되어 있어요."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "저장하지 않은 초안을 읽을 수 없어요. 노트로 세트를 다시 만드세요. 원본 사본은 이 iPad에 보관되어 있어요."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "저장하지 않은 초안을 읽을 수 없어요. 노트로 세트를 다시 만드세요. 원본 사본은 이 iPhone에 보관되어 있어요."
+                }
+              }
+            }
           }
         },
         "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Não foi possível ler seu rascunho não salvo. Crie o conjunto de novo a partir das suas anotações. Uma cópia do original foi mantida neste iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível ler seu rascunho não salvo. Crie o conjunto de novo a partir das suas anotações. Uma cópia do original foi mantida neste iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível ler seu rascunho não salvo. Crie o conjunto de novo a partir das suas anotações. Uma cópia do original foi mantida neste iPhone."
+                }
+              }
+            }
           }
         },
         "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se pudo leer tu borrador sin guardar. Crea el conjunto de nuevo a partir de tus apuntes. Se conservó una copia del original en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se pudo leer tu borrador sin guardar. Crea el conjunto de nuevo a partir de tus apuntes. Se conservó una copia del original en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se pudo leer tu borrador sin guardar. Crea el conjunto de nuevo a partir de tus apuntes. Se conservó una copia del original en este iPhone."
+                }
+              }
+            }
           }
         },
         "es-ES" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se ha podido leer tu borrador sin guardar. Crea el conjunto de nuevo a partir de tus apuntes. Se ha conservado una copia del original en este iPhone."
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se ha podido leer tu borrador sin guardar. Crea el conjunto de nuevo a partir de tus apuntes. Se ha conservado una copia del original en este iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No se ha podido leer tu borrador sin guardar. Crea el conjunto de nuevo a partir de tus apuntes. Se ha conservado una copia del original en este iPhone."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipad" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your unsaved draft couldn't be read. Create the set again from your notes. A copy of the original was kept on this iPad."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your unsaved draft couldn't be read. Create the set again from your notes. A copy of the original was kept on this iPhone."
+                }
+              }
+            }
           }
         }
       }

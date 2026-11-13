@@ -16,6 +16,10 @@ def flat(loc):
     """One readable line for a catalog localization: plural forms joined by ‖, substitutions in [brackets]."""
     if not loc:
         return ""
+    device = loc.get("variations", {}).get("device")
+    if device:
+        subs = {"substitutions": loc["substitutions"]} if "substitutions" in loc else {}
+        return " ⟂ ".join(f"{name}: {flat({**form, **subs})}" for name, form in device.items())
     if "variations" in loc:
         return " ‖ ".join(f"{k}: {v['stringUnit']['value']}" for k, v in loc["variations"]["plural"].items())
     out = loc["stringUnit"]["value"]
